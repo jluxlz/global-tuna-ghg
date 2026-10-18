@@ -1,0 +1,59 @@
+"xmin","xmax","ymin","ymax","Title","Body"
+1,24.5,83,94,"Sources","Five tuna RFMOs
+Registry and authorisations
+Catch / effort records"
+25.5,49,83,94,"Vessel registry","Gear, flag and RFMO
+Length, tonnage, power
+Build and exit years"
+50,73.5,83,94,"Harmonisation","Identifier deduplication
+Unit checks and PMM
+Historical gap reconstruction"
+74.5,98,83,94,"Activity and catch","Gear-specific effort units
+Catch by species and year
+Spatial record keys"
+1,19.6,68,79,"Fuel","Power, load and hours
+SFC and fuel factors
+Combustion + upstream"
+20.6,39.2,68,79,"Refrigerant","R22 charge and leakage
+Annual release
+Characterisation factor"
+40.2,58.8,68,79,"Gear","Gear mass and lifetime
+Material emission factors"
+59.8,78.4,68,79,"Bait","LL hooks and bait mass
+Bait production factor"
+79.4,98,68,79,"Hull","Hull mass and materials
+Construction emission factor
+Maintenance and lifetime"
+1,49,53,64,"Historical inventory","Vessel-year life-cycle emissions
+Monte Carlo parameter / donor uncertainty
+Paired-draw cumulative ranges"
+50,98,53,64,"Spatial and species allocation","Fleet-to-grid effort shares; catch conservation
+Species catch composition; tuna-only share
+Grid, species and RFMO intensity outputs"
+1,32.6666666666667,38,49,"Stock and ecological response","JABBA: directed catch + CPUE
+Four-chain sampling gate
+Meco: quota / biomass / technology"
+33.6666666666667,65.3333333333333,38,49,"Combined effort response","Meco x Mecon
+Applied once to operating effort
+Capacity and adoption remain separate"
+66.3333333333333,98,38,49,"Economic response","Fuel and carbon energy costs
+Same-pathway MGO reference
+Mecon: effort elasticity -0.3"
+1,24.5,23,34,"WEO","STEPS / APS / NZE"
+25.5,49,23,34,"Capacity growth","0.21% / 1.36% / 2.72%
+per year"
+50,73.5,23,34,"Technology creep","1.90% / 2.40% / 4.30%
+per year"
+74.5,98,23,34,"Fleet turnover","Natural / renewal / forced
+Age and capacity rules"
+1,24.5,8,19,"Quota rules","Fixed catch vs harvest rate
+Prescribed species fractions
+Terminal biomass guard"
+25.5,49,8,19,"Fuel transition","WEO-bound fuel screening
+Blend and newbuild adoption
+Prices and life-cycle factors"
+50,73.5,8,19,"Refrigeration","R22 to liquid nitrogen
+Electricity-linked upstream emissions"
+74.5,98,8,19,"Consolidation","Power-conserving replacements
+Larger group templates
+Operating-time factor 1 - 0.243 S"

@@ -1,0 +1,7 @@
+Rate_Label,d_pct,N,Effort_log_trend_pct,Spearman_rho,SBT_catch_fraction,Window,Inference
+Uncorrected,0.0,14,-9.662993432833796,-0.9648351648351648,1.0,2009-2022,Descriptive association; digitised assessment and temporal dependence preclude causal inference
+Literature q growth 0.5%,0.49751243781094534,14,-9.164239281729895,-0.9604395604395607,1.0,2009-2022,Descriptive association; digitised assessment and temporal dependence preclude causal inference
+Literature q growth 1.0%,0.9900990099009901,14,-8.667960347516992,-0.9604395604395607,1.0,2009-2022,Descriptive association; digitised assessment and temporal dependence preclude causal inference
+Literature q growth 1.5%,1.4778325123152711,14,-8.174132183458735,-0.9604395604395607,1.0,2009-2022,Descriptive association; digitised assessment and temporal dependence preclude causal inference
+Literature q growth 2.0%,1.9607843137254901,14,-7.682730703215819,-0.9516483516483516,1.0,2009-2022,Descriptive association; digitised assessment and temporal dependence preclude causal inference
+Adopted,1.8599999999999999,14,-7.785477900200401,-0.9516483516483516,1.0,2009-2022,Descriptive association; digitised assessment and temporal dependence preclude causal inference

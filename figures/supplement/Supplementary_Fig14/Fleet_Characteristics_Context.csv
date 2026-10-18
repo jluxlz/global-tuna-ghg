@@ -1,0 +1,5 @@
+Gear,Model_cohort,Metric,Unit,N,Model_mean,Model_median,Model_p25,Model_p75,Survey_region,Survey_mean,Survey_N,Comparison
+LL,Registry vessels built by 2023; all oceans; imputed values included,Length,m,6135,23.52288056867453,20.9,13.41,30.42,Pacific,34.9,14,Context only: different populations; no annual active-vessel status inferred
+LL,Registry vessels built by 2023; all oceans; imputed values included,Enginepower,kW,6135,421.9559847358435,365.393,161.87600000000003,610.0,Pacific,800.51626959072,14,Context only: different populations; no annual active-vessel status inferred
+PS,Registry vessels built by 2023; all oceans; imputed values included,Length,m,1588,45.665732403364295,37.575,31.6,61.85,Pacific,63.2,48,Context only: different populations; no annual active-vessel status inferred
+PS,Registry vessels built by 2023; all oceans; imputed values included,Enginepower,kW,1588,1411.5628249526449,894.84,471.7103975000001,2386.24,Pacific,2309.22370761984,48,Context only: different populations; no annual active-vessel status inferred

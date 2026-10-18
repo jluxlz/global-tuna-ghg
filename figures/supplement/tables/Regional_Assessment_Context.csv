@@ -1,0 +1,9 @@
+Stock,Organization,Assessment_Year,Terminal_Year,Metric,Estimate,Lower,Upper,Interval,Report,Page,URL,Role
+SKJ,IOTC,2023,2022,SB/SB0,0.53,0.42,0.68,80%,IOTC-2024-SC27-ES03,1,https://iotc.org/sites/default/files/documents/2024/11/IOTC-2024-SC27-ES03_SKJE_0.pdf,Regional context only; no conversion to global B/K
+YFT,IOTC,2025,2023,SSB/SSBMSY,1.18,,,Median across model grid; interval not reported in Table 1,IOTC-2025-SC28-13,5,https://iotc.org/sites/default/files/documents/2025/11/IOTC-2025-SC28-13E-Yellowfin_Assessment.pdf,Primary revised YFT context; not global total B/K validation
+YFT,IOTC,2024,2023,SB/SB0,0.44,0.4,0.5,80%,IOTC-2024-SC27-ES04,1,https://iotc.org/sites/default/files/documents/2024/11/IOTC-2024-SC27-ES04_YFTE.pdf,Historical 2024 entry; superseded for primary context by revised 2025 report
+BET,IOTC,2025,2024,SB/SBMSY,0.98,0.71,1.25,80%,IOTC-2025-SC28-ES02,1,https://iotc.org/sites/default/files/content/Stock_status/2025/English/IOTC-2025-SC28-ES02_BETE.pdf,Regional context only; no conversion to global B/K
+BET,ICCAT,2025,2023,SSB/SSBMSY,1.23,0.81,1.85,80%,BET_ENG,1,https://iccat.int/Documents/SCRS/ExecSum/BET_ENG.pdf,Regional context only; no conversion to global B/K
+SBT,CCSBT,2023,2023,TRO/TRO0,0.23,0.21,0.29,80%,ESC28_16,8,https://www.ccsbt.org/system/files/2023-08/ESC28_16_stockAssessment2023.pdf,Distinct reproductive metric; no conversion to total biomass
+ALB,WCPFC,2024,2019–2022,SB/SBF0,0.48,0.36,0.62,10th–90th grid percentiles,SC20-SA-WP-02 Rev.03,8,https://meetings.wcpfc.int/system/files/2024-08/SC20-SA-WP-02%20Sth_Pacific_albacore_assessment2024_rev3.pdf,Regional context; original PDF independently verified
+YFT,IATTC,2025,2024-Q1,S/SMSY_dynamic,2.38,,,Joint model median; other spatial-hypothesis medians 1.82–2.22,SAC-16-03,11,https://www.iattc.org/GetAttachment/11b8757d-ad0f-435c-b2c6-40f5658c56c0/SAC-16-03_Yellowfin-benchmark-assessment---2025.pdf,Regional reproductive metric; no conversion to global B/K

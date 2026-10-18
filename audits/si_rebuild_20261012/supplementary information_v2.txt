@@ -1,0 +1,2146 @@
+[0] Supplementary Information
+[1] 
+[2] 
+[3] Spatial-temporal Analysis of Carbon Footprint in Tuna Pelagic Fisheries Based on a Dynamic Life Cycle Model
+[4] 
+[5] Jianan Sun 1, Shaobin Li 1*
+[6] 
+[7] 1 - College of the Environment and Ecology, Xiamen University, Xiamen 361102, China
+[8] 
+[9] Section S1. Methodological Framework of Life Cycle Assessment 
+[10] S1.1 System Boundary and Inventory Scope
+[11] The system boundary of this Life Cycle Assessment (LCA) is defined as the wild capture fishing stage from “cradle to port.” The operational processes of the five target tuna species (skipjack SKJ, yellowfin YFT, bigeye BET, albacore ALB, southern bluefin SBT) involve only two main gear types—purse seine and longline—and strictly follow the standard wild fishery model of “sea capture – onboard processing and freezing – port landing,” ensuring high methodological consistency between the functional unit and the system boundary.
+[12] As illustrated in Figure S1 (blue dashed box), the dynamic life cycle model provides comprehensive coverage of the core fishing phase and related asset flows. The greenhouse gas (GHG) emission inventory covers the following five key components:
+[13] Fuel-related emissions: Direct fuel consumption (diesel) and associated combustion emissions during sea operations. The accounting covers the entire at-sea process, including fish finding (sonar, radar), fishing operations (net setting/hauling, longline shooting/retrieving), onboard power generation (for freezing systems, lighting, deck machinery), and energy use for basic crew living. The gases covered include CO₂, CH₄, and N₂O.
+[14] Bait-related emissions: For longline operations, this accounts for the full upstream life cycle emissions of bait consumption, including indirect carbon emissions from bait harvesting, processing, frozen storage, and market distribution.
+[15] Gear-related emissions: Indirect emissions from the manufacturing to the periodic replacement of purse seine and longline gear. The raw materials are simplified to nylon (polyamide) and steel, covering the chemical synthesis of nylon and the smelting and processing of steel, as well as emissions from dynamic renewal based on attrition rates.
+[16] Hull construction and maintenance emissions: Emissions from the production of hull steel and equipment manufacturing during vessel construction, shipyard rigging, and the carbon footprint of regular maintenance, major repairs, and replacement of consumable parts over the long operational life of vessels.
+[17] Refrigerant leakage-related emissions: For the high-intensity cold chain in distant-water fisheries, this study only accounts for GHG emissions from the hydrochlorofluorocarbon R-22 (HCFC-22) used in refrigeration systems. This includes two parts: (a) direct fugitive leakage of R-22 during the operation of onboard ultra-low temperature freezing and refrigeration systems; and (b) indirect GHG emissions from the upstream production and supply of R-22 in chemical plants. Other refrigerant types (e.g., CFCs, HFCs) are not included.
+[18] S1.2 Target Greenhouse Gas Inventory and Functional Unit System
+[19] To assess the historical carbon trajectory and efficiency differences of global tuna fisheries from multiple dimensions, this study specifies the types of GHGs included in the inventory based on the GHG Protocol. All emissions are converted to CO₂ equivalents (CO₂-eq) using the 100-year global warming potentials (GWP₁₀₀) provided by the IPCC. A two-tier metric system of “absolute total vs. relative intensity” and corresponding functional units is then established.
+[20] (1) Target Greenhouse Gas Inventory
+[21] Fuel-related gases: For fossil fuel combustion (diesel) in main and auxiliary engines, the accounting covers dominant CO₂, as well as CH₄ from incomplete combustion and N₂O as a combustion by-product.
+[22] Refrigerant leakage-related gases: Only direct fugitive leakage of R-22 (HCFC-22) and its upstream production emissions are accounted for. The GWP₁₀₀ value of R-22 follows the latest IPCC reports.
+[23] Embodied GHGs in upstream supply chains: For capital goods (e.g., hull steels), consumable fishing gear (e.g., nylon netting, longline gear), and fishery inputs (bait) within the system boundary, their GHG emissions belong to background life cycle processes. This study systematically compiles the combined emissions from these upstream processes using life cycle inventory (LCI) databases such as Ecoinvent. Specifically, the following two categories are included: (1) Embodied emissions from hull steel and gear materials: CO₂ from steel smelting for vessels, chemical synthesis of nylon (polyamide), and processing of steel for fishing gear, as well as CH₄ escaping during upstream fossil fuel (oil/natural gas) extraction and refining for these raw materials. (2) Embodied emissions from bait acquisition: The supply chain of bait (e.g., squid, small pelagic fish) embeds the life cycle of secondary capture fisheries. The embodied gases include CO₂, CH₄, and N₂O from fuel combustion by secondary fishing vessels, as well as refrigerant leakage and indirect CO₂ from electricity use during cold storage of bait.
+[24] (2) Dual-Metrics System and Functional Units
+[25] Historical absolute emissions: Characterizes the macro-scale GHG emission magnitude of global tuna fisheries from 1950 to 2025. The functional unit is defined as the total GHG emissions from the complete tuna capture process within a specific spatiotemporal boundary, expressed in t CO₂-eq or kg CO₂-eq.
+[26] Multi-dimensional GHG emission intensity: Evaluates the low-carbon performance of different fishing practices. The basic functional unit is defined as GHG emissions generated per unit weight of tuna captured and landed (kg CO₂-eq per kg of tuna). To avoid masking effects, the emission intensity is decoupled at high resolution in the following dimensions: (1) RFMO-specific intensity: Differentiates jurisdictions of Regional Fisheries Management Organizations (WCPFC, IATTC, ICCAT, IOTC, CCSBT) to assess the influence of management policies on fishery carbon efficiency. (2) Species-specific intensity: Targets SKJ, YFT, BET, ALB, and SBT to reveal the intrinsic effects of species’ ecological niches and swimming speeds on fishing energy consumption. (3) Vessel-type specific intensity: Compares GHG emission differences among four vessel types: purse seiners, longliners, carrier vessels, and auxiliary vessels. Note that this study only covers the two fishing methods (purse seine and longline); carrier and auxiliary vessels are included as supporting vessels in the accounting.
+[27] Fig S1 System definition and GHG emissions inventory. The elements within the blue box represent the calculation objects of the dynamic life cycle model, while the upstream processes outside the box utilize the Ecoinvent database.
+[28] 
+[29] Fig S2 Methodology framework of GHG emissions estimation for global tuna fisheries. The estimation method is constructed by means of a three-step process， involving several important references:
+[30] 
+[31] 
+[32] 
+[33] 
+[34] 
+[35] 
+[36] 
+[37] 
+[38] 
+[39] 
+[40] Section S2. Data Harmonization and Cross-Scale Preprocessing
+[41] S2.1 Extraction and Reconstruction of the Global t-RFMOs Foundation Database
+[42] Geographical Scopes and Data Sources 
+[43] The distant-water tuna fishery is characterized by its high degree of globalization and highly migratory trans-oceanic behavior. To comprehensively cover and capture the dynamic operational footprints of global distant-water tuna fleets, the foundation of our model systematically integrates the official public-domain databases of the five global Tuna Regional Fisheries Management Organizations (t-RFMOs). Authorized by international maritime conventions, these five organizations have strictly delineated the core global tuna fishing grounds and resource management boundaries:
+[44] Western and Central Pacific Fisheries Commission (WCPFC): Its jurisdiction covers the vast waters of the Western and Central Pacific Ocean, which currently stands as the ocean basin with the highest tuna catch volume and the most intensive fleet activities globally.
+[45] Inter-American Tropical Tuna Commission (IATTC): Primarily responsible for the assessment and fisheries management of tropical and temperate tuna resources in the Eastern Pacific Ocean (EPO).
+[46] International Commission for the Conservation of Atlantic Tunas (ICCAT): Manages tuna and highly migratory species across the entire Atlantic Ocean and its adjacent seas (including the Mediterranean Sea).
+[47] Indian Ocean Tuna Commission (IOTC): Responsible for regulating fleet behavior and managing catch quotas in the entire Indian Ocean and its adjacent seas.
+[48] Commission for the Conservation of Southern Bluefin Tuna (CCSBT): Unlike the four aforementioned organizations demarcated by geographical ocean basins, this is a trans-oceanic management body for a specific highly endangered species. Its jurisdiction spans the mid-to-high latitude temperate waters of the Southern Hemisphere, covering all fishing and transshipment activities involving Southern Bluefin Tuna.
+[49] The geographical operational envelopes of the five aforementioned t-RFMOs are naturally delineated through the spatial projection of the historical cumulative effort grid points (latitude and longitude) extracted in this study (see Figure S1). The direct URLs, literature citations, and download version details for the foundational data portals of each organization are compiled in Table S1.
+[50] Table S1 data sources
+[51] 
+[52] Raw Data Extraction Protocol of Target Fleets 
+[53] This study systematically extracted heterogeneous, cross-scale archives from the five global regional fisheries management organizations (t-RFMOs), covering the historical evolution sequence and modern high-resolution intervals from 1950 to 2025. The dataset comprises two core categories: the "Record of Authorized Vessels (RAV)" documenting static engineering characteristics, and "Catch & Effort Logbooks" recording dynamic spatio-temporal operational intensities. Through standardized cleaning of vessel classifications and gear types, we precisely targeted distant-water longlines, purse seines, and associated refrigerated carrier vessels, while strictly excluding coastal and small-scale non-industrial fleets. Prior to integration, essential unit harmonizations (e.g., standardizing varied engine power metrics to kW and unifying vessel length and tonnage parameters) were executed to ensure cross-basin comparability. The specific unit conversion factors and standardization rules are detailed in Table S2.
+[54] Cross-Basin Cascading Deduplication and Imputation 
+[55] Given the extreme trans-oceanic mobility of distant-water tuna fleets, individual vessels are frequently registered across multiple commissions. To avoid severe double counting in the construction and extensive refitting phases of the Life Cycle Assessment (LCA) model (e.g., the embodied carbon emissions from steel and copper), we established a rigorous cascading deduplication framework. This pipeline pooled the five raw databases globally, utilizing a hierarchical matching logic based on permanent and temporal identifiers (prioritizing the IMO Number, followed by the IRCS and standardized vessel names) to isolate unique physical assets. This process effectively eliminated virtual fleet inflation caused by transnational re-flagging, structural retrofits, or administrative license renewals. The specific multi-stage matching criteria and cross-record missing value imputation protocols are summarized in Table SX.
+[56] Following entity resolution, consolidating conflicting engineering parameters for a single vessel required a robust update mechanism based on the conservative principle inherent in environmental footprint accounting. In the distant-water fishing industry, administrative under-reporting is occasionally employed to bypass capacity limits or tonnage taxes. Therefore, when disparate physical parameters (such as engine horsepower or gross tonnage) existed for the same vessel across different registries within the same temporal boundary, the model forcibly extracted the maximum recorded value—representing the latest and most saturated physical snapshot—as the true modern physical anchor. This conservative strategy prevents the systemic underestimation of historical carbon intensities.
+[57] In contrast, because Catch & Effort Logbooks reflect true dynamic operational footprints, all historical spatial effort data points for the deduplicated vessels were fully retained without any deletion. This decoupling of asset deduplication and behavioral retention ensures spatial continuity and total mass conservation for the subsequent bottom-up dynamic energy consumption accounting.
+[58] 
+[59] Table SX 单位类型统计
+[60] Table SX 单位转换逻辑
+[61] 
+[62] Table SX 提取模型提取结果（没有去重）
+[63] Table SX 去重模型结果
+[64] 
+[65] 
+[66] Table SX MO类型去除逻辑
+[67] 1. 缺乏核心金枪鱼捕捞网具的“明确标识”（数据黑箱）
+[68] 核验报告中最致命的一点是，这批 MO 船只无法提供任何与金枪鱼商业捕捞直接相关的网具证据。
+[69] IATTC 的情况： 报告明确指出，IATTC 的 699 艘 "Multi-purpose" 船只“没有任何可供 gear rescue 的渔具缩写代码”。这意味着我们完全处于数据黑箱中，无法证明它们使用了围网（PS）或延绳钓（LL）等金枪鱼主导渔具。
+[70] ICCAT 的印证： 报告在 ICCAT 部分提到，被丢弃的 336 艘 MO 船，其关联的渔具代码是 LX、NK、MIS、LTL、TM、TB 等。报告明确结论为这些代码“均无 LL/PS 渔具”。这反向印证了，即使 MO 船只有详细代码，它们也通常属于杂项网具或未分类网具，根本不在远洋金枪鱼的核心作业链条内。
+[71] 2. 船旗国高度集中于“非典型工业金枪鱼捕捞国”的近海
+[72] 报告揭示了 IATTC 中 MO 船只的极端地域聚集性：
+[73] 这 699 艘船“主要来自智利(481)、美国(217)、墨西哥(1)”。
+[74] 从渔业常识来看，智利和美国的此类中小型沿海多用途渔船，其核心目标物种通常是鳀鱼（智利）或鲑鱼/甲壳类（美国沿海）。它们并不属于像日本、韩国或中国台湾那样在各大洋区追逐热带金枪鱼的高度专业化远洋船队。
+[75] 3. 避免 LCA 模型中的“分配误差”（核心防线）
+[76] 基于上述两点来自 txt 文件的铁证（无 PS/LL 网具代码 + 集中于智利/美国沿海），如果我们在 LCA 模型中保留这批 MO 船只，将引发灾难性的分配误差（Allocation Error）。
+[77] 在无法确认其主要作业时间是用于捕捞金枪鱼的情况下，如果将其常年从事多物种（如鳀鱼、螃蟹等）近海轮作的燃油消耗和碳排放，全部强行分摊给金枪鱼的产量，将会极其严重地高估美洲东太平洋沿岸金枪鱼产业的真实碳足迹。
+[78] 
+[79] 
+[80] S2.2 Fleet Characterization and Missing Value Imputation
+[81] (1) Spider
+[82] (2) PMM imputation & Stratified Hot-Deck Imputation
+[83] 
+[84] Fig. S3 Diagnostic plots of Predictive Mean Matching (PMM) multiple imputation for distant-water fishing vessel parameters. The diagnostic framework evaluates the robustness of the strict one-way imputation method (using vessel length to predict tonnage and engine power) through a two-step visual validation process. Top panels display density distributions, demonstrating that the five sets of imputed data (colored lines) perfectly preserve the macroscopic probability density of the original observed data (black line). Bottom panels show strip plots, confirming that the individual imputed data points are strictly bounded within the physical minimum and maximum limits of the observations, with no generation of scientifically invalid outliers (e.g., negative values). The un-imputed status of the predictor variable (Length) is also verified in the left panels.
+[85] 
+[86] Table S Missing Parameter Statistics and Handling Methods. There is data for a total of 9815 ships
+[87] 
+[88] Table S Fallback Level
+[89] 
+[90] 
+[91] Table S3 Stochastic Hot-Deck Imputation Results
+[92] 
+[93] 
+[94] 
+[95] 
+[96] 
+[97] 
+[98] 
+[99] 
+[100] S2.3 Spatial Effort Harmonization and Gridding
+[101] Spatial effort harmonisation. All spatial statistics are computed on a 5-degree x 5-degree cell lattice. Reported effort is first harmonised to a common unit per gear (longline: hooks, with hook-hour records multiplied by 100 and days or sets converted at 3,000 hooks per day; purse seine: sets and fishing days as recorded, with fishing hours divided by 12), and summed to year x flag x gear totals. Each grid record receives the effort share of its flag x gear x year, and that group’s annual life-cycle emissions are allocated to the cells accordingly; where effort is missing, catch is used as the fallback weight. Gridded catch and effort are used in their native resolutions (about 1-degree and 5-degree records); the harmonised layer provides the maps, the regression diagnostics and the CPUE series used for the stock fits.
+[102] Data-quality corrections. A small number of order-of-magnitude reporting errors were identified by audit and corrected before allocation (Belize purse seine 2020-2022 in ICCAT divided by 1,000; Belize longline 2013 divided by 100 in ICCAT and by 10 in IATTC). Cells used for intensity metrics must carry both positive catch and positive emissions; this retains about 65% of fleet emissions in the gridded domain (support vessels land no catch by definition), with residual unmatched fractions of 2-3% on each side that are quantified in Section S7.
+[103] 
+[104] 
+[105] 
+[106] 
+[107] 
+[108] 
+[109] Fig. S5 | Spatial effort harmonisation and allocation workflow. Reported effort is standardised per gear, aggregated to flag x gear x year totals and distributed across the 5-degree grid; the same lattice carries catch, effort, allocated emissions and the resulting carbon emission intensity used in Sections S4 and S7.
+[110] Section S3. GHG emissions model of Global Tuna fisheries
+[111] S3.1 Introduction of Macro-Activity Profile Data (Sea Around Us / Rousseau 等人 (2019))
+[112] The raw macroscopic parameters (e.g., nominal active days at sea) were extracted and cleaned in this step. The subsequent physical decoupling of absolute transit time () and pure fishing hours () based on this dataset will be detailed in the dynamic GHG accounting framework
+[113] 
+[114] 
+[115] 
+[116] 
+[117] 
+[118] S3.2 Calculation formula
+[119] The life-cycle account is evaluated per vessel and year and aggregated to gear, sector, organisation, 5-degree cell and fleet. Five sources are covered: fuel combustion including well-to-tank upstream emissions, refrigerant leakage, bait, fishing gear, and hull construction and maintenance. The formulas below follow the implementation; the key variable definitions and constants are summarised after them.
+[120] Fuel consumption is obtained from the installed main and auxiliary engine power, the phase-specific load factor and load-corrected specific fuel consumption, the annual hours per phase and a year-specific fuel-consumption factor; combustion emissions use fuel-specific CO2 factors together with CH4 and N2O emission factors and their 100-year global warming potentials (CH4 28.5; N2O 273), while upstream emissions use well-to-tank factors per fuel. Refrigerant leakage is charged on the on-board charge at sector-specific annual leak rates and the R-22 GWP of 1,810. Bait use is assigned to longline operations (0.1 kg of bait per hook at 1.606 kg CO2e per kg); fishing gear is charged at construction and periodic replacement; hull construction is charged in the build year and maintenance biennially, both scaled by light-ship weight. Parameter uncertainty is propagated with a 500-run Monte Carlo (seed 42) after a 2,000-draw global sensitivity analysis selects the two most influential parameters per process; medians and 5th/95th percentiles are reported for every series.
+[121] The same accounting is applied to the 2026-2050 scenario projections with the alternative-fuel pathways of Section S5; the tuna-only (E_tuna) correction, which rescales each vessel’s emissions to the share of its catch composed of the five principal market species, is applied identically in the historical account and in the projections.
+[122] 
+[123] 
+[124] 
+[125] 
+[126] 
+[127] Fig. S4 Carbon emissions of three types of ships. Figure (a) Cumulative greenhouse gas emissions, Figure (b) Historical changes in greenhouse gas emissions
+[128] 该渔业的温室气体排放正在经历快速的历史性扩张，而这种扩张几乎完全是由燃油消耗驱动的。 如果目标是制定减排策略（例如撰写可持续发展相关的政策建议），图表清晰地表明：优化渔具材料或改进造船工艺带来的减排效益犹如杯水车薪。行业脱碳的唯一有效途径必须直接针对燃油效率——例如引入替代燃料、优化航线、或者控制总体捕捞努力量（Fishing effort）。
+[129] 
+[130] 从造船史来看，全球沿海小型渔船大规模机械化（挂载燃油舷外机或小型柴油机）是从 20 世纪 60 年代末到 70 年代 才开始真正普及的。在那之前，绝大多数小船依然是风帆或人力驱动。
+[131] 
+[132] Section S4. Spatial model of Global Tuna fisheries
+[133] S4.1 
+[134] The spatial layer is built on the harmonised grid of Section S2.3. Carbon emission intensity (CEI, tonnes CO2e per tonne landed) is computed for every grid cell and year as allocated emissions divided by allocated catch, and gridded catch-per-unit-effort (CPUE) as catch divided by standardised effort.
+[135] Three-era maps (1970-1990, 1991-2005 and 2006-2025) show the joint expansion of low-intensity purse-seine grounds and high-intensity longline grounds. Per-cell trends are estimated by ordinary least squares on annual values over the full period (minimum ten annual observations per cell) and within each era (minimum eight), expressed as percentages of the cell mean; cells with negligible catch, intensity or emissions are masked as noise.
+[136] Because nominal effort becomes more effective over time, all effort series are corrected for technology creep before use, with gear-specific rates applied to the CPUE (purse seine 4.26% yr^-1, longline 1.86% yr^-1, base year 1970; Section S5.4). The correction is applied identically to the grid diagnostics and to the stock-fit series, so the spatial and stock layers share one effort standardisation. The phase-space layer combines effort per tonne with carbon per operation; its trajectories and coverage caveats are described in Section S7.
+[137] 
+[138] 
+[139] 
+[140] 
+[141] 
+[142] 
+[143] 
+[144] Section S5. Scenario Analysis model of Global Tuna fisheries
+[145] Note: In addition to the above factors, this study also considers embodied emissions from new vessel construction and emissions from gear production and replacement. However, preliminary analysis shows that fuel combustion accounts for the vast majority（具体数值 ） of total emissions; therefore, scenario analysis focuses on fuel-related emissions, with other sources treated as boundary items in sensitivity analysis.
+[146] 
+[147] 
+[148] S5.1 Scenario ensemble and simulation protocol
+[149] The scenario chain evolves the 2025 baseline fleet (11,518 registry vessels, tuna-only E_tuna basis) year by year to 2050 under 81 futures: the full crossing of three WEO pathways (STEPS / APS / NZE), three capacity-growth rates (0.21, 1.36 and 2.72% yr^-1), three retirement regimes (natural: scrap at age 30; renewal: overage hulls rebuilt in place; forced: overage hulls replaced by equal-effort low-carbon newbuilds plus dynamic surplus retirement) and three technology-creep rates (1.9, 2.4 and 4.3% yr^-1). The baseline (BAU) keeps the catch fixed at its 2024 level and burns fossil fuels; seven mitigation packages (fuel switching, refrigerant switching to LN2, consolidation, the three pairwise combinations and the triple package) are applied to every baseline and measured against that baseline. Every run uses explicit seeds, the same five-source life-cycle accounting as the historical model, and the same per-vessel tuna-only correction.
+[150] S5.2 Why baseline emissions rise to the mid-2030s and then fall
+[151] In the baseline the catch is held at the 2024 level while the stocks are projected with the fitted Schaefer models. Under this fixed catch the tropical stocks deplete early: skipjack reaches the 0.03 K floor by ~2032 and yellowfin by ~2030, while albacore declines steadily; the required effort per landed tonne, Meco = (C_t / C_2024) / [(B_t / B_2024) x (1 + tc)^dt], therefore rises steeply through the late 2020s and early 2030s. Fleet capacity also compounds (0.2-2.7% yr^-1). Because the baseline uses fossil fuels, this effort growth translates directly into emission growth, producing the rising phase of the 81-scenario envelope and the median peak in the mid-2030s (median 83 Mt CO2e in 2034). Three mechanisms then reverse the trend. (i) Once the depleted stocks reach the Schaefer floor, the technical-progress denominator (1 + tc)^dt keeps accumulating (a factor of about 1.6-2.9 by 2050 across the creep levels), so required effort per tonne falls. (ii) From 2030 the WEO carbon prices enter the energy cost and the economic effort multiplier M_econ < 1 suppresses effort. (iii) Bigeye and southern bluefin, whose 2024 catches sit below their sustainable yields, rebuild (B_t / B_2024 > 1 by 2050), lowering their effort requirement. Capacity growth continues, but the combined abatement outpaces it, so the median baseline declines from the peak to about 70 Mt CO2e by 2050, while individual futures still span 4-121 Mt CO2e.
+[152] S5.3 Reading Fig. 5 (decision chain panels)
+[153] Panel a screens 14 fuel options (two drop-in biofuels, four device-dependent fuels and eight dual blends) at three adoption intensities bound to the scenario WEO (STEPS-low, APS-medium, NZE-high); the winning scheme is a high-share HVO blend combined with green hydrogen (STEPS, APS) or green ammonia (NZE), whereas fossil LNG and fossil hydrogen fail both the decarbonisation and the cost screen.
+[154] Panel b translates quota rules and stock status into the ecological effort space for each species and creep level, with the sustainability guard B/B_MSY >= 0.5; fixed-catch rules collapse bigeye, yellowfin and southern bluefin, while harvest-rate rules keep every stock above the guard, so all five species are assigned harvest-rate rules.
+[155] Panel c shows the annual transition depth of the single and dual fuel pathways; panel d maps the heterogeneity of the mitigation effect across fleet objects; panel e gives the absolute accounting - the 81-scenario baseline envelope against the individual measures, their combination, the quota shift alone and the final portfolio (WEO-bound fuel + species-level harvest-rate quotas + LN2 + consolidation), which cuts 2050 emissions by about 94%.
+[156] S5.4 Sensitivity of the Schaefer fits to the technology-creep rate
+[157] Because the creep correction standardises the CPUE series both in the Schaefer fits and in the gridded diagnostics, its choice was scanned over seven published rates (no-creep control, PP-10 4.26%, PP-20 2.98%, PP-30 2.44%, PP-40 2.11%, PP-54 1.86% and PP-60 1.77% yr^-1, from the Palomares & Pauly (2019) spectrum). The fitted B_2024/K of each stock is given in Table S6. Skipjack is a strong anchor: only PP-10 reproduces the scale and status of the official assessment (MSY ~1.9 Mt, B/K 0.585 versus the reference 0.60). For the longline stocks the fitted B/K increases monotonically as the rate decreases, and the uncorrected fits sit closest to the official reference conversions; the adopted longline rate is nevertheless PP-54 = 1.86% yr^-1, the published fleet-average for a ~50-year span (the spectrum formula gives 1.9% at 50 yr), because a zero correction would imply no catchability growth for any longline fleet since 1970, contrary to the documented technology history. The adopted configuration (purse seine = PP-10, longline = PP-54) is therefore conservative for longline stock status.
+[158] Table S6 | Fitted B_2024/K by stock and uniform technology-creep rate (post-2026-09-20 catch-table revision). Reference = official-assessment conversion used for the rate selection.
+[159] Section S6. Uncertainty of model
+[160] S6.1 Global Sensitivity Analysis and Surrogate Model Validation
+[161] Motivation and Framework:
+[162] To systematically quantify the cascading effects of uncertainties from missing data imputation (Predictive Mean Matching, PMM) and Life Cycle Assessment (LCA) parameters on total greenhouse gas (GHG) emissions, we developed a Global Sensitivity Analysis (GSA) framework integrating a machine learning surrogate model with Shapley Additive exPlanations (SHAP). Traditional variance-based GSA methods (e.g., Sobol indices) assume independent input variables and struggle with the inherent collinearity of physical vessel characteristics (e.g., engine power and tonnage). The Random Forest-SHAP architecture overcomes this limitation by robustly interpreting correlated empirical distributions.
+[163] Data Generation and Model Configuration:
+[164] An uncertainty phase space was generated via 2,000 Monte Carlo simulations. In each iteration, the framework randomly sampled from one of five parallel PMM datasets to preserve structural covariance. Concurrently, triangular distributions were applied to perturb 10 core LCA parameters, including activity days, specific fuel consumption, gear wear, bait usage, and shipbuilding emission factors. A Random Forest Regressor (n_estimators=200, max_depth=12) was then trained on an 80% data split to map these macroscopic features to the total LCA GHG emissions.
+[165] Performance Metrics and Validation:
+[166] Evaluated on the independent 20% test set, the surrogate model demonstrated exceptional fidelity to the underlying physical accounting model. It achieved a coefficient of determination ($R^2$) of 0.9692, capturing the vast majority of the system's variance. The absolute deviations were minimal, yielding a Root Mean Squared Error (RMSE) of 0.2908 Mt and a Mean Absolute Error (MAE) of 0.2127 Mt. Crucially, the Mean Absolute Percentage Error (MAPE) was strictly controlled at 1.297%, confirming that the information loss induced by the surrogate approximation is negligible（Supplementary Table Y）.
+[167] Model Implications:
+[168] Based on this high-fidelity surrogate model, the computed SHAP values effectively unboxed the non-linear emission feedback loops, revealing both the magnitude and directionality of parameter impacts. This validation robustly decouples the primary uncertainty drivers (i.e., operational effort and fuel efficiency) from secondary supply-chain variations, providing a rigorous and physically consistent statistical foundation for the error bounds applied in our future scenario projections.
+[169] 
+[170] Supplementary Table Y
+[171] 
+[172] 
+[173] Fig. SX SHAP-based global sensitivity analysis and feature attribution of life-cycle GHG emissions in the distant-water fishery. a, Feature importance ranked by the mean absolute SHAP (Shapley Additive exPlanations) values. The x-axis represents the average impact magnitude of each parameter's perturbation on the predicted total greenhouse gas emissions (in million tonnes, Mt) across 2,000 Monte Carlo simulations. Micro-operational factors (Activity Days and Specific Fuel Consumption) and the macroscopic imputed fleet power predominantly govern the system's uncertainty bounds. b, Beeswarm plot illustrating the directional impacts and distribution of the SHAP values. Each dot represents a single simulation iteration ($n=2000$). Dot color denotes the relative value of the input feature (red for high, blue for low), while the horizontal axis indicates how that specific feature value drives the total emission prediction away from the baseline expectation. Notably, the "Imputed Fleet Power (PMM)" exhibits a distinct clustered distribution, reflecting the discrete nature of the underlying five parallel Predictive Mean Matching datasets, whereas fuel-related operational parameters demonstrate strong continuous, monotonic positive gradients.
+[174] S6.2 Uncertainty 
+[175] Beyond the surrogate-model validation above, the reported emission envelopes combine three uncertainty layers: (i) parameter uncertainty of the life-cycle account, propagated by the 500-run Monte Carlo of Section S3.2 and reported as 5th/50th/95th percentiles for every series; (ii) structural uncertainty of the scenario chain, explored by the full crossing of growth, retirement and technology-creep settings (Section S5); and (iii) input-data uncertainty, assessed by the coverage and matching audit (Section S7).
+[176] Scenario runs use explicit seeds and are reproducible: identical configurations reproduce identical outputs. Sensitivity experiments include the technology-creep scan reported in Section S5.4 and Table S6, refrigerant leak-rate tests (10-1,000 kg per vessel per year), fuel-price and carbon-price pathway variants, and alternative grid filters and weightings of the spatial diagnosis.
+[177] Section S7. Model Validation and Methodological Comparison
+[178] This section validates the model against independent sources and places it in the context of earlier tuna-fishery carbon accounts.
+[179] Stock model. The fitted stock layer is compared with the official assessments of the five commissions. Skipjack reproduces the scale and status of the assessment reference (B_2024/K 0.585 against 0.60; MSY of the order of the summed regional estimates). The remaining stocks fall within the uncertainty of the assessment conversions used in Table S6, and the southern bluefin fit is deliberately conservative (lower relative biomass than the 2024 assessment state), as explained in Section S5.4. The stock layer is used to rank quota rules and to compute effort requirements, not to replace the regional assessments.
+[180] Emission-intensity comparison. The life-cycle intensities computed here are consistent with published fuel-use inventories of the tuna fleet. The International Seafood Sustainability Foundation reports 2023 fuel-use intensities of about 496 litres per tonne for purse seiners and 1,523 litres per tonne for longliners (combustion only, global fleet). Our life-cycle CEI spans about 2.9-5.3 tonnes CO2e per tonne for the purse-seine-caught species and about 9.4-31.6 for the longline-caught species on the tuna-only basis; the gear ranking and separation match the inventories, while the level is higher because refrigerant, bait, gear and construction emissions are included in addition to combustion. The fuel-only component of our annual account (about 14 Mt CO2e in the mid-2020s) is of the same order as, and about 1.6 times, the inventory’s global fleet combustion total (8-9 Mt CO2e in 2023), reflecting our full-fleet reconstruction and life-cycle boundary.
+[181] Data-quality validation. Every gridded catch record matches the upstream spatial allocation table at the species level (cumulative southern bluefin 1.09 Mt, skipjack 53.1 Mt, bigeye 15.7 Mt, yellowfin 38.3 Mt, albacore 5.0 Mt), the allocation shares sum to one per flag x gear x year, and the emissions attributed to each grid cell are conserved against the national fleet totals. The remaining unmatched catch (about 2.4% of the gridded total, concentrated in purse-seine flags whose vessels are not present in the registries) is excluded from all intensity metrics and quantified in the coverage assessment.
+[182] Historical fleet reconstruction. The reconstruction restores about 9,400 vessels that are absent from the registries before the late 1990s. It is anchored to an independent effort database, fades out completely before 2018 and never enters the 2025 baseline or the projections; after reconstruction the fleet totals, the species composition and the organisation-level burden agree with published catch compositions and regional catch shares.
+
+TABLES
+[
+  [
+    [
+      "RFMO",
+      "LengthType",
+      "TonnageType",
+      "PowerType"
+    ],
+    [
+      "CCSBT",
+      "LOA/REG/LBP",
+      "GT",
+      ""
+    ],
+    [
+      "IATTC",
+      "LOA/REG/LBP",
+      "GT",
+      "HP"
+    ],
+    [
+      "ICCAT",
+      "LOA",
+      "GT/GRT",
+      "HP"
+    ],
+    [
+      "IOTC",
+      "LOA",
+      "GT",
+      ""
+    ],
+    [
+      "WCPFC",
+      "LOA/REG/LBP",
+      "GT/GRT/NT",
+      "KW/HP/PS"
+    ]
+  ],
+  [
+    [
+      "维度",
+      "转换",
+      "系数"
+    ],
+    [
+      "功率 HP（英制）→ kW",
+      "× 0.7457",
+      "1 英制马力 = 0.7457 kW"
+    ],
+    [
+      "功率 PS（公制）→ kW",
+      "× 0.7355",
+      "1 公制马力 = 0.7355 kW"
+    ],
+    [
+      "功率 BHP → kW",
+      "× 0.7457",
+      "制动力 ≈ 英制 HP"
+    ],
+    [
+      "吨位 GT ≈ GRT",
+      "1:1",
+      "宏观 LCA 中等效"
+    ],
+    [
+      "吨位 NT",
+      "→ NaN",
+      "去除"
+    ],
+    [
+      "长度类型 LOA/LBP/REG",
+      "1:1",
+      "等效"
+    ],
+    [
+      "长度 ft → m",
+      "",
+      ""
+    ]
+  ],
+  [
+    [
+      "RFMO",
+      "Number",
+      "LL",
+      "PS",
+      "TS",
+      "SA"
+    ],
+    [
+      "CCSBT",
+      "4,753",
+      "4,534",
+      "45",
+      "174",
+      "0"
+    ],
+    [
+      "IATTC",
+      "2,079",
+      "1,792",
+      "287",
+      "0",
+      "0"
+    ],
+    [
+      "ICCAT",
+      "5,464",
+      "4,191",
+      "1,007",
+      "114",
+      "152"
+    ],
+    [
+      "IOTC",
+      "3,029",
+      "2,515",
+      "409",
+      "92",
+      "13"
+    ],
+    [
+      "WCPFC",
+      "2,985",
+      "1,812",
+      "519",
+      "368",
+      "286"
+    ],
+    [
+      "Total",
+      "18,310",
+      "",
+      "",
+      "",
+      ""
+    ]
+  ],
+  [
+    [
+      "类型",
+      "数量",
+      "处理方式"
+    ],
+    [
+      "Type A（换皮——改名/换旗）",
+      "84",
+      "船名合并为 \"名称A; 名称B\""
+    ],
+    [
+      "Type B（升级——保守原则取最大值）",
+      "837",
+      "GT/kW/Length 取集群内最大值"
+    ],
+    [
+      "Type C（刷脸——年度续期）",
+      "1,412",
+      "删除重复，保留信息最饱满记录"
+    ],
+    [
+      "A+B 共存",
+      "40",
+      "同时应用名称合并 + 最大值"
+    ]
+  ],
+  [
+    [
+      "组织",
+      "MO 数量",
+      "总数",
+      "MO 占比"
+    ],
+    [
+      "CCSBT",
+      "0",
+      "4753",
+      "0%"
+    ],
+    [
+      "IATTC",
+      "699",
+      "2778",
+      "25.2%"
+    ],
+    [
+      "ICCAT",
+      "0",
+      "5819",
+      "0%"
+    ],
+    [
+      "IOTC",
+      "0",
+      "3058",
+      "0%"
+    ],
+    [
+      "WCPFC",
+      "0",
+      "3003",
+      "0%"
+    ],
+    [
+      "合计",
+      "699",
+      "19411",
+      "3.6%"
+    ]
+  ],
+  [
+    [
+      "Parameters",
+      "Missing quantity",
+      "Treatment method"
+    ],
+    [
+      "Length",
+      "67",
+      "Mean imputation"
+    ],
+    [
+      "Tonnage",
+      "128",
+      "PMM multiple imputation"
+    ],
+    [
+      "Engine Power",
+      "3947",
+      "PMM multiple imputation"
+    ],
+    [
+      "Bulit Date",
+      "1799",
+      "Stratified Hot-Deck Imputation"
+    ]
+  ],
+  [
+    [
+      "Level",
+      "Explanation"
+    ],
+    [
+      "Level 1",
+      "Priority 1 (Perfect Match): Same ship type + Same captain category + Same ship flag (if pool size is greater than 5, sample directly)."
+    ],
+    [
+      "Level 2",
+      "Priority 2 (First-Level Downgrade): If pool size is less than 5, abandon the ship flag constraint, which is the most detailed restriction. Look for: Same ship type + Same captain category + all ship flags as the pool."
+    ],
+    [
+      "Level 3",
+      "Priority 3 (Second-Level Downgrade): If it is still extremely scarce, look for: Same ship type + all captains + all ship flags."
+    ]
+  ],
+  [
+    [
+      "Flag",
+      "Vessel Type",
+      "Length Category",
+      "Pool Size",
+      "Median Year",
+      "Min Year",
+      "Max Year",
+      "Fallback Level"
+    ],
+    [
+      "Albania",
+      "PS",
+      ">= 16m",
+      "1268",
+      "2004",
+      "1900",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Algeria",
+      "LL",
+      "< 16m",
+      "1851",
+      "2008",
+      "1964",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Algeria",
+      "PS",
+      ">= 16m",
+      "40",
+      "2010",
+      "1976",
+      "2025",
+      "Level 1"
+    ],
+    [
+      "Angola",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Australia",
+      "LL",
+      "< 16m",
+      "7",
+      "1977",
+      "1973",
+      "1989",
+      "Level 1"
+    ],
+    [
+      "Australia",
+      "LL",
+      ">= 16m",
+      "113",
+      "1999",
+      "1971",
+      "2021",
+      "Level 1"
+    ],
+    [
+      "Australia",
+      "PS",
+      ">= 16m",
+      "15",
+      "1981",
+      "1973",
+      "2005",
+      "Level 1"
+    ],
+    [
+      "Belize",
+      "LL",
+      ">= 16m",
+      "21",
+      "1999",
+      "1980",
+      "2013",
+      "Level 1"
+    ],
+    [
+      "Belize",
+      "PS",
+      ">= 16m",
+      "10",
+      "1987",
+      "1974",
+      "2014",
+      "Level 1"
+    ],
+    [
+      "Brazil",
+      "LL",
+      "< 16m",
+      "1851",
+      "2008",
+      "1964",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Brazil",
+      "LL",
+      ">= 16m",
+      "38",
+      "1990",
+      "1947",
+      "2019",
+      "Level 1"
+    ],
+    [
+      "Brazil",
+      "PS",
+      ">= 16m",
+      "1268",
+      "2004",
+      "1900",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Canada",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Cape Verde",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Chile",
+      "LL",
+      "< 16m",
+      "1851",
+      "2008",
+      "1964",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Chile",
+      "LL",
+      ">= 16m",
+      "5",
+      "1988",
+      "1966",
+      "2001",
+      "Level 1"
+    ],
+    [
+      "China",
+      "LL",
+      ">= 16m",
+      "900",
+      "2013",
+      "1973",
+      "2025",
+      "Level 1"
+    ],
+    [
+      "China",
+      "PS",
+      ">= 16m",
+      "74",
+      "2010",
+      "1986",
+      "2022",
+      "Level 1"
+    ],
+    [
+      "Colombia",
+      "LL",
+      "< 16m",
+      "13",
+      "1991",
+      "1976",
+      "2003",
+      "Level 1"
+    ],
+    [
+      "Colombia",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Cook Islands",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Cook Islands",
+      "PS",
+      ">= 16m",
+      "1268",
+      "2004",
+      "1900",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Costa Rica",
+      "LL",
+      "< 16m",
+      "48",
+      "1998",
+      "1981",
+      "2019",
+      "Level 1"
+    ],
+    [
+      "Costa Rica",
+      "LL",
+      ">= 16m",
+      "102",
+      "2000",
+      "1954",
+      "2023",
+      "Level 1"
+    ],
+    [
+      "Croatia",
+      "PS",
+      ">= 16m",
+      "8",
+      "1989",
+      "1960",
+      "2008",
+      "Level 1"
+    ],
+    [
+      "Cyprus",
+      "LL",
+      "< 16m",
+      "7",
+      "1996",
+      "1976",
+      "2019",
+      "Level 1"
+    ],
+    [
+      "Cyprus",
+      "LL",
+      ">= 16m",
+      "15",
+      "1999",
+      "1961",
+      "2020",
+      "Level 1"
+    ],
+    [
+      "Cyprus",
+      "PS",
+      ">= 16m",
+      "1268",
+      "2004",
+      "1900",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Ecuador",
+      "LL",
+      "< 16m",
+      "13",
+      "2001",
+      "1996",
+      "2004",
+      "Level 1"
+    ],
+    [
+      "Ecuador",
+      "LL",
+      ">= 16m",
+      "101",
+      "2001",
+      "1951",
+      "2024",
+      "Level 1"
+    ],
+    [
+      "Ecuador",
+      "ps",
+      ">= 16m",
+      "113",
+      "1979",
+      "1946",
+      "2015",
+      "Level 1"
+    ],
+    [
+      "Egypt",
+      "LL",
+      "< 16m",
+      "21",
+      "2002",
+      "1985",
+      "2013",
+      "Level 1"
+    ],
+    [
+      "Egypt",
+      "LL",
+      ">= 16m",
+      "18",
+      "2012",
+      "1993",
+      "2018",
+      "Level 1"
+    ],
+    [
+      "Egypt",
+      "PS",
+      ">= 16m",
+      "1268",
+      "2004",
+      "1900",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "El Salvador",
+      "LL",
+      "< 16m",
+      "1851",
+      "2008",
+      "1964",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "El Salvador",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "El Salvador",
+      "PS",
+      ">= 16m",
+      "5",
+      "1989",
+      "1980",
+      "2000",
+      "Level 1"
+    ],
+    [
+      "Fiji",
+      "LL",
+      "< 16m",
+      "1851",
+      "2008",
+      "1964",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Fiji",
+      "LL",
+      ">= 16m",
+      "23",
+      "2017",
+      "1975",
+      "2022",
+      "Level 1"
+    ],
+    [
+      "France",
+      "LL",
+      "< 16m",
+      "37",
+      "1999",
+      "1964",
+      "2023",
+      "Level 1"
+    ],
+    [
+      "France",
+      "LL",
+      ">= 16m",
+      "17",
+      "1997",
+      "1980",
+      "2007",
+      "Level 1"
+    ],
+    [
+      "France",
+      "PS",
+      ">= 16m",
+      "38",
+      "2002",
+      "1990",
+      "2018",
+      "Level 1"
+    ],
+    [
+      "French Polynesia",
+      "LL",
+      ">= 16m",
+      "93",
+      "2006",
+      "1986",
+      "2025",
+      "Level 1"
+    ],
+    [
+      "Ghana",
+      "PS",
+      ">= 16m",
+      "17",
+      "1990",
+      "1975",
+      "2009",
+      "Level 1"
+    ],
+    [
+      "Greece",
+      "PS",
+      ">= 16m",
+      "28",
+      "1991",
+      "1973",
+      "2018",
+      "Level 1"
+    ],
+    [
+      "Grenada",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Guatemala",
+      "LL",
+      ">= 16m",
+      "23",
+      "2004",
+      "1989",
+      "2022",
+      "Level 1"
+    ],
+    [
+      "Guinea",
+      "PS",
+      ">= 16m",
+      "1268",
+      "2004",
+      "1900",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "India",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Indonesia",
+      "LL",
+      "< 16m",
+      "5",
+      "2000",
+      "2000",
+      "2005",
+      "Level 1"
+    ],
+    [
+      "Indonesia",
+      "LL",
+      ">= 16m",
+      "786",
+      "2007",
+      "1982",
+      "2025",
+      "Level 1"
+    ],
+    [
+      "Indonesia",
+      "PS",
+      ">= 16m",
+      "411",
+      "2012",
+      "1985",
+      "2024",
+      "Level 1"
+    ],
+    [
+      "Indonesia",
+      "TS",
+      ">= 16m",
+      "32",
+      "2014",
+      "1997",
+      "2023",
+      "Level 1"
+    ],
+    [
+      "Iran",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Iran",
+      "PS",
+      ">= 16m",
+      "8",
+      "1984",
+      "1976",
+      "2012",
+      "Level 1"
+    ],
+    [
+      "Iran",
+      "TS",
+      ">= 16m",
+      "118",
+      "2002",
+      "1969",
+      "2023",
+      "Level 2 "
+    ],
+    [
+      "Italy",
+      "LL",
+      "< 16m",
+      "257",
+      "2001",
+      "1966",
+      "2025",
+      "Level 1"
+    ],
+    [
+      "Italy",
+      "LL",
+      ">= 16m",
+      "60",
+      "2003",
+      "1960",
+      "2025",
+      "Level 1"
+    ],
+    [
+      "Italy",
+      "PS",
+      "< 16m",
+      "5",
+      "2008",
+      "1985",
+      "2019",
+      "Level 2 "
+    ],
+    [
+      "Italy",
+      "PS",
+      ">= 16m",
+      "57",
+      "1993",
+      "1965",
+      "2012",
+      "Level 1"
+    ],
+    [
+      "Ivory Coast",
+      "LL",
+      ">= 16m",
+      "26",
+      "2001",
+      "1988",
+      "2001",
+      "Level 1"
+    ],
+    [
+      "Japan",
+      "LL",
+      "< 16m",
+      "1851",
+      "2008",
+      "1964",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Japan",
+      "LL",
+      ">= 16m",
+      "586",
+      "1997",
+      "1973",
+      "2025",
+      "Level 1"
+    ],
+    [
+      "Japan",
+      "PS",
+      ">= 16m",
+      "36",
+      "2013",
+      "1986",
+      "2024",
+      "Level 1"
+    ],
+    [
+      "Japan",
+      "TS",
+      ">= 16m",
+      "12",
+      "2003",
+      "1988",
+      "2018",
+      "Level 1"
+    ],
+    [
+      "Kenya",
+      "LL",
+      ">= 16m",
+      "6",
+      "1988",
+      "1980",
+      "1989",
+      "Level 1"
+    ],
+    [
+      "Kenya",
+      "PS",
+      ">= 16m",
+      "1268",
+      "2004",
+      "1900",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Kiribati",
+      "LL",
+      ">= 16m",
+      "5",
+      "2021",
+      "2011",
+      "2021",
+      "Level 1"
+    ],
+    [
+      "Kiribati",
+      "PS",
+      ">= 16m",
+      "5",
+      "2025",
+      "2022",
+      "2025",
+      "Level 1"
+    ],
+    [
+      "Korea",
+      "LL",
+      "< 16m",
+      "14",
+      "1986",
+      "1976",
+      "2009",
+      "Level 1"
+    ],
+    [
+      "Korea",
+      "LL",
+      ">= 16m",
+      "152",
+      "1989",
+      "1963",
+      "2008",
+      "Level 1"
+    ],
+    [
+      "Korea",
+      "PS",
+      ">= 16m",
+      "24",
+      "1989",
+      "1984",
+      "2014",
+      "Level 1"
+    ],
+    [
+      "Korea",
+      "TS",
+      ">= 16m",
+      "19",
+      "1993",
+      "1988",
+      "2014",
+      "Level 1"
+    ],
+    [
+      "Liberia",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Liberia",
+      "TS",
+      ">= 16m",
+      "118",
+      "2002",
+      "1969",
+      "2023",
+      "Level 2 "
+    ],
+    [
+      "Libya",
+      "PS",
+      ">= 16m",
+      "15",
+      "1991",
+      "1975",
+      "2011",
+      "Level 1"
+    ],
+    [
+      "Lithuania",
+      "TS",
+      ">= 16m",
+      "118",
+      "2002",
+      "1969",
+      "2023",
+      "Level 2 "
+    ],
+    [
+      "Madagascar",
+      "LL",
+      "< 16m",
+      "1851",
+      "2008",
+      "1964",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Madagascar",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Malaysia",
+      "LL",
+      ">= 16m",
+      "31",
+      "2001",
+      "1968",
+      "2008",
+      "Level 1"
+    ],
+    [
+      "Malaysia",
+      "TS",
+      ">= 16m",
+      "118",
+      "2002",
+      "1969",
+      "2023",
+      "Level 2 "
+    ],
+    [
+      "Maldives",
+      "TS",
+      ">= 16m",
+      "7",
+      "1993",
+      "1978",
+      "2015",
+      "Level 1"
+    ],
+    [
+      "Malta",
+      "LL",
+      "< 16m",
+      "171",
+      "1994",
+      "1964",
+      "2025",
+      "Level 1"
+    ],
+    [
+      "Malta",
+      "LL",
+      ">= 16m",
+      "21",
+      "1996",
+      "1970",
+      "2011",
+      "Level 1"
+    ],
+    [
+      "Malta",
+      "PS",
+      ">= 16m",
+      "1268",
+      "2004",
+      "1900",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Marshall Islands",
+      "PS",
+      ">= 16m",
+      "5",
+      "2018",
+      "2010",
+      "2018",
+      "Level 1"
+    ],
+    [
+      "Mauritius",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Mauritius",
+      "PS",
+      ">= 16m",
+      "1268",
+      "2004",
+      "1900",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Mexico",
+      "LL",
+      "< 16m",
+      "59",
+      "2002",
+      "1972",
+      "2015",
+      "Level 1"
+    ],
+    [
+      "Mexico",
+      "LL",
+      ">= 16m",
+      "114",
+      "1988",
+      "1967",
+      "2013",
+      "Level 1"
+    ],
+    [
+      "Mexico",
+      "ps",
+      ">= 16m",
+      "96",
+      "1982",
+      "1965",
+      "2023",
+      "Level 1"
+    ],
+    [
+      "Micronesia",
+      "LL",
+      ">= 16m",
+      "5",
+      "2011",
+      "2009",
+      "2011",
+      "Level 1"
+    ],
+    [
+      "Micronesia",
+      "PS",
+      ">= 16m",
+      "23",
+      "2010",
+      "1981",
+      "2024",
+      "Level 1"
+    ],
+    [
+      "Morocco",
+      "LL",
+      "< 16m",
+      "44",
+      "1997",
+      "1974",
+      "2021",
+      "Level 1"
+    ],
+    [
+      "Morocco",
+      "LL",
+      ">= 16m",
+      "25",
+      "1997",
+      "1989",
+      "2020",
+      "Level 1"
+    ],
+    [
+      "Morocco",
+      "PS",
+      ">= 16m",
+      "39",
+      "2003",
+      "1954",
+      "2022",
+      "Level 1"
+    ],
+    [
+      "Namibia",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Nauru",
+      "PS",
+      ">= 16m",
+      "23",
+      "2007",
+      "1990",
+      "2025",
+      "Level 1"
+    ],
+    [
+      "New Zealand",
+      "LL",
+      "< 16m",
+      "1851",
+      "2008",
+      "1964",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "New Zealand",
+      "LL",
+      ">= 16m",
+      "11",
+      "1998",
+      "1967",
+      "2025",
+      "Level 1"
+    ],
+    [
+      "Nicaragua",
+      "LL",
+      "< 16m",
+      "1851",
+      "2008",
+      "1964",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Nicaragua",
+      "LL",
+      ">= 16m",
+      "49",
+      "1987",
+      "1967",
+      "2005",
+      "Level 1"
+    ],
+    [
+      "Norway",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Norway",
+      "PS",
+      ">= 16m",
+      "7",
+      "2000",
+      "1988",
+      "2012",
+      "Level 1"
+    ],
+    [
+      "Oman",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Oman",
+      "PS",
+      ">= 16m",
+      "6",
+      "2006",
+      "1991",
+      "2024",
+      "Level 1"
+    ],
+    [
+      "Panama",
+      "LL",
+      "< 16m",
+      "1851",
+      "2008",
+      "1964",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Panama",
+      "LL",
+      ">= 16m",
+      "34",
+      "2000",
+      "1982",
+      "2021",
+      "Level 1"
+    ],
+    [
+      "Panama",
+      "PS",
+      ">= 16m",
+      "1268",
+      "2004",
+      "1900",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Panama",
+      "TS",
+      ">= 16m",
+      "23",
+      "2012",
+      "1986",
+      "2022",
+      "Level 1"
+    ],
+    [
+      "Panama",
+      "ps",
+      "< 16m",
+      "280",
+      "1981",
+      "1946",
+      "2023",
+      "Level 3 "
+    ],
+    [
+      "Panama",
+      "ps",
+      ">= 16m",
+      "54",
+      "1978",
+      "1947",
+      "2018",
+      "Level 1"
+    ],
+    [
+      "Papua New Guinea",
+      "PS",
+      ">= 16m",
+      "9",
+      "1987",
+      "1976",
+      "2006",
+      "Level 1"
+    ],
+    [
+      "Peru",
+      "LL",
+      ">= 16m",
+      "16",
+      "2011",
+      "2010",
+      "2021",
+      "Level 1"
+    ],
+    [
+      "Philippines",
+      "PS",
+      ">= 16m",
+      "45",
+      "2003",
+      "1966",
+      "2024",
+      "Level 1"
+    ],
+    [
+      "Portugal",
+      "LL",
+      "< 16m",
+      "1851",
+      "2008",
+      "1964",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Portugal",
+      "LL",
+      ">= 16m",
+      "95",
+      "1997",
+      "1951",
+      "2024",
+      "Level 1"
+    ],
+    [
+      "Senegal",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Senegal",
+      "PS",
+      ">= 16m",
+      "6",
+      "1981",
+      "1978",
+      "2003",
+      "Level 1"
+    ],
+    [
+      "Seychelles",
+      "LL",
+      "< 16m",
+      "24",
+      "2018",
+      "2001",
+      "2023",
+      "Level 1"
+    ],
+    [
+      "Seychelles",
+      "LL",
+      ">= 16m",
+      "64",
+      "2016",
+      "1986",
+      "2025",
+      "Level 1"
+    ],
+    [
+      "Seychelles",
+      "PS",
+      ">= 16m",
+      "14",
+      "2007",
+      "1984",
+      "2015",
+      "Level 1"
+    ],
+    [
+      "Singapore",
+      "TS",
+      ">= 16m",
+      "118",
+      "2002",
+      "1969",
+      "2023",
+      "Level 2 "
+    ],
+    [
+      "South Africa",
+      "LL",
+      ">= 16m",
+      "64",
+      "1996",
+      "1953",
+      "2024",
+      "Level 1"
+    ],
+    [
+      "South Korea",
+      "LL",
+      ">= 16m",
+      "9",
+      "1990",
+      "1989",
+      "1997",
+      "Level 1"
+    ],
+    [
+      "Spain",
+      "LL",
+      "< 16m",
+      "21",
+      "1999",
+      "1982",
+      "2004",
+      "Level 1"
+    ],
+    [
+      "Spain",
+      "LL",
+      ">= 16m",
+      "246",
+      "2001",
+      "1960",
+      "2024",
+      "Level 1"
+    ],
+    [
+      "Spain",
+      "PS",
+      ">= 16m",
+      "99",
+      "2000",
+      "1972",
+      "2021",
+      "Level 1"
+    ],
+    [
+      "Spain",
+      "TS",
+      ">= 16m",
+      "118",
+      "2002",
+      "1969",
+      "2023",
+      "Level 2 "
+    ],
+    [
+      "Spain",
+      "ps",
+      ">= 16m",
+      "279",
+      "1981",
+      "1946",
+      "2023",
+      "Level 2 "
+    ],
+    [
+      "Sri Lanka",
+      "LL",
+      "< 16m",
+      "994",
+      "2014",
+      "1994",
+      "2024",
+      "Level 1"
+    ],
+    [
+      "Sri Lanka",
+      "LL",
+      ">= 16m",
+      "87",
+      "2018",
+      "1983",
+      "2024",
+      "Level 1"
+    ],
+    [
+      "Suriname",
+      "LL",
+      ">= 16m",
+      "17",
+      "2002",
+      "1998",
+      "2003",
+      "Level 1"
+    ],
+    [
+      "Syria",
+      "PS",
+      ">= 16m",
+      "1268",
+      "2004",
+      "1900",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Taiwan",
+      "LL",
+      "< 16m",
+      "42",
+      "1997",
+      "1965",
+      "2013",
+      "Level 1"
+    ],
+    [
+      "Taiwan",
+      "LL",
+      ">= 16m",
+      "297",
+      "2001",
+      "1969",
+      "2024",
+      "Level 1"
+    ],
+    [
+      "Taiwan",
+      "TS",
+      ">= 16m",
+      "6",
+      "1976",
+      "1969",
+      "1980",
+      "Level 1"
+    ],
+    [
+      "Taiwan",
+      "ps",
+      ">= 16m",
+      "14",
+      "1981",
+      "1973",
+      "2007",
+      "Level 1"
+    ],
+    [
+      "Tanzania",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Tanzania",
+      "PS",
+      ">= 16m",
+      "1268",
+      "2004",
+      "1900",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Thailand",
+      "TS",
+      ">= 16m",
+      "6",
+      "1979",
+      "1978",
+      "1983",
+      "Level 1"
+    ],
+    [
+      "Tonga",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Trinidad and Tobago",
+      "LL",
+      ">= 16m",
+      "8",
+      "1999",
+      "1963",
+      "2022",
+      "Level 1"
+    ],
+    [
+      "Tunisia",
+      "PS",
+      ">= 16m",
+      "52",
+      "2005",
+      "1968",
+      "2025",
+      "Level 1"
+    ],
+    [
+      "Turkey",
+      "LL",
+      "< 16m",
+      "27",
+      "2003",
+      "1976",
+      "2021",
+      "Level 1"
+    ],
+    [
+      "Turkey",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Turkey",
+      "PS",
+      "< 16m",
+      "5",
+      "2008",
+      "1985",
+      "2019",
+      "Level 2 "
+    ],
+    [
+      "Turkey",
+      "PS",
+      ">= 16m",
+      "105",
+      "2001",
+      "1900",
+      "2025",
+      "Level 1"
+    ],
+    [
+      "United States",
+      "LL",
+      "< 16m",
+      "12",
+      "1987",
+      "1966",
+      "2020",
+      "Level 1"
+    ],
+    [
+      "United States",
+      "LL",
+      ">= 16m",
+      "92",
+      "2006",
+      "1945",
+      "2014",
+      "Level 1"
+    ],
+    [
+      "United States",
+      "ps",
+      ">= 16m",
+      "279",
+      "1981",
+      "1946",
+      "2023",
+      "Level 2 "
+    ],
+    [
+      "Vanuatu",
+      "LL",
+      "< 16m",
+      "9",
+      "1997",
+      "1967",
+      "2011",
+      "Level 1"
+    ],
+    [
+      "Vanuatu",
+      "LL",
+      ">= 16m",
+      "4505",
+      "2002",
+      "1945",
+      "2025",
+      "Level 2 "
+    ],
+    [
+      "Venezuela",
+      "LL",
+      "< 16m",
+      "6",
+      "1978",
+      "1967",
+      "2014",
+      "Level 1"
+    ],
+    [
+      "Venezuela",
+      "LL",
+      ">= 16m",
+      "100",
+      "1988",
+      "1966",
+      "2022",
+      "Level 1"
+    ],
+    [
+      "Venezuela",
+      "PS",
+      ">= 16m",
+      "22",
+      "1977",
+      "1971",
+      "2013",
+      "Level 1"
+    ]
+  ],
+  [
+    [
+      "Factor",
+      "Definition",
+      "Impact Mechanism",
+      "Example Scenarios",
+      "Data Source"
+    ],
+    [
+      "F1:Fleet size (active proportion)",
+      "Proportion of vessels actually engaged in fishing operations relative to the baseline fleet.",
+      "Determines total fishing capacity and directly affects total fuel consumption.",
+      "Baseline:100%;Low: 80%;High:120% (fleet expansion)",
+      ""
+    ],
+    [
+      "F2:Renewal rate (new vessel proportion)",
+      "Proportion of old vessels replaced by newbuilds by 2050 relative to the baseline fleet.",
+      "New vessels have higher energy efficiency and lower unit fuel consumption, and are more compatible with alternative fuels.",
+      "Baseline:0%; Medium:30%; Ambitious: 70%",
+      ""
+    ],
+    [
+      "F3:Energy substitution rate",
+      "Share of alternative fuels (e.g., LNG, methanol, ammonia, biofuels) in total vessel energy consumption.",
+      "Alternative fuels have lower carbon emission factors than conventional fuels, directly reducing the carbon intensity per vessel.",
+      "Feasibility matrix by vessel type/age; target overall substitution rates: Low 10%, Medium 30%, High 50%",
+      ""
+    ],
+    [
+      "F4:Fish finding assistance efficiency",
+      "Reduction in time spent searching for target fish schools through the use of drones, satellite remote sensing, fish finders, etc.",
+      "Reduces ineffective steaming time and fuel consumption.",
+      "Search time reduction: Low 5%, Medium 15%, High 25%",
+      ""
+    ],
+    [
+      "F5:Voyage optimization",
+      "Improvement in operational efficiency through route planning, speed optimization, and reduction of empty sailing.",
+      "Lowers fuel consumption per unit of catch.",
+      "Ineffective steaming reduction: Low 5%, Medium 10%, High 20%",
+      ""
+    ],
+    [
+      "F6:Fishing method optimization",
+      "Measures to improve fishing efficiency, such as gear improvement and optimized FAD (Fish Aggregating Device) strategies.",
+      "Increases catch per unit effort or shortens fishing operation time, indirectly reducing fuel use.",
+      "Fishing time reduction: Low 2%, Medium 5%, High 10%",
+      ""
+    ]
+  ],
+  [
+    [
+      "Stock",
+      "No creep",
+      "PP-10",
+      "PP-20",
+      "PP-30",
+      "PP-40",
+      "PP-54",
+      "PP-60",
+      "Reference"
+    ],
+    [
+      "SKJ",
+      "1.006",
+      "0.585",
+      "0.870",
+      "0.936",
+      "0.969",
+      "1.042",
+      "1.034",
+      "0.60"
+    ],
+    [
+      "YFT",
+      "0.615",
+      "0.115",
+      "0.209",
+      "0.264",
+      "0.303",
+      "0.330",
+      "0.336",
+      "0.50"
+    ],
+    [
+      "BET",
+      "0.438",
+      "0.078",
+      "0.140",
+      "0.177",
+      "0.203",
+      "0.222",
+      "0.222",
+      "0.42"
+    ],
+    [
+      "ALB",
+      "0.741",
+      "0.247",
+      "0.450",
+      "0.567",
+      "0.627",
+      "0.685",
+      "0.739",
+      "0.80"
+    ],
+    [
+      "SBT",
+      "0.213",
+      "0.048",
+      "0.067",
+      "0.073",
+      "0.081",
+      "0.086",
+      "0.100",
+      "0.20"
+    ]
+  ],
+  [
+    [
+      "R²",
+      "RMSE",
+      "MAE",
+      "MAPE"
+    ],
+    [
+      "0.9692",
+      "0.2908 Mt",
+      "0.2127 Mt",
+      "1.297%"
+    ]
+  ]
+]

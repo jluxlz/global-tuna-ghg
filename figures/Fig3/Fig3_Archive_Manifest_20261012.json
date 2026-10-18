@@ -1,0 +1,284 @@
+{
+  "Date": "2026-10-12",
+  "Root": "C:\\Users\\11401\\Desktop\\Global_Tuna_Fishery_GHG_Emission\\figures\\Fig3",
+  "Moved": [
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview.pdf",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "B81B0000C2C6C393118CD3C25674CC85B6E012E8A9BF800735B53D03A7E3BE8B",
+      "Bytes": 93935
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview.png",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "A23C894A6942A24A501DD07D723D107EDB091EF09B5D2459603C99825BD10E7B",
+      "Bytes": 233231
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview.r",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "347091718FCF9B65E15C7DB216B78C35427E1BC376010C45C3B665125FC1ADE5",
+      "Bytes": 3001
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview2.pdf",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "808484591240ADB35185E30EA51D4E9CC81218E7E6915D86E90B5DB9D9B66AF3",
+      "Bytes": 109976
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview2.png",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "1014C8ADF21841375D6E16E758E1223CF71CE1F9B7B4987AF1B9B0A63BF6B531",
+      "Bytes": 245084
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview2.r",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "E196A39A46FAA072FFCEB38D030A7A7AD4087EB927F8C5177064A752E9BD125F",
+      "Bytes": 3821
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview3.pdf",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "8B9E3B96C923D9FB1141FC88226B8AACA7A7EA24BF8F88A3A867832E8741D724",
+      "Bytes": 114717
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview3.png",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "9B74A0094D1977A76E5B836D31D1B799AB4D0E44E725BC359490D112E301E83F",
+      "Bytes": 264555
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview3.r",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "C46E5B1757D582B7AB9C1AAA2CE57A1542C30708DE409644DD9CF5371A159A23",
+      "Bytes": 3923
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview4.pdf",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "B4A4C4C27E5D880102F329845D703E218E21417A0B247DE37E8A7687E6B43778",
+      "Bytes": 116221
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview4.png",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "D58A3618703A74BB184422B0B3E46FC35F3C4CB1EC1DB790C910F718AE4D1DB5",
+      "Bytes": 307210
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview4.r",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "3BB016D939E74E198121E8C83105BB7E51736BF2BD66A5B1E8805BA17464CED6",
+      "Bytes": 4015
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview5.pdf",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "5735EBD993A9A4C42572F16E62E112352C0AFFEDCD197B7808E5F532D096230B",
+      "Bytes": 111811
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview5.png",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "DBEB55AB21EF6D5A6370B0B1B94DBBE65EAAD97BE5CC2C7C959CD0ABC4EC5EEF",
+      "Bytes": 334391
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview5.r",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "3A621B563601FCACF10A9DC19DCFC6CA2F6853A0E65B4EA4FC10D73C18224393",
+      "Bytes": 4243
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview6.pdf",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "2FA6B02CBAEC29129896C6640D591BA1135E683800A32C7857AE9268A8DA8CBE",
+      "Bytes": 81242
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview6.png",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "CEE9290A0B8D00850CA99CCD4CE8BB9250FA813D1B48DE3B6D56974F2A3673B8",
+      "Bytes": 300658
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace_preview6.r",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "31D6B543CEA229DC4764094D3648F728AA3AB1B6CABD4E7494A08A7301C7A8A7",
+      "Bytes": 4348
+    },
+    {
+      "Name": "Fig3_PanelA_NewSpace.csv",
+      "Destination": "_archive_newspace_prototypes_20261011",
+      "SHA256": "0F34BE4F9E7E9FDA6B37EFDEFD75CDFEA73A5704E51D4EA4E2F530F457C65210",
+      "Bytes": 4294305
+    },
+    {
+      "Name": "Fig3_PanelB_LL_Trajectory.csv",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "4FB2B81932255CEA703E5516E9F65874F62BFF77985E82A84D5C8809AB2AFE04",
+      "Bytes": 12206
+    },
+    {
+      "Name": "Fig3_PanelC_PS_Trajectory.csv",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "4D8590B3C19AC22D8F6AE19FCCE50E9D5433370EA64F8BF2ECED8E42429CC7F4",
+      "Bytes": 8867
+    },
+    {
+      "Name": "Fig3_PanelBC_Aggregate_Factors.csv",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "8734810F954264C12FFBFF2595D8984FADEB1C586906D9B90C052F3B2F33011B",
+      "Bytes": 21338
+    },
+    {
+      "Name": "Fig3_PanelBC_Aggregate.pdf",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "A1CF185887746CDC1301D57C8A591317CD3EE64E512FF8A5E5C92B1A2CF4712F",
+      "Bytes": 61020
+    },
+    {
+      "Name": "Fig3_PanelBC_Aggregate.png",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "41C748CBCC5E4B427F7CC86ED519B3DCD3ECBFF7458D8E8AB38785B38F14785A",
+      "Bytes": 277611
+    },
+    {
+      "Name": "Fig3_PanelBC_Audit.json",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "B56E9417C9325A384A2323D24151ADCBEF0FB79C002716EF25C1C3C31CBAE78F",
+      "Bytes": 850
+    },
+    {
+      "Name": "Fig3_PanelBC_Nominal_Trajectory.csv",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "62B801BA9EF7B88FB5B322D670B8E374B792ACE811071255B755BF3E6FDAB07C",
+      "Bytes": 24460
+    },
+    {
+      "Name": "Fig3_PanelBC_Previous_Comparison.csv",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "AE52B328DBE3FB07AA9A4559F69226B80D9F2C04C83F042A828158E9DA78CDE9",
+      "Bytes": 24842
+    },
+    {
+      "Name": "Fig3_PanelBC_Record_Scope.csv",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "F0E64785C675366EF64B3C809E68E7F0528F486840C9E4A07774C65BFC4B3895",
+      "Bytes": 10901
+    },
+    {
+      "Name": "Fig3_PanelBC_Trajectories.r",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "30DD298928179894B604B7842B9930C4E5E34E34ACE09E0239B0A1453943142B",
+      "Bytes": 5219
+    },
+    {
+      "Name": "Fig3_PanelBC_ZeroCatch_Sensitivity.csv",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "67589A154796A0A55722B2A4880205269E2DC79FC8DC838263C613B913E790A4",
+      "Bytes": 22437
+    },
+    {
+      "Name": "Fig3_Phase_Decoupling.pdf",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "30E94C582CC136B0CC1C8C54FBCB540A717D901581791D690235E7493A1D8C23",
+      "Bytes": 268972
+    },
+    {
+      "Name": "Fig3_Phase_Decoupling.png",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "F6E5343F2877A13DC216ED6DE6A2AEE2DA64DFB01A160A809168D86302E421F4",
+      "Bytes": 548587
+    },
+    {
+      "Name": "Fig3_Phase_Decoupling.tiff",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "0D849915697F6E40E5B1D5AC06ACE2D5BF6A8109AA363E27987437197B863A11",
+      "Bytes": 2642576
+    },
+    {
+      "Name": "Fig3_new.pdf",
+      "Destination": "_archive_legacy_exports_20260928",
+      "SHA256": "D899CD05FBA705F5BA6A4BB3DCB4B4553079F5A17435CDBD497ECBE4350CD979",
+      "Bytes": 4531900
+    },
+    {
+      "Name": "Fig3_new.png",
+      "Destination": "_archive_legacy_exports_20260928",
+      "SHA256": "D6643FE4DFAC62DEE2B9A82A9E58EDAE94C78738E2138268316A8E82057F8551",
+      "Bytes": 3793262
+    },
+    {
+      "Name": "Fig3_new.tif",
+      "Destination": "_archive_legacy_exports_20260928",
+      "SHA256": "B845F78F4552B60698EA0F16135C09D8AEEA3BE8100C9CEE5AA36BE8064A9E35",
+      "Bytes": 177298784
+    },
+    {
+      "Name": "Rplots.pdf",
+      "Destination": "_archive_legacy_exports_20260928",
+      "SHA256": "EE5C15BE0EE8C0FEA2517D591BC1DE831A30DDAE389DACEF3B0F6FB462C055AE",
+      "Bytes": 3667
+    },
+    {
+      "Name": "__pycache__\\preprocess_fig3.cpython-313.pyc",
+      "Destination": "_archive_runtime_cache_20261012",
+      "SHA256": "3BFDC672FF1D5F49CABAE3643AA227DDFE7E9FBF7821BCCF44C4373D2B147389",
+      "Bytes": 29337
+    }
+  ],
+  "Copied": [
+    {
+      "Name": "Fig3_Phase_Decoupling.r",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "3875C5FF6DA978B9209B3BBF6CFD43A196C2792F5D4E3C125DBEB22D7E6EC499",
+      "Bytes": 3089
+    },
+    {
+      "Name": "preprocess_fig3.py",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "B74154D2712765B689655A56C9440F31D3043EACD20F1BFF045E7063AAE82297",
+      "Bytes": 18825
+    },
+    {
+      "Name": "Fig3_PanelA_Decomposition.r",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "0B93BD3281B56AAB942C297820D52E427140623EC61920AACAFB3EA44C42D776",
+      "Bytes": 5074
+    },
+    {
+      "Name": "Fig3_Revision_Notes.md",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "13F214FBB39756B16D34297B23984B357AD1ABC0E871D2BD6210542DB1C77B02",
+      "Bytes": 15971
+    },
+    {
+      "Name": "Fig3_PanelA_Factor_Trends.csv",
+      "Destination": "_archive_decade_aggregation_20261011",
+      "SHA256": "CF8DC46F937B5CC8266FD4CE38108B181808E9CBAF2CC687CB001B8034AB68C5",
+      "Bytes": 956787
+    }
+  ],
+  "AdobePreserved": [
+    {
+      "Name": "Fig3.ai",
+      "SHA256": "F13A68F6A54D5AEE3B0613D9B6D8784AF95566C4FDBA5DB5E7D8F0705F51A4CD"
+    },
+    {
+      "Name": "Fig3.pdf",
+      "SHA256": "112996A37B729F47F402950D66A28A6D36DFBE1650C882038A7C506C48B6E3B8"
+    },
+    {
+      "Name": "Fig3.png",
+      "SHA256": "41B4FA152007BA1144A81BB358B7B75DE328E17FDF87BD4C011A18F8405363CB"
+    },
+    {
+      "Name": "Fig3.tif",
+      "SHA256": "4C00FF56D7018F3EF77AAEB8DDE349FF8F61AF84513F061A5531A00BE57681DF"
+    }
+  ]
+}

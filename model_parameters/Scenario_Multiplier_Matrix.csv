@@ -1,0 +1,88 @@
+﻿Scenario_ID,Measure_Category,Measure_Description,Measure_Value_Raw,Fuel_Multiplier,GHG_Multiplier,Is_Quantified,Multiplier_Note,Source,Note
+S1,运营优化,降低船速10–20%,燃料节省 35–61%,0.52,,True,Fuel multiplier = 0.520 (≈ 48% fuel saving relative to baseline),"Wileman, 1984；Gulbrandsen, 1986","Jha, P. N., Baiju, M. V., & Leela Edwin. (2025). A Review of Energy use and Carbon Footprint in Fishing with special reference to Life Cycle Assessment (LCA): Energy use and Carbon Footprint in Fishing. Fishery Technology, 62(1). https://doi.org/10.56093/ft.v62i1.151686"
+S2,运营优化,降低发动机转速3%,燃料节省 高达10%,0.9,,True,Fuel multiplier = 0.900 (≈ 10% fuel saving relative to baseline),"Aegisson & Endal, 1993",
+S3,能源管理,对拖网船队进行能源审计,预计可减少油耗 40%,0.6,,True,Fuel multiplier = 0.600 (≈ 40% fuel saving relative to baseline),"Eayrs et al., 2017",
+S4,替代燃料,甲醇替代柴油（围网）,运营成本降低 23%；GHG排放减少 22%,,0.78,True,GHG multiplier = 0.780 (≈ 22% GHG reduction relative to baseline),"Perèiæ et al., 2023",
+S5,替代燃料,LPG替代柴油（小型渔船）,GHG排放减少 >30%,,0.7,True,GHG multiplier = 0.700 (≈ 30% GHG reduction relative to baseline),"Kim et al., 2023",
+Q1,替代燃料,沼气燃烧,CO₂排放因子 0.9 吨 CO₂/吨燃料,,,False,Qualitative only — no numeric multiplier,"Bilgili, 2021",
+Q2,替代燃料,LNG/CNG双燃料发动机,显著减少燃料消耗和排放（未量化）,,,False,Qualitative only — no numeric multiplier,"Baiju et al., 2024",
+Q3,船舶设计,加装球鼻艏,降低阻力，减少油耗（未量化）,,,False,Qualitative only — no numeric multiplier,"Szelangiewicz et al., 2021；Tadros et al., 2023",
+Q4,船舶设计,优化螺旋桨 + 减速齿轮,显著降低阻力，节省燃料（未量化）,,,False,Qualitative only — no numeric multiplier,"Mathai, 2000；Lee & Lee, 2010",
+Q5,船舶设计,使用木质代替钢结构（同尺寸）,降低CO₂排放（未量化）,,,False,Qualitative only — no numeric multiplier,"Jha et al., 2021",
+Q6,渔具改进,无结网片、细网线、方网目、大网目,减少拖网阻力，降低油耗（未量化）,,,False,Qualitative only — no numeric multiplier,"Boopendranath, 2002",
+Q7,渔具改进,高开度拖网、离底大网目拖网,提高效率，减少能耗（未量化）,,,False,Qualitative only — no numeric multiplier,"EC, 2011；Gulbrandsen, 2012",
+Q8,运营优化,航线优化 + 气象导航（RNN）,减少无效航行，降低油耗（未量化）,,,False,Qualitative only — no numeric multiplier,"Kaklis et al., 2022；Granado et al., 2024",
+Q9,运营优化,定期清洁船底、防止生物污损,减少摩擦阻力，节约燃料（未量化）,,,False,Qualitative only — no numeric multiplier,"GEF-UNDP-IMO GloFouling, 2022；Molland, 2008",
+Q10,运营优化,使用涡轮增压柴油机、智能导航设备,提高燃烧效率，减少排放（未量化）,,,False,Qualitative only — no numeric multiplier,"Boopendranath & Hameed, 2009；Cochrane et al., 2011；Rakopoulos et al., 2011",
+Q11,新能源,太阳能电动船 / 风帆助航,长期减少化石燃料依赖（未量化）,,,False,Qualitative only — no numeric multiplier,"Baiju, 2019；Ghosh et al., 2023；Pereia et al., 2020",
+Q12,政策与管理,建立燃料使用强度（FUI）基准,监测和改进环境绩效（未量化）,,,False,Qualitative only — no numeric multiplier,"Asokan et al., 2023",
+Q13,政策与管理,发布潜在渔场预报，减少无效搜寻,提高捕捞效率，降低油耗（未量化）,,,False,Qualitative only — no numeric multiplier,文中综述，无具体文献,
+Q14,基准燃油消耗,被动渔具（壶、陷阱、延绳钓、刺网）,0.1 - 0.4 L/kg,,,False,Qualitative only — no numeric multiplier,"Thrane, M., 2004. Energy consumption in the Danish fishery: identification of key factors. Journal of Industrial Ecology, 8, 223-239. https://doi.org/10.1162/1088198041269445",燃油高效
+Q15,基准燃油消耗,底拖网,0.5 - 1.5 L/kg,,,False,Qualitative only — no numeric multiplier,"Thrane, M., 2004. 同上 https://doi.org/10.1162/1088198041269445",油耗高
+Q16,基准燃油消耗,底围网,介于被动渔具与底拖网之间,,,False,Qualitative only — no numeric multiplier,"Thrane, M., 2004. 同上 https://doi.org/10.1162/1088198041269445",相对省油
+Q17,基准燃油消耗,中层拖网、围网（捕聚群鱼类）,约 0.1 L/kg,,,False,Qualitative only — no numeric multiplier,"Thrane, M., 2004. 同上 https://doi.org/10.1162/1088198041269445",但搜索时间耗油
+Q18,基准燃油消耗,日本沿岸鱿鱼钓（金属卤素灯）,约 600 L/次作业,,,False,Qualitative only — no numeric multiplier,"Matsushita, Y., Yamashita, Y., Azuno, T., 2010. Balancing fishing performance and energy saving in light fishing. In: International Symposium on Conservation and Sustainable Utilization in Marine Fisheries - Smartfish 2010, Zhejiang Ocean University, Zhoushan, China. （会议论文，无DOI）",灯具耗油大
+Q19,基准燃油消耗,LED 替代金属卤素灯,节省燃油 20-30%,0.75,,False,Qualitative only — no numeric multiplier,"Yamashita, Y., Matsushita, Y., Azuno, T., 2012. Catch performance of coastal squid jigging boats using LED panels in combination with metal halide lamps. Fisheries Research, 113, 182-189. https://doi.org/10.1016/j.fishres.2011.10.011",但捕捞效率可能降低
+S6,技术改进（实测）,墨西哥、哥伦比亚、智利底拖网修改（阻力减少20-35%）,燃油节省 23-43%,0.67,,True,Fuel multiplier = 0.670 (≈ 33% fuel saving relative to baseline),"Zúñiga, H., Sánchez, J., Altamar, J., Manjarrés, L., 2006. Evaluación técnica y económica de innovaciones en el sistema de arrastre de la flota industrial camaronera del Caribe colombiano. In: Zúñiga, H. et al. (Eds.), Evaluación de innovaciones… Informe Técnico, Universidad del Magdalena-INCODER-DISTA-GEF/FAO-INVEMAR. （西班牙语技术报告，无公开DOI）",具体国家案例
+S6a,技术改进（实测）,同上,燃油节省 23-43%,0.67,,True,Fuel multiplier = 0.670 (≈ 33% fuel saving relative to baseline),"Rico-Mejía, F., Rueda, M., 2007. Bioeconomic evaluation of changes in fishing technology of shrimp-trawl nets in shallow waters of the Colombian Pacific coast. Boletín de Investigaciones Marinas y Costeras, 36, 79-109. http://boletin.invemar.org.co/ojs/index.php/boletin/article/view/226",同上
+S6b,技术改进（实测）,同上,燃油节省 23-43%,0.67,,True,Fuel multiplier = 0.670 (≈ 33% fuel saving relative to baseline),"Melo, T., et al., 2008. Rediseño de las redes de arrastre de crustáceos. Proyecto FIP/IT No. 2006-20, 144 pp. （智利渔业发展研究所报告，可查询 http://www.fip.cl）",同上
+S6c,技术改进（实测）,同上,燃油节省 23-43%,0.67,,True,Fuel multiplier = 0.670 (≈ 33% fuel saving relative to baseline),"Heredia-Quevedo, J.A., 2010. Fuel saving: the goal in designing fishing nets. In: NOAA Symposium on Energy use in Fisheries, Seattle, WA. （会议报告，未正式出版）",同上
+S7,技术改进（实测）,加拿大 Browns Bank 扇贝渔业多波束声学测绘,拖曳距离减少 70%,0.3,,True,Fuel multiplier = 0.300 (≈ 70% fuel saving relative to baseline),"National Research Council, 2005. Effects of Trawling and Dredging on the Seafloor. National Academy Press, Washington, DC. https://doi.org/10.17226/11323",减少无效拖曳
+Q20,技术改进（通用）,使用更细更韧纤维、无结网、T90网、大网目,减少网具重量与阻力,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于作者总结的技术知识,高价格、可用性；大网目可能损失渔获
+Q21,技术改进（通用）,使用多个小网（针对虾、比目鱼等）,减少网面积和阻力，不降低产量,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于作者建议,政策、习惯阻力
+Q22,技术改进（通用）,安装兼捕减少装置（BRDs）和底栖生物排除装置,减少非目标种类，降低网内重量,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于作者建议,性能不稳定；可能损失目标渔获
+Q23,技术改进（通用）,四片式网身 + 方目网片,改善网形稳定，便于安装BRD,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于作者建议,缺乏成本效益分析
+Q24,技术改进（通用）,水动力网板 + 优化曳纲长度,网板阻力占 gear 总阻力 25-35%,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于拖网设计常识,优化后显著降阻
+Q25,技术改进（通用）,升力式网板（离底）,减少底接触和阻力,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于作者建议,价格；不适合所有鱼种
+Q26,技术改进（通用）,轻量化底纲、缩短底纲、复合绳索、加长侧索,减轻底接触压力和阻力,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于作者建议,需监测性能
+Q27,技术改进（通用）,水动力学浮子、风筝、脉冲电刺激、SumWing设计,降低阻力，减少底接触,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于作者建议,速度依赖性
+Q28,技术改进（通用）,单船拖网改为双船拖网,减少油耗，减少底栖损害,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于作者建议,政策、行为习惯
+Q29,技术改进（通用）,实时声学监控渔具状态,保持最佳性能，减少能耗和兼捕,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于作者建议,价格、培训
+Q30,技术改进（通用）,水下摄像实时观察鱼群行为,减少兼捕，可主动释放非目标渔获,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于作者建议,价格、培训
+Q31,操作优化,改进导航、鱼探、电子海图、海底测绘,最大化渔获，减少无效航行和能耗,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于作者建议,价格、培训
+Q32,操作优化,降低拖网速度,直接减少燃油消耗,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于通用操作知识,行为习惯
+Q33,操作优化,船舶动力系统优化、预防性维护、改变航次规划,减少油耗,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于通用维护知识,价格、行为习惯
+Q34,操作优化,波束拖网中用电脉冲替代 tickler chains,减少底接触和阻力,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于作者建议,技术成熟度
+Q35,更换渔具,底围网（Danish/Scottish seine）底栖生物死亡率,0.05（对比底拖网 0.25）,,,False,Qualitative only — no numeric multiplier,"Tulp, I., Piet, G., Quirijns, F., Rijnsdorp, A., Lindeboom, H., 2005. A method to quantify fisheries induced mortality of benthos and fish. RIVO Report No. C087/05. （荷兰瓦赫宁根大学报告，可查询 https://www.wur.nl）",围网对底栖影响更小
+Q36,更换渔具,陷阱网（trap-net / pound-net）,油耗极低；可活捕,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用（属于通用渔具知识）,不易移动，水深受限，有兼捕
+Q37,更换渔具,壶（pot）,0.1 - 0.4 L/kg,,,False,Qualitative only — no numeric multiplier,"同“被动渔具”引用（Thrane, 2004）",部分鱼类捕获效率低；丢失壶造成 ghost fishing
+Q38,更换渔具,延绳钓,0.1 - 0.4 L/kg,,,False,Qualitative only — no numeric multiplier,"同“被动渔具”引用（Thrane, 2004）",有海鸟、海龟兼捕问题；需饵料
+Q39,更换渔具,刺网,0.1 - 0.4 L/kg,,,False,Qualitative only — no numeric multiplier,"同“被动渔具”引用（Thrane, 2004）",物种选择性差；兼捕；鱼质较差
+Q40,更换渔具（案例）,加拿大东海岸可折叠壶（cod pot）,活捕鳕鱼，价格显著高于刺网,,,False,Qualitative only — no numeric multiplier,"Safer, A., 2010. Newfoundland cod pot fishery looks promising. Commercial Fisheries News, 38(4), 1-3. https://www.fish-news.com （需订阅）",具体区域案例
+Q41,更换渔具（案例）,挪威漂浮壶（cod）离底设置,避免蟹类兼捕，减少底栖影响，提高鳕鱼捕获率,,,False,Qualitative only — no numeric multiplier,"Furevik, D.M., Humborstad, O-B., Jørgensen, T., Løkkeborg, S., 2008. Floated fish pot eliminates bycatch of red king crab and maintains target catch of cod. Fisheries Research, 92, 23-27. https://doi.org/10.1016/j.fishres.2008.01.017",减少底栖影响
+Q42,更换渔具（案例）,瑞典漂浮壶替代刺网,解决海豹捕食问题,,,False,Qualitative only — no numeric multiplier,"Ovegard, M., Konigson, S., Persson, A., Lunneryd, S.G., 2011. Size selective capture of Atlantic cod (Gadus morhua) in floating pots. Fisheries Research, 107, 239-244. https://doi.org/10.1016/j.fishres.2010.11.007",具体应用案例
+Q43,综合结论,全球渔业平均燃油消耗,约 620 L/吨渔获（0.62 L/kg）,,,False,Qualitative only — no numeric multiplier,"Tvedmers, P.H., Watson, R., Pauly, D., 2005. Fueling global fishing fleets. Ambio, 34, 635-638. https://doi.org/10.1579/0044-7447-34.8.635",全球船队年耗油约 4100 万吨
+Q44,综合结论,全球船队 CO₂ 排放,约 1.3 亿吨/年,,,False,Qualitative only — no numeric multiplier,"Tvedmers, P.H., Watson, R., Pauly, D., 2005. 同上 https://doi.org/10.1579/0044-7447-34.8.635",基于 4100 万吨燃油
+Q45,综合结论,仅提高燃油效率不一定减少总油耗,可能吸引更多渔船，增加总努力量,,,False,Qualitative only — no numeric multiplier,论文中未提供直接引用，属于作者基于管理学的结论,需配合有效渔业管理
+S8,替代燃料,LNG柴油混合燃料,"CF 降低区间：14% – 16%（建议取中值 15% 用于粗略估算）
+总成本降低区间：9.5% – 13.8%（建议按不同 LNG 掺混比例分情景设定）
+燃料价格不确定性：LNG 价格标准差 0.18，柴油 0.22（可用来做敏感性分析）
+CH4 滑失：随 LNG 比例增加而升高（从 0.776 kg/cycle 到 0.873 kg/cycle），在 GWP 计算中需乘以 36",,0.86,True,GHG multiplier = 0.860 (≈ 14% GHG reduction relative to baseline),"Sjeric, M., Percic, M., Jovanovic, I., & Vladimir, N. (2026). Carbon footprint and economic analysis of LNG-fueled fishing vessel using real engine performance simulation. Journal of Marine Science and Application. https://doi.org/10.1007/s11804-025-00640-5","根据该文献的内容，LNG与普通柴油的燃料供应方式存在显著区别，不能直接将LNG注入原柴油机，而是需要配备专门的设备。
+LNG比例	CF降低幅度（vs 柴油）	总成本降低（vs 柴油）	投资成本 (€/kW)	燃料价格均值 (€/kg)	燃料价格标准差
+85%	14%	9.5%	1290	0.75	0.18
+90%	15%	11.8%	1290	0.75	0.18
+95%	16%	13.8%	1290	0.75	0.18"
+S9,替代燃料,生物燃料,生物油在 PTW 阶段（船上使用）的碳排放仅为柴油的 50.24%,,0.502,True,GHG multiplier = 0.502 (≈ 50% GHG reduction relative to baseline),"Li, C., Zhu, Y., Zhu, J., Zhao, Y., & Chen, G. (2024). Life cycle assessment of utilizing bio-oil to reduce the carbon footprint on the Yangtze River mainline: A case study of container ships. Journal of Marine Science and Engineering, *12*(2), 226. https://doi.org/10.3390/jmse12020226","生物油全生命周期总排放比柴油低 34.58%。
+生物油在 PTW 阶段（船上使用）的碳排放仅为柴油的 50.24%。
+生物油生产阶段（WTP）排放占全生命周期排放的比例为 169.14%（因油棕生长吸收 CO2，导致产阶段排放高于总排放）。
+生物油生产过程中，预处理和生产环节的能耗占整个生产过程的 98.49%。"
+S10,替代燃料,液化石油气,"LPG 比汽油/柴油减排 ~30%；
+Bio LPG（100%）比汽油/柴油减排 >65%；
+混合燃料（50:50 LPG:Bio LPG）可减排约 49–52%。",,0.495,True,GHG multiplier = 0.495 (≈ 50% GHG reduction relative to baseline),"Kim, J. K., Jeong, B., Choi, J.-H., & Lee, W.-J. (2023). Life cycle assessment of liquefied petroleum gas (LPG) and bio LPG for small fishing vessels in South Korea. Journal of Marine Science and Engineering, *11*(8), 1488. https://doi.org/10.3390/jmse11081488",PG（液化石油气）的主要用途是作为小型渔船的替代燃料，用来取代传统的汽油和船用柴油，以减少温室气体排放。
+S11,替代燃料,电力,约 50%,,0.5,True,GHG multiplier = 0.500 (≈ 50% GHG reduction relative to baseline),"Perčić, M., Vladimir, N., & Fan, A. (2020). Life-cycle cost assessment of alternative marine fuels to reduce the carbon footprint in short-sea shipping: A case study of Croatia. Applied Energy, *279*, 115848.",最环保方案。排放主要来自发电过程；若电力结构更清洁，减排更高。
+Q46,替代燃料,甲醇,约 32–33%,,,False,Qualitative only — no numeric multiplier,,第二环保。虽燃料消耗高，但碳含量低。
+Q47,替代燃料,DME,介于甲醇和天然气之间,,,False,Qualitative only — no numeric multiplier,,文献未给确切数字，但明确其排放高于甲醇、低于天然气（天然气约10-12%减排），估算约 20–25%。
+Q48,替代燃料,生物柴油 B20,约 16–18%,,,False,Qualitative only — no numeric multiplier,,因生物柴油部分视为碳中性，仅计算80%柴油的尾气排放。
+Q49,替代燃料,天然气（CNG / LNG）,约 10–12%,,,False,Qualitative only — no numeric multiplier,,CNG和LNG减排效果相近，CNG略优。
+Q50,替代燃料,氢气（可再生或化石）,负减排（排放更高）,,,False,Qualitative only — no numeric multiplier,,生命周期总CF高于柴油，且成本高昂，不推荐作为主推进能源。
+S12,替代燃料,甲醇-柴油混合燃料 (DF-M-80),下降78.5%,,0.215,True,GHG multiplier = 0.215 (≈ 78% GHG reduction relative to baseline),"Sjerić, M., Koričan, M., & Vladimir, N. (2026). Environmental footprint of hydrogen- and methanol-powered fishing vessel under steady and transient engine operation. Ocean Engineering, *345*, 123864. https://doi.org/10.1016/j.oceaneng.2025.123864",
+S13,替代燃料,氢-柴油混合燃料 (DF-H2-80),下降81.1%,,0.189,True,GHG multiplier = 0.189 (≈ 81% GHG reduction relative to baseline),,
+S14,替代燃料,电力（LFP电池）,下降约40%,,0.6,True,GHG multiplier = 0.600 (≈ 40% GHG reduction relative to baseline),"Percic, M., Korican, M., Jovanovic, I., & Vladimir, N. (2024). Environmental and Economic Assessment of Batteries for Marine Applications: Case Study of All-Electric Fishing Vessels. Batteries, *10*(1), 7. https://doi.org/10.3390/batteries10010007","系统边界仅限船舶动力系统，不包括船体、渔具、渔获、港口作业
+不包括电池回收过程
+不考虑海水对电池的损坏影响
+使用欧洲平均电力结构（图4），不同国家/地区结果会不同
+不考虑安全因素
+电池价格和寿命数据来自文献（Hasselwander et al., 2023），有波动范围"
+S15,制冷剂替代,替代为氨,最高减少 30%,,0.7,True,GHG multiplier = 0.700 (≈ 30% GHG reduction relative to baseline),"Ziegler, F., Winther, U., Hognes, E. S., Emanuelsson, A., Sund, V., & Ellingsen, H. (2013). The carbon footprint of Norwegian seafood products on the global seafood market. Journal of Industrial Ecology, *17*(1), 103–116.",“replacement of the HCFC R22 with environmentally harmless refrigerants like ammonia … can reduce the carbon footprint of the whitefish products included in this study by up to 30% if the right substitutes are chosen
+Q51,制冷剂替代,改用 HFC,若简单用 R404a 或 R507 等 HFC 替代 R22，这些物质的 GWP（全球增温潜势）约为 R22 的两倍，反而会增加碳足迹,,,False,Qualitative only — no numeric multiplier,,"If the phasing out of R22 is done in the easiest way … to let hydrofluorocarbons (HFCs) like R404a or R507 replace it, then the carbon footprint will increase rather than decrease; the IPCC 2007 indicators for these substances are about double those of R22"
+S16,船舶设计,更换柴油电力系统,现有船队发动机功率严重过剩，仅更换匹配功率的发动机即可实现 45% 的燃油节约,0.55,,True,Fuel multiplier = 0.550 (≈ 45% fuel saving relative to baseline),"Bastos, R. F., Branco, D. A. C., & Arouca, M. C. (2021). Potential of diesel electric system for fuel saving in fishing vessels: a case study on a bottom longline fleet of Brazil. Journal of Marine Engineering & Technology, 20(1), 1-16. https://doi.org/10.1080/20464177.2018.1507445",小船换为柴油电力系统

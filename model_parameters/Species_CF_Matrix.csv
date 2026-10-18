@@ -1,0 +1,12 @@
+﻿Common_Name,Scientific_Name,CF_median,CF_min,CF_max
+Albacore,Thunnus alalunga,3.72e-06,2.48e-06,4.75e-06
+Atlantic bluefin tuna,Thunnus thynnus,1.6e-05,3.27e-06,0.00137
+Bigeye tuna,Thunnus obesus,1.45e-06,8.63e-07,3.05e-06
+Skipjack tuna,Katsuwonus pelamis,1.62e-07,1.02e-07,2e-07
+Yellowfin tuna,Thunnus albacares,4.86e-07,3.05e-07,7.46e-06
+Southern bluefin tuna,Thunnus maccoyii,8.25e-06,1.42e-06,0.000464
+Longtail tuna,Thunnus tonggol,5.38e-06,2.68e-06,6.41e-06
+Kawakawa,Euthynnus affinis,1.02e-06,5.49e-07,1.75e-06
+Bullet tuna,Auxis rochei,3.92e-05,2.77e-05,0.000103
+Frigate tuna,Auxis thazard,1.68e-06,1.18e-06,1.98e-06
+DEFAULT,Unknown bycatch species,2.6956369162938897e-06,1.02e-07,0.00137

@@ -1,0 +1,20 @@
+function (mu, CV, Prior = "x", Plot = FALSE) 
+{
+    sdev = sqrt(log(CV^2 + 1))
+    rand.pr = rlnorm(1000, log(mu) - 0.5 * sdev^2, sdev)
+    x = seq(min(rand.pr), quantile(rand.pr, 0.995), max(rand.pr/500))
+    pdf = dlnorm(x, log(mu), sdev)
+    if (Plot == TRUE) {
+        plot(x, pdf, type = "l", xlim = range(x), xlab = paste(Prior), 
+            ylab = "", yaxt = "n")
+        polygon(c(x, rev(x)), c(rep(0, length(x)), rev(ifelse(pdf == 
+            Inf, 1e+05, pdf))), col = "grey")
+    }
+    return(c(mu, sdev))
+}
+<bytecode: 0x000002b7eba385f0>
+<environment: namespace:JABBA>
+SKJ 
+[1] 2.000000 2.960441
+SBT 
+[1] 1.00000 1.80502

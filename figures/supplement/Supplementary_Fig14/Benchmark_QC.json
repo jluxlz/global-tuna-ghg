@@ -1,0 +1,26 @@
+{
+  "Inputs": {
+    "GHG_Calculation\\Base_2_Fleet_GHG.csv": "82f6c72ef93939cc383ba879bbcbc54ae9002c2219ff5347223a07348181e60c",
+    "GHG_Calculation\\Base_3_Spatial_Grid_Enriched.csv": "cdd250c6c3f95df5e23ed7cea5dd571d3454411408ec4b5c6cbcabab00da1cdb"
+  },
+  "Densities_kg_L": {
+    "I": 0.8305650000000001,
+    "APW": 0.746269
+  },
+  "Carbon_factors_tCO2_tfuel": {
+    "I": 3.206,
+    "APW": 3.158
+  },
+  "Conservation_checks": "PASS sector-recovered allocated process totals",
+  "Inference": "Descriptive external gaps, not statistical validation; central process medians are not paired-draw intervals",
+  "Important_source_issues": [
+    "ISSF 2025 activities=2023; 2009 figures are retrospective, not independent",
+    "Table 5 average days 412.46/1048.29/477.78 exceed a calendar year; not used to validate operating days",
+    "Table 4 LL fuel/catch differs from Table 10 weighted FUI; retain Table 10, flag internal discrepancy",
+    "UK 2024 Fuels and WTT-fuels are distinct: benchmark ISSF Table 12 as-tabulated combustion only",
+    "GRT not numerically equated with GT; no tonnage residual calculated",
+    "2009 LL survey is albacore only: model numerator AND catch mass-allocated to ALB",
+    "2003 Spanish PS is SKJ+YFT only: model numerator AND catch allocated to same species",
+    "Do not divide unchanged survey total fuel by a target-only denominator: consistent mass allocation leaves its FUI unchanged"
+  ]
+}

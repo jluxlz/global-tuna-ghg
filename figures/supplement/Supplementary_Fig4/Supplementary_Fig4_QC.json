@@ -1,0 +1,10 @@
+{
+  "Positive_catch_rows": 412302,
+  "Catch_without_GHG_rows": 27846,
+  "Catch_without_GHG_Mt": 3.028648389961631,
+  "First_Grid_Year": 1951,
+  "Last_Grid_Year": 2024,
+  "Unique_Catch_Keys": true,
+  "Max_Unfilled_kW": 1.8189894035458565e-12,
+  "Ghost_From_2017_kW": 0.0
+}

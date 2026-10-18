@@ -1,0 +1,8 @@
+suppressPackageStartupMessages({library(ggplot2);library(dplyr)})
+arg<-grep('^--file=',commandArgs(FALSE),value=TRUE);HERE<-dirname(normalizePath(sub('^--file=','',arg[1]),winslash='/'))
+d<-read.csv(file.path(HERE,'Fig4_Coupled_Validation_PanelA_Stocks.csv'))%>%group_by(Year,Stock,Pathway)%>%summarise(Median=median(B_K),Lower=quantile(B_K,.05),Upper=quantile(B_K,.95),.groups='drop')
+d$Stock<-factor(d$Stock,levels=c('SKJ','YFT','BET','ALB','SBT'))
+write.csv(d,file.path(HERE,'Fig4_Coupled_Validation_PanelA_Render_Data.csv'),row.names=FALSE)
+cols<-c('Constrained BAU'='#333333','C-type quota'='#CC79A7','F-type quota'='#0072B2')
+fig<-ggplot(d,aes(Year,Median,colour=Pathway,fill=Pathway))+geom_hline(yintercept=.5,linetype='dotted',linewidth=.2,colour='grey60')+geom_ribbon(aes(ymin=Lower,ymax=Upper),alpha=.12,colour=NA,show.legend=FALSE)+geom_line(linewidth=.4)+facet_wrap(~Stock,nrow=1)+scale_colour_manual(values=cols)+scale_fill_manual(values=cols,guide='none')+scale_x_continuous(breaks=c(2025,2050))+labs(x=NULL,y='End-year total biomass / K')+theme_classic(base_size=7,base_family='Arial')+theme(axis.title=element_text(size=7,face='bold'),axis.text=element_text(size=6,colour='black'),strip.background=element_blank(),strip.text=element_text(size=7,face='bold'),legend.position='bottom',legend.text=element_text(size=6))
+for(ext in c('pdf','png','tiff')){opt<-list(filename=file.path(HERE,paste0('Fig4_Coupled_Validation.',ext)),plot=fig,width=183,height=70,units='mm',bg='white');if(ext=='pdf')opt$device<-cairo_pdf;if(ext=='png')opt$dpi<-300;if(ext=='tiff'){opt$dpi<-900;opt$compression<-'lzw'};do.call(ggsave,opt)}

@@ -1,0 +1,9 @@
+Fuel,Excel_Row,LHV_MJ_kg,Source_LHV_Column,Source_WtT_Column,WtT_Source_Value
+MGO,10,42.7,D,E,17.7
+HFO,6,40.2,D,E,16.8
+FAME,16,37.199999999999996,D,E,20.8
+HVO,17,44.0,D,E,14.9
+LNG_Fossil,14,48.0,D,E,23.8
+H2_Fossil,18,120.0,D,E,135.5
+NH3_Green,19,18.599999999999998,D,E,
+H2_Green,20,120.0,D,E,

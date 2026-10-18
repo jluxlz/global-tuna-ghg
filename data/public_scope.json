@@ -1,0 +1,96 @@
+{
+  "Public_Scope": "Model algorithms, compiled parameter CSVs and author-generated figures/aggregate outputs only",
+  "Excluded": [
+    "manuscripts and SI documents",
+    "agent and editorial tooling",
+    "original RFMO downloads and registry microdata",
+    "third-party assessment archives and source workbooks",
+    "bundled RDS fit objects and source boundary shapefiles"
+  ],
+  "Files": 15792,
+  "Bytes": 1519537283,
+  "Originals_Removed_From_Staging": [
+    "gear_intensity/gear_model/unit_gears_model/README.md",
+    "gear_intensity/gear_model/unit_gears_model/setup.py",
+    "gear_intensity/gear_model/unit_gears_model/jupyter/Manuscript Fig2.ipynb",
+    "gear_intensity/gear_model/unit_gears_model/jupyter/Manuscript Revision.ipynb",
+    "gear_intensity/gear_model/unit_gears_model/unit_gears/base_models.py",
+    "gear_intensity/gear_model/unit_gears_model/unit_gears/gear_mapping.py",
+    "gear_intensity/gear_model/unit_gears_model/unit_gears/model_library.py",
+    "gear_intensity/gear_model/unit_gears_model/unit_gears/quantities.py",
+    "gear_intensity/gear_model/unit_gears_model/unit_gears/query.py",
+    "gear_intensity/gear_model/unit_gears_model/unit_gears/README.md",
+    "gear_intensity/gear_model/unit_gears_model/unit_gears/stages.py",
+    "gear_intensity/gear_model/unit_gears_model/unit_gears/__init__.py",
+    "gear_intensity/gear_model/unit_gears_model/unit_gears/tests/test_base_models.py",
+    "gear_intensity/gear_model/unit_gears_model/unit_gears/tests/test_gear_mapper.py",
+    "gear_intensity/gear_model/unit_gears_model/unit_gears/tests/test_library.py",
+    "gear_intensity/gear_model/unit_gears_model/unit_gears/tests/__init__.py"
+  ],
+  "Updated_Private_Documents": [],
+  "Public_Data_By_Category": {
+    "CEI.py": {
+      "Files": 1,
+      "Bytes": 4430
+    },
+    "GHG_Calculation": {
+      "Files": 25,
+      "Bytes": 478765213
+    },
+    "Icon": {
+      "Files": 5,
+      "Bytes": 1235287
+    },
+    "PMM_Imputation": {
+      "Files": 2,
+      "Bytes": 9357
+    },
+    "Stratified_Hot-Deck_Imputation": {
+      "Files": 1,
+      "Bytes": 18123
+    },
+    "audits": {
+      "Files": 11904,
+      "Bytes": 231119607
+    },
+    "effort_data": {
+      "Files": 20,
+      "Bytes": 131604035
+    },
+    "figures": {
+      "Files": 684,
+      "Bytes": 579845586
+    },
+    "gear_intensity": {
+      "Files": 2,
+      "Bytes": 1595
+    },
+    "model_parameters": {
+      "Files": 7,
+      "Bytes": 311670
+    },
+    "scenario": {
+      "Files": 3129,
+      "Bytes": 96287940
+    },
+    "spatial_analysis": {
+      "Files": 4,
+      "Bytes": 37467
+    },
+    "spider": {
+      "Files": 2,
+      "Bytes": 65239
+    },
+    "uncertainty": {
+      "Files": 2,
+      "Bytes": 18734
+    },
+    "vessel_data_extract": {
+      "Files": 4,
+      "Bytes": 213000
+    }
+  },
+  "Core_Algorithms_Byte_Identical": true,
+  "Forbidden_Payload_Check": "PASS",
+  "Credential_Pattern_Check": "PASS"
+}

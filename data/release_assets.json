@@ -1,0 +1,17 @@
+[
+  {
+    "Asset": "public-data-001.zip",
+    "Bytes": 414579494,
+    "SHA256": "8dc75e6e48a0f6b26ec5cdd3133ba81b33759aeb4dcbe49d419dbb5c3bc17194"
+  },
+  {
+    "Asset": "public-data-002.zip",
+    "Bytes": 29670347,
+    "SHA256": "d63332bd66e78f9af5a799295a00d94e07df82c1871bfa255d79dbd1b4fd96b0"
+  },
+  {
+    "Asset": "public-data-003.zip",
+    "Bytes": 95081559,
+    "SHA256": "d3e34612757ddc52ed3a04cca8fcc091fee25ff5f82a781002f8be293c63ab83"
+  }
+]

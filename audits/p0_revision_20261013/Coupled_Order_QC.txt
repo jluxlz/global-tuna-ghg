@@ -1,0 +1,1 @@
+PASS: bit-identical annual GHG/catch/stocks before and after other futures; input fleet unchanged.

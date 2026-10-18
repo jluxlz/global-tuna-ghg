@@ -1,0 +1,70 @@
+Required_Path,Provider,Public_Deposit
+effort_data/CCSBT/source_data/CEData_Longline.xlsx,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/CCSBT/source_data/CEData_Surface.xlsx,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/CCSBT/source_data/CatchByYMGOLoLa.xlsx,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/CCSBT/source_data/GlobalCatch_Flag_Gear.xlsx,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/IATTC/source_data/CatchByFlagGear1918-2024.csv,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/IATTC/source_data/PublicLLTunaBillfish/LLTunaBillfish-AtunPicudo.pdf,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/IATTC/source_data/PublicLLTunaBillfish/PublicLLTunaBillfishMt.csv,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/IATTC/source_data/PublicLLTunaBillfish/PublicLLTunaBillfishNum.csv,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/IATTC/source_data/PublicPSTuna/PSTuna-Atun.pdf,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/IATTC/source_data/PublicPSTuna/PublicPSTunaFlag.csv,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/IATTC/source_data/PublicPSTuna/PublicPSTunaSetType.csv,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/ICCAT/source_data/t1nc-20260129_ALL.xlsx,https://www.iccat.int/,Excluded original/third-party input; obtain under provider terms
+effort_data/ICCAT/source_data/t2ce_20260130web.mdb,https://www.iccat.int/,Excluded original/third-party input; obtain under provider terms
+effort_data/IOTC/source_data/IOTC-DATASETS-2026-02-23-CA-1952-2024.csv,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/IOTC/source_data/IOTC-DATASETS-2026-02-23-CE-1952-2024.csv,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/IOTC/source_data/IOTC-DATASETS-2026-02-23-EF-1952-2024.csv,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/IOTC/source_data/IOTC-DATASETS-2026-02-23-RC-SCI-1950-2024.csv,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
+effort_data/WCPFC/source_data/WCPFC_L_PUBLIC_BY_YY_FLAG_1/Longline.pdf,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+effort_data/WCPFC/source_data/WCPFC_L_PUBLIC_BY_YY_FLAG_1/WCPFC_L_PUBLIC_BY_YY_FLAG.csv,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+effort_data/WCPFC/source_data/WCPFC_L_PUBLIC_BY_YY_FLAG_1/WCPFC_L_PUBLIC_BY_YY_FLAG_Coverage.csv,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+effort_data/WCPFC/source_data/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG_0/Purse_seine.pdf,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+effort_data/WCPFC/source_data/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG_0/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG.csv,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+effort_data/WCPFC/source_data/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG_0/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG_coverage.csv,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+extracted_vessel_data/CCSBT.xlsx,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
+extracted_vessel_data/IATTC.xlsx,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+extracted_vessel_data/ICCAT.xlsx,https://www.iccat.int/,Excluded original/third-party input; obtain under provider terms
+extracted_vessel_data/IOTC.xlsx,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
+extracted_vessel_data/WCPFC.xlsx,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+model_parameters/Model_parameters.xlsx,See source annotations in the model and parameter builders,Excluded original/third-party input; obtain under provider terms
+model_parameters/Scenario_Fuel_Parameters.xlsx,See source annotations in the model and parameter builders,Excluded original/third-party input; obtain under provider terms
+model_parameters/Scenario_Fuel_Price_Matrix.xlsx,See source annotations in the model and parameter builders,Excluded original/third-party input; obtain under provider terms
+model_parameters/Scenario_Fuel_Price_Matrix_backup_v4.xlsx,See source annotations in the model and parameter builders,Excluded original/third-party input; obtain under provider terms
+model_parameters/量化参数.xlsx,See source annotations in the model and parameter builders,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/CCSBT南方蓝鳍金枪鱼保护委员会.csv,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/CCSBT字段.xlsx,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/IATTC字段.xlsx,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/IATTC美洲热带金枪鱼委员会.xlsx,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/ICCAT国际大西洋金枪鱼保护委员会.xlsx,https://www.iccat.int/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/ICCAT字段.xlsx,https://www.iccat.int/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/IOTC印度洋金枪鱼委员会.xlsx,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/IOTC字段.xlsx,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/WCPFC中西太平洋渔业委员会.csv,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/WCPFC字段.xlsx,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/金枪鱼渔船数量.xlsx,See source annotations in the model and parameter builders,Excluded original/third-party input; obtain under provider terms
+shape_file/CCSBT/RFB_CCSBT.cst,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/CCSBT/RFB_CCSBT.dbf,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/CCSBT/RFB_CCSBT.prj,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/CCSBT/RFB_CCSBT.shp,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/CCSBT/RFB_CCSBT.shx,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/IATTC/RFB_IATTC.cst,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/IATTC/RFB_IATTC.dbf,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/IATTC/RFB_IATTC.prj,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/IATTC/RFB_IATTC.shp,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/IATTC/RFB_IATTC.shx,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/ICCAT/RFB_ICCAT.cst,https://www.iccat.int/,Excluded original/third-party input; obtain under provider terms
+shape_file/ICCAT/RFB_ICCAT.dbf,https://www.iccat.int/,Excluded original/third-party input; obtain under provider terms
+shape_file/ICCAT/RFB_ICCAT.prj,https://www.iccat.int/,Excluded original/third-party input; obtain under provider terms
+shape_file/ICCAT/RFB_ICCAT.shp,https://www.iccat.int/,Excluded original/third-party input; obtain under provider terms
+shape_file/ICCAT/RFB_ICCAT.shx,https://www.iccat.int/,Excluded original/third-party input; obtain under provider terms
+shape_file/IOTC/RFB_IOTC.cst,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/IOTC/RFB_IOTC.dbf,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/IOTC/RFB_IOTC.prj,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/IOTC/RFB_IOTC.shp,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/IOTC/RFB_IOTC.shx,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
+shape_file/WCPFC/RFB_WCPFC.cst,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+shape_file/WCPFC/RFB_WCPFC.dbf,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+shape_file/WCPFC/RFB_WCPFC.prj,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+shape_file/WCPFC/RFB_WCPFC.shp,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+shape_file/WCPFC/RFB_WCPFC.shx,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms

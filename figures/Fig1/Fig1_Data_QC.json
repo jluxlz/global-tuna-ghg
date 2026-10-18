@@ -1,0 +1,10 @@
+{
+  "Draws": 500,
+  "Interval": "central 90% (p5-p95)",
+  "Aggregation": "sum paired draws first, then quantile",
+  "MC_Source_SHA256": "e80d4588c947c9f8a0e59f08246c03f0a8060696d82799e53a05bf629b2fe37d",
+  "PanelD_Point": "sum effort-allocated fleet-year medians from Base3",
+  "Grid_Data_First_Year": 1951,
+  "Grid_Data_Last_Year": 2024,
+  "PanelD_Coverage": "all allocated LL/PS records including zero-catch effort records"
+}

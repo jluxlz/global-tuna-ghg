@@ -1,0 +1,21 @@
+{
+  "source": "C:\\Users\\11401\\Desktop\\Global_Tuna_Fishery_GHG_Emission\\GHG_Calculation\\Base_3_Spatial_Grid_Enriched.csv",
+  "source_sha256": "cdd250c6c3f95df5e23ed7cea5dd571d3454411408ec4b5c6cbcabab00da1cdb",
+  "source_rows": 489561,
+  "retained_source_rows": 373683,
+  "annual_grid_gear_rows": 47130,
+  "eligible_grid_gear_era_rows": 2715,
+  "pd_by_gear": {
+    "LL": 0.0186,
+    "PS": 0.0426
+  },
+  "min_years": 8,
+  "min_mean_cei": 0.01,
+  "weight": "Total_GHG within eligible grid x gear x era",
+  "max_abs_slope_identity_residual": 2.1316282072803006e-14,
+  "annual_factor_identity": "PASS",
+  "aggregation_conservation": "PASS",
+  "source_unique_catch_key": "PASS",
+  "slope_identity": "PASS",
+  "centroid_identity": "PASS"
+}

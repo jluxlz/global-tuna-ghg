@@ -1,0 +1,35 @@
+{
+  "catch_rows": 489561,
+  "max_row_catch_error": {
+    "SBT_Tonnes": 5.684341886080802e-14,
+    "SKJ_Tonnes": 3.637978807091713e-12,
+    "BET_Tonnes": 4.547473508864641e-13,
+    "YFT_Tonnes": 9.094947017729282e-13,
+    "ALB_Tonnes": 4.547473508864641e-13
+  },
+  "catch_tonnes": {
+    "SBT_Tonnes": 1091038.412364873,
+    "SKJ_Tonnes": 53162229.75943637,
+    "BET_Tonnes": 15740374.814751301,
+    "YFT_Tonnes": 38257679.53198856,
+    "ALB_Tonnes": 4990653.611946635
+  },
+  "zero_effort_groups": 195,
+  "catch_groups_without_Base2": 258,
+  "catch_groups_without_Base2_tonnes": 1233703.7163665183,
+  "process_allocation": "PASS: groupwise Fuel_CO2 against Base_2, including zero-effort groups",
+  "sha256": {
+    "GHG_Calculation\\Base_3_Spatial_Grid_Enriched.csv": "cdd250c6c3f95df5e23ed7cea5dd571d3454411408ec4b5c6cbcabab00da1cdb",
+    "GHG_Calculation\\Base_2_Fleet_GHG.csv": "82f6c72ef93939cc383ba879bbcbc54ae9002c2219ff5347223a07348181e60c",
+    "effort_data\\Grid_Catch_Allocation.csv": "005b759482b95a6ed6b05797f3baf66cb4af6dfe92681651dfa5126dfd19d082",
+    "PMM_Imputation\\After_PMM_Vessels.csv": "9e17190cd8e0f976a386e3be2bf64fb5fb6d0a0fe7871dc6bfff21dc64c30423",
+    "model_parameters\\Prior_Matrix.csv": "1b76b150d0ba0adf635c7884026be02dd8e53792b88e80d53852437fb839ba2e",
+    "model_parameters\\Scenario_Fuel_Parameters.xlsx": "1cef0a09da222b0c97648852f291f091f0504cb98b55a0184b966bbe88c9f234",
+    "model_parameters\\Scenario_Fuel_Price_Matrix.xlsx": "f880186bf6a100a96c228d452e276e16cd664b829c6961eacefb7f24d3f19b4d",
+    "scenario\\output\\schaefer_biomass_annual.csv": "a5c599d6080c8ec84b08a7d0e46ab05d7f16735809ee6d52ce4d9fc56acd1f66",
+    "scenario\\output\\schaefer_biomass_annual_F.csv": "da986bc3b5e0265b030e5a9da35f1feabc43ac75c7a48bad77b59f8f5dd71d0a",
+    "scenario\\jabba_fit.r": "6d58d48f5e6714b51a284b7db05fd7ed6b7e5b9ee09f768f8d7984dcb981cc07",
+    "scenario\\fleet_model.py": "3f4ca7e9862d24fb74b82615cf14ac05b2462af6a8dbf1d14d452654484b1d9b",
+    "scenario\\price_loader.py": "f55693c1dfff1183d65cf01fb5fc32b30a64c355c10979c7e9c2cb20ba521234"
+  }
+}

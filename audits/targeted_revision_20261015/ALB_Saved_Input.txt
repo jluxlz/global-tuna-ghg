@@ -1,0 +1,74 @@
+ALB 
+ [1] "fit"             "input"           "cpue"            "se"             
+ [5] "catch"           "source_md5"      "PD_LL"           "PD_PS"          
+ [9] "package_version" "sampler"         "sampling_seed"   "prior_change"   
+List of 3
+ $ data    :List of 4
+  ..$ yr   : int [1:55] 1970 1971 1972 1973 1974 1975 1976 1977 1978 1979 ...
+  ..$ catch:'data.frame':	55 obs. of  2 variables:
+  ..$ cpue :'data.frame':	55 obs. of  5 variables:
+  ..$ se   :'data.frame':	55 obs. of  5 variables:
+ $ jagsdata:List of 35
+  ..$ N              : int 55
+  ..$ TC             : num [1:55] 0.037 0.0372 0.0346 0.0427 0.0517 ...
+  ..$ I              : num [1:55, 1:4] 0.636 0.845 0.567 0.324 0.361 ...
+  ..$ SE2            : num [1:55, 1:4] 0.04 0.04 0.04 0.04 0.04 ...
+  ..$ r.pr           : num [1:2] 0.25 0.3
+  ..$ psi.pr         : num [1:2] 0.55 0.294
+  ..$ K.pr           : num [1:2] 2 2.96
+  ..$ q1.pr          : num [1:2] 1e-30 1e+20
+  ..$ nq             : int 4
+  ..$ nI             : int 4
+  ..$ nvar           : int 4
+  ..$ sigma.fixed    : num 0
+  ..$ sets.var       : int [1:4] 1 2 3 4
+  ..$ sets.q         : int [1:4] 1 2 3 4
+  ..$ Plim           : num 0
+  ..$ slope.HS       : num 1e+10
+  ..$ nTAC           : num 1
+  ..$ pyrs           : num 1
+  ..$ TAC            : num 0.125
+  ..$ igamma         : num [1:2] 4 0.01
+  ..$ stI            : num 1
+  ..$ pen.P          : num [1:55] 0 0 0 0 0 0 0 0 0 0 ...
+  ..$ pen.bk         : num [1:55] 0 0 0 0 0 0 0 0 0 0 ...
+  ..$ proc.pen       : num 0
+  ..$ K.pen          : num 0
+  ..$ obs.pen        : num [1:4] 0 0 0 0
+  ..$ P_bound        : num [1:2] 0.02 1.3
+  ..$ q_bounds       : num [1:2] 1e-30 1e+20
+  ..$ sigmaobs_bound : num 1
+  ..$ sigmaproc_bound: num 0.2
+  ..$ K_bounds       : num [1:2] 1e-02 1e+20
+  ..$ mu.m           : num 2
+  ..$ b.yr           : num [1:55] 0 0 0 0 0 0 0 0 0 0 ...
+  ..$ b.pr           : num [1:4] 0.5 0.1 0 0
+  ..$ CV.C           : num [1:55] 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1 ...
+ $ settings:List of 27
+  ..$ params            : chr [1:23] "K" "r" "q" "psi" ...
+  ..$ BmsyK             : num 0.4
+  ..$ psi.dist          : chr "lnorm"
+  ..$ psi.prior.raw     : num [1:2] 0.55 0.3
+  ..$ q1.dist           : chr "range"
+  ..$ SE.I              : logi TRUE
+  ..$ sigma.proc        : logi TRUE
+  ..$ proc.dyn          : logi FALSE
+  ..$ sigma.est         : logi TRUE
+  ..$ model.id          : int 1
+  ..$ model.type        : chr "Schaefer"
+  ..$ add.catch.CV      : logi TRUE
+  ..$ catch.cv          : num 0.1
+  ..$ catch.error       : chr "random"
+  ..$ CatchOnly         : logi FALSE
+  ..$ proc.dev.all      : logi TRUE
+  ..$ Auxiliary         : logi FALSE
+  ..$ auxiliary.type    : chr "z"
+  ..$ auxiliary.lag     : num 1
+  ..$ auxiliary.sigma   : logi TRUE
+  ..$ projection        : logi FALSE
+  ..$ TAC.implementation: num 2025
+  ..$ catch.metric      : chr "(t)"
+  ..$ harvest.label     : chr "Fmsy"
+  ..$ assessment        : chr "ALB"
+  ..$ scenario          : chr "jabba"
+  ..$ cols              : chr [1:23] "#e6194b" "#3cb44b" "#ffe119" "#0082c8" ...

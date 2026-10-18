@@ -1,0 +1,23 @@
+{
+  "source_sha256": "cdd250c6c3f95df5e23ed7cea5dd571d3454411408ec4b5c6cbcabab00da1cdb",
+  "upstream_catch_record_identity": "PASS",
+  "upstream_matched_records": 489561,
+  "retained_source_records": 373683,
+  "background_grid_era_rows": 4769,
+  "foreground_regional_era_rows": 29,
+  "eras": [
+    "1970-1990",
+    "1991-2005",
+    "2006-2025"
+  ],
+  "pd_by_gear": {
+    "LL": 0.0186,
+    "PS": 0.0426
+  },
+  "background_eligibility": "At least one positive-catch, positive-effort, positive-GHG record; no trend-fit threshold",
+  "foreground": "Ratios of regional totals; not a centroid of background coordinates",
+  "total_retained_GHG_Mt": 478.747264016203,
+  "max_abs_factor_identity_relative_residual": 4.440892098500626e-16,
+  "grid_to_region_conservation": "PASS",
+  "factor_identity": "PASS"
+}

@@ -1,0 +1,9 @@
+{
+  "Changed_Copies": [
+    ".gitignore",
+    "figures/supplement/refresh_data.py",
+    "figures/supplement/render_all.py",
+    "audits/full_chain_20261012/render_single.py"
+  ],
+  "Scope": "Portable render launchers and README only; no scientific model calculations changed."
+}

@@ -1,0 +1,29 @@
+{
+  "panel_rows": {
+    "A": 1170,
+    "B": 336,
+    "C": 312,
+    "D": 72,
+    "E": 672,
+    "F": 135
+  },
+  "PS_share": 0.7901631447237528,
+  "registry_PS_ships": 2095,
+  "d_e_max_mecon_error": 0.0,
+  "e_min_intensity": -14.471639134121547,
+  "e_max_intensity": 1127.097762746491,
+  "fossil_wtt_topup_max": 0.0,
+  "ratio_blend_vs_species_mean_max": 2.9026757396541916,
+  "model_vessel_checks": 144,
+  "status": "PASS",
+  "panel_sha256": {
+    "Fig4_PanelA_Biomass.csv": "5981f18a620ea1cbe86ccf2e3359435107ce363b6fa7f39163282fdd4f904ab9",
+    "Fig4_PanelB_Yearly_M.csv": "416b483a63977d062eb68e124a6f089503f291937a7d9093b6da52713e239d8c",
+    "Fig4_PanelC_Effort_Required.csv": "8bb29a02536134137bc778d40b585bb95fda4ab271cf1119a2c46a8cef2189f3",
+    "Fig4_PanelC_Species_Components.csv": "ac5e77274aeea1169e30b838b79ed3b659952f41c2014bb5d19c26f3ebbe18e3",
+    "Fig4_PanelD_Fuel_Cost.csv": "6887e5c417be261ba617445c73ec25d1d72afbf4ec08588a472f8fb37758dd2b",
+    "Fig4_PanelE_Intensity.csv": "9719af60c16602e9b95d609ee7d2f9154879928ff7cc8f1d20683efa0b57d88b",
+    "Fig4_PanelF_Annual_Components.csv": "2bc97fb3758ccb57274c3c6b1fce0492daf2ff024de0f72d4ecf1e3209f0ec79",
+    "Fig4_PanelF_Crossover_By_Leak.csv": "db2a101b64eb78bf18fc594d9085ba7dd2851956e0ff2920f9e5460011376cdc"
+  }
+}

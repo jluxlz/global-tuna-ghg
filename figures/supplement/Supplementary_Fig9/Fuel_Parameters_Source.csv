@@ -1,0 +1,28 @@
+Marine Fuel Physical Parameters & Price Projections,,,,,,,,,,,,,,,,
+Fuel properties & emission factors: IMO MEPC.391(81) -- 2024 LCA Guidelines,,,,,,,,Price projections: IRENA (2021) A pathway to decarbonise the shipping sector by 2050,,,,,,,,
+,,,,,,,,,,,,,,,,
+Fuel Identification,,,Physical & Chemical Properties,,,,Emission Factors (g / g fuel),,,,Production Cost (IRENA 2021) -- USD / MWh,,,,,
+Seq,Fuel Type,Fuel Pathway Code (IMO),"LHV
+(MJ/g)","WtT GHG
+(gCO2eq/MJ)","Engine Eff.
+(fraction)","CCS
+Req.",Cf_CO2,Cf_CH4,Cf_N2O,"Current
+Min","Current
+Max","2050
+Min","2050
+Max",Unit,Key Notes,WtT Source / Reference
+1,"HFO (VLSFO, 0.10<S<=0.50%)",HFO(VLSFO)_f_SR_gm,0.0402,16.8,0.4,No,3.114,5e-05,0.00018,30,50,,,USD/MWh,Volatile; crude oil dependent,
+2,"HFO (HSHFO, >0.50% S)",HFO(HSHFO)_f_SR_gm,0.0402,14.1,0.4,No,3.114,5e-05,0.00018,30,50,,,USD/MWh,Higher S content,
+3,"LFO (ULSFO, max 0.10% S)",LFO(ULSFO)_f_SR_gm,0.0412,,0.41,No,3.151,5e-05,0.00018,35,55,,,USD/MWh,Similar to MGO pricing,
+4,"LFO (VLSFO, 0.10<S<=0.50%)",LFO(VLSFO)_f_SR_gm,0.0412,,0.41,No,3.151,5e-05,0.00018,35,55,,,USD/MWh,Similar to MGO pricing,
+5,"MDO/MGO (ULSFO, max 0.10% S)",MDO/MGO(ULSFO)_f_SR_gm,0.0427,17.7,0.42,No,3.206,5e-05,0.00018,35,55,,,USD/MWh,BASELINE marine fuel,
+6,"MDO/MGO (VLSFO, 0.10<S<=0.50%)",MDO/MGO(VLSFO)_f_SR_gm,0.0427,,0.42,No,3.206,5e-05,0.00018,35,55,,,USD/MWh,Similar to MGO pricing,
+11,LPG (Propane),LPG(Propane)_f_SR_gm,0.0463,,0.38,No,3,5e-05,0.00018,30,50,,,USD/MWh,LPG propulsion niche,
+21,LPG (Butane),LPG(Butane)_f_SR_gm,0.0457,,0.38,No,3.03,5e-05,0.00018,30,50,,,USD/MWh,LPG propulsion niche,
+31,LNG -- Fossil (Methane),LNG_f_SLP_gm,0.048,23.8,0.43,No,2.75,0,0.00011,15,25,,,USD/MWh,Geopolitically sensitive; methane slip risk,"LNG WtT = 23.8 gCO2eq/MJ: MEPC 83/7/28 (Pacific Environment/CSC), global weighted average LNG WtT GHG intensity ~23.8 gCO2eq/MJ (Australia ~24); IMO 2024 LCA Guidelines (MEPC.391(81)) LNG WtT default still under review (GESAMP-LCA WG)"
+33,LNG -- Biogenic (Methane),LNG_b_AD_gm,,,0.43,No,2.75,,,25,148,,,USD/MWh,Feedstock-constrained; wide cost range,
+62,FAME Biodiesel (waste FOGs),FAME_b_TRE_gm_2ndgen,0.0372,20.8,0.4,No,,,,72,126,,,USD/MWh,Limited sustainable feedstock supply,
+77,HVO Renewable Diesel (2nd gen),HVO_b_HD_gm_2ndgen,0.044,14.9,0.42,No,,,,86,140,,,USD/MWh,Mature tech; limited supply,
+105,Hydrogen -- Fossil (SMR + CCS),H2_f_SMR_CCS_gm,0.12,135.5,0.45,Yes,0,,,66,154,32,100,USD/MWh,2050: green H2 via electrolysis 32-100,"Blue H2 (SMR+CCS) WtT = 135.5 gCO2eq/MJ (midpoint of 132-139): Howarth & Jacobson (2021), Energy Sci. Eng. 9:1676-1687 - blue hydrogen at 3.5% supply-chain methane leakage, 78.8-90% SMR capture + 55-90% flue-gas capture: 132-139 gCO2eq/MJ (fugitive CH4 dominates, 86-99 gCO2eq/MJ)"
+121,Ammonia -- Renewable (e-NH3),NH3_rN2_fH2_HB_gm,0.0186,,0.38,No,0,,,143,219,67,114,USD/MWh,Most promising long-haul fuel; no carbon needed,e-NH3 upstream is NOT a fixed WtT: grid electrolysis 9.3 kWh/kg NH3 (50 kWh/kg H2 x 0.176 kgH2/kgNH3 + 0.5 kWh/kg Haber-Bosch) x WEO grid EF (458->111/29/0 gCO2e/kWh by 2050) - see Fig4 Panel e (preprocess_fig4.py panel_e)
+122,Hydrogen -- Green (electrolysis),H2_g_EL_gm,0.12,,0.45,No,0,,,210,250,90,110,USD/MWh,Electrolysis; upstream = grid EF x 50 kWh/kg; NZE grid -> ~0/negative upstream,"Green-H2 WtT is NOT fixed: grid electrolysis 50 kWh/kg H2 (PEM 190 MJ/kg, AWE 172 MJ/kg: Ha, Jang, Park & Jeong 2025, Renew. Sustain. Energy Rev. 116219) x WEO grid EF (Grid_Carbon sheet 458->111/29/-4 gCO2e/kWh by 2050). Production emissions median 2.9 kgCO2e/kgH2 on wind (Kleijne et al., Worldwide GHG emissions of green hydrogen, Environ. Res. Lett.); price 7 EUR/kg -> 3 EUR/kg 2023-2050 (Assessing hydrogen-powered cargo shipping, Commun. Eng. 2025, s44172-025-00388-4) ~ IRENA (2021) 2050 range 32-100 USD/MWh."

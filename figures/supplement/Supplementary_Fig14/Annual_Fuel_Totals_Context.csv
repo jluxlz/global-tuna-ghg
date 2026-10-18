@@ -1,0 +1,5 @@
+Year,Gear,Model_fuel_t,Model_fuel_billion_L,Scope,External_context,Relative_bias
+2009,LL,1007183.6759911161,1.2133665584425128,Full model five-species-allocated LL/PS fuel; no service vessels,ISSF about 3 billion L across all tuna gears globally; not an identical population,"Not calculated: target species, gear and fleet coverage differ"
+2009,PS,1055387.2534860284,1.270685922818838,Full model five-species-allocated LL/PS fuel; no service vessels,ISSF about 3 billion L across all tuna gears globally; not an identical population,"Not calculated: target species, gear and fleet coverage differ"
+2023,LL,1894256.5071923232,2.282812495743328,Full model five-species-allocated LL/PS fuel; no service vessels,ISSF about 3 billion L across all tuna gears globally; not an identical population,"Not calculated: target species, gear and fleet coverage differ"
+2023,PS,1505852.2339626995,1.8130456182992292,Full model five-species-allocated LL/PS fuel; no service vessels,ISSF about 3 billion L across all tuna gears globally; not an identical population,"Not calculated: target species, gear and fleet coverage differ"

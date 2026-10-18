@@ -1,0 +1,130 @@
+    if (verbose) 
+        stop("\n", "\n", "><> Catch Time series not provided <><", 
+        stop("\n", "\n", "><> catch time series must have years in sequential order <><", 
+    if (is.null(se)) 
+        if (verbose) 
+        sets.q = 1
+        sets.var = 1
+    else {
+        if (verbose) 
+        if (verbose) 
+    if (add.catch.CV == TRUE) {
+            CV.C = catch.cv[, 2]
+        else {
+            CV.C = rep(catch.cv, length(TC))
+        if (verbose) 
+            message("\n", "><> Assume Catch with error CV = ", 
+                mean(CV.C), " <><", "\n", "\n")
+    else {
+        if (verbose) 
+    if (is.null(se)) {
+    else {
+        if (verbose) 
+            message("\n", "><> SE.I=FALSE: Creating cpue.se dummy matrix <><", 
+        se = cpue
+        conv.se = as.numeric(rbind(matrix(rep(NA, (styr.I - 1) * 
+        se2 = matrix(ifelse(fixed.obsE > 0, fixed.obsE^2, 10^-10), 
+    else {
+        if (ncol(cpue) != ncol(se) | nrow(cpue) != nrow(se)) 
+        conv.se = as.numeric(rbind(matrix(rep(NA, (styr.I - 1) * 
+            n.indices), styr.I - 1, n.indices), as.matrix(se[, 
+        se2 = matrix(ifelse(is.na(conv.se), 0.3^2, conv.se)^2, 
+    else {
+        if (is.null(auxiliary.se)) 
+            if (verbose) 
+                message("\n", "><> SE.A=FALSE: Creating auxiliary.se dummy matrix <><", 
+            A.se = auxiliary
+            convA.se = as.numeric(rbind(matrix(rep(NA, (styr.A - 
+            A.se2 = matrix(ifelse(auxiliary.obsE > 0, auxiliary.obsE^2, 
+        else {
+            if (ncol(auxiliary) != ncol(auxiliary.se) | nrow(auxiliary) != 
+                nrow(auxiliary.se)) 
+            convA.se = as.numeric(rbind(matrix(rep(NA, (styr.A - 
+                1) * nA), styr.A - 1, nA), as.matrix(auxiliary.se[, 
+            A.se2 = matrix(ifelse(is.na(convA.se), 0.3^2, convA.se)^2, 
+        if (verbose) 
+    else {
+        else {
+            ishape = seq(0.1, 10, 0.001)
+        else {
+        else {
+    else {
+        else if (r.prior == "High") {
+        else if (r.prior == "Medium") {
+        else if (r.prior == "Low") {
+        else {
+        CV.r = sqrt(exp(sd.r^2) - 1)
+    else {
+        CV.r = sqrt(exp(sd.r^2) - 1)
+        CV.K = sqrt(exp(sd.K^2) - 1)
+    else {
+        CV.K = K.prior[2]
+        sd.K = sqrt(log(CV.K^2 + 1))
+        CV.q1 = q1.prior[2]
+        sd.q1 = sqrt(log(CV.q1^2 + 1))
+        q1.pr = plot_lnorm(exp(log.q1), CV.q1, Prior = "q1")
+    K.pr = plot_lnorm(exp(log.K), CV.K, Prior = "K")
+    r.pr = plot_lnorm(mu = exp(log.r), CV = CV.r, Prior = "r")
+        psi.pr = get_beta(mu = psi.prior[1], CV = psi.prior[2], 
+    else {
+        psi.pr = plot_lnorm(mu = psi.prior[1], CV = psi.prior[2], 
+        dm = dlnorm((seq(0.001, 5, 0.1)), log(m), shape.CV)
+        bmsyk = (seq(0.001, 5, 0.1))^(-1/(seq(0.001, 5, 0.1) - 
+    Priors = rbind(c(K.pr[1], CV.K), psi.prior, c(r.pr[1], CV.r))
+    colnames(Priors) = c("Mean", "CV")
+    if (verbose) {
+        else {
+                m, "and a CV", shape.CV, "\n")
+        message("\n", "><> K prior mean =", K.pr[1], "and CV =", 
+            CV.K, "(log.sd = ", K.pr[2], ")", "\n")
+        message("\n", "><> r prior mean =", r.pr[1], "and CV =", 
+            CV.r, "(log.sd = ", r.pr[2], ")", "\n")
+            "and CV =", psi.prior[2], "with", psi.dist, "destribution", 
+    if (verbose) 
+        message("\n", "\n", "\n", "><> ALWAYS ENSURE to adjust default settings to your specific stock <><", 
+        TACs = round(seq(0.5, 1.2, 0.1) * TC[n.years], 0)
+            else {
+    else {
+    slope.HS = ifelse(Plim == 0, 1/10^-10, 1/Plim)
+    stI = ifelse(proc.dev.all == TRUE, 1, c(1:n.years)[is.na(apply(CPUE, 
+    nq = length(unique(sets.q))
+    nvar = length(unique(sets.var))
+    surplus.dat = list(N = n.years, TC = TC, I = CPUE, SE2 = se2, 
+        nq = nq, nI = nI, nvar = nvar, sigma.fixed = ifelse(sigma.proc == 
+            TRUE, 0, sigma.proc), sets.var = sets.var, sets.q = sets.q, 
+        surplus.dat$m.CV = shape.CV
+    if (add.catch.CV == TRUE) {
+        surplus.dat$CV.C = CV.C
+        surplus.dat$A.SE2 = A.se2
+            surplus.dat$sets.varA = sets.varA
+            surplus.dat$nAvar = length(sets.varA)
+    jbinput$settings = list()
+    jbinput$data$se = se
+    jbinput$data$auxiliary.se = auxiliary.se
+    jbinput$settings$params = params
+    jbinput$settings$BmsyK = BmsyK
+    jbinput$settings$psi.dist = psi.dist
+    jbinput$settings$psi.prior.raw = psi.prior
+    jbinput$settings$q1.dist = q1.dist[1]
+    jbinput$settings$SE.I = SE.I
+    jbinput$settings$sigma.proc = sigma.proc
+    jbinput$settings$proc.dyn = proc.dyn
+    jbinput$settings$sigma.est = sigma.est
+    jbinput$settings$model.id = model
+    jbinput$settings$model.type = mod.names
+    jbinput$settings$add.catch.CV = add.catch.CV
+    jbinput$settings$catch.cv = catch.cv
+    jbinput$settings$catch.error = catch.error
+    jbinput$settings$CatchOnly = CatchOnly
+    jbinput$settings$proc.dev.all = proc.dev.all
+    jbinput$settings$Auxiliary = Auxiliary
+    jbinput$settings$auxiliary.type = auxiliary.type
+    jbinput$settings$auxiliary.lag = auxiliary.lag
+    jbinput$settings$auxiliary.sigma = auxiliary.sigma
+    jbinput$settings$projection = projection
+    jbinput$settings$TAC.implementation = imp.yr
+    jbinput$settings$catch.metric = catch.metric
+    jbinput$settings$harvest.label = harvest.label
+    jbinput$settings$assessment = assessment
+    jbinput$settings$scenario = scenario
+    jbinput$settings$cols = jabba.colors
