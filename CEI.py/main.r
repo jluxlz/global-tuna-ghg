@@ -1,16 +1,16 @@
-# 加载核心包
+# Load Core Package
 library(tidyverse)
 library(ggplot2)
 library(scales)
-library(svglite)  # 用于高质量输出 SVG
+library(svglite)  # For high quality output SVG
 
 # ==========================================
-# 0. 数据读取与学术主题设定
+# 0. Data reading and academic theme setting
 # ==========================================
-# 读取数据
+# Read Data
 df <- read_csv("Table2_Species_CEI_Timeseries.csv")
 
-# 自定义经典学术主题
+# Customize classic academic themes
 theme_academic <- function() {
   theme_classic(base_size = 13, base_family = "sans") +
     theme(
@@ -30,7 +30,7 @@ gear_colors <- c("LL" = "#E64B35", "PS" = "#4DBBD5", "ALL" = "#00A087")
 
 
 # ==========================================
-# 1. Figure A: 各物种的长期碳排强度演变
+# 1. Figure A: Long-term carbon emission intensity evolution of species
 # ==========================================
 df_trend <- df %>%
   filter(Year >= 1970, Gear %in% c("LL", "PS"))
@@ -40,16 +40,16 @@ p1 <- ggplot(df_trend, aes(x = Year)) +
   geom_line(aes(y = CEI_median, color = Gear), linewidth = 0.5) +
   facet_wrap(~ Species, scales = "free_y", ncol = 3) +
   
-  # ======= 恢复稳定写法 =======
+  # ======= Restoring a stable writing =======
   scale_y_log10(
     breaks = trans_breaks("log10", function(x) 10^x),
     labels = trans_format("log10", math_format(10^.x)),
     
-    # 稍微放宽一点下限到 1e-2，让早年数值不至于马上变平直线
-    # 如果你还是觉得平直线多，可以继续改小，比如 1e-3
+    # Just relax a little bit 1e-2, Lets get the early values straight
+    # If you still think its more square,, You can keep it small, Like 1e-3
     limits = c(1e-2, NA), 
     
-    # 恢复 squish：将低于 1e-2 的极端低值拍扁在底部，保证线不断且不撑爆 Y 轴
+    # Restore squish: Below 1e-2 ♪ The extreme low-value beat at the bottom ♪, The line of guarantees is not up and running Y Axes
     oob = squish 
   ) +
   # ============================
@@ -66,13 +66,13 @@ p1 <- ggplot(df_trend, aes(x = Year)) +
   theme_academic() +
   theme(panel.spacing = unit(1.5, "lines"))
 
-# --- 同时保存 Figure A 的 PDF 和 SVG ---
+# --- Save simultaneously Figure A of PDF and SVG ---
 ggsave("Fig_A_CEI_Timeseries.pdf", plot = p1, width = 12, height = 7, dpi = 900)
 ggsave("Fig_A_CEI_Timeseries.svg", plot = p1, device = "svg", width = 12, height = 7)
 
 
 # ==========================================
-# 2. Figure B: 近十年全球格局剖面图
+# 2. Figure B: Global profile for the last 10 years
 # ==========================================
 df_recent <- df %>%
   filter(Year >= 2015) %>%
@@ -110,6 +110,6 @@ p2 <- ggplot(df_recent, aes(x = Species, y = mean_med, fill = Gear)) +
   ) +
   theme_academic()
 
-# --- 同时保存 Figure B 的 PDF 和 SVG ---
+# --- Save simultaneously Figure B of PDF and SVG ---
 ggsave("Fig_B_Recent_Decade_Barplot.pdf", plot = p2, width = 9, height = 6, dpi = 900)
 ggsave("Fig_B_Recent_Decade_Barplot.svg", plot = p2, device = "svg", width = 9, height = 6)

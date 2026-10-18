@@ -4,7 +4,7 @@ import os
 import sys
 from pathlib import Path
 
-# 使用相对于脚本所在目录的路径
+# Use a path to the directory where the script is
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SCRIPT_DIR)
 from flag_utils import normalize_flag_to_iso3
@@ -17,7 +17,7 @@ from flag_utils import normalize_flag_to_iso3
 # ==========================================
 
 def ensure_flag_iso3(df, rejected=None, source="unknown"):
-    """统一 Flag 列：处理 'Country'→'Flag' 重命名 + ISO3 标准化"""
+    """common Flag Column: Processing 'Country'→'Flag' Rename + ISO3 standardisation"""
     if 'Flag' not in df.columns:
         if 'Country' in df.columns:
             df.rename(columns={'Country': 'Flag'}, inplace=True)
@@ -38,16 +38,16 @@ def build_global_tables(output_dir=None, iccat_path=None, iotc_path=None, iattc_
     output_dir.mkdir(parents=True, exist_ok=True)
     rejected = []
     # ==========================================
-    # 1. 汇总年度纯捕获量 (Annual Catch)
+    # 1. Summary of annual net catches (Annual Catch)
     # ==========================================
     annual_dfs = []
 
     # (1) CCSBT
     df_ccsbt_a = pd.read_csv(os.path.join(SCRIPT_DIR, 'CCSBT', 'CCSBT_Annual_Catch.csv'))
-    # 宽表转长表（年份 -> 各国家捕获量，列名已是 ISO3）
+    # Width-to-Long Table (Year -> Captures by country, Listed as ISO3) 
     df_ccsbt_a_melt = df_ccsbt_a.melt(id_vars=['Year'], var_name='Flag', value_name='SBT')
     df_ccsbt_a_melt['Organization'] = 'CCSBT'
-    df_ccsbt_a_melt['GearTypeCode'] = 'Unknown' # 宏观年度汇总不带渔具
+    df_ccsbt_a_melt['GearTypeCode'] = 'Unknown' # Macro-annual aggregation without fishing gear
     df_ccsbt_a_melt = ensure_flag_iso3(df_ccsbt_a_melt, rejected, "df_ccsbt_a_melt")
     annual_dfs.append(df_ccsbt_a_melt)
 
@@ -77,10 +77,10 @@ def build_global_tables(output_dir=None, iccat_path=None, iotc_path=None, iattc_
     df_wcpfc_a['Organization'] = 'WCPFC'
     annual_dfs.append(df_wcpfc_a)
 
-    # 纵向合并所有年度表
+    # Merge all annual tables vertically
     global_annual = pd.concat(annual_dfs, ignore_index=True)
 
-    # 统一目标物种的列（不存在则补0）
+    # Harmonized target species columns (_Other Organiser 0) 
     species_cols = ['SKJ', 'BET', 'YFT', 'SBT', 'ALB']
     for sp in species_cols:
         if sp not in global_annual.columns:
@@ -88,7 +88,7 @@ def build_global_tables(output_dir=None, iccat_path=None, iotc_path=None, iattc_
         else:
             global_annual[sp] = global_annual[sp].fillna(0.0)
 
-    # 规范列顺序
+    # Normative column order
     annual_cols = ['Organization', 'Year', 'Flag', 'GearTypeCode'] + species_cols
     global_annual = global_annual[annual_cols]
     global_annual.to_csv(output_dir / 'Global_Annual_Catch.csv', index=False, encoding='utf-8-sig')
@@ -96,7 +96,7 @@ def build_global_tables(output_dir=None, iccat_path=None, iotc_path=None, iattc_
 
 
     # ==========================================
-    # 2. 汇总网格捕捞与努力量 (Grid Catch Effort)
+    # 2. Summary of grid fishing and effort (Grid Catch Effort)
     # ==========================================
     grid_dfs = []
 
@@ -105,7 +105,7 @@ def build_global_tables(output_dir=None, iccat_path=None, iotc_path=None, iattc_
     df_ccsbt_g.rename(columns={'Gear': 'GearTypeCode', 'Latitude': 'Lat', 'Longitude': 'Lon', 'Effort_Type': 'EffortType', 'Effort': 'EffortValue'}, inplace=True)
     df_ccsbt_g = ensure_flag_iso3(df_ccsbt_g, rejected, "df_ccsbt_g")
     df_ccsbt_g['Organization'] = 'CCSBT'
-    df_ccsbt_g['SBT'] = 0.0 # 若努力量表中无捕获数据用0填补
+    df_ccsbt_g['SBT'] = 0.0 # If no capture data are used in the effort table 0 Filling
     grid_dfs.append(df_ccsbt_g)
 
     # (2) IATTC
@@ -146,10 +146,10 @@ def build_global_tables(output_dir=None, iccat_path=None, iotc_path=None, iattc_
     df_wcpfc_g['Organization'] = 'WCPFC'
     grid_dfs.append(df_wcpfc_g)
 
-    # 纵向合并所有网格表
+    # Merge all grid tables vertically
     global_grid = pd.concat(grid_dfs, ignore_index=True)
 
-    # 统一重量(吨)和数量(尾)的列名，填补空缺为 0
+    # Uniform weight(tonnes)and number(End)Listing, The filling of vacancies in the 0
     species_weight = ['SKJ', 'BET', 'YFT', 'SBT', 'ALB']
     species_num = ['SKJn', 'BETn', 'YFTn', 'SBTn', 'ALBn']
 
@@ -159,17 +159,17 @@ def build_global_tables(output_dir=None, iccat_path=None, iotc_path=None, iattc_
         else:
             global_grid[col] = global_grid[col].fillna(0.0)
 
-    # 对空缺的努力量填0或Unknown
+    # Efforts to fill vacancies 0 or Unknown
     global_grid['EffortValue'] = global_grid['EffortValue'].fillna(0.0)
     global_grid['EffortType'] = global_grid['EffortType'].fillna('Unknown')
 
-    # 规范列顺序
+    # Normative column order
     grid_cols = ['Organization', 'Year', 'Flag', 'GearTypeCode', 'SquareTypeCode', 'Lat', 'Lon', 'EffortType', 'EffortValue'] + species_weight + species_num
     global_grid = global_grid[grid_cols]
 
     global_grid.to_csv(output_dir / 'Global_Grid_Catch_Effort.csv', index=False, encoding='utf-8-sig')
 
-    print("大一统处理完成！")
+    print("All hands are in order！")
     if rejected:
         pd.concat(rejected, ignore_index=True).to_csv(output_dir / "Global_Flag_Rejections.csv", index=False, encoding="utf-8-sig")
     return global_annual, global_grid

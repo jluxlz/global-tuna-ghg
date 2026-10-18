@@ -7,8 +7,8 @@
     "third-party assessment archives and source workbooks",
     "bundled RDS fit objects and source boundary shapefiles"
   ],
-  "Files": 15792,
-  "Bytes": 1519537283,
+  "Files": 15673,
+  "Bytes": 1517380715,
   "Originals_Removed_From_Staging": [
     "gear_intensity/gear_model/unit_gears_model/README.md",
     "gear_intensity/gear_model/unit_gears_model/setup.py",
@@ -31,11 +31,11 @@
   "Public_Data_By_Category": {
     "CEI.py": {
       "Files": 1,
-      "Bytes": 4430
+      "Bytes": 4508
     },
     "GHG_Calculation": {
       "Files": 25,
-      "Bytes": 478765213
+      "Bytes": 478769687
     },
     "Icon": {
       "Files": 5,
@@ -43,31 +43,31 @@
     },
     "PMM_Imputation": {
       "Files": 2,
-      "Bytes": 9357
+      "Bytes": 9711
     },
     "Stratified_Hot-Deck_Imputation": {
       "Files": 1,
-      "Bytes": 18123
+      "Bytes": 18099
     },
     "audits": {
-      "Files": 11904,
-      "Bytes": 231119607
+      "Files": 11785,
+      "Bytes": 228928958
     },
     "effort_data": {
       "Files": 20,
-      "Bytes": 131604035
+      "Bytes": 131605648
     },
     "figures": {
       "Files": 684,
-      "Bytes": 579845586
+      "Bytes": 579847803
     },
     "gear_intensity": {
       "Files": 2,
-      "Bytes": 1595
+      "Bytes": 1616
     },
     "model_parameters": {
       "Files": 7,
-      "Bytes": 311670
+      "Bytes": 332116
     },
     "scenario": {
       "Files": 3129,
@@ -75,19 +75,19 @@
     },
     "spatial_analysis": {
       "Files": 4,
-      "Bytes": 37467
+      "Bytes": 38335
     },
     "spider": {
       "Files": 2,
-      "Bytes": 65239
+      "Bytes": 67578
     },
     "uncertainty": {
       "Files": 2,
-      "Bytes": 18734
+      "Bytes": 19352
     },
     "vessel_data_extract": {
       "Files": 4,
-      "Bytes": 213000
+      "Bytes": 214077
     }
   },
   "Core_Algorithms_Byte_Identical": true,

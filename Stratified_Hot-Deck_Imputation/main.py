@@ -195,13 +195,13 @@ def prepare_data_and_pools(file_path, current_year=2024, min_n=5):
 def calculate_yearly_emissions(df_year, calc_year):
     """
     Calculate per-vessel GHG emissions for a given year.
-    Expects columns: 建造日期, Length(m), Enginepower(kw), Tonnage(t), VesselType
+    Expects columns: Built_Date, Length(m), Enginepower(kw), Tonnage(t), VesselType
     (Column names are mapped to Chinese before calling.)
     """
     df_year = df_year.copy()
 
     # Fuel carbon factor
-    df_year["FC"] = df_year["建造日期"].apply(get_fc)
+    df_year["FC"] = df_year["Built_Date"].apply(get_fc)
 
     SFR = {"small": 0.00035, "large": 0.0002}
     T = {"LL": 334, "PS": 195, "TS": 300}
@@ -253,7 +253,7 @@ def calculate_yearly_emissions(df_year, calc_year):
     # 3. Build emissions (only in construction year)
     EF_build = 2.228
     df_year["CE_Build"] = np.where(
-        df_year["建造日期"] == calc_year,
+        df_year["Built_Date"] == calc_year,
         df_year["Tonnage(t)"].fillna(0) * EF_build,
         0,
     )
@@ -299,14 +299,14 @@ def run_monte_carlo_lca(df_cleaned, pool_dict, calc_year=2024, n_simulations=100
 
     # Map column names to Chinese for the emission model
     df_cleaned = df_cleaned.rename(columns={
-        "Builtdate": "建造日期",
+        "Builtdate": "Built_Date",
         "Length": "Length(m)",
         "Tonnage": "Tonnage(t)",
         "Enginepower": "Enginepower(kw)",
     })
 
     # Identify which vessels need Builtdate imputation
-    missing_indices = df_cleaned[df_cleaned["建造日期"].isna()].index
+    missing_indices = df_cleaned[df_cleaned["Built_Date"].isna()].index
     n_missing = len(missing_indices)
     print(f"  Vessels needing Builtdate imputation: {n_missing}")
 
@@ -347,11 +347,11 @@ def run_monte_carlo_lca(df_cleaned, pool_dict, calc_year=2024, n_simulations=100
             donor_pool = pool_dict.get(key)
             if donor_pool is None or len(donor_pool) == 0:
                 # Global fallback
-                donor_pool = df_cleaned["建造日期"].dropna().values
+                donor_pool = df_cleaned["Built_Date"].dropna().values
             sampled_year = np.random.choice(donor_pool, size=1, replace=True)[0]
             simulated_years.append(sampled_year)
 
-        df_sim.loc[missing_indices, "建造日期"] = simulated_years
+        df_sim.loc[missing_indices, "Built_Date"] = simulated_years
 
         # Run LCA
         df_sim_result = calculate_yearly_emissions(df_sim, calc_year)
@@ -405,13 +405,13 @@ def save_deterministic_imputation(df_cleaned, pool_dict):
 
     # Rename for emission model
     df_final = df_final.rename(columns={
-        "Builtdate": "建造日期",
+        "Builtdate": "Built_Date",
         "Length": "Length(m)",
         "Tonnage": "Tonnage(t)",
         "Enginepower": "Enginepower(kw)",
     })
 
-    missing_indices = df_final[df_final["建造日期"].isna()].index
+    missing_indices = df_final[df_final["Built_Date"].isna()].index
     if len(missing_indices) > 0:
         for idx in missing_indices:
             vt = df_final.loc[idx, "VesselType"]
@@ -420,13 +420,13 @@ def save_deterministic_imputation(df_cleaned, pool_dict):
             key = (vt, lc, fl)
             donor_pool = pool_dict.get(key)
             if donor_pool is None or len(donor_pool) == 0:
-                donor_pool = df_final["建造日期"].dropna().values
+                donor_pool = df_final["Built_Date"].dropna().values
             # Deterministic: use median of donor pool
-            df_final.loc[idx, "建造日期"] = int(np.median(donor_pool))
+            df_final.loc[idx, "Built_Date"] = int(np.median(donor_pool))
 
     # Rename back to English for output
     df_final = df_final.rename(columns={
-        "建造日期": "Builtdate",
+        "Built_Date": "Builtdate",
         "Length(m)": "Length",
         "Tonnage(t)": "Tonnage",
         "Enginepower(kw)": "Enginepower",

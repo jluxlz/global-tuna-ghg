@@ -1,30 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-=============================================================================
-数据清洗与矩阵重构管道 (Data Preprocessing Pipeline)
-=============================================================================
-将 Model_parameters.xlsx 中的 4 个非结构化 Sheet 转化为 4 个标准化的、
-机器可读的关系型矩阵 (DataFrame)，供下游 LCA 模型直接调用。
+Compile parameter matrices from the source parameter workbook.
 
-输入:  model_parameters/Model_parameters.xlsx (4 sheets)
-输出:  4 个 CSV + 1 个合并 Excel:
-       - model_parameters/Prior_Matrix.csv
-       - model_parameters/Species_CF_Matrix.csv
-       - model_parameters/Scenario_Multiplier_Matrix.csv
-       - model_parameters/MonteCarlo_Config_Matrix.csv
-       - model_parameters/Cleaned_Parameter_Matrices.xlsx (4 sheets)
+Inputs: model_parameters/Model_parameters.xlsx (four worksheets).
+Outputs: Prior_Matrix.csv, Species_CF_Matrix.csv,
+Scenario_Multiplier_Matrix.csv, MonteCarlo_Config_Matrix.csv and the combined
+Cleaned_Parameter_Matrices.xlsx workbook.
 
-设计原则:
-  1. 原始 Sheet 1（动态生命周期模型）是"文献笔记本"，数据嵌入在中文叙述中，
-     无法稳健地自动化解析 → 采用"硬编码提取 + 文献溯源注释"策略。
-  2. Sheet 2/3/4 结构相对规整 → 直接解析 + 文本正则提取。
-  3. 所有输出矩阵中的缺失值用 NaN 标记，不在计算核心中使用空字符串。
-  4. 每个矩阵包含完整的列级中文注释 (via DataFrame.attrs)。
+The first worksheet contains literature notes and requires explicitly traced
+parameter entries. The other worksheets are parsed using their structured
+columns and text patterns. Missing entries are represented by NaN. Published
+parameter names, descriptions and notes are in English. Unicode escapes in
+legacy input aliases preserve compatibility with the original workbook.
 
-作者: Claude Code 辅助构建
-日期: 2026-06-18
-=============================================================================
+Original implementation assisted by Claude Code; dated 2026-06-18.
 """
 
 import os
@@ -71,9 +61,9 @@ def parse_percent_range(text: str):
 
     Examples
     --------
-    "燃料节省 35–61%"    → (0.65, 0.39, 0.52)  # reduction → multiplier = 1-pct
-    "GHG排放减少 22%"     → (1-0.22, 1-0.22, 0.78)
-    "碳排放仅为柴油的50%"  → (0.50, 0.50, 0.50)  # direct fraction, NOT reduction
+    "fuel savings 35–61%"    → (0.65, 0.39, 0.52)  # reduction → multiplier = 1-pct
+    "GHG emission reduction 22%"     → (1-0.22, 1-0.22, 0.78)
+    "Carbon emissions are only diesel fuel 50%"  → (0.50, 0.50, 0.50)  # direct fraction, NOT reduction
     "0.1 - 0.4 L/kg"     → (None, None, None)   # physical units, skip
 
     Returns
@@ -87,16 +77,16 @@ def parse_percent_range(text: str):
     # ---- Reject physical-unit values ----
     unit_patterns = [
         r'L\s*/\s*kg', r'g\s*/\s*kWh', r'kW\s*/\s*m',
-        r'\d+\s*(?:ton|吨|t)\s*(?:CO|C)', r'次作业',
+        r'\d+\s*(?:ton|\u5428|t)\s*(?:CO|C)', r'\u6b21\u4f5c\u4e1a',
     ]
     for pat in unit_patterns:
         if re.search(pat, text):
             return None, None, None
 
-    # ---- Detect "direct fraction" pattern: "为/是/仅为...的 X%" ----
-    # "碳排放仅为柴油的 50.24%" → multiplier = 0.5024 (direct, NOT 1-pct)
+    # ---- Detect "direct fraction" pattern: "is/is/only...of X%" ----
+    # "Carbon emissions are only diesel fuel 50.24%" → multiplier = 0.5024 (direct, NOT 1-pct)
     direct_frac_match = re.search(
-        r'(?:仅为|仅为|为|是)\s*(?:\S+\s*的)?\s*(\d+\.?\d*)\s*%', text
+        r'(?:\u4ec5\u4e3a|\u4ec5\u4e3a|\u4e3a|\u662f)\s*(?:\S+\s*\u7684)?\s*(\d+\.?\d*)\s*%', text
     )
     if direct_frac_match:
         val = float(direct_frac_match.group(1)) / 100.0
@@ -104,7 +94,7 @@ def parse_percent_range(text: str):
 
     # ---- Detect saving/reduction language ----
     is_saving = any(kw in text for kw in [
-        '节省', '减少', '降低', '下降', '节约', '减排', 'saving', 'reduce'
+        '\u8282\u7701', '\u51cf\u5c11', '\u964d\u4f4e', '\u4e0b\u964d', '\u8282\u7ea6', '\u51cf\u6392', 'saving', 'reduce'
     ])
 
     # Pattern: "35–61%" or "35-61%"
@@ -143,10 +133,10 @@ def parse_percent_range(text: str):
             if lo <= 1.0 and hi <= 1.0:
                 return 1.0 - hi, 1.0 - lo, 1.0 - (lo + hi) / 2.0
 
-    # Try single number with saving keywords but no % (e.g., "减少40")
+    # Try single number with saving keywords but no % (e.g., "reduction 40")
     if is_saving:
         single_no_pct = re.search(
-            r'(?:节省|减少|降低|下降|节约|减排)\s*(\d+\.?\d*)', text
+            r'(?:\u8282\u7701|\u51cf\u5c11|\u964d\u4f4e|\u4e0b\u964d|\u8282\u7ea6|\u51cf\u6392)\s*(\d+\.?\d*)', text
         )
         if single_no_pct:
             val = float(single_no_pct.group(1)) / 100.0
@@ -162,9 +152,9 @@ def parse_ghg_change(text: str):
 
     Examples
     --------
-    "GHG排放减少 22%"     → 0.78
-    "GHG排放减少 >30%"    → 0.70
-    "CO₂排放因子 0.9 吨"  → 0.9 (direct factor, not multiplier)
+    "GHG emission reduction 22%"     → 0.78
+    "GHG emission reduction >30%"    → 0.70
+    "CO₂emission factor 0.9 tonnes"  → 0.9 (direct factor, not multiplier)
 
     Returns
     -------
@@ -174,10 +164,10 @@ def parse_ghg_change(text: str):
     if not text:
         return None
 
-    # Pattern: GHG/CO2 减少/降低/下降 X% (with optional > or ~)
+    # Pattern: GHG/CO2 reduction/decrease/decrease X% (with optional > or ~)
     pct_match = re.search(
-        r'(?:GHG|CO₂?|CO2|温室|碳排放?)\s*(?:排放)?\s*'
-        r'(?:减少|降低|下降|减排)\s*[>~]?\s*(\d+\.?\d*)\s*%',
+        r'(?:GHG|CO₂?|CO2|\u6e29\u5ba4|\u78b3\u6392\u653e?)\s*(?:\u6392\u653e)?\s*'
+        r'(?:\u51cf\u5c11|\u964d\u4f4e|\u4e0b\u964d|\u51cf\u6392)\s*[>~]?\s*(\d+\.?\d*)\s*%',
         text
     )
     if pct_match:
@@ -186,7 +176,7 @@ def parse_ghg_change(text: str):
 
     # Pattern: direct CO2 emission factor
     ef_match = re.search(
-        r'(?:CO₂?|CO2)\s*(?:排放因子)?\s*[：:]\s*(\d+\.?\d*)', text
+        r'(?:CO₂?|CO2)\s*(?:\u6392\u653e\u56e0\u5b50)?\s*[：:]\s*(\d+\.?\d*)', text
     )
     if ef_match:
         return float(ef_match.group(1))
@@ -200,77 +190,77 @@ def normalize_distribution_name(text: str) -> str:
 
     Examples
     --------
-    "三角分布" → "Triangular"
-    "正态分布" → "Normal"
-    "对数正态分布" → "Lognormal"
-    "连续概率分布" → "Continuous" (generic)
+    "Triangular distribution" → "Triangular"
+    "Normal distribution" → "Normal"
+    "logarithmic normal distribution" → "Lognormal"
+    "Continuous Probability Distribution" → "Continuous" (generic)
     """
     text = safe_str(text).lower()
-    if '三角' in text or 'triangular' in text:
+    if '\u4e09\u89d2' in text or 'triangular' in text:
         return 'Triangular'
     if 'pert' in text:
         return 'PERT'
-    if '对数正态' in text or 'lognormal' in text or 'log normal' in text:
+    if '\u5bf9\u6570\u6b63\u6001' in text or 'lognormal' in text or 'log normal' in text:
         return 'Lognormal'
-    if '正态' in text or 'normal' in text:
+    if '\u6b63\u6001' in text or 'normal' in text:
         return 'Normal'
-    if '均匀' in text or 'uniform' in text:
+    if '\u5747\u5300' in text or 'uniform' in text:
         return 'Uniform'
-    if '截断' in text or 'truncat' in text:
+    if '\u622a\u65ad' in text or 'truncat' in text:
         return 'Truncated'
-    if '离散' in text or 'discrete' in text:
+    if '\u79bb\u6563' in text or 'discrete' in text:
         return 'Discrete'
-    if '连续' in text or 'continuous' in text:
+    if '\u8fde\u7eed' in text or 'continuous' in text:
         return 'Continuous'
     return 'Continuous'
 
 
 # =============================================================================
-# Matrix 1: Prior_Matrix (先验参数矩阵 — 排放模型完整参数表)
+# Matrix 1: Prior_Matrix (Pre-demonstration Array — Full list of parameters of the emission model)
 # =============================================================================
 #
-# 设计说明:
-#   Prior_Matrix 是排放模型的"参数主表"，以长格式 (long format) 组织。
-#   每条记录代表一个参数在特定维度组合 (Flag × Gear × Sector × LengthCategory)
-#   下的取值。所有参数共表，下游模型按 Param_Code + 维度键 直接索引。
+# Design description:
+#   Prior_Matrix Its an emission model"Parameters master table", In long format (long format) Organization. 
+#   Each record represents a combination of parameters in a given dimension (Flag × Gear × Sector × LengthCategory)
+#   Take value from below. All parameters in total table, Downstream model press Param_Code + Width Keys Direct Index. 
 #
-#   参数来源: Model_parameters.xlsx → Sheet 1「动态生命周期模型」(108 rows)
-#   该 Sheet 是文献笔记本，参数嵌入在中文叙述中，需人工提取。
+#   Parameters Source: Model_parameters.xlsx → Sheet 1「Dynamic life-cycle models」(108 rows)
+#   The Sheet Its a notebook, Arguments embedded in the Chinese narrative, Its gonna be extracted manually. 
 #
-#   参数覆盖 8 大类:
-#     A. 船舶分类标准            (Vessel Classification)
-#     B. 船舶作业活动参数        (Fishing Activity Parameters)
-#     C. 核心燃料与排放参数      (Core Fuel & Emission Parameters)
-#     D. 辅机功率参数            (Auxiliary Engine Power)
-#     E. 船体材料与建造参数      (Hull Material & Construction)
-#     F. 渔具材料消耗参数        (Gear Material Consumption)
-#     G. 延绳钓饵料消耗参数      (Longline Bait Consumption)
-#     H. 制冷剂参数              (Refrigerant Parameters)
-#     I. 努力量标准化参数        (Effort Standardization)
-#     J. 历史功率演进参数        (Power Discount / Historical Evolution)
-#     K. GT-LDT 吨位转换参数     (Gross Tonnage → Light Displacement Tonnage)
+#   Parameter Overwrite 8 Category:
+#     A. Standard Classification of Ships            (Vessel Classification)
+#     B. Parameters for ship operations        (Fishing Activity Parameters)
+#     C. Core fuel and emission parameters      (Core Fuel & Emission Parameters)
+#     D. auxiliary engine power parameters            (Auxiliary Engine Power)
+#     E. Ship-body material and construction parameters      (Hull Material & Construction)
+#     F. Parameters for the consumption of gear material        (Gear Material Consumption)
+#     G. longline bait consumption parameters      (Longline Bait Consumption)
+#     H. Refrigerant parameters              (Refrigerant Parameters)
+#     I. Efforts to standardize parameters        (Effort Standardization)
+#     J. Historical Power Evolution Parameters        (Power Discount / Historical Evolution)
+#     K. GT-LDT Tonn Conversion Parameters     (Gross Tonnage → Light Displacement Tonnage)
 #
-#   LONG-FORMAT 列定义:
-#     Param_Section    — 参数大类 (A-L)
-#     Param_Code       — 模型代码中的变量名 (e.g., T_map, SFR_map)
-#     Param_Name_CN    — 参数中文名称
-#     Flag             — 适用船旗国/区域 (ALL = 全局通用)
-#     Gear             — 适用渔具类型: LL/PS/TP/ALL
-#     Sector           — 适用部门: I (Industrial) / APW (Artisanal) / ALL
-#     Length_Category  — 船长分类: <12m / >=12m / ALL
-#     Value_Best       — 最佳估计值 (中位数/众数/均值)
-#     Value_Low        — 参数下限
-#     Value_High       — 参数上限
-#     Unit             — 物理单位
-#     Distribution     — 推荐蒙特卡洛分布类型
-#     Source_Citation  — 文献来源 (作者, 年份, 期刊)
-#     Sheet1_Row       — 原始 Sheet 1 中的行号
-#     Note             — 说明备注 (提取逻辑、假设、与模型的关系)
+#   LONG-FORMAT Column Definitions:
+#     Param_Section    — Large class of parameters (A-L)
+#     Param_Code       — Variable name in model code (e.g., T_map, SFR_map)
+#     Param_Name_EN    — parameter name in English
+#     Flag             — Application of flag States/Regional (ALL = Globally available)
+#     Gear             — Type of gear applicable: LL/PS/TP/ALL
+#     Sector           — Applicable authority: I (Industrial) / APW (Artisanal) / ALL
+#     Length_Category  — vessel-length class: <12m / >=12m / ALL
+#     Value_Best       — Best estimate (median/mode/mean)
+#     Value_Low        — Parameter Lower Limits
+#     Value_High       — Parameter Maximum
+#     Unit             — Physics Unit
+#     Distribution     — Recommended Monte Carlo distribution type
+#     Source_Citation  — Documentation sources (Author, Year, Periodicals)
+#     Sheet1_Row       — Original Sheet 1 Line Numbers
+#     Note             — Note (Extract Logic, Assumptions, Relationship with model)
 #
-#   SCALAR 参数统一使用: Flag=ALL, Gear=ALL, Sector=ALL, Length_Category=ALL
-#   GEAR-SPECIFIC 参数:   Flag=ALL, Gear=LL|PS|TP, Sector=ALL
-#   SECTOR-SPECIFIC 参数: Flag=ALL, Gear=ALL, Sector=I|APW
-#   REGION-SPECIFIC 参数: Flag=Africa|Asia|..., Gear=LL|PS, Sector=I|APW
+#   SCALAR Uniform use of parameters: Flag=ALL, Gear=ALL, Sector=ALL, Length_Category=ALL
+#   GEAR-SPECIFIC parameter:   Flag=ALL, Gear=LL|PS|TP, Sector=ALL
+#   SECTOR-SPECIFIC parameter: Flag=ALL, Gear=ALL, Sector=I|APW
+#   REGION-SPECIFIC parameter: Flag=Africa|Asia|..., Gear=LL|PS, Sector=I|APW
 # =============================================================================
 
 def build_prior_matrix(xlsx_path=None):
@@ -291,18 +281,18 @@ def build_prior_matrix(xlsx_path=None):
     pd.DataFrame — long-format unified parameter matrix (102 rows × 15 cols)
     """
     print("\n" + "=" * 70)
-    print("  Building Matrix 1: Prior_Matrix (先验参数矩阵 — v2 修正版)")
+    print("  Building Matrix 1: Prior_Matrix (Pre-demonstration Array — v2 Revised)")
     print("  Fixes: Sheet1_Row 'R' prefix + Bastos LF corrected + EFs gapped")
     print("=" * 70)
 
     rows = []
 
-    def add_row(section, code, name_cn, flag, gear, sector, len_cat,
+    def add_row(section, code, name_en, flag, gear, sector, len_cat,
                 v_best, v_low, v_high, unit, dist, source, s1_row, note):
         rows.append({
             'Param_Section':    section,
             'Param_Code':       code,
-            'Param_Name_CN':    name_cn,
+            'Param_Name_EN':    name_en,
             'Flag':             flag,
             'Gear':             gear,
             'Sector':           sector,
@@ -318,57 +308,57 @@ def build_prior_matrix(xlsx_path=None):
         })
 
     # ========================================================================
-    # A. 船舶分类标准 (Vessel Classification) — Sheet 1 Row 4-5
+    # A. Standard Classification of Ships (Vessel Classification) — Sheet 1 Row 4-5
     # ========================================================================
-    # Row 4: "手工渔业与工业渔业划分标准 — 船长12m" (EU definition)
-    # Row 5: 保留为模型注释行（原Greer 16m阈值已弃用，统一使用EU 12m标准）
+    # Row 4: "Classification criteria for artisanal and industrial fisheries — vessel length 12m" (EU definition)
+    # Row 5: Keep as model comment line (Original Greer 16m Threshold abandoned, Uniformly used EU 12m standard) 
     # Model usage:
-    #   - 12m: 统一船长阈值，用于Sector、SFR_map、EF_fuel_map等所有阶梯函数
-    #   - EU标准: Council Regulation (EC) No 1198/2006, Article 26
+    #   - 12m: common vessel-length threshold, For Sector, SFR_map, EF_fuel_map Waiting for all staircase functions
+    #   - EU standard: Council Regulation (EC) No 1198/2006, Article 26
 
     add_row(
-        'A', 'LENGTH_THRESHOLD_SECTOR_M', 'Sector划分船长阈值 (EU标准)',
+        'A', 'LENGTH_THRESHOLD_SECTOR_M', 'Sector classification vessel-length threshold (EU standard)',
         'ALL', 'ALL', 'ALL', 'ALL',
         12.0, np.nan, np.nan, 'm', 'Discrete',
         'Council Regulation (EC) No 1198/2006 of 27 July 2006 on the European Fisheries Fund, Article 26',
         'R4',
-        'I (Industrial): >=12m; APW (Artisanal): <12m. 按欧盟标准统一划分。用于Sector二元分类。'
+        'I (Industrial): >=12m; APW (Artisanal): <12m. Harmonization by EU standards. For Sector binary classification. '
     )
     add_row(
-        'A', 'LENGTH_THRESHOLD_SFR_M', 'SFR/EF阶梯分界船长阈值 (统一EU标准)',
+        'A', 'LENGTH_THRESHOLD_SFR_M', 'SFR/EF stepwise vessel-length threshold (common EU standard)',
         'ALL', 'ALL', 'ALL', 'ALL',
         12.0, np.nan, np.nan, 'm', 'Discrete',
         'Council Regulation (EC) No 1198/2006; Greer et al. (2019) Mar. Policy 107:103382',
         'R4-R5',
-        '<12m vs >=12m. 统一使用EU 12m标准。原Row 5 (Greer 16m)已弃用，所有阶梯函数统一按12m划分。'
+        '<12m vs >=12m. Uniformly used EU 12m standard. Original Row 5 (Greer 16m)Abandoned, All ladder functions are aligned by pressing 12m Division. '
     )
 
     # ========================================================================
-    # B. 船舶作业活动参数 (Fishing Activity Parameters) — Sheet 1 Row 6-28
+    # B. Parameters for ship operations (Fishing Activity Parameters) — Sheet 1 Row 6-28
     # ========================================================================
 
     # ------------------------------------------------------------------
     # B1. DAS — Days at Sea (T_map) — Row 6-13
     # ------------------------------------------------------------------
-    # 数据优先级体系 (Data Hierarchy):
-    #   Tier 1 (最高): Parker et al. (2014) — 现代金枪鱼围网船队, 按大洋,
-    #                  反映1990年后FAD策略下的真实高强度作业
-    #   Tier 2 (次级): Jha et al. (2026) — 印度洋/阿拉伯海机械化延绳钓, 最新区域修正
-    #   Tier 3 (兜底): Anticamara et al. (2011) — 宏观历史基线 (1950-2010),
-    #                  适用于非主要目标船型(TP)、历史回溯、缺数据区域
+    # Data Priority System (Data Hierarchy):
+    #   Tier 1 (Highest): Parker et al. (2014) — modern tuna purse-seine fleet, By Ocean,
+    #                  Response 1990 After FAD Real high-intensity work under strategy
+    #   Tier 2 (Sub): Jha et al. (2026) — Indian Ocean/mechanised longline fisheries in the Arabian Sea, Recent regional amendments
+    #   Tier 3 (Take the bottom): Anticamara et al. (2011) — Macro-historical baseline (1950-2010),
+    #                  Applicable to non-principal ship type(TP), Historical retroactivity, Missing data range
     #
-    # 地理映射 (Geographic Mapping):
-    #   Pacific  → 亚洲/大洋洲 (西太) 或 美洲 (东太)
-    #   Indian   → 亚洲 或 非洲
-    #   Atlantic → 欧洲/美洲 或 非洲
-    # RFMO对应: IATTC+WCPFC→Pacific, IOTC→Indian, ICCAT→Atlantic
+    # Geographical Map (Geographic Mapping):
+    #   Pacific  → Asia/Oceania (Theta) or Americas (Tung Tai!)
+    #   Indian   → Asia or Africa
+    #   Atlantic → Europe/Americas or Africa
+    # RFMO Corresponds to: IATTC+WCPFC→Pacific, IOTC→Indian, ICCAT→Atlantic
     #
-    # 完整文献引用见各条目 Source_Citation 字段.
+    # For full literature reference see entries Source_Citation Fields.
     #
     # Row 6: Table header — Gear × Region
     # Row 7: Longline DAS table (Anticamara et al. 2011)
     # Row 8: Purse Seine DAS table (Anticamara et al. 2011)
-    # Row 9: PS China = 200 (expert: 谢斌老师咨询)
+    # Row 9: PS China = 200 (expert: expert consultation with Bin Xie)
     # Row 10: Transport = 15 days/month → ~180 days/year
     # Row 11: Fleet characteristics table (Atlantic/Indian/Pacific averages)
     # Row 12: PS trip profile: 33.1 days, 68% transit, 8% fishing, 381t fuel/trip
@@ -381,7 +371,7 @@ def build_prior_matrix(xlsx_path=None):
     # Fuel performance and carbon footprint of the global purse seine tuna fleet.
     # Journal of Cleaner Production, 103, 517-524.
     # DOI: 10.1016/j.jclepro.2014.05.017
-    # 数据: 93艘围网船 (占全球鲣鱼/黄鳍金枪鱼捕捞量28%), 按大洋分层统计.
+    # Data: 93 purse-seine vessels (And thats the only way to make a living/Yellowfin tuna catches 28%), By ocean layer.
 
     parker_citation = (
         'Parker RWR, Vázquez-Rowe I, Tyedmers PH. (2014). '
@@ -390,43 +380,43 @@ def build_prior_matrix(xlsx_path=None):
     )
 
     # Atlantic PS: 297 days (n=9 vessels, avg LOA=70.6m)
-    add_row('B', 'T_map_DAS', '年出海天数 (Days at Sea) — Tier 1: Parker PS Atlantic',
+    add_row('B', 'T_map_DAS', 'annual days at sea (Days at Sea) — Tier 1: Parker PS Atlantic',
             'Atlantic', 'PS', 'I', 'ALL', 297, np.nan, np.nan,
             'days/year', 'Triangular', parker_citation,
             'R11',
-            'Tier 1 — 大西洋围网 (Parker et al. 2014): 297 days/year. '
-            'n=9 vessels, avg LOA=70.6m. 适用于ICCAT水域, 1990年后FAD时代. '
+            'Tier 1 — Atlantic purse seine (Parker et al. 2014): 297 days/year. '
+            'n=9 vessels, avg LOA=70.6m. Applicable to ICCAT Water, 1990 After FAD Times. '
             'RFMO: ICCAT → Atlantic.')
 
     # Indian PS: 289 days (n=9 vessels, avg LOA=81.7m)
-    add_row('B', 'T_map_DAS', '年出海天数 (Days at Sea) — Tier 1: Parker PS Indian',
+    add_row('B', 'T_map_DAS', 'annual days at sea (Days at Sea) — Tier 1: Parker PS Indian',
             'Indian', 'PS', 'I', 'ALL', 289, np.nan, np.nan,
             'days/year', 'Triangular', parker_citation,
             'R11',
-            'Tier 1 — 印度洋围网 (Parker et al. 2014): 289 days/year. '
-            'n=9 vessels, avg LOA=81.7m. 适用于IOTC水域, 1990年后FAD时代. '
+            'Tier 1 — Indian Ocean purse seine (Parker et al. 2014): 289 days/year. '
+            'n=9 vessels, avg LOA=81.7m. Applicable to IOTC Water, 1990 After FAD Times. '
             'RFMO: IOTC → Indian.')
 
     # Pacific PS: 244 days (n=75 vessels, avg LOA=68.9m)
-    add_row('B', 'T_map_DAS', '年出海天数 (Days at Sea) — Tier 1: Parker PS Pacific',
+    add_row('B', 'T_map_DAS', 'annual days at sea (Days at Sea) — Tier 1: Parker PS Pacific',
             'Pacific', 'PS', 'I', 'ALL', 244, np.nan, np.nan,
             'days/year', 'Triangular', parker_citation,
             'R11',
-            'Tier 1 — 太平洋围网 (Parker et al. 2014): 244 days/year. '
-            'n=75 vessels, avg LOA=68.9m. 适用于WCPFC+IATTC水域, 1990年后FAD时代. '
+            'Tier 1 — Pacific purse seine (Parker et al. 2014): 244 days/year. '
+            'n=75 vessels, avg LOA=68.9m. Applicable to WCPFC+IATTC Water, 1990 After FAD Times. '
             'RFMO: WCPFC+IATTC → Pacific.')
 
     # PS fallback for unmapped RFMOs: mean of 3 oceans
     parker_mean = round((297 + 289 + 244) / 3, 1)  # = 276.7 ≈ 277
-    add_row('B', 'T_map_DAS', '年出海天数 (Days at Sea) — Tier 1: Parker PS 缺省均值',
+    add_row('B', 'T_map_DAS', 'annual days at sea (Days at Sea) — Tier 1: Parker PS default mean',
             'ALL', 'PS', 'I', 'ALL', parker_mean, np.nan, np.nan,
             'days/year', 'Triangular', parker_citation,
             'R11',
-            f'Tier 1 — 未映射组织默认值: mean(Atlantic 297, Indian 289, Pacific 244) '
+            f'Tier 1 — Default for unmaped tissue: mean(Atlantic 297, Indian 289, Pacific 244) '
             f'= {parker_mean} days/year. '
-            '适用于无法明确归入三大洋的RFMO (如CCSBT跨洋水域) 或数据库缺失RFMO标签的船只. '
-            'Parker et al. (2014) 全球加权均值=253 days (含小型船), '
-            f'三大洋算术均值={parker_mean} days (仅大型商业围网船).')
+            'For those that cannot be clearly divided into three oceans RFMO (Like CCSBT Trans-ocean waters) or missing database RFMO Trailers . '
+            'Parker et al. (2014) Global weighted average=253 days (Smaller ships), '
+            f'Average of arithmetic in three oceans={parker_mean} days (large commercial purse-seine vessels only).')
 
     # ──────────────────────────────────────────────────────────────
     # Tier 2: Jha et al. (2026) — Indian Ocean Mechanized Longline
@@ -447,15 +437,15 @@ def build_prior_matrix(xlsx_path=None):
     )
 
     # LL small-scale, SE Arabian Sea (Row 13): 234-256 days for 16-20m vessels
-    add_row('B', 'T_map_DAS', '年出海天数 (Days at Sea) — Tier 2: Jha LL Indian Ocean',
+    add_row('B', 'T_map_DAS', 'annual days at sea (Days at Sea) — Tier 2: Jha LL Indian Ocean',
             'Asia', 'LL', 'APW', '<12m', 245, 234, 256,
             'days/year', 'Triangular', jha_citation,
             'R13',
-            'Tier 2 — 印度洋机械化延绳钓 (Jha et al. 2026): '
+            'Tier 2 — mechanised longline fisheries in the Indian Ocean (Jha et al. 2026): '
             '234-256 days/year, Best=245 (midpoint). '
             '16-20m mechanized longline-cum-gillnet vessels, SE Arabian Sea. '
-            '提供最新区域时间切片, 比历史基线更能反映当前捕捞努力量. '
-            '地理映射: Indian Ocean → Asia (南亚/阿拉伯海沿岸).')
+            'Provide up-to-date area time slices, More reflective of current fishing efforts than historical baselines. '
+            'Geographical Map: Indian Ocean → Asia (South Asia/Arabian Sea coast).')
 
     # ──────────────────────────────────────────────────────────────
     # Tier 3: Anticamara et al. (2011) — Historical Baseline (ALL flags, ALL sectors)
@@ -477,13 +467,13 @@ def build_prior_matrix(xlsx_path=None):
         'Europe': 304, 'North America': 304, 'South America': 304,
     }
     for region, das in ll_das.items():
-        add_row('B', 'T_map_DAS', '年出海天数 (Days at Sea) — Tier 3: Anticamara LL',
+        add_row('B', 'T_map_DAS', 'annual days at sea (Days at Sea) — Tier 3: Anticamara LL',
                 region, 'LL', 'ALL', 'ALL', das, np.nan, np.nan,
                 'days/year', 'Triangular', anticamara_citation,
                 'R7',
                 f'Tier 3 — LL {region} (Anticamara et al. 2011): {das} days/year. '
-                '宏观历史基线 (1950-2010), Flag=ALL, Sector=ALL. '
-                '适用于缺乏高精度区域数据的延绳钓船队历史回溯.')
+                'Macro-historical baseline (1950-2010), Flag=ALL, Sector=ALL. '
+                'For longline fleet historical retroactivity for lack of high-precision data.')
 
     # Purse Seine DAS by continent (Row 8) — Tier 3 fallback
     ps_das = {
@@ -491,33 +481,33 @@ def build_prior_matrix(xlsx_path=None):
         'Europe': 177, 'North America': 177, 'South America': 177,
     }
     for region, das in ps_das.items():
-        add_row('B', 'T_map_DAS', '年出海天数 (Days at Sea) — Tier 3: Anticamara PS',
+        add_row('B', 'T_map_DAS', 'annual days at sea (Days at Sea) — Tier 3: Anticamara PS',
                 region, 'PS', 'ALL', 'ALL', das, np.nan, np.nan,
                 'days/year', 'Triangular', anticamara_citation,
                 'R8',
                 f'Tier 3 — PS {region} (Anticamara et al. 2011): {das} days/year. '
-                '宏观历史基线 (1950-2010), Flag=ALL, Sector=ALL. '
-                '适用于1990年前(无FAD)围网船队历史回溯或缺乏Parker数据的区域.')
+                'Macro-historical baseline (1950-2010), Flag=ALL, Sector=ALL. '
+                'Applicable to 1990 A year ago(none FAD)historical reconstruction of purse-seine fleets or missing Parker Area of data.')
 
     # PS China expert consultation (Row 9) — specific override
-    add_row('B', 'T_map_DAS', '年出海天数 (Days at Sea) — China PS expert',
+    add_row('B', 'T_map_DAS', 'annual days at sea (Days at Sea) — China PS expert',
             'Asia', 'PS', 'I', 'ALL', 200, np.nan, np.nan,
             'days/year', 'Triangular',
-            'Expert consultation (谢斌老师咨询) — China PS fleet. '
+            'Expert consultation (expert consultation with Bin Xie) — China PS fleet. '
             'Overrides Anticamara Asia PS (195 days) for Chinese-flagged vessels.',
             'R9',
-            'China-specific PS DAS=200, 高于亚洲区域均值(195). '
-            '适用于中国籍围网船, 覆盖Anticamara Asia PS条目.')
+            'China-specific PS DAS=200, Higher than average for Asia region(195). '
+            'applies to Chinese-flagged purse-seine vessels, Overwrite Anticamara Asia PS Entry.')
 
     # Transport vessel (Row 10) — Anticamara inferred
-    add_row('B', 'T_map_DAS', '年出海天数 (Days at Sea) — Transport vessel',
+    add_row('B', 'T_map_DAS', 'annual days at sea (Days at Sea) — Transport vessel',
             'ALL', 'TP', 'I', 'ALL', 180, np.nan, np.nan,
             'days/year', 'Triangular',
             'Inferred from Sheet 1 Row 10: "Transport 15 days per month" '
             '→ 15×12=180 days/year. '
             'Reference: Anticamara et al. (2011) for non-fishing vessel DAS baseline.',
             'R10',
-            'Transport/refrigerated carrier vessel (转运船/冷藏运输船). '
+            'Transport/refrigerated carrier vessel (transshipment vessel/Refrigerated transport vessels). '
             '15 days/month × 12 = 180 days/year.')
 
     # ──────────────────────────────────────────────────────────────
@@ -532,7 +522,7 @@ def build_prior_matrix(xlsx_path=None):
                      and r['Flag'] != 'ALL']
         if gear_vals:
             mean_das = round(np.mean(gear_vals), 1)
-            add_row('B', 'T_map_DAS', '年出海天数 (Days at Sea)',
+            add_row('B', 'T_map_DAS', 'annual days at sea (Days at Sea)',
                     'ALL', gear, 'ALL', 'ALL', mean_das, np.nan, np.nan,
                     'days/year', 'Triangular', anticamara_citation,
                     'R7-R11',
@@ -548,7 +538,7 @@ def build_prior_matrix(xlsx_path=None):
     #         → [TIME PROPORTIONS, NOT engine hours directly]
     # Row 15: PS ghg_lca engine=4h, auxiliary=15h (Korican et al. 2023)
     # Row 16: "24h(Industrial) 4h(Smallscale)" — general guidance
-    # Row 17: "出海行程时长 (Trip duration) | 6h"
+    # Row 17: "Long trip to the sea (Trip duration) | 6h"
     # Row 18: "24h(Industrial)"
     # Row 19: "6h(Smallscale)"
     #
@@ -557,7 +547,7 @@ def build_prior_matrix(xlsx_path=None):
     # nuanced Sector-aware parameterization for future model refinement.
 
     # Industrial: 24h continuous deep-sea operation
-    add_row('B', 'H_map_Hday', '日主机运行小时数 (Daily Engine Hours)',
+    add_row('B', 'H_map_Hday', 'daily main engine operating hours (Daily Engine Hours)',
             'ALL', 'ALL', 'I', 'ALL', 24.0, np.nan, np.nan,
             'h/day', 'Triangular',
             'Greer et al. (2019) Mar. Policy 107:103382; '
@@ -566,7 +556,7 @@ def build_prior_matrix(xlsx_path=None):
             'Industrial: 24h continuous deep-sea operation (Row 16, Row 18).')
 
     # APW: 12h coastal daytime (based on PNAS α-analysis, median ~9h → 12h)
-    add_row('B', 'H_map_Hday', '日主机运行小时数 (Daily Engine Hours)',
+    add_row('B', 'H_map_Hday', 'daily main engine operating hours (Daily Engine Hours)',
             'ALL', 'ALL', 'APW', 'ALL', 12.0, 4.0, 12.0,
             'h/day', 'Triangular',
             'Greer et al. (2019) smallscale=4h (Row 16, Row 19); '
@@ -574,16 +564,16 @@ def build_prior_matrix(xlsx_path=None):
             'R16,R19',
             'APW: coastal daytime operation. Sheet 1 says 4-6h (Row 16, 19), '
             'but PNAS empirical data shows median ~9h. '
-            '保守取12h作为最佳估计, 4h作为下限.')
+            'Conservative 12h As the best estimate, 4h As the lower limit.')
 
     # PS-specific: ghg_lca engine vs auxiliary (Row 15, Korican et al. 2023)
-    add_row('B', 'H_map_Main_PS', 'PS主机日运行小时数',
+    add_row('B', 'H_map_Main_PS', 'PS daily main engine operating hours',
             'ALL', 'PS', 'I', 'ALL', 4.0, np.nan, np.nan,
             'h/day', 'Triangular',
             'Korican et al. (2023) Ocean Eng. 286:115734',
             'R15',
             'PS ghg_lca engine: ~4h/day (short high-power bursts for setting/hauling).')
-    add_row('B', 'H_map_Aux_PS', 'PS辅机日运行小时数',
+    add_row('B', 'H_map_Aux_PS', 'PS daily auxiliary engine operating hours',
             'ALL', 'PS', 'I', 'ALL', 15.0, np.nan, np.nan,
             'h/day', 'Triangular',
             'Korican et al. (2023) Ocean Eng. 286:115734',
@@ -608,14 +598,14 @@ def build_prior_matrix(xlsx_path=None):
     #   Row 28: Kim et al. (2023) — Coastal 79%/19%, Offshore 73%/20%, Other 76%/14%
 
     # --- Industrial Longline ---
-    add_row('B', 'LF_move', '航行阶段发动机负荷因子 (Transit Load Factor)',
+    add_row('B', 'LF_move', 'Engine load factor during the cruise phase (Transit Load Factor)',
             'ALL', 'LL', 'I', 'ALL', 0.80, np.nan, np.nan,
             'fraction of MCR', 'Triangular',
             'Eyring et al. (2005) JGR 112:D12305 — cruise MCR≥65%, typical load 80%',
             'R22-R23',
             'LL Industrial transit: 80% MCR cruise (Eyring et al. 2005, Row 22-23).')
 
-    add_row('B', 'LF_work', '捕捞作业阶段发动机负荷因子 (Fishing Load Factor)',
+    add_row('B', 'LF_work', 'Engine load factors for the fishing operations phase (Fishing Load Factor)',
             'ALL', 'LL', 'I', 'ALL', 0.50, np.nan, np.nan,
             'fraction of MCR', 'Triangular',
             'Perčić et al. (2020) — general marine auxiliary engines, Aux=0.5',
@@ -625,14 +615,14 @@ def build_prior_matrix(xlsx_path=None):
             'NOTE: Bastos et al. (2021) is SMALL-SCALE (see APW entries below).')
 
     # --- Industrial Purse Seine ---
-    add_row('B', 'LF_move', '航行阶段发动机负荷因子 (Transit Load Factor)',
+    add_row('B', 'LF_move', 'Engine load factor during the cruise phase (Transit Load Factor)',
             'ALL', 'PS', 'I', 'ALL', 0.80, np.nan, np.nan,
             'fraction of MCR', 'Triangular',
             'Eyring et al. (2005) JGR 112:D12305 — cruise MCR≥65%, typical load 80%',
             'R22-R23',
             'PS Industrial transit: 80% MCR cruise (same as LL).')
 
-    add_row('B', 'LF_work', '捕捞作业阶段发动机负荷因子 (Fishing Load Factor)',
+    add_row('B', 'LF_work', 'Engine load factors for the fishing operations phase (Fishing Load Factor)',
             'ALL', 'PS', 'I', 'ALL', 0.65, np.nan, np.nan,
             'fraction of MCR', 'Triangular',
             'Eyring et al. (2005) JGR 112:D12305 — non-cargo ships, load 65-75%',
@@ -641,14 +631,14 @@ def build_prior_matrix(xlsx_path=None):
             'Higher than LL because PS uses hydraulics during setting/hauling.')
 
     # --- Industrial Transport ---
-    add_row('B', 'LF_move', '航行阶段发动机负荷因子 (Transit Load Factor)',
+    add_row('B', 'LF_move', 'Engine load factor during the cruise phase (Transit Load Factor)',
             'ALL', 'TP', 'I', 'ALL', 0.80, np.nan, np.nan,
             'fraction of MCR', 'Triangular',
             'Eyring et al. (2005) — general vessel cruise parameters',
             'R22-R23',
             'Transport vessel transit: 80% MCR cruise.')
 
-    add_row('B', 'LF_work', '捕捞作业阶段发动机负荷因子 (Fishing Load Factor)',
+    add_row('B', 'LF_work', 'Engine load factors for the fishing operations phase (Fishing Load Factor)',
             'ALL', 'TP', 'I', 'ALL', 0.50, np.nan, np.nan,
             'fraction of MCR', 'Triangular',
             'Perčić et al. (2020) — general marine auxiliary engines, Aux=0.5',
@@ -662,7 +652,7 @@ def build_prior_matrix(xlsx_path=None):
     # Bastos et al. (2021) — Brazilian bottom longline (Row 13-14) provides
     #   additional time-breakdown context for small-scale LL operations.
 
-    add_row('B', 'LF_move', '航行阶段发动机负荷因子 (Transit Load Factor)',
+    add_row('B', 'LF_move', 'Engine load factor during the cruise phase (Transit Load Factor)',
             'ALL', 'ALL', 'APW', 'ALL', 0.79, 0.73, 0.80,
             'fraction of MCR', 'Triangular',
             'Kim et al. (2023) JMSE 11:1488 — coastal small fishing vessels',
@@ -670,7 +660,7 @@ def build_prior_matrix(xlsx_path=None):
             'APW transit: Coastal vessels 79% load (Row 28). '
             'Range 73-80% covers coastal-to-offshore variation.')
 
-    add_row('B', 'LF_work', '捕捞作业阶段发动机负荷因子 (Fishing Load Factor)',
+    add_row('B', 'LF_work', 'Engine load factors for the fishing operations phase (Fishing Load Factor)',
             'ALL', 'ALL', 'APW', 'ALL', 0.19, 0.14, 0.20,
             'fraction of MCR', 'Triangular',
             'Kim et al. (2023) JMSE 11:1488 — coastal small fishing vessels',
@@ -682,14 +672,14 @@ def build_prior_matrix(xlsx_path=None):
             'but engine load during this phase is low (~19%).')
 
     # --- Industrial general fallback ---
-    add_row('B', 'LF_move', '航行阶段发动机负荷因子 (Transit Load Factor)',
+    add_row('B', 'LF_move', 'Engine load factor during the cruise phase (Transit Load Factor)',
             'ALL', 'ALL', 'I', 'ALL', 0.80, np.nan, np.nan,
             'fraction of MCR', 'Triangular',
             'Eyring et al. (2005) + Perčić et al. (2020) — general marine engines',
             'R22-R23,R27',
             'General Industrial fallback: 80% MCR cruise.')
 
-    add_row('B', 'LF_work', '捕捞作业阶段发动机负荷因子 (Fishing Load Factor)',
+    add_row('B', 'LF_work', 'Engine load factors for the fishing operations phase (Fishing Load Factor)',
             'ALL', 'ALL', 'I', 'ALL', 0.50, np.nan, np.nan,
             'fraction of MCR', 'Triangular',
             'Perčić et al. (2020) — general marine auxiliary engines, Aux=0.5',
@@ -697,7 +687,7 @@ def build_prior_matrix(xlsx_path=None):
             'General Industrial fallback: 50% aux load.')
 
     # ========================================================================
-    # C. 核心燃料与排放参数 (Core Fuel & Emission) — Sheet 1 Row 30-43
+    # C. Core fuel and emission parameters (Core Fuel & Emission) — Sheet 1 Row 30-43
     # ========================================================================
 
     # ------------------------------------------------------------------
@@ -714,7 +704,7 @@ def build_prior_matrix(xlsx_path=None):
     sfr_source_main = 'Endresen et al. (2007) JGR 112:D12305; Sustainable Ships (2022)'
 
     # Industrial SFR (>=12m, diesel)
-    add_row('C', 'SFR_map', '特定燃油消耗率 (Specific Fuel Consumption Rate)',
+    add_row('C', 'SFR_map', 'Specific fuel consumption rate (Specific Fuel Consumption Rate)',
             'ALL', 'ALL', 'I', '>=12m', 0.000200, 0.000155, 0.000250,
             'tFuel/kWh', 'Lognormal',
             sfr_source_main,
@@ -724,7 +714,7 @@ def build_prior_matrix(xlsx_path=None):
             'Row 31: 0.00020 tFuel/kWh; Row 36: ghg_lca=215 g/kWh.')
 
     # Smallscale SFR (<12m, gasoline/diesel mix)
-    add_row('C', 'SFR_map', '特定燃油消耗率 (Specific Fuel Consumption Rate)',
+    add_row('C', 'SFR_map', 'Specific fuel consumption rate (Specific Fuel Consumption Rate)',
             'ALL', 'ALL', 'APW', '<12m', 0.000350, 0.000250, 0.000450,
             'tFuel/kWh', 'Lognormal',
             'Winther (2007) Danish navigation emissions; Greer et al. (2019)',
@@ -733,14 +723,14 @@ def build_prior_matrix(xlsx_path=None):
             'Range 250-450 g/kWh. Row 32: 0.00035 tFuel/kWh.')
 
     # Main vs Aux diesel SFR (for detailed fuel modeling)
-    add_row('C', 'SFR_Main_Diesel', '主机柴油特定燃油消耗率',
+    add_row('C', 'SFR_Main_Diesel', 'specific diesel consumption of main engines',
             'ALL', 'ALL', 'I', 'ALL', 0.000215, np.nan, np.nan,
             'tFuel/kWh', 'Lognormal',
             'Sustainable Ships (2022)',
             'R36',
             'Main engine diesel: 215 g/kWh (Row 36).')
 
-    add_row('C', 'SFR_Aux_Diesel', '辅机柴油特定燃油消耗率',
+    add_row('C', 'SFR_Aux_Diesel', 'specific diesel consumption of auxiliary engines',
             'ALL', 'ALL', 'I', 'ALL', 0.000210, np.nan, np.nan,
             'tFuel/kWh', 'Lognormal',
             'Sustainable Ships (2022)',
@@ -748,14 +738,14 @@ def build_prior_matrix(xlsx_path=None):
             'Auxiliary engine diesel: 210 g/kWh (Row 37).')
 
     # Alternative fuel SFR (for scenario modeling — S4, S14)
-    add_row('C', 'SFR_Methanol_Diesel_80', '甲醇-柴油混合 (80%能量替代) SFR',
+    add_row('C', 'SFR_Methanol_Diesel_80', 'methanol-diesel blend (80%energy substitution) SFR',
             'ALL', 'ALL', 'ALL', 'ALL', 0.000439, np.nan, np.nan,
             'tFuel/kWh', 'Lognormal',
             'Sheet 1 Row 34',
             'R34',
             '438.58 g/kWh = 0.000439 t/kWh. Used in scenario S4, S14.')
 
-    add_row('C', 'SFR_H2_Diesel_80', '氢-柴油混合 (80%能量替代) SFR',
+    add_row('C', 'SFR_H2_Diesel_80', 'hydrogen-diesel blend (80%energy substitution) SFR',
             'ALL', 'ALL', 'ALL', 'ALL', 0.000112, np.nan, np.nan,
             'tFuel/kWh', 'Lognormal',
             'Sheet 1 Row 35',
@@ -763,45 +753,45 @@ def build_prior_matrix(xlsx_path=None):
             '112.32 g/kWh = 0.000112 t/kWh. Used in scenario S14.')
 
     # ------------------------------------------------------------------
-    # C1b. SFOC-负荷转换公式 (柴油机负荷-油耗拟合) — Row 30
+    # C1b. SFOC-Load Conversion Formula (Diesel load-Oil consumption) — Row 30
     # ------------------------------------------------------------------
     # Row 30: SFOC_actual = SFOC_base × (0.455×L² − 0.71×L + 1.28)
-    #   L = 发动机负荷因子 (Load Factor, fraction of rated power)
-    #   适用条件: ≥12m, 四冲程柴油主机
-    #   来源: Jalkanen et al. (2012) ACP 12:2641-2659
-    #   示例计算:
-    #     L=0.80 (巡航): factor = 0.455×0.64 − 0.71×0.80 + 1.28 = 1.003
-    #     L=0.50 (LL作业): factor = 0.455×0.25 − 0.71×0.50 + 1.28 = 1.039
-    #     L=0.19 (APW作业): factor = 0.455×0.0361 − 0.71×0.19 + 1.28 = 1.162
+    #   L = Engine load factor (Load Factor, fraction of rated power)
+    #   Conditions of application: ≥12m, four-stroke diesel main engine
+    #   Source: Jalkanen et al. (2012) ACP 12:2641-2659
+    #   Example calculation:
+    #     L=0.80 (Cruise): factor = 0.455×0.64 − 0.71×0.80 + 1.28 = 1.003
+    #     L=0.50 (LL fishing operation): factor = 0.455×0.25 − 0.71×0.50 + 1.28 = 1.039
+    #     L=0.19 (APW fishing operation): factor = 0.455×0.0361 − 0.71×0.19 + 1.28 = 1.162
 
-    add_row('C', 'SFOC_LOAD_COEFF_A', 'SFOC-负荷二次项系数 (L²)',
+    add_row('C', 'SFOC_LOAD_COEFF_A', 'SFOC-quadratic load coefficient (L²)',
             'ALL', 'ALL', 'ALL', '>=12m', 0.455, np.nan, np.nan,
             'dimensionless', 'Discrete',
             'Jalkanen et al. (2012) Atmos. Chem. Phys. 12:2641-2659',
             'R30',
             'SFOC_actual = SFOC_base × (0.455×L² − 0.71×L + 1.28). '
-            '仅适用于≥12m四冲程柴油主机。L=发动机负荷因子(LF, 额定功率比例).')
+            'It only applies to≥12m four-stroke diesel main engine. L=Engine load factor(LF, Quantified power ratio).')
 
-    add_row('C', 'SFOC_LOAD_COEFF_B', 'SFOC-负荷一次项系数 (L)',
+    add_row('C', 'SFOC_LOAD_COEFF_B', 'SFOC-linear load coefficient (L)',
             'ALL', 'ALL', 'ALL', '>=12m', -0.71, np.nan, np.nan,
             'dimensionless', 'Discrete',
             'Jalkanen et al. (2012) Atmos. Chem. Phys. 12:2641-2659',
             'R30',
-            '一次项系数。抛物线公式在L=0.78附近取最小值(最经济工况).')
+            'A single item factor. The parabolic formula is L=0.78 Min. value in the vicinity(Most economics).')
 
-    add_row('C', 'SFOC_LOAD_COEFF_C', 'SFOC-负荷常数项系数',
+    add_row('C', 'SFOC_LOAD_COEFF_C', 'SFOC-load-equation constant',
             'ALL', 'ALL', 'ALL', '>=12m', 1.28, np.nan, np.nan,
             'dimensionless', 'Discrete',
             'Jalkanen et al. (2012) Atmos. Chem. Phys. 12:2641-2659',
             'R30',
-            '常数项。L=0(怠速)时SFOC为基准值的1.28倍; L=1(全负荷)时≈1.025倍.')
+            'Constant items. L=0(Rust)Hour SFOC as the base value 1.28 Multiply; L=1(Full load)Hour≈1.025 Multiply.')
 
-    add_row('C', 'SFOC_LOAD_APPLICABILITY', 'SFOC-负荷公式适用范围',
+    add_row('C', 'SFOC_LOAD_APPLICABILITY', 'SFOC-load-equation applicability',
             'ALL', 'ALL', 'I', '>=12m', 1.0, np.nan, np.nan,
             'binary flag', 'Discrete',
-            'Jalkanen et al. (2012); 仅适用于≥12m四冲程柴油主机',
+            'Jalkanen et al. (2012); It only applies to≥12m four-stroke diesel main engine',
             'R30',
-            '1=适用。辅机应使用固定高效负荷(75%)+固定SFR(220 g/kWh)，不适用此公式。')
+            '1=Application. auxiliary engines use a fixed efficient load(75%)+Fixed SFR(220 g/kWh), This formula is not applicable. ')
 
     # ------------------------------------------------------------------
     # C2. Emission Factors (EF) — Row 38, 40-42
@@ -815,149 +805,149 @@ def build_prior_matrix(xlsx_path=None):
     # ------------------------------------------------------------------
     # C2a. Upstream (Well-to-Tank, WTT) Emission Factors — ecoinvent v3
     # ------------------------------------------------------------------
-    # 燃料上游生产/运输过程的间接碳排放因子。
-    # 来源: ecoinvent v3 cutoff 数据库, 1000次蒙特卡洛模拟。
-    # 单位: kg CO₂eq / kg fuel (功能单位 = 1 kg 燃料供应)
+    # Upstream production of fuel/Indirect carbon emission factors for transport processes. 
+    # Source: ecoinvent v3 cutoff Database, 1000 The Monte Carlo simulation. 
+    # Units: kg CO₂eq / kg fuel (Functional units = 1 kg Fuel supply)
 
-    add_row('C', 'EF_WTT_DIESEL', '柴油上游(WTT)碳排放因子',
+    add_row('C', 'EF_WTT_DIESEL', 'upstream diesel(WTT)carbon emission factor',
             'ALL', 'ALL', 'ALL', 'ALL', 0.369, 0.318, 0.441,
             'kg CO₂eq/kg diesel', 'Lognormal',
             'Ecoinvent v3 — market for diesel | diesel | Cutoff, U - RoW '
             '(1000 MC simulations)',
             'Ecoinvent_Diesel_WTT',
-            '1 kg 柴油上游生产与运输碳排放 (Cradle-to-Tank)。'
-            '过程: market for diesel | Cutoff, U - RoW。'
+            '1 kg Upstream diesel production and transport carbon emissions (Cradle-to-Tank). '
+            'Process: market for diesel | Cutoff, U - RoW. '
             'Mean=0.369, SD=0.031, Median=0.366, 95% CI [0.318, 0.441]. '
-            '此因子与燃烧因子(EF_CO2_Diesel)相加得到完整Well-to-Wake排放。')
+            'This and the burner(EF_CO2_Diesel)Add complete Well-to-Wake emissions. ')
 
-    add_row('C', 'EF_WTT_GASOLINE', '汽油上游(WTT)碳排放因子',
+    add_row('C', 'EF_WTT_GASOLINE', 'upstream petrol(WTT)carbon emission factor',
             'ALL', 'ALL', 'APW', 'ALL', 0.535, 0.489, 0.595,
             'kg CO₂eq/kg petrol', 'Lognormal',
             'Ecoinvent v3 — market for petrol, two-stroke blend | '
             'petrol, two-stroke blend | Cutoff, U - GLO '
             '(1000 MC simulations)',
             'Ecoinvent_Gasoline_WTT',
-            '1 kg 汽油上游生产与运输碳排放 (Cradle-to-Tank)。'
-            '过程: market for petrol, two-stroke blend | Cutoff, U - GLO。'
+            '1 kg Upstream production and transport of carbon emissions from gasoline (Cradle-to-Tank). '
+            'Process: market for petrol, two-stroke blend | Cutoff, U - GLO. '
             'Mean=0.535, SD=0.029, Median=0.532, 95% CI [0.489, 0.595]. '
-            '此因子与燃烧因子(EF_CO2_Gasoline)相加得到完整Well-to-Wake排放。')
+            'This and the burner(EF_CO2_Gasoline)Add complete Well-to-Wake emissions. ')
 
     # ------------------------------------------------------------------
     # C2b. Combustion (Tank-to-Wake, TTW) — CO₂ Emission Factors
     # ------------------------------------------------------------------
-    # 燃料燃烧直接CO₂排放因子。
+    # Direct fuel combustion CO₂emission factor. 
 
     # CO2 from diesel — IMO (2020) Fourth GHG Study
-    add_row('C', 'EF_CO2_Diesel', '柴油CO₂燃烧排放因子',
+    add_row('C', 'EF_CO2_Diesel', 'diesel CO₂combustion emission factor',
             'ALL', 'ALL', 'I', 'ALL', 3.206, 3.206, 3.206,
             'tCO2/tFuel', 'Discrete',
             'IMO (2020) Fourth IMO GHG Study 2020. London, UK: IMO.',
             'IMO_2020',
-            '船用轻柴油(MDO)燃烧CO₂排放因子。'
-            '基于碳元素质量占比(~87.44%)化学计量完全氧化方程计算的无量纲转换系数(CF)。'
+            'Light diesel for boat(MDO)Incendiary CO₂emission factor. '
+            'Based on carbon mass ratio(~87.44%)dimensionless conversion factor from the stoichiometric complete-oxidation equation(CF). '
             '3.206 kg CO₂/kg diesel = 3206 g/kgFuel. '
-            '原值: 3.17 (Korican 2023), 更新为IMO官方值.')
+            'Original value [u]: 3.17 (Korican 2023), Update As IMO Official value [v].')
 
     # CO2 from gasoline — EPA (2025)
-    add_row('C', 'EF_CO2_Gasoline', '汽油CO₂燃烧排放因子',
+    add_row('C', 'EF_CO2_Gasoline', 'petrol CO₂combustion emission factor',
             'ALL', 'ALL', 'APW', 'ALL', 3.158, np.nan, np.nan,
             'tCO2/tFuel', 'Normal',
             'U.S. EPA (2025). Emission Factors for Greenhouse Gas Inventories. '
             'Climate Leadership. Washington, DC.',
             'EPA_2025',
-            '车用/船用汽油燃烧CO₂排放因子。'
-            '原始: 8.78 kg/gallon ÷ 2.78 kg/gallon = 3.158 kg CO₂/kg 汽油。'
-            '来源: EPA Table 2 Mobile Combustion CO2, Motor Gasoline. '
-            '原值: 3.01, 更新为EPA官方值.')
+            'Cars/Gasoline burning from ships CO₂emission factor. '
+            'Original: 8.78 kg/gallon ÷ 2.78 kg/gallon = 3.158 kg CO₂/kg petrol. '
+            'Source: EPA Table 2 Mobile Combustion CO2, Motor Gasoline. '
+            'Original value [u]: 3.01, Update As EPA Official value [v].')
 
     # ------------------------------------------------------------------
     # C2c. Combustion — CH₄ (Methane) Emission Factors
     # ------------------------------------------------------------------
-    # 甲烷排放因发动机冲程技术和燃料类型差异显著, 按燃料和机型分别设定。
+    # methane emissions vary by engine stroke technology and fuel type, specified by fuel and engine type. 
 
-    # Diesel CH4 — IMO (2020) Fourth GHG Study (g/kWh, IMO标准单位)
-    add_row('C', 'EF_CH4_DIESEL_MSD', '柴油CH₄排放因子—中速四冲程(MSD)',
+    # Diesel CH4 — IMO (2020) Fourth GHG Study (g/kWh, IMO Standard Unit)
+    add_row('C', 'EF_CH4_DIESEL_MSD', 'diesel CH₄emission factor—medium-speed four-stroke(MSD)',
             'ALL', 'ALL', 'I', 'ALL', 0.010, np.nan, np.nan,
             'g/kWh', 'Lognormal',
             'IMO (2020) Fourth IMO GHG Study 2020. London, UK: IMO.',
             'IMO_2020',
-            '中速柴油机 (Medium-Speed Diesel, MSD) 甲烷逃逸因子。'
-            '远洋渔船绝大多数采用中速四冲程柴油机，适用于主力渔船和辅机。'
-            '0.010 g/kWh (IMO标准单位).')
+            'medium-speed diesel engine (Medium-Speed Diesel, MSD) methane slip factor. '
+            'most distant-water fishing vessels use medium-speed four-stroke diesel engines, applies to primary fishing vessels and auxiliary engines. '
+            '0.010 g/kWh (IMO Standard Unit).')
 
-    add_row('C', 'EF_CH4_DIESEL_SSD', '柴油CH₄排放因子—低速二冲程(SSD)',
+    add_row('C', 'EF_CH4_DIESEL_SSD', 'diesel CH₄emission factor—low-speed two-stroke(SSD)',
             'ALL', 'ALL', 'I', 'ALL', 0.010, np.nan, np.nan,
             'g/kWh', 'Lognormal',
             'IMO (2020) Fourth IMO GHG Study 2020. London, UK: IMO.',
             'IMO_2020',
-            '低速柴油机 (Slow-Speed Diesel, SSD) 甲烷逃逸因子。'
-            '适用于大型转运船主机。'
-            '0.010 g/kWh (IMO标准单位).')
+            'low-speed diesel engine (Slow-Speed Diesel, SSD) methane slip factor. '
+            'applies to main engines of large transshipment vessels. '
+            '0.010 g/kWh (IMO Standard Unit).')
 
     # Gasoline CH4 — EPA (2025) Table 5, Ships and Boats
-    add_row('C', 'EF_CH4_GASOLINE_2STROKE', '汽油CH₄排放因子—二冲程舷外机',
+    add_row('C', 'EF_CH4_GASOLINE_2STROKE', 'petrol CH₄emission factor—two-stroke outboard engine',
             'ALL', 'ALL', 'APW', 'ALL', 3.76, np.nan, np.nan,
             'g/kgFuel', 'Lognormal',
             'U.S. EPA (2025). Emission Factors for Greenhouse Gas Inventories. '
             'Table 5: Mobile Combustion CH4 and N2O for Non-Road Vehicles, Ships and Boats.',
             'EPA_2025',
-            '老式二冲程汽油舷外机甲烷排放因子。'
-            '原始: 10.45 g/gallon ÷ 2.78 kg/gallon = 3.76 g CH₄/kg 汽油. '
-            '二冲程发动机因扫气过程导致未燃碳氢化合物(含CH₄)逃逸量显著偏高.')
+            'methane emission factor for conventional two-stroke petrol outboard engines. '
+            'Original: 10.45 g/gallon ÷ 2.78 kg/gallon = 3.76 g CH₄/kg petrol. '
+            'two-stroke engine scavenging releases unburned hydrocarbons(Ham CH₄)The escape is significantly higher.')
 
-    add_row('C', 'EF_CH4_GASOLINE_4STROKE', '汽油CH₄排放因子—四冲程舷外机',
+    add_row('C', 'EF_CH4_GASOLINE_4STROKE', 'petrol CH₄emission factor—four-stroke outboard engine',
             'ALL', 'ALL', 'APW', 'ALL', 1.50, np.nan, np.nan,
             'g/kgFuel', 'Lognormal',
             'U.S. EPA (2025). Emission Factors for Greenhouse Gas Inventories. '
             'Table 5: Mobile Combustion CH4 and N2O for Non-Road Vehicles, Ships and Boats.',
             'EPA_2025',
-            '现代四冲程汽油舷外机甲烷排放因子。'
-            '原始: 4.18 g/gallon ÷ 2.78 kg/gallon = 1.50 g CH₄/kg 汽油. '
-            '四冲程机燃烧更完全, CH₄排放约为二冲程的40%.')
+            'methane emission factor for modern four-stroke petrol outboard engines. '
+            'Original: 4.18 g/gallon ÷ 2.78 kg/gallon = 1.50 g CH₄/kg petrol. '
+            'Its more perfect, CH₄The emissions are about two-stroke 40%.')
 
     # ------------------------------------------------------------------
     # C2d. Combustion — N₂O (Nitrous Oxide) Emission Factors
     # ------------------------------------------------------------------
 
-    add_row('C', 'EF_N2O_DIESEL_MSD', '柴油N₂O排放因子—中速四冲程(MSD)',
+    add_row('C', 'EF_N2O_DIESEL_MSD', 'diesel N₂O emission factor—medium-speed four-stroke(MSD)',
             'ALL', 'ALL', 'I', 'ALL', 0.030, np.nan, np.nan,
             'g/kWh', 'Lognormal',
             'IMO (2020) Fourth IMO GHG Study 2020. London, UK: IMO.',
             'IMO_2020',
-            '中速柴油机 (MSD) N₂O排放因子。'
-            '适用于主力渔船和辅机。'
-            '0.030 g/kWh (IMO标准单位). '
-            '原通用值: 0.14 g/kgFuel (Korican 2023).')
+            'medium-speed diesel engine (MSD) N₂O emission factor. '
+            'applies to primary fishing vessels and auxiliary engines. '
+            '0.030 g/kWh (IMO Standard Unit). '
+            'Original Universal Value: 0.14 g/kgFuel (Korican 2023).')
 
-    add_row('C', 'EF_N2O_DIESEL_SSD', '柴油N₂O排放因子—低速二冲程(SSD)',
+    add_row('C', 'EF_N2O_DIESEL_SSD', 'diesel N₂O emission factor—low-speed two-stroke(SSD)',
             'ALL', 'ALL', 'I', 'ALL', 0.020, np.nan, np.nan,
             'g/kWh', 'Lognormal',
             'IMO (2020) Fourth IMO GHG Study 2020. London, UK: IMO.',
             'IMO_2020',
-            '低速柴油机 (SSD) N₂O排放因子。'
-            '适用于大型转运船主机。'
-            '0.020 g/kWh (IMO标准单位).')
+            'low-speed diesel engine (SSD) N₂O emission factor. '
+            'applies to main engines of large transshipment vessels. '
+            '0.020 g/kWh (IMO Standard Unit).')
 
-    add_row('C', 'EF_N2O_GASOLINE', '汽油N₂O排放因子',
+    add_row('C', 'EF_N2O_GASOLINE', 'petrol N₂O emission factor',
             'ALL', 'ALL', 'APW', 'ALL', 0.04, np.nan, np.nan,
             'g/kgFuel', 'Lognormal',
             'U.S. EPA (2025). Emission Factors for Greenhouse Gas Inventories. '
             'Table 5: Mobile Combustion CH4 and N2O for Non-Road Vehicles, Ships and Boats.',
             'EPA_2025',
-            '汽油机N₂O排放因子（二冲程与四冲程无显著差异, EPA统一基准）。'
-            '原始: 0.11 g/gallon ÷ 2.78 kg/gallon = 0.04 g N₂O/kg 汽油.')
+            'Gasoline N₂O emission factor (Two-strike and four-stroke do not differ significantly, EPA Harmonization of benchmarks) . '
+            'Original: 0.11 g/gallon ÷ 2.78 kg/gallon = 0.04 g N₂O/kg petrol.')
 
     # ------------------------------------------------------------------
     # C3. GWP — Global Warming Potential — Row 39
     # ------------------------------------------------------------------
-    add_row('C', 'GWP_CH4_100yr', '甲烷 100年全球增温潜势',
+    add_row('C', 'GWP_CH4_100yr', 'methane 100 year global warming potential',
             'ALL', 'ALL', 'ALL', 'ALL', 28.5, 27.0, 30.0,
             'kgCO2e/kgCH4', 'Uniform',
             'IPCC AR5/AR6; Sheet 1 Row 39',
             'R39',
             'CH4 GWP-100: IPCC range 27-30, midpoint 28.5 (Row 39).')
 
-    add_row('C', 'GWP_N2O_100yr', '氧化亚氮 100年全球增温潜势',
+    add_row('C', 'GWP_N2O_100yr', 'nitrous oxide 100 year global warming potential',
             'ALL', 'ALL', 'ALL', 'ALL', 273.0, np.nan, np.nan,
             'kgCO2e/kgN2O', 'Discrete',
             'IPCC AR6; Sheet 1 Row 39',
@@ -967,7 +957,7 @@ def build_prior_matrix(xlsx_path=None):
     # ------------------------------------------------------------------
     # C4. FC_LOOKUP — Fuel Coefficient time series — Row 43
     # ------------------------------------------------------------------
-    add_row('C', 'FC_LOOKUP_Baseline_Year', '燃料效率时间系数基准年份',
+    add_row('C', 'FC_LOOKUP_Baseline_Year', 'fuel-efficiency time-factor baseline year',
             'ALL', 'ALL', 'ALL', 'ALL', 2000, np.nan, np.nan,
             'year', 'Discrete',
             'Yanmar marine engine data (interpolated); Sheet 1 Row 43',
@@ -975,14 +965,14 @@ def build_prior_matrix(xlsx_path=None):
             'FC=1.0 at year 2000 (baseline). Pre-2000 >1.0 (less efficient), '
             'post-2004 =0.99 (stable). Row 43.')
 
-    add_row('C', 'FC_LOOKUP_Min', '燃料效率时间系数最小值',
+    add_row('C', 'FC_LOOKUP_Min', 'minimum fuel-efficiency time factor',
             'ALL', 'ALL', 'ALL', 'ALL', 0.99, np.nan, np.nan,
             'dimensionless', 'Discrete',
             'Yanmar data; 2004-2016 stable period',
             'R43',
             'Minimum FC = 0.99 (most efficient era, 2004-2016). Row 43.')
 
-    add_row('C', 'FC_LOOKUP_Max', '燃料效率时间系数最大值',
+    add_row('C', 'FC_LOOKUP_Max', 'maximum fuel-efficiency time factor',
             'ALL', 'ALL', 'ALL', 'ALL', 1.21, np.nan, np.nan,
             'dimensionless', 'Discrete',
             'Yanmar data; 1950-1951 peak',
@@ -990,7 +980,7 @@ def build_prior_matrix(xlsx_path=None):
             'Maximum FC = 1.21 (least efficient era, 1950-1951). Row 43.')
 
     # ========================================================================
-    # D. 辅机功率参数 (Auxiliary Engine Power Ratio) — Sheet 1 Row 44-46
+    # D. auxiliary engine power parameters (Auxiliary Engine Power Ratio) — Sheet 1 Row 44-46
     # ========================================================================
     # Row 44: Overall aux ≈ 38.8% of ghg_lca power
     # Row 45: Detailed ship comparison data (short vs long routes)
@@ -999,7 +989,7 @@ def build_prior_matrix(xlsx_path=None):
     #   - 500<GT<=1500 + post-1990 → 0.25-0.33 (medium, transitional)
     #   - GT<=500 or pre-1990 → 0.15-0.25 (small/old, minimal cold storage)
 
-    add_row('D', 'AUX_POWER_RATIO', '辅机/主机功率比 (总体均值)',
+    add_row('D', 'AUX_POWER_RATIO', 'auxiliary engine/main engine power ratio (Overall average)',
             'ALL', 'ALL', 'ALL', 'ALL', 0.388, 0.33, 0.54,
             'ratio', 'Triangular',
             'Sheet 1 Row 44-46',
@@ -1007,7 +997,7 @@ def build_prior_matrix(xlsx_path=None):
             'Overall mean: aux = 38.8% of ghg_lca power. '
             'Range: 0.33 (25/75 split, Row 46) to 0.54 (extreme).')
 
-    add_row('D', 'AUX_POWER_RATIO_LARGE', '辅机/主机功率比 (大型船 GT>1500)',
+    add_row('D', 'AUX_POWER_RATIO_LARGE', 'auxiliary engine/main engine power ratio (large vessels GT>1500)',
             'ALL', 'ALL', 'ALL', '>=12m', 0.365, 0.33, 0.40,
             'ratio', 'Triangular',
             'Sheet 1 Row 46 — size-mandated high-power category',
@@ -1016,7 +1006,7 @@ def build_prior_matrix(xlsx_path=None):
             '→ aux ratio forced into 0.33-0.40.')
 
     add_row('D', 'AUX_POWER_RATIO_MEDIUM',
-            '辅机/主机功率比 (中型船 500<GT<=1500, post-1990)',
+            'auxiliary engine/main engine power ratio (Medium-sized boats 500<GT<=1500, post-1990)',
             'ALL', 'ALL', 'ALL', 'ALL', 0.29, 0.25, 0.33,
             'ratio', 'Triangular',
             'Sheet 1 Row 46 — transitional category',
@@ -1025,7 +1015,7 @@ def build_prior_matrix(xlsx_path=None):
             '→ aux ratio 0.25-0.33.')
 
     add_row('D', 'AUX_POWER_RATIO_SMALL',
-            '辅机/主机功率比 (小型/老旧船 GT<=500 or pre-1990)',
+            'auxiliary engine/main engine power ratio (Small/Old boat GT<=500 or pre-1990)',
             'ALL', 'ALL', 'ALL', '<12m', 0.20, 0.15, 0.25,
             'ratio', 'Triangular',
             'Sheet 1 Row 46 — dual-low category',
@@ -1034,40 +1024,40 @@ def build_prior_matrix(xlsx_path=None):
             '→ aux ratio 0.15-0.25.')
 
     # ========================================================================
-    # E. 船体材料与建造参数 (Hull Material & Construction) — Sheet 1 Row 70-84
+    # E. Ship-body material and construction parameters (Hull Material & Construction) — Sheet 1 Row 70-84
     # ========================================================================
 
     # ------------------------------------------------------------------
     # E1. Material Ratios — Row 72-73
     # ------------------------------------------------------------------
-    # Row 72: Detailed material composition per kg catch (围网船体材料组成比例)
-    # Row 73: "船体钢材占LSW 80%、其余20%为其他结构和系统
-    #         （10%看作发动机，5%看作铜即电力系统）"
+    # Row 72: Detailed material composition per kg catch (material shares of purse-seine vessel hulls)
+    # Row 73: "Ship Body Steel LSW 80%, The rest 20%for other structures and systems
+    #          (10%Seen as an engine, 5%Its considered a copper or an electrical system) "
     # Model (ghg_lca.py): STEEL=0.85, ENGINE=0.10, COPPER=0.05
     # Note: 80% of LSW is steel hull; remaining 20% = 10% engine + 5% copper + 5% other
     # The model normalizes to: steel=85%, engine=10%, copper=5% (sum=100%)
 
-    add_row('E', 'MATERIAL_RATIO_STEEL', '船体钢材质量占比',
+    add_row('E', 'MATERIAL_RATIO_STEEL', 'hull steel mass fraction',
             'ALL', 'ALL', 'ALL', 'ALL', 0.85, np.nan, np.nan,
             'fraction of GT', 'Normal',
             'Sheet 1 Row 72-73; ghg_lca.py model constants',
             'R72-R73',
-            'Steel hull = 85% of GT. Row 73: "船体钢材占LSW 80%". '
+            'Steel hull = 85% of GT. Row 73: "Ship Body Steel LSW 80%". '
             'Row 72: detailed composition confirms ~90% steel for PS hull.')
 
-    add_row('E', 'MATERIAL_RATIO_ENGINE', '发动机铸铁质量占比',
+    add_row('E', 'MATERIAL_RATIO_ENGINE', 'Quality share of engine irons',
             'ALL', 'ALL', 'ALL', 'ALL', 0.10, np.nan, np.nan,
             'fraction of GT', 'Normal',
             'Sheet 1 Row 73; ghg_lca.py model constants',
             'R73',
-            'Engine iron/steel = 10% of GT. Row 73: "10%看作发动机".')
+            'Engine iron/steel = 10% of GT. Row 73: "10%Seen as an engine".')
 
-    add_row('E', 'MATERIAL_RATIO_COPPER', '电力系统铜材质量占比',
+    add_row('E', 'MATERIAL_RATIO_COPPER', 'Proportion of copper quality in electrical systems',
             'ALL', 'ALL', 'ALL', 'ALL', 0.05, np.nan, np.nan,
             'fraction of GT', 'Normal',
             'Sheet 1 Row 73; ghg_lca.py model constants',
             'R73',
-            'Copper = 5% of GT. Row 73: "5%看作铜即电力系统".')
+            'Copper = 5% of GT. Row 73: "5%Its considered a copper or an electrical system".')
 
     # ------------------------------------------------------------------
     # E2. Material Emission Factors — Row 68-71
@@ -1075,17 +1065,17 @@ def build_prior_matrix(xlsx_path=None):
     # ------------------------------------------------------------------
     # E2b. Vessel Construction Emission Factors (cradle-to-gate, ecoinvent LCA)
     # ------------------------------------------------------------------
-    # 以下建造碳排放因子来自 ecoinvent v3 cutoff 数据库，
-    # 每个过程运行1000次蒙特卡洛模拟提取统计量。
-    # 单位: kg CO₂eq / kg vessel (功能单位 = 1 kg 船舶建造)
+    # The following carbon emission factors are derived from ecoinvent v3 cutoff Database, 
+    # Every process runs 1000 Monte Carlo Simulation of Statistics. 
+    # Units: kg CO₂eq / kg vessel (Functional units = 1 kg Ship construction)
     #
-    # 适用范围说明 (per user instruction):
-    #   - 转运船/辅助船 (TS): 统一使用围网钢船因子
-    #   - 延绳钓小船 (<12m, 木质): 统一使用围网木船因子
-    #   - 延绳钓大船 (>=12m, 钢质): 使用延绳钓钢船专用因子
+    # Description of the scope of application (per user instruction):
+    #   - transshipment vessel/support vessel (TS): use the steel purse-seine vessel factor
+    #   - small longline vessels (<12m, wood): use the wooden purse-seine vessel factor
+    #   - large longline vessels (>=12m, steel): use the factor for steel longline vessels
 
     # PS steel construction (>=12m) — also applies to TS/aux
-    add_row('E', 'EF_BUILD_PS_STEEL', '围网钢船建造碳排放因子 (cradle-to-gate)',
+    add_row('E', 'EF_BUILD_PS_STEEL', 'construction emission factor for steel purse-seine vessels (cradle-to-gate)',
             'ALL', 'PS', 'I', '>=12m',
             2.421, 2.332, 2.528,
             'kg CO₂eq/kg vessel', 'Lognormal',
@@ -1094,10 +1084,10 @@ def build_prior_matrix(xlsx_path=None):
             'Ecoinvent_PS_Steel',
             '1 kg purse seiner steel construction. '
             'Mean=2.421, SD=0.052, Median=2.415, 95% CI [2.332, 2.528]. '
-            'Also applies to: TS/auxiliary vessels (转运船/辅助船统一使用围网钢船因子).')
+            'Also applies to: TS/auxiliary vessels (transshipment vessel/Auxiliary ships use the purse seine steel factor uniformly).')
 
     # PS wood construction (<12m) — also applies to LL small boats, TS/aux small
-    add_row('E', 'EF_BUILD_PS_WOOD', '围网木船建造碳排放因子 (cradle-to-gate)',
+    add_row('E', 'EF_BUILD_PS_WOOD', 'construction emission factor for wooden purse-seine vessels (cradle-to-gate)',
             'ALL', 'PS', 'APW', '<12m',
             0.578, 0.513, 0.678,
             'kg CO₂eq/kg vessel', 'Lognormal',
@@ -1106,11 +1096,11 @@ def build_prior_matrix(xlsx_path=None):
             'Ecoinvent_PS_Wood',
             '1 kg purse seiner wood construction. '
             'Mean=0.578, SD=0.040, Median=0.575, 95% CI [0.513, 0.678]. '
-            'Also applies to: LL small boats <12m (延绳钓小船), '
-            'TS/aux small boats (转运船/辅助船小船).')
+            'Also applies to: LL small boats <12m (small longline vessels), '
+            'TS/aux small boats (transshipment vessel/Auxiliary ship).')
 
     # LL steel construction (>=12m)
-    add_row('E', 'EF_BUILD_LL_STEEL', '延绳钓钢船建造碳排放因子 (cradle-to-gate)',
+    add_row('E', 'EF_BUILD_LL_STEEL', 'construction emission factor for steel longline vessels (cradle-to-gate)',
             'ALL', 'LL', 'I', '>=12m',
             1.956, 1.877, 2.069,
             'kg CO₂eq/kg vessel', 'Lognormal',
@@ -1121,34 +1111,34 @@ def build_prior_matrix(xlsx_path=None):
             'Mean=1.956, SD=0.052, Median=1.949, 95% CI [1.877, 2.069].')
 
     # LL wood construction (<12m) — same as PS wood
-    add_row('E', 'EF_BUILD_LL_WOOD', '延绳钓木船建造碳排放因子 (同围网木船)',
+    add_row('E', 'EF_BUILD_LL_WOOD', 'construction emission factor for wooden longline vessels (same as wooden purse-seine vessels)',
             'ALL', 'LL', 'APW', '<12m',
             0.578, 0.513, 0.678,
             'kg CO₂eq/kg vessel', 'Lognormal',
-            '同 EF_BUILD_PS_WOOD — 延绳钓小船建造维护因子使用围网木船因子',
+            'Same EF_BUILD_PS_WOOD — Longline boat construction and maintenance factor for purse seine boat',
             'Ecoinvent_PS_Wood',
-            '延绳钓小船 (<12m, 木质) 建造碳排放: 同围网木船因子 0.578 kg CO₂eq/kg. '
-            'Per user instruction: 延绳钓小船的建造维护因子使用围网木船的因子.')
+            'small longline vessels (<12m, wood) Construction of carbon emissions: same factor as wooden purse-seine vessels 0.578 kg CO₂eq/kg. '
+            'Per user instruction: Factors for the construction of longline boats and the maintenance factor for the use of purse-seine boats.')
 
     # TS/aux construction — same as PS steel
-    add_row('E', 'EF_BUILD_TS', '转运船/辅助船建造碳排放因子 (同围网钢船)',
+    add_row('E', 'EF_BUILD_TS', 'transshipment vessel/support-vessel construction emission factor (same as steel purse-seine vessels)',
             'ALL', 'TP', 'I', 'ALL',
             2.421, 2.332, 2.528,
             'kg CO₂eq/kg vessel', 'Lognormal',
-            '同 EF_BUILD_PS_STEEL — 转运船和辅助船统一使用围网钢船因子',
+            'Same EF_BUILD_PS_STEEL — Harmonizing the use of the purse-seine steel factor for trans-shipment vessels and ancillary vessels',
             'Ecoinvent_PS_Steel',
-            '转运船/辅助船建造碳排放: 同围网钢船因子 2.421 kg CO₂eq/kg. '
-            'Per user instruction: 转运船和辅助船的建造和维护统一使用围网钢船的因子.')
+            'transshipment vessel/Carbon emissions from construction of support vessels: same factor as steel purse-seine vessels 2.421 kg CO₂eq/kg. '
+            'Per user instruction: Factors for the construction and maintenance of trans-shipment and auxiliary vessels for the uniform use of seine steel vessels.')
 
     # ------------------------------------------------------------------
     # E2c. Vessel Maintenance Emission Factors (cradle-to-gate, ecoinvent LCA)
     # ------------------------------------------------------------------
-    # 以下维护碳排放因子来自 ecoinvent v3 cutoff 数据库，
-    # 每个过程运行1000次蒙特卡洛模拟提取统计量。
-    # 单位: kg CO₂eq / kg vessel maintenance (功能单位 = 1 kg 船舶维护)
+    # The following maintenance of carbon emission factors is derived from ecoinvent v3 cutoff Database, 
+    # Every process runs 1000 Monte Carlo Simulation of Statistics. 
+    # Units: kg CO₂eq / kg vessel maintenance (Functional units = 1 kg Ship maintenance)
 
     # PS steel maintenance (>=12m) — also applies to TS/aux
-    add_row('E', 'EF_MAINT_PS_STEEL', '围网钢船维护碳排放因子 (cradle-to-gate)',
+    add_row('E', 'EF_MAINT_PS_STEEL', 'maintenance emission factor for steel purse-seine vessels (cradle-to-gate)',
             'ALL', 'PS', 'I', '>=12m',
             6.744, 6.627, 6.883,
             'kg CO₂eq/kg maintenance', 'Lognormal',
@@ -1157,10 +1147,10 @@ def build_prior_matrix(xlsx_path=None):
             'Ecoinvent_PS_Steel_Maint',
             '1 kg purse seiner steel maintenance. '
             'Mean=6.744, SD=0.067, Median=6.740, 95% CI [6.627, 6.883]. '
-            'Also applies to: TS/auxiliary vessels (转运船/辅助船统一使用围网钢船因子).')
+            'Also applies to: TS/auxiliary vessels (transshipment vessel/Auxiliary ships use the purse seine steel factor uniformly).')
 
     # PS wood maintenance (<12m) — also applies to LL small boats, TS/aux small
-    add_row('E', 'EF_MAINT_PS_WOOD', '围网木船维护碳排放因子 (cradle-to-gate)',
+    add_row('E', 'EF_MAINT_PS_WOOD', 'maintenance emission factor for wooden purse-seine vessels (cradle-to-gate)',
             'ALL', 'PS', 'APW', '<12m',
             1.289, 1.179, 1.437,
             'kg CO₂eq/kg maintenance', 'Lognormal',
@@ -1169,11 +1159,11 @@ def build_prior_matrix(xlsx_path=None):
             'Ecoinvent_PS_Wood_Maint',
             '1 kg purse seiner wood maintenance. '
             'Mean=1.289, SD=0.065, Median=1.282, 95% CI [1.179, 1.437]. '
-            'Also applies to: LL small boats <12m (延绳钓小船), '
-            'TS/aux small boats (转运船/辅助船小船).')
+            'Also applies to: LL small boats <12m (small longline vessels), '
+            'TS/aux small boats (transshipment vessel/Auxiliary ship).')
 
     # LL steel maintenance (>=12m)
-    add_row('E', 'EF_MAINT_LL_STEEL', '延绳钓钢船维护碳排放因子 (cradle-to-gate)',
+    add_row('E', 'EF_MAINT_LL_STEEL', 'maintenance emission factor for steel longline vessels (cradle-to-gate)',
             'ALL', 'LL', 'I', '>=12m',
             4.450, 3.777, 5.376,
             'kg CO₂eq/kg maintenance', 'Lognormal',
@@ -1184,35 +1174,35 @@ def build_prior_matrix(xlsx_path=None):
             'Mean=4.450, SD=0.385, Median=4.417, 95% CI [3.777, 5.376].')
 
     # LL wood maintenance (<12m) — same as PS wood
-    add_row('E', 'EF_MAINT_LL_WOOD', '延绳钓木船维护碳排放因子 (同围网木船)',
+    add_row('E', 'EF_MAINT_LL_WOOD', 'maintenance emission factor for wooden longline vessels (same as wooden purse-seine vessels)',
             'ALL', 'LL', 'APW', '<12m',
             1.289, 1.179, 1.437,
             'kg CO₂eq/kg maintenance', 'Lognormal',
-            '同 EF_MAINT_PS_WOOD — 延绳钓小船建造维护因子使用围网木船因子',
+            'Same EF_MAINT_PS_WOOD — Longline boat construction and maintenance factor for purse seine boat',
             'Ecoinvent_PS_Wood_Maint',
-            '延绳钓小船 (<12m, 木质) 维护碳排放: 同围网木船因子 1.289 kg CO₂eq/kg. '
-            'Per user instruction: 延绳钓小船的建造维护因子使用围网木船的因子.')
+            'small longline vessels (<12m, wood) Maintenance of carbon emissions: same factor as wooden purse-seine vessels 1.289 kg CO₂eq/kg. '
+            'Per user instruction: Factors for the construction of longline boats and the maintenance factor for the use of purse-seine boats.')
 
     # TS/aux maintenance — same as PS steel
-    add_row('E', 'EF_MAINT_TS', '转运船/辅助船维护碳排放因子 (同围网钢船)',
+    add_row('E', 'EF_MAINT_TS', 'transshipment vessel/support-vessel maintenance emission factor (same as steel purse-seine vessels)',
             'ALL', 'TP', 'I', 'ALL',
             6.744, 6.627, 6.883,
             'kg CO₂eq/kg maintenance', 'Lognormal',
-            '同 EF_MAINT_PS_STEEL — 转运船和辅助船统一使用围网钢船因子',
+            'Same EF_MAINT_PS_STEEL — Harmonizing the use of the purse-seine steel factor for trans-shipment vessels and ancillary vessels',
             'Ecoinvent_PS_Steel_Maint',
-            '转运船/辅助船维护碳排放: 同围网钢船因子 6.744 kg CO₂eq/kg. '
-            'Per user instruction: 转运船和辅助船的建造和维护统一使用围网钢船的因子.')
+            'transshipment vessel/Auxiliary ships maintain carbon emissions: same factor as steel purse-seine vessels 6.744 kg CO₂eq/kg. '
+            'Per user instruction: Factors for the construction and maintenance of trans-shipment and auxiliary vessels for the uniform use of seine steel vessels.')
 
     # ------------------------------------------------------------------
     # E3. Lifespan Parameters — Row 78-82
     # ------------------------------------------------------------------
-    # Row 78: "25% 用于维修保养"
-    # Row 79: "船体钢材更换比例：每 2 年更换 12%"
-    # Row 80: "船舶寿命30年；发动机在船舶寿命期内更换一次"
-    # Row 81: "船体30年，主机10年；钢材用量增加25%（船体）和50%（主机）用于维修"
-    # Row 82: "船体寿命（钢）：30年；船体寿命（木）：40年；发动机更换次数：1次"
+    # Row 78: "25% For repairs and maintenance"
+    # Row 79: "Ship Body Steel Replacement Ratio: Every 2 Yearly replacement 12%"
+    # Row 80: "Life of ships 30 years; Engines are replaced once in the lifetime of the ship"
+    # Row 81: "hull 30 years, main engine 10 years; Increased use of steel 25% (hull) and 50% (main engine) For maintenance"
+    # Row 82: "hull service life (steel) : 30 years; hull service life (Wood) : 40 years; Engine replacements: 1 Number of times"
 
-    add_row('E', 'LIFESPAN_HULL', '船体寿命 (钢质)',
+    add_row('E', 'LIFESPAN_HULL', 'hull service life (steel)',
             'ALL', 'ALL', 'ALL', 'ALL', 30, np.nan, np.nan,
             'years', 'Discrete',
             'Sheet 1 Row 80-82',
@@ -1220,7 +1210,7 @@ def build_prior_matrix(xlsx_path=None):
             'Steel hull lifespan: 30 years. '
             'Wood hull: 40yr (Row 82, not used in current model).')
 
-    add_row('E', 'LIFESPAN_ENGINE', '发动机寿命 (更换周期)',
+    add_row('E', 'LIFESPAN_ENGINE', 'engine service life (replacement interval)',
             'ALL', 'ALL', 'ALL', 'ALL', 10, np.nan, np.nan,
             'years', 'Discrete',
             'Sheet 1 Row 80-82',
@@ -1228,88 +1218,88 @@ def build_prior_matrix(xlsx_path=None):
             'Engine lifespan: 10 years (Row 80-81). '
             'Replaced once during 30yr hull life = 2 engines total.')
 
-    add_row('E', 'LIFESPAN_COPPER', '电力系统更新周期',
+    add_row('E', 'LIFESPAN_COPPER', 'Electricity system update cycle',
             'ALL', 'ALL', 'ALL', 'ALL', 8, np.nan, np.nan,
             'years', 'Discrete',
             'ghg_lca.py model constants; Ecoinvent reference',
             '—',
-            '⚠ 未在Excel中找到直接来源。当前模型默认值: 8年。'
+            '⚠ Not yet Excel direct source found in. Current model default: 8 years. '
             'Copper electric system renewal cycle (wiring, switchgear).')
 
     # ------------------------------------------------------------------
     # E4. Maintenance Parameters — Row 78-81
     # ------------------------------------------------------------------
-    add_row('E', 'MAINTENANCE_RATE_STEEL', '船体钢材每2年维护更换比例',
+    add_row('E', 'MAINTENANCE_RATE_STEEL', 'Shipwork steel every 2 Annual replacement rate for maintenance',
             'ALL', 'ALL', 'ALL', 'ALL', 0.12, np.nan, np.nan,
             'fraction per event', 'Discrete',
             'Sheet 1 Row 79',
             'R79',
-            '每2年更换12%船体钢材 (Row 79). '
+            'Every 2 Yearly replacement 12%Ship Body Steel (Row 79). '
             'Model: is_steel_maint triggers every 2yr (skipping hull replacement years), '
             'replaces 12% of steel_w.')
 
-    add_row('E', 'MAINTENANCE_INTERVAL_STEEL', '船体钢材维护间隔',
+    add_row('E', 'MAINTENANCE_INTERVAL_STEEL', 'Maintenance interval for hull steel',
             'ALL', 'ALL', 'ALL', 'ALL', 2, np.nan, np.nan,
             'years', 'Discrete',
             'Sheet 1 Row 79; ghg_lca.py maint_interval=2',
             'R79',
             'Steel maintenance occurs every 2 years (Row 79).')
 
-    add_row('E', 'MAINTENANCE_EXTRA_STEEL_PCT', '建造阶段钢材额外余量 (维修预留)',
+    add_row('E', 'MAINTENANCE_EXTRA_STEEL_PCT', 'Additional surplus of steel in the construction phase (Maintenance provision)',
             'ALL', 'ALL', 'ALL', 'ALL', 0.25, np.nan, np.nan,
             'fraction of base steel', 'Discrete',
             'Sheet 1 Row 81',
             'R81',
-            '建造时钢材用量增加25%用于船体维修预留，50%用于主机维修预留 (Row 81).')
+            'Increased use of steel for construction 25%For hull maintenance, 50%allowance for main engine maintenance (Row 81).')
 
     # ------------------------------------------------------------------
     # E5. Anti-fouling Paint — Row 83-84
     # ------------------------------------------------------------------
-    add_row('E', 'ANTIFOUL_PAINT_COATING_RATE', '防污漆平均涂布量',
+    add_row('E', 'ANTIFOUL_PAINT_COATING_RATE', 'The average amount of paint is covered in anti-fouling paint',
             'ALL', 'ALL', 'ALL', 'ALL', 0.11, np.nan, np.nan,
             'L/tonne catch', 'Discrete',
             'Sheet 1 Row 83',
             'R83',
-            '平均涂布量: 0.11 L/吨渔获 (Row 83). 涂刷频率: 每2年一次.')
+            'Average clothing volume: 0.11 L/Ton catch (Row 83). Cursor Frequency: Every 2 Annual.')
 
-    add_row('E', 'ANTIFOUL_PAINT_RELEASE_FRAC', '防污漆海洋释放比例',
+    add_row('E', 'ANTIFOUL_PAINT_RELEASE_FRAC', 'Proportion of marine releases of anti-fouling paints',
             'ALL', 'ALL', 'ALL', 'ALL', 2.0 / 3.0, np.nan, np.nan,
             'fraction', 'Discrete',
             'Sheet 1 Row 83-84',
             'R83-R84',
             '2/3 of antifoul paint released to ocean environment (Row 83). '
-            'Row 84: 防污涂料降解率: 2/3释放到海洋环境.')
+            'Row 84: Degradation rate of anti-fouling paints: 2/3 Release to the marine environment.')
 
     # ------------------------------------------------------------------
     # E6. Steel Recycling — Row 76-77
     # ------------------------------------------------------------------
-    add_row('E', 'STEEL_RECYCLING_RATE', '报废时钢材回收率',
+    add_row('E', 'STEEL_RECYCLING_RATE', 'Recovery rate for steel at end of life',
             'ALL', 'ALL', 'ALL', 'ALL', 0.90, np.nan, np.nan,
             'fraction', 'Discrete',
             'Sheet 1 Row 76',
             'R76',
-            '报废时钢材和尼龙可回收，回收率考虑为90% (Row 76).')
+            'Steel and nylon are recoverable at end of life, The recovery rate is taken into account 90% (Row 76).')
 
-    add_row('E', 'STEEL_RECYCLED_CONTENT_RATE', '新船中回收钢材使用率',
+    add_row('E', 'STEEL_RECYCLED_CONTENT_RATE', 'Use of recovered steel in new ships',
             'ALL', 'ALL', 'ALL', 'ALL', 0.50, np.nan, np.nan,
             'fraction', 'Discrete',
             'Sheet 1 Row 77',
             'R77',
-            '新船建造中回收钢材使用率50% (Row 77).')
+            'Use of recycled steel in the construction of new ships 50% (Row 77).')
 
     # ========================================================================
-    # F. 渔具材料消耗参数 (Gear Material Consumption) — Sheet 1 Row 51-67
+    # F. Parameters for the consumption of gear material (Gear Material Consumption) — Sheet 1 Row 51-67
     # ========================================================================
 
     # ------------------------------------------------------------------
     # F1. Gear Intensity (gear_int) — Row 55-58
     # ------------------------------------------------------------------
-    # Row 55: "模型截断" — methodology note
+    # Row 55: "Model Interruption" — methodology note
     # Row 56: PS small: ['uniform', 17.9, 9.12] kg/m vessel length
     # Row 57: PS large: ['uniform', 251.0, 54.0] kg/m vessel length
     # Row 58: LL: ['uniform', 0.490, 0.120] kg/hook
     #
-    # IMPORTANT: Excel explicitly says "均匀分布" (Uniform distribution).
+    # IMPORTANT: Excel explicitly says "even distribution" (Uniform distribution).
     # Parameters [a, b] are the range boundaries [min, max] after sorting.
     # Best = (min + max) / 2 — midpoint of uniform range.
     # This is NOT a Normal distribution — there is no std.
@@ -1318,7 +1308,7 @@ def build_prior_matrix(xlsx_path=None):
     gear_int_ps_small_low  = min(17.9, 9.12) / 1000        # 0.00912
     gear_int_ps_small_high = max(17.9, 9.12) / 1000        # 0.01790
     gear_int_ps_small_best = (9.12 + 17.9) / (2 * 1000)    # 0.01351
-    add_row('F', 'gear_int_PS', '围网渔具强度系数 (小型船 <12m)',
+    add_row('F', 'gear_int_PS', 'purse-seine gear mass per unit vessel length (small vessels <12m)',
             'ALL', 'PS', 'ALL', '<12m',
             round(gear_int_ps_small_best, 6),
             round(gear_int_ps_small_low, 6),
@@ -1329,13 +1319,13 @@ def build_prior_matrix(xlsx_path=None):
             f'Excel: uniform[9.12, 17.9] kg/m. '
             f'Best=(min+max)/2={gear_int_ps_small_best:.5f} t/m. '
             'Model: gear_w = length × gear_int. '
-            '小型手工围网(8-12m渔船), 莫桑比克渔业数据.')
+            'small artisanal purse-seine fisheries(8-12m fishing vessel), Mozambique fisheries data.')
 
     # PS large (>=12m): uniform [54.0, 251.0] kg/m → [0.054, 0.251] t/m
     gear_int_ps_large_low  = min(251.0, 54.0) / 1000        # 0.054
     gear_int_ps_large_high = max(251.0, 54.0) / 1000        # 0.251
     gear_int_ps_large_best = (251.0 + 54.0) / (2 * 1000)    # 0.1525
-    add_row('F', 'gear_int_PS', '围网渔具强度系数 (大型船 >=12m)',
+    add_row('F', 'gear_int_PS', 'purse-seine gear mass per unit vessel length (large vessels >=12m)',
             'ALL', 'PS', 'ALL', '>=12m',
             round(gear_int_ps_large_best, 4),
             round(gear_int_ps_large_low, 4),
@@ -1346,14 +1336,14 @@ def build_prior_matrix(xlsx_path=None):
             f'Excel: uniform[54.0, 251.0] kg/m. '
             f'Best=(min+max)/2={gear_int_ps_large_best:.4f} t/m. '
             'Model: gear_w = length × gear_int. '
-            '印度围网渔业(11-24m渔船).')
+            'Indian purse-seine fisheries(11-24m fishing vessel).')
 
     # LL: uniform [0.120, 0.490] kg/hook → [0.03333, 0.13611] t/m
     # Conversion: kg/hook ÷ (0.0036 m/hook × 1000 kg/t) = kg/hook / 3.6
     gear_int_ll_low  = min(0.490, 0.120) / (0.0036 * 1000)   # 0.03333
     gear_int_ll_high = max(0.490, 0.120) / (0.0036 * 1000)   # 0.13611
     gear_int_ll_best = (0.490 + 0.120) / (2 * 0.0036 * 1000) # 0.08472
-    add_row('F', 'gear_int_LL', '延绳钓渔具强度系数',
+    add_row('F', 'gear_int_LL', 'longline gear mass per unit vessel length',
             'ALL', 'LL', 'ALL', 'ALL',
             round(gear_int_ll_best, 6),
             round(gear_int_ll_low, 6),
@@ -1365,7 +1355,7 @@ def build_prior_matrix(xlsx_path=None):
             f'Best=(min+max)/(2×0.0036×1000)={gear_int_ll_best:.5f} t/m. '
             'Model: gear_w = length × gear_int. '
             '1 hook ≈ 0.0036m vessel length. '
-            '埃及地中海长鳍金枪鱼延绳钓(4000-4500钩, 14-17m, 70-130HP).')
+            'Longline longlines for longfin tuna in the Egyptian Mediterranean(4000-4500 hooks, 14-17m, 70-130HP).')
 
     # ------------------------------------------------------------------
     # F2. Gear Material Composition — Row 52-54, 59-60
@@ -1375,7 +1365,7 @@ def build_prior_matrix(xlsx_path=None):
     # Row 59: PS detailed: PA6=64.2%, EVA=9.7%, Steel=26.1% (93.2t ±16.2 per vessel)
     # Row 60: Alternative composition: Nylon 66.69%, EVA 27.43%, Polysteel 5.88%
 
-    add_row('F', 'GEAR_MATERIAL_NYLON_PS', '围网尼龙 (PA6) 材料占比',
+    add_row('F', 'GEAR_MATERIAL_NYLON_PS', 'purse-seine nylon (PA6) material share',
             'ALL', 'PS', 'ALL', 'ALL', 0.642, np.nan, np.nan,
             'mass fraction', 'Discrete',
             'Sheet 1 Row 59',
@@ -1384,7 +1374,7 @@ def build_prior_matrix(xlsx_path=None):
             'Includes netting, ropes, float lines. '
             'Alternative composition (Row 60): 66.69% nylon.')
 
-    add_row('F', 'GEAR_MATERIAL_EVA_PS', '围网EVA浮子占比',
+    add_row('F', 'GEAR_MATERIAL_EVA_PS', 'purse seine EVA Float ratio',
             'ALL', 'PS', 'ALL', 'ALL', 0.097, np.nan, np.nan,
             'mass fraction', 'Discrete',
             'Sheet 1 Row 59',
@@ -1392,7 +1382,7 @@ def build_prior_matrix(xlsx_path=None):
             'EVA floats = 9.7% of PS net weight (Row 59). '
             'Alternative composition (Row 60): 27.43% EVA.')
 
-    add_row('F', 'GEAR_MATERIAL_STEEL_PS', '围网金属部件 (钢) 占比',
+    add_row('F', 'GEAR_MATERIAL_STEEL_PS', 'purse-seine metal components (steel) share',
             'ALL', 'PS', 'ALL', 'ALL', 0.261, np.nan, np.nan,
             'mass fraction', 'Discrete',
             'Sheet 1 Row 59',
@@ -1402,129 +1392,129 @@ def build_prior_matrix(xlsx_path=None):
             'Row 52-53 alternative: lead 28%, steel 2%.')
 
     # LL material
-    add_row('F', 'GEAR_MATERIAL_NYLON_LL', '延绳钓主绳尼龙占比',
+    add_row('F', 'GEAR_MATERIAL_NYLON_LL', 'nylon share of the longline mainline',
             'ALL', 'LL', 'ALL', 'ALL', 1.0, np.nan, np.nan,
             'mass fraction (mainline)', 'Discrete',
             'Sheet 1 Row 54',
             'R54',
             'LL mainline: nylon (Row 54). Hooks: metal/alloy. '
-            '⚠ 钩子金属材料的具体占比未在Sheet 1中明确给出，需补充.')
+            '⚠ Specific percentage of metal material in hooks is missing Sheet 1 Its clearly given, Additional requirements.')
 
     # ------------------------------------------------------------------
-    # F3. Gear Emission Factors (材料级, cradle-to-gate) — Row 69
+    # F3. Gear Emission Factors (Material level, cradle-to-gate) — Row 69
     # ------------------------------------------------------------------
-    # ⚠ USER NOTE: Excel Row 69仅标注"尼龙绳生产排放因子"但未给出具体数值.
-    # 以下按网具材料组成拆分为3个独立的排放因子, 便于LCA建模.
-    # PS网具组成 (Row 59): PA6=64.2%, EVA=9.7%, Steel=26.1%
-    # LL网具组成 (Row 54-55): 主绳=尼龙, 钩子=金属/合金
-    # 所有值为NaN, 待用户从Ecoinvent等LCA数据库填入.
+    # ⚠ USER NOTE: Excel Row 69 Mark only"Nilonline production emission factors"No specific values given.
+    # The following is broken down by web-based material: 3 A stand-alone emission factor, Easy LCA Model.
+    # PS Network composition (Row 59): PA6=64.2%, EVA=9.7%, Steel=26.1%
+    # LL Network composition (Row 54-55): The main rope=nylon, The hook=Metal/Alloys
+    # All Values NaN, To-Use From Ecoinvent Wait LCA Database Filling.
 
-    add_row('F', 'EMISSION_FACTOR_NYLON_PA6', '尼龙(PA6)碳排放因子 (cradle-to-gate)',
+    add_row('F', 'EMISSION_FACTOR_NYLON_PA6', 'nylon(PA6)carbon emission factor (cradle-to-gate)',
             'ALL', 'ALL', 'ALL', 'ALL', 9.885, 9.807, 9.969,
             'kg CO₂eq/kg nylon', 'Lognormal',
-            '自建前景过程 — fishing net production, nylon, 1kg '
+            'Self-building foreground process — fishing net production, nylon, 1kg '
             '(1000 MC simulations, Cradle-to-Gate)',
             'SelfBuilt_NylonNet',
-            '1 kg 尼龙网衣生产碳排放。系统边界: Cradle-to-Gate。'
-            '核心代理: market for nylon 6 | Cutoff, U - RoW + '
+            '1 kg Nilon netcoats produce carbon emissions. system boundary: Cradle-to-Gate. '
+            'Core Agent: market for nylon 6 | Cutoff, U - RoW + '
             'market for extrusion, plastic film | Cutoff, U - GLO。'
             'Mean=9.885, SD=0.040, Median=9.885, 95% CI [9.807, 9.969]. '
-            '同时适用于围网和延绳钓尼龙材料.')
+            'It applies to both the purse seine and longline nylon materials.')
 
-    add_row('F', 'EMISSION_FACTOR_STEEL_GEAR', '渔具用钢/金属件碳排放因子 (cradle-to-gate)',
+    add_row('F', 'EMISSION_FACTOR_STEEL_GEAR', 'gear steel/metal-component emission factor (cradle-to-gate)',
             'ALL', 'ALL', 'ALL', 'ALL', 3.070, 2.819, 3.374,
             'kg CO₂eq/kg steel hardware', 'Lognormal',
-            '自建前景过程 — longline hardware, steel, 1kg '
+            'Self-building foreground process — longline hardware, steel, 1kg '
             '(1000 MC simulations, Cradle-to-Gate)',
             'SelfBuilt_LL_Hardware',
-            '1 kg 延绳钓金属渔具 (鱼钩、转环、沉子等五金件) 碳排放。'
-            '系统边界: Cradle-to-Gate。'
-            '投入: market for steel, low-alloyed | Cutoff, U - GLO + '
+            '1 kg longline metal gear (hooks, Ring, Suzuko waits for the hardware) carbon emissions. '
+            'system boundary: Cradle-to-Gate. '
+            'Input: market for steel, low-alloyed | Cutoff, U - GLO + '
             'metal working, average for steel product manufacturing | Cutoff, U - GLO。'
             'Mean=3.070, SD=0.139, Median=3.064, 95% CI [2.819, 3.374].')
 
     # ------------------------------------------------------------------
-    # F4. Gear Intensity Truncation Limits (物理截断) — Row 56
+    # F4. Gear Intensity Truncation Limits (physical truncation) — Row 56
     # ------------------------------------------------------------------
-    # Row 56: "模型截断" — 设物理极值防止无限线性外推
+    # Row 56: "Model Interruption" — Set the physical poles to prevent unlimited linear extrapolation
     # Kuczenski et al. (2022) Fish. Fish. 23:22-33
-    # 延绳钓上限: 1600 kW / 55m LOA / 800 GT
-    # 围网双峰: 小集群 1000 kW/50m/750 GT; 大集群 2000-3000 kW/60-80m/1000-2000 GT
+    # longline upper bound: 1600 kW / 55m LOA / 800 GT
+    # bimodal purse-seine distribution: small-vessel group 1000 kW/50m/750 GT; large-vessel group 2000-3000 kW/60-80m/1000-2000 GT
 
-    add_row('F', 'GEAR_INT_TRUNC_LL_MAX_KW', '延绳钓gear_int物理截断—最大功率',
+    add_row('F', 'GEAR_INT_TRUNC_LL_MAX_KW', 'longline gear_int physical truncation—maximum power',
             'ALL', 'LL', 'ALL', 'ALL', 1600.0, np.nan, np.nan,
             'kW', 'Discrete',
             'Kuczenski et al. (2022) Fish. Fish. 23:22-33',
             'R56',
-            'LL渔船最大功率约1600 kW. 超过此值的vessel在gear_int外推时截断.')
+            'LL Maximum power margin for fishing vessels 1600 kW. above this value vessel Yes gear_int Intercept when extrapolating.')
 
-    add_row('F', 'GEAR_INT_TRUNC_LL_MAX_LOA_M', '延绳钓gear_int物理截断—最大船长',
+    add_row('F', 'GEAR_INT_TRUNC_LL_MAX_LOA_M', 'longline gear_int physical truncation—maximum vessel length',
             'ALL', 'LL', 'ALL', 'ALL', 55.0, np.nan, np.nan,
             'm', 'Discrete',
             'Kuczenski et al. (2022) Fish. Fish. 23:22-33',
             'R56',
-            'LL渔船最大LOA约55m. 超过此值的vessel在gear_int外推时截断.')
+            'LL Maximum number of fishing boats LOA NYO 55m. above this value vessel Yes gear_int Intercept when extrapolating.')
 
-    add_row('F', 'GEAR_INT_TRUNC_LL_MAX_GT', '延绳钓gear_int物理截断—最大总吨位',
+    add_row('F', 'GEAR_INT_TRUNC_LL_MAX_GT', 'longline gear_int physical truncation—maximum gross tonnage',
             'ALL', 'LL', 'ALL', 'ALL', 800.0, np.nan, np.nan,
             'GT', 'Discrete',
             'Kuczenski et al. (2022) Fish. Fish. 23:22-33',
             'R56',
-            'LL渔船最大GT约800. 超过此值的vessel在gear_int外推时截断.')
+            'LL Maximum number of fishing boats GT NYO 800. above this value vessel Yes gear_int Intercept when extrapolating.')
 
-    add_row('F', 'GEAR_INT_TRUNC_PS_SMALL_MAX_KW', '围网(小集群) gear_int物理截断—最大功率',
+    add_row('F', 'GEAR_INT_TRUNC_PS_SMALL_MAX_KW', 'purse seine(small-vessel group) gear_int physical truncation—maximum power',
             'ALL', 'PS', 'ALL', '<12m', 1000.0, np.nan, np.nan,
             'kW', 'Discrete',
             'Kuczenski et al. (2022) Fish. Fish. 23:22-33',
             'R56',
-            'PS小集群(<12m)上限: 1000 kW, 50m LOA, 750 GT.')
+            'PS small-vessel group(<12m)upper bound: 1000 kW, 50m LOA, 750 GT.')
 
-    add_row('F', 'GEAR_INT_TRUNC_PS_SMALL_MAX_LOA_M', '围网(小集群) gear_int物理截断—最大船长',
+    add_row('F', 'GEAR_INT_TRUNC_PS_SMALL_MAX_LOA_M', 'purse seine(small-vessel group) gear_int physical truncation—maximum vessel length',
             'ALL', 'PS', 'ALL', '<12m', 50.0, np.nan, np.nan,
             'm', 'Discrete',
             'Kuczenski et al. (2022) Fish. Fish. 23:22-33',
             'R56',
-            'PS小集群(<12m)LOA上限约50m.')
+            'PS small-vessel group(<12m)LOA Maximum Treaty 50m.')
 
-    add_row('F', 'GEAR_INT_TRUNC_PS_SMALL_MAX_GT', '围网(小集群) gear_int物理截断—最大总吨位',
+    add_row('F', 'GEAR_INT_TRUNC_PS_SMALL_MAX_GT', 'purse seine(small-vessel group) gear_int physical truncation—maximum gross tonnage',
             'ALL', 'PS', 'ALL', '<12m', 750.0, np.nan, np.nan,
             'GT', 'Discrete',
             'Kuczenski et al. (2022) Fish. Fish. 23:22-33',
             'R56',
-            'PS小集群(<12m)GT上限约750.')
+            'PS small-vessel group(<12m)GT Maximum Treaty 750.')
 
-    add_row('F', 'GEAR_INT_TRUNC_PS_LARGE_MAX_KW', '围网(大集群) gear_int物理截断—最大功率',
+    add_row('F', 'GEAR_INT_TRUNC_PS_LARGE_MAX_KW', 'purse seine(large-vessel group) gear_int physical truncation—maximum power',
             'ALL', 'PS', 'ALL', '>=12m', 2500.0, 2000.0, 3000.0,
             'kW', 'Triangular',
             'Kuczenski et al. (2022) Fish. Fish. 23:22-33',
             'R56',
-            'PS大集群(>=12m)上限: 2000-3000 kW, 60-80m LOA, 1000-2000 GT. Best取2500kW.')
+            'PS large-vessel group(>=12m)upper bound: 2000-3000 kW, 60-80m LOA, 1000-2000 GT. Best Remove 2500kW.')
 
-    add_row('F', 'GEAR_INT_TRUNC_PS_LARGE_MAX_LOA_M', '围网(大集群) gear_int物理截断—最大船长',
+    add_row('F', 'GEAR_INT_TRUNC_PS_LARGE_MAX_LOA_M', 'purse seine(large-vessel group) gear_int physical truncation—maximum vessel length',
             'ALL', 'PS', 'ALL', '>=12m', 70.0, 60.0, 80.0,
             'm', 'Triangular',
             'Kuczenski et al. (2022) Fish. Fish. 23:22-33',
             'R56',
-            'PS大集群(>=12m)LOA范围60-80m. Best取70m.')
+            'PS large-vessel group(>=12m)LOA Scope 60-80m. Best Remove 70m.')
 
-    add_row('F', 'GEAR_INT_TRUNC_PS_LARGE_MAX_GT', '围网(大集群) gear_int物理截断—最大总吨位',
+    add_row('F', 'GEAR_INT_TRUNC_PS_LARGE_MAX_GT', 'purse seine(large-vessel group) gear_int physical truncation—maximum gross tonnage',
             'ALL', 'PS', 'ALL', '>=12m', 1500.0, 1000.0, 2000.0,
             'GT', 'Triangular',
             'Kuczenski et al. (2022) Fish. Fish. 23:22-33',
             'R56',
-            'PS大集群(>=12m)GT范围1000-2000. Best取1500GT.')
+            'PS large-vessel group(>=12m)GT Scope 1000-2000. Best Remove 1500GT.')
 
     # ------------------------------------------------------------------
     # F5. Gear Lifespan — Row 61-66
     # ------------------------------------------------------------------
     # Row 61: PS net lifespan 5yr, annual replacement 25%; "1/5 + 25%"
     # Row 62: Company-reported net lifespan: 3.2yr (±0.8, range 2-4yr)
-    # Row 63: "5年 更换率25% 20% + 25%"
+    # Row 63: "5 years Replacement rate 25% 20% + 25%"
     # Row 64: "33.3%+(2.3% - 6.6%)"
     # Row 65: "20% + 25%"
     # Row 66: LL update rate: "20% + 25%" (same structure as PS)
 
-    add_row('F', 'LIFESPAN_GEAR_PS', '围网使用寿命',
+    add_row('F', 'LIFESPAN_GEAR_PS', 'purse-seine service life',
             'ALL', 'PS', 'ALL', 'ALL', 5, 3, 5,
             'years', 'Triangular',
             'Sheet 1 Row 61-64',
@@ -1533,7 +1523,7 @@ def build_prior_matrix(xlsx_path=None):
             'Company-reported average: 3.2yr (Row 62). '
             'Annual replacement 25% in non-renewal years (Row 61).')
 
-    add_row('F', 'LIFESPAN_GEAR_LL', '延绳钓使用寿命',
+    add_row('F', 'LIFESPAN_GEAR_LL', 'longline service life',
             'ALL', 'LL', 'ALL', 'ALL', 5, 3, 5,
             'years', 'Triangular',
             'Sheet 1 Row 65-66',
@@ -1544,7 +1534,7 @@ def build_prior_matrix(xlsx_path=None):
     # ------------------------------------------------------------------
     # F5. Gear Maintenance Rate — Row 61-66
     # ------------------------------------------------------------------
-    add_row('F', 'MAINTENANCE_RATE_GEAR_PS', '围网年度维护更换比例',
+    add_row('F', 'MAINTENANCE_RATE_GEAR_PS', 'annual purse-seine maintenance replacement fraction',
             'ALL', 'PS', 'ALL', 'ALL', 0.25, 0.20, 0.33,
             'fraction per year', 'Triangular',
             'Sheet 1 Row 61-64',
@@ -1552,7 +1542,7 @@ def build_prior_matrix(xlsx_path=None):
             'PS: 25% annual gear replacement (in non-renewal years). '
             'Row 61: 1/5 + 25%; Row 63: 20% + 25%.')
 
-    add_row('F', 'MAINTENANCE_RATE_GEAR_LL', '延绳钓年度维护更换比例',
+    add_row('F', 'MAINTENANCE_RATE_GEAR_LL', 'annual longline maintenance replacement fraction',
             'ALL', 'LL', 'ALL', 'ALL', 0.25, 0.20, 0.33,
             'fraction per year', 'Triangular',
             'Sheet 1 Row 65-66',
@@ -1561,14 +1551,14 @@ def build_prior_matrix(xlsx_path=None):
             'Row 65-66: 20% + 25%.')
 
     # ========================================================================
-    # G. 延绳钓饵料消耗参数 (Longline Bait Consumption) — Sheet 1 Row 91-94
+    # G. longline bait consumption parameters (Longline Bait Consumption) — Sheet 1 Row 91-94
     # ========================================================================
     # Row 91: Section header
-    # Row 92: 每船每航次部署 500-1500 枚钓钩
-    # Row 93: 每套钓具总钩数 1,666 - 2,147 枚
-    # Row 94: 饵料主要是低值杂鱼 (low-value trash fish)
+    # Row 92: Every ship is deployed on every voyage 500-1500 A fishing hook
+    # Row 93: Number of hooks per gear set 1,666 - 2,147 Min
+    # Row 94: The bait is mainly for low-value fish (low-value trash fish)
 
-    add_row('G', 'BAIT_WEIGHT_PER_HOOK_KG', '延绳钓单钩饵料平均重量',
+    add_row('G', 'BAIT_WEIGHT_PER_HOOK_KG', 'mean bait mass per longline hook',
             'ALL', 'LL', 'ALL', 'ALL', 0.1, 0.05, 0.15,
             'kg/hook', 'Triangular',
             'Sheet 1 Row 91-94; ghg_lca.py BAIT_WEIGHT_PER_HOOK_KG',
@@ -1578,24 +1568,24 @@ def build_prior_matrix(xlsx_path=None):
             'Model: Bait_GHG = Std_Effort × BAIT_WEIGHT × EF_BAIT / 1000.')
 
     # Bait EF — from ecoinvent LCA (small pelagic fish, fresh)
-    add_row('G', 'EMISSION_FACTOR_BAIT', '饵料碳排放因子 (cradle-to-gate)',
+    add_row('G', 'EMISSION_FACTOR_BAIT', 'bait emission factor (cradle-to-gate)',
             'ALL', 'LL', 'ALL', 'ALL', 1.606, 1.548, 1.670,
             'kg CO₂eq/kg bait', 'Lognormal',
             'Ecoinvent v3 — market for small pelagic fish, fresh | Cutoff, U - GLO '
             '(1000 MC simulations)',
             'Ecoinvent_Bait',
-            '1 kg 小型中上层鱼类 (新鲜) 碳排放。'
+            '1 kg Small pelagic fish (Fresh) carbon emissions. '
             'Mean=1.606, SD=0.033, Median=1.606, 95% CI [1.548, 1.670]. '
-            '替代原有遗留值 0.454 kgCO2/kg bait (来源待核实).')
+            'Replace existing legacy value 0.454 kgCO2/kg bait (Source to be verified).')
 
-    add_row('G', 'HOOKS_PER_LINE_RANGE_LOW', '每套钓具最低总钩数',
+    add_row('G', 'HOOKS_PER_LINE_RANGE_LOW', 'minimum hooks per longline set',
             'ALL', 'LL', 'ALL', 'ALL', 1666, 500, 1666,
             'hooks/line', 'Triangular',
             'Sheet 1 Row 92-93',
             'R92-R93',
             'Row 92: 500-1500 hooks per trip; Row 93: 1666-2147 total hooks per line.')
 
-    add_row('G', 'HOOKS_PER_LINE_RANGE_HIGH', '每套钓具最高总钩数',
+    add_row('G', 'HOOKS_PER_LINE_RANGE_HIGH', 'maximum hooks per longline set',
             'ALL', 'LL', 'ALL', 'ALL', 2147, 1666, 3000,
             'hooks/line', 'Triangular',
             'Sheet 1 Row 92-93',
@@ -1604,14 +1594,14 @@ def build_prior_matrix(xlsx_path=None):
             'Extended upper bound: 3000 for large industrial LL vessels.')
 
     # ========================================================================
-    # H. 制冷剂参数 (Refrigerant Parameters) — Sheet 1 Row 85-88
+    # H. Refrigerant parameters (Refrigerant Parameters) — Sheet 1 Row 85-88
     # ========================================================================
     # Row 85: Section header — most vessels have already switched from R22
     # Row 86: R22 GWP = 1810 kg CO2e / kg R22
     # Row 87: Leak rates by vessel type
     # Row 88: Summary: bottom trawl 150 kg/yr, PS 10 kg/yr
 
-    add_row('H', 'R22_GWP', 'R22制冷剂全球增温潜势 (100yr)',
+    add_row('H', 'R22_GWP', 'R22 refrigerant global warming potential (100yr)',
             'ALL', 'ALL', 'ALL', 'ALL', 1810, np.nan, np.nan,
             'kgCO2e/kg R22', 'Discrete',
             'Sheet 1 Row 86',
@@ -1619,14 +1609,14 @@ def build_prior_matrix(xlsx_path=None):
             'R22 (HCFC) GWP-100 = 1810 (Row 86). '
             'Being phased out under Montreal Protocol.')
 
-    add_row('H', 'R22_LEAK_COASTAL_TRAWL', 'R22年泄漏量 (沿海拖网渔船)',
+    add_row('H', 'R22_LEAK_COASTAL_TRAWL', 'R22 annual leakage (coastal trawlers)',
             'ALL', 'ALL', 'ALL', 'ALL', 150, np.nan, np.nan,
             'kg R22/year/vessel', 'Triangular',
             'Sheet 1 Row 87-88',
             'R87-R88',
             'Coastal trawl: 150 kg R22/yr (Row 87-88).')
 
-    add_row('H', 'R22_LEAK_COASTAL_PS', 'R22年泄漏量 (沿海围网渔船)',
+    add_row('H', 'R22_LEAK_COASTAL_PS', 'R22 annual leakage (coastal purse-seine vessels)',
             'ALL', 'PS', 'ALL', 'ALL', 10, np.nan, np.nan,
             'kg R22/year/vessel', 'Triangular',
             'Sheet 1 Row 87-88',
@@ -1634,14 +1624,14 @@ def build_prior_matrix(xlsx_path=None):
             'Coastal PS: 10 kg R22/yr (Row 87-88). '
             'Much lower than trawl because PS has less refrigeration demand.')
 
-    add_row('H', 'R22_LEAK_OFFSHORE', 'R22年泄漏量 (近海渔船)',
+    add_row('H', 'R22_LEAK_OFFSHORE', 'R22 annual leakage (offshore fishing vessels)',
             'ALL', 'ALL', 'ALL', 'ALL', 200, np.nan, np.nan,
             'kg R22/year/vessel', 'Triangular',
             'Sheet 1 Row 87',
             'R87',
             'Offshore vessels: 200 kg R22/yr (Row 87).')
 
-    add_row('H', 'R22_LEAK_DISTANT_PS', 'R22年泄漏量 (远洋围网渔船)',
+    add_row('H', 'R22_LEAK_DISTANT_PS', 'R22 annual leakage (offshore purse-seine vessels)',
             'ALL', 'PS', 'ALL', 'ALL', 500, np.nan, np.nan,
             'kg R22/year/vessel', 'Triangular',
             'Sheet 1 Row 87',
@@ -1650,22 +1640,22 @@ def build_prior_matrix(xlsx_path=None):
             'Tuna PS (Indian Ocean): 751 g/t reference.')
 
     # ========================================================================
-    # I. 努力量标准化参数 (Effort Standardization) — ghg_lca.py + Sheet 1
+    # I. Efforts to standardize parameters (Effort Standardization) — ghg_lca.py + Sheet 1
     # ========================================================================
     # These parameters are used to convert heterogeneous RFMO effort units
     # into a common standard (hooks for LL, sets for PS).
 
-    add_row('I', 'HOOKS_PER_DAY', '延绳钓标准日下钩数 (Effort标准化)',
+    add_row('I', 'HOOKS_PER_DAY', 'standard longline hooks per day (Effort standardisation)',
             'ALL', 'LL', 'ALL', 'ALL', 3000, np.nan, np.nan,
             'hooks/day', 'Triangular',
             'ghg_lca.py HOOKS_PER_DAY constant; Sheet 1 Row 92-93 for range context',
             'R92-R93',
             'Standard LL hooks per day. '
             'Model: Std_Effort(LL) = EffortValue × HOOKS_PER_DAY for days/sets units. '
-            '⚠ 该值未在Sheet 1中直接给出，来自模型代码。Row 92-93提供了每套钓具钩数范围 '
-            '(1666-2147)，但并非每日下钩数。')
+            '⚠ The value is not there Sheet 1 , and give it to me, From model code. Row 92-93 It provides the range of hooks for each set of fishing gear '
+            '(1666-2147), But not every day. ')
 
-    add_row('I', 'HOURS_PER_SET', '围网标准单网耗时 (Effort标准化)',
+    add_row('I', 'HOURS_PER_SET', 'standard purse-seine hours per set (Effort standardisation)',
             'ALL', 'PS', 'ALL', 'ALL', 12, np.nan, np.nan,
             'hours/set', 'Triangular',
             'ghg_lca.py HOURS_PER_SET constant; '
@@ -1673,54 +1663,54 @@ def build_prior_matrix(xlsx_path=None):
             'R15',
             'Standard PS hours per set (searching + operation). '
             'Model: Std_Effort(PS) = EffortValue / HOURS_PER_SET for hours units. '
-            '⚠ 该值未在Sheet 1中直接给出，来自模型代码。Row 15给出了PS日运行时间(主机4h,辅机15h)'
-            '的上下文，但非单网耗时。')
+            '⚠ The value is not there Sheet 1 , and give it to me, From model code. Row 15 Yes PS Run-time(main engine 4h,auxiliary engine 15h)'
+            'Context, But its a time-consuming, non-separated network. ')
 
     # ========================================================================
-    # J. 历史功率演进参数 (Power Discount / Evolution) — Sheet 1 Row 47-50
+    # J. Historical Power Evolution Parameters (Power Discount / Evolution) — Sheet 1 Row 47-50
     # ========================================================================
-    # Row 46 (actually Row 47 in 1-based): "Vessel HP 增长3-6%, GRT增长4%"
+    # Row 46 (actually Row 47 in 1-based): "Vessel HP Growth 3-6%, GRT Growth 4%"
     # Row 47 (Row 48): Regional annual power growth rates
     # Row 48 (Row 49): Gear-type power growth rates
     # Row 49 (Row 50): Python preprocessing note
 
     # Regional power growth rates
-    add_row('J', 'POWER_GROWTH_RATE', '主机功率年均增长率 (欧洲)',
+    add_row('J', 'POWER_GROWTH_RATE', 'annual main engine power growth rate (Europe)',
             'Europe', 'ALL', 'ALL', 'ALL', 0.002, np.nan, np.nan,
             'fraction/year', 'Normal',
             'Sheet 1 Row 48',
             'R48',
             'Europe: 0.2%/yr — lowest growth (Row 48).')
 
-    add_row('J', 'POWER_GROWTH_RATE', '主机功率年均增长率 (亚洲)',
+    add_row('J', 'POWER_GROWTH_RATE', 'annual main engine power growth rate (Asia)',
             'Asia', 'ALL', 'ALL', 'ALL', 0.012, np.nan, np.nan,
             'fraction/year', 'Normal',
             'Sheet 1 Row 48',
             'R48',
             'Asia: 1.2%/yr — highest growth (Row 48).')
 
-    add_row('J', 'POWER_GROWTH_RATE', '主机功率年均增长率 (北美洲)',
+    add_row('J', 'POWER_GROWTH_RATE', 'annual main engine power growth rate (North America)',
             'North America', 'ALL', 'ALL', 'ALL', 0.011, np.nan, np.nan,
             'fraction/year', 'Normal',
             'Sheet 1 Row 48',
             'R48',
             'North America: 1.1%/yr (Row 48).')
 
-    add_row('J', 'POWER_GROWTH_RATE', '主机功率年均增长率 (非洲)',
+    add_row('J', 'POWER_GROWTH_RATE', 'annual main engine power growth rate (Africa)',
             'Africa', 'ALL', 'ALL', 'ALL', 0.009, np.nan, np.nan,
             'fraction/year', 'Normal',
             'Sheet 1 Row 48',
             'R48',
             'Africa: 0.9%/yr (Row 48).')
 
-    add_row('J', 'POWER_GROWTH_RATE', '主机功率年均增长率 (南美洲)',
+    add_row('J', 'POWER_GROWTH_RATE', 'annual main engine power growth rate (South America)',
             'South America', 'ALL', 'ALL', 'ALL', 0.011, np.nan, np.nan,
             'fraction/year', 'Normal',
             'Sheet 1 Row 48',
             'R48',
             'South America: 1.1%/yr (Row 48).')
 
-    add_row('J', 'POWER_GROWTH_RATE', '主机功率年均增长率 (大洋洲)',
+    add_row('J', 'POWER_GROWTH_RATE', 'annual main engine power growth rate (Oceania)',
             'Australia & Oceania', 'ALL', 'ALL', 'ALL', 0.017, np.nan, np.nan,
             'fraction/year', 'Normal',
             'Sheet 1 Row 48',
@@ -1728,14 +1718,14 @@ def build_prior_matrix(xlsx_path=None):
             'Oceania: 1.7%/yr — highest among regions (Row 48).')
 
     # Gear-type power growth rates (Row 49)
-    add_row('J', 'POWER_GROWTH_RATE_LL', '主机功率年均增长率 (延绳钓船队)',
+    add_row('J', 'POWER_GROWTH_RATE_LL', 'annual main engine power growth rate (longline fleet)',
             'ALL', 'LL', 'ALL', 'ALL', 0.010, np.nan, np.nan,
             'fraction/year', 'Normal',
             'Sheet 1 Row 49',
             'R49',
             'LL fleet: 1.0%/yr — 3rd largest contributor (Row 49).')
 
-    add_row('J', 'POWER_GROWTH_RATE_PS', '主机功率年均增长率 (围网船队)',
+    add_row('J', 'POWER_GROWTH_RATE_PS', 'annual main engine power growth rate (purse-seine fleet)',
             'ALL', 'PS', 'ALL', 'ALL', 0.004, np.nan, np.nan,
             'fraction/year', 'Normal',
             'Sheet 1 Row 49',
@@ -1743,7 +1733,7 @@ def build_prior_matrix(xlsx_path=None):
             'PS fleet: 0.4%/yr — 5th largest contributor (Row 49).')
 
     # Decadal power growth (Row 47)
-    add_row('J', 'POWER_GROWTH_DECADAL_HP', '主机功率十年增长率',
+    add_row('J', 'POWER_GROWTH_DECADAL_HP', 'decadal main engine power growth rate',
             'ALL', 'ALL', 'ALL', 'ALL', 0.045, 0.03, 0.06,
             'fraction/decade', 'Triangular',
             'Sheet 1 Row 47',
@@ -1752,13 +1742,13 @@ def build_prior_matrix(xlsx_path=None):
             'Best=4.5% (midpoint).')
 
     # ========================================================================
-    # K. GT-LDT 吨位转换参数 — Sheet 1 Row 89-90
+    # K. GT-LDT Tonn Conversion Parameters — Sheet 1 Row 89-90
     # ========================================================================
     # Row 89: General vessel type LDT/GT ratios
     # Row 90: Fishing vessel LDT/GT = 0.859 (anomalously high)
-    # "渔船是异常值，LDT/GT比率高达85.9%"
+    # "The fishing boat is abnormal, LDT/GT High ratio 85.9%"
 
-    add_row('K', 'LDT_GT_RATIO_FISHING', '渔船 GT→LDT 转换系数',
+    add_row('K', 'LDT_GT_RATIO_FISHING', 'fishing vessel GT→LDT conversion factor',
             'ALL', 'ALL', 'ALL', 'ALL', 0.859, np.nan, np.nan,
             'LDT/GT ratio', 'Normal',
             'Sheet 1 Row 90 — MEPC/IMO vessel statistics',
@@ -1768,7 +1758,7 @@ def build_prior_matrix(xlsx_path=None):
             'Means fishing vessels need more structural weight per GT → higher unit GHG.')
 
     # Reference: general cargo vessels (Row 89)
-    add_row('K', 'LDT_GT_RATIO_CARGO_REF', '货船 GT→LDT 转换系数 (参考对比)',
+    add_row('K', 'LDT_GT_RATIO_CARGO_REF', 'cargo vessels GT→LDT conversion factor (reference comparison)',
             'ALL', 'ALL', 'ALL', 'ALL', 0.287, 0.22, 0.55,
             'LDT/GT ratio', 'Triangular',
             'Sheet 1 Row 89 — MEPC vessel statistics (various types)',
@@ -1780,92 +1770,92 @@ def build_prior_matrix(xlsx_path=None):
     # ========================================================================
     # L. EPA Nonroad Engine Reference Data — EPA NR-005d/009d/010f
     # ========================================================================
-    # 三份EPA核心技术报告 (可在EPA NEPIS数据库按编号搜索下载):
+    # Three EPA Core technical reports (Its possible EPA NEPIS Database Search Download by Number):
     #   NR-005d (EPA-420-R-10-016): Median Life, Annual Activity, Load Factor
-    #   NR-009d (EPA-420-R-10-018): CI Engine Emission Factors (柴油机)
-    #   NR-010f (EPA-420-R-10-019): SI Engine Emission Factors (汽油机)
-    # 单位换算: 1 lb/hp-hr ≈ 608.277 g/kWh
+    #   NR-009d (EPA-420-R-10-018): CI Engine Emission Factors (Diesels)
+    #   NR-010f (EPA-420-R-10-019): SI Engine Emission Factors (Gasoline)
+    # Conversion in units: 1 lb/hp-hr ≈ 608.277 g/kWh
 
     # ------------------------------------------------------------------
     # L1. EPA Load Factors (NR-005d)
     # ------------------------------------------------------------------
-    add_row('L', 'LF_EPA_OUTBOARD_GASOLINE', 'EPA船用舷外汽油机默认负荷因子',
+    add_row('L', 'LF_EPA_OUTBOARD_GASOLINE', 'EPA default marine petrol outboard engine load factor',
             'ALL', 'ALL', 'APW', 'ALL', 0.207, np.nan, np.nan,
             'fraction of MCR', 'Discrete',
-            'EPA-420-R-10-016 (NR-005d) — 船用舷外机法定综合工况默认值',
+            'EPA-420-R-10-016 (NR-005d) — Default for SQE',
             'EPA_NR005d',
-            'EPA对所有常规船用舷外汽油机的基准测试默认负荷因子: 20.7%. '
-            '适用于APW小型渔船(<12m, 汽油舷外机).')
+            'EPA Default load factors for baseline testing of all conventional off-board petrol machines: 20.7%. '
+            'Applicable to APW Small fishing vessels(<12m, Gasoline offboard).')
 
-    add_row('L', 'LF_EPA_COMMERCIAL_FISHING', 'EPA商业捕捞高负荷因子',
+    add_row('L', 'LF_EPA_COMMERCIAL_FISHING', 'EPA Commercial catch high load factor',
             'ALL', 'ALL', 'I', 'ALL', 0.39, 0.34, 0.44,
             'fraction of MCR', 'Triangular',
-            'EPA-420-R-10-016 (NR-005d) — 商业拖网/满载作业',
+            'EPA-420-R-10-016 (NR-005d) — Commercial trawling/Full load job',
             'EPA_NR005d',
-            '商业捕捞高强度作业(拖网/满载)引擎负荷: 0.34-0.44. '
-            'Best取中点0.39. 适用于工业渔船(>=12m).')
+            'High-intensity commercial fishing operations(Trawl/Full)Engine load: 0.34-0.44. '
+            'Best Midpoint 0.39. Applicable to industrial fishing vessels(>=12m).')
 
-    add_row('L', 'LF_EPA_INBOARD_DIESEL', 'EPA船用柴油舷内机默认负荷因子',
+    add_row('L', 'LF_EPA_INBOARD_DIESEL', 'EPA Default load factor for diesel cargo',
             'ALL', 'ALL', 'I', 'ALL', 0.425, 0.40, 0.45,
             'fraction of MCR', 'Triangular',
-            'EPA-420-R-10-016 (NR-005d) — 柴油主机持续巡航/重载牵引',
+            'EPA-420-R-10-016 (NR-005d) — continuous cruising of diesel main engines/Load Towed',
             'EPA_NR005d',
-            '柴油舷内机持续巡航/重载牵引默认负荷: 0.40-0.45. '
-            'Best取中点0.425. 显著高于汽油舷外机(0.207).')
+            'The diesel cargo is on a continuous cruise/Reload towed default load: 0.40-0.45. '
+            'Best Midpoint 0.425. Its significantly higher than the gas outboard(0.207).')
 
     # ------------------------------------------------------------------
-    # L2. EPA SFR — 汽油机 (NR-010f, Spark-Ignition Outboard)
+    # L2. EPA SFR — Gasoline (NR-010f, Spark-Ignition Outboard)
     # ------------------------------------------------------------------
-    add_row('L', 'SFR_GASOLINE_2STROKE', 'EPA传统两冲程汽油舷外机SFR',
+    add_row('L', 'SFR_GASOLINE_2STROKE', 'EPA conventional two-stroke petrol outboard engine SFR',
             'ALL', 'ALL', 'APW', 'ALL', 0.000592, 0.000547, 0.000638,
             'tFuel/kWh', 'Triangular',
             'EPA-420-R-10-019 (NR-010f) — 2-Stroke Outboard',
             'EPA_NR010f',
-            '传统两冲程: 0.90-1.05 lb/hp-hr = 547-638 g/kWh = 0.000547-0.000638 t/kWh. '
-            'Best=592 g/kWh. 油耗极高, >20%未燃燃油直接排放入水.')
+            'The traditional two-stroke: 0.90-1.05 lb/hp-hr = 547-638 g/kWh = 0.000547-0.000638 t/kWh. '
+            'Best=592 g/kWh. The fuel is very high, >20%Unburned fuel is directly released into water.')
 
-    add_row('L', 'SFR_GASOLINE_4STROKE', 'EPA现代四冲程汽油舷外机SFR',
+    add_row('L', 'SFR_GASOLINE_4STROKE', 'EPA modern four-stroke petrol outboard engine SFR',
             'ALL', 'ALL', 'APW', 'ALL', 0.000319, 0.000304, 0.000334,
             'tFuel/kWh', 'Triangular',
             'EPA-420-R-10-019 (NR-010f) — 4-Stroke Outboard',
             'EPA_NR010f',
-            '现代四冲程: 0.50-0.55 lb/hp-hr = 304-334 g/kWh = 0.000304-0.000334 t/kWh. '
-            'Best=319 g/kWh. 油耗与车用发动机接近, 中大型汽油舷外机主流技术.')
+            'Modern Four-Four: 0.50-0.55 lb/hp-hr = 304-334 g/kWh = 0.000304-0.000334 t/kWh. '
+            'Best=319 g/kWh. Fuel consumption is close to vehicle engines, Main technology for medium-sized and large-scale petrol offboards.')
 
-    add_row('L', 'SFR_GASOLINE_DI_2STROKE', 'EPA直喷两冲程汽油舷外机SFR',
+    add_row('L', 'SFR_GASOLINE_DI_2STROKE', 'EPA direct-injection two-stroke petrol outboard engine SFR',
             'ALL', 'ALL', 'APW', 'ALL', 0.000365, 0.000334, 0.000395,
             'tFuel/kWh', 'Triangular',
             'EPA-420-R-10-019 (NR-010f) — DI 2-Stroke Outboard',
             'EPA_NR010f',
-            '直喷两冲程: 0.55-0.65 lb/hp-hr = 334-395 g/kWh = 0.000334-0.000395 t/kWh. '
-            'Best=365 g/kWh. 缸内直喷改善传统两冲程短路漏油, 油耗介于两者之间.')
+            'Two straight ahead: 0.55-0.65 lb/hp-hr = 334-395 g/kWh = 0.000334-0.000395 t/kWh. '
+            'Best=365 g/kWh. direct injection reduces short-circuit fuel losses in conventional two-stroke engines, The oil is in between.')
 
     # ------------------------------------------------------------------
-    # L3. EPA SFR — 柴油机 (NR-009d, Compression-Ignition Inboard)
+    # L3. EPA SFR — Diesels (NR-009d, Compression-Ignition Inboard)
     # ------------------------------------------------------------------
-    add_row('L', 'SFR_DIESEL_25_50HP', 'EPA小型柴油舷内机(25-50HP / 19-37kW) SFR',
+    add_row('L', 'SFR_DIESEL_25_50HP', 'EPA small diesel inboard engine(25-50HP / 19-37kW) SFR',
             'ALL', 'ALL', 'APW', 'ALL', 0.000248, np.nan, np.nan,
             'tFuel/kWh', 'Lognormal',
             'EPA-420-R-10-018 (NR-009d) — 25-50 HP (19-37 kW) CI Engine',
             'EPA_NR009d',
-            '小型柴油机: ~0.408 lb/hp-hr ≈ 248 g/kWh = 0.000248 t/kWh. '
-            '25-50 HP ≈ 19-37 kW. 燃油经济性全面优于同马力四冲程汽油舷外机.')
+            'Small diesel machine: ~0.408 lb/hp-hr ≈ 248 g/kWh = 0.000248 t/kWh. '
+            '25-50 HP ≈ 19-37 kW. fuel economy exceeds that of four-stroke petrol outboard engines with the same power.')
 
-    add_row('L', 'SFR_DIESEL_100_175HP', 'EPA中型柴油舷内机(100-175HP / 75-130kW) SFR',
+    add_row('L', 'SFR_DIESEL_100_175HP', 'EPA Inner diesel engine, medium(100-175HP / 75-130kW) SFR',
             'ALL', 'ALL', 'I', 'ALL', 0.000221, np.nan, np.nan,
             'tFuel/kWh', 'Lognormal',
             'EPA-420-R-10-018 (NR-009d) — 100-175 HP (75-130 kW) CI Engine',
             'EPA_NR009d',
-            '中型柴油机: ~0.364 lb/hp-hr ≈ 221 g/kWh = 0.000221 t/kWh. '
-            '100-175 HP ≈ 75-130 kW. 随排量缸径增加热效率提升, SFR进一步降低.')
+            'Fuel, medium: ~0.364 lb/hp-hr ≈ 221 g/kWh = 0.000221 t/kWh. '
+            '100-175 HP ≈ 75-130 kW. Heat efficiency increases with the volume cylinders, SFR Further down.')
 
-    add_row('L', 'SFR_DIESEL_300_600HP', 'EPA大型柴油舷内机(300-600HP / 224-447kW) SFR',
+    add_row('L', 'SFR_DIESEL_300_600HP', 'EPA large diesel inboard engine(300-600HP / 224-447kW) SFR',
             'ALL', 'ALL', 'I', 'ALL', 0.000210, np.nan, np.nan,
             'tFuel/kWh', 'Lognormal',
             'EPA-420-R-10-018 (NR-009d) — 300-600 HP (224-447 kW) CI Engine',
             'EPA_NR009d',
-            '大型柴油机: ~0.345 lb/hp-hr ≈ 210 g/kWh = 0.000210 t/kWh. '
-            '300-600 HP ≈ 224-447 kW. 中大型近海船只主机典型经济工况. 与Row 37辅机=210 g/kWh一致.')
+            'Large diesel machine: ~0.345 lb/hp-hr ≈ 210 g/kWh = 0.000210 t/kWh. '
+            '300-600 HP ≈ 224-447 kW. typical efficient operating conditions of main engines on medium and large offshore vessels. and Row 37 auxiliary engine=210 g/kWh Unanimously.')
 
     # ========================================================================
     # Assemble DataFrame
@@ -1874,18 +1864,18 @@ def build_prior_matrix(xlsx_path=None):
 
     # Add metadata
     prior.attrs['description'] = (
-        '先验参数矩阵 (v7修正版) — 排放模型全部参数的统一长格式矩阵。'
-        '覆盖12大类(A-L)，每条记录由(Param_Code, Flag, Gear, Sector, Length_Category)唯一索引。'
-        'v4修正: (1)ecoinvent建造/维护EF (PS钢/木, LL钢); '
-        '(2)转运船/辅助船使用PS钢船因子; (3)延绳钓小船使用PS木船因子; '
-        '(4)填入NaN值: 尼龙PA6=9.885, 渔具钢=3.070, 饵料=1.606 kgCO2/kg. '
-        'v5修正: 删除5个不再需要的NaN参数 (STEEL/IRON/COPPER/EVA/GEAR_COMPOSITE). '
-        'v6修正: (1)新增柴油/汽油上游WTT EF; (2)更新燃烧CO2 (IMO 2020/EPA 2025); '
-        '(3)CH4/N2O按燃料和机型拆分; (4)柴油CH4/N2O改为IMO标准单位g/kWh. '
-        'v7修正: T_map_DAS重构为3级数据优先级体系 — '
-        'Tier1: Parker(2014)按大洋PS (Atlantic 297/Indian 289/Pacific 244, 缺省277); '
-        'Tier2: Jha(2026)印度洋LL (234-256); '
-        'Tier3: Anticamara(2011)按大洲兜底 (LL/PS/TP, Flag=ALL, Sector=I).'
+        'Pre-demonstration Array (v7 Revised) — A single long format matrix for all parameters of the emission model. '
+        'Overwrite 12 Category(A-L), ♪ Every record by ♪(Param_Code, Flag, Gear, Sector, Length_Category)Unique Index. '
+        'v4 Amendments: (1)ecoinvent construction/maintenance EF (PS steel/Wood, LL steel); '
+        '(2)transshipment vessel/Use of an auxiliary ship PS Steel ship factor; (3)small longline vessels use PS Woodboat factors; '
+        '(4)Enter NaN Value: nylon PA6=9.885, Fishing steel=3.070, bait=1.606 kgCO2/kg. '
+        'v5 Amendments: remove 5 One no longer needed NaN parameter (STEEL/IRON/COPPER/EVA/GEAR_COMPOSITE). '
+        'v6 Amendments: (1)Additional diesel fuel/upstream petrol WTT EF; (2)Update burning CO2 (IMO 2020/EPA 2025); '
+        '(3)CH4/N2O Split by fuel and machine type; (4)diesel CH4/N2O should read IMO Standard Unit g/kWh. '
+        'v7 Amendments: T_map_DAS Reconfigure 3 Data Priority System — '
+        'Tier1: Parker(2014)By Ocean PS (Atlantic 297/Indian 289/Pacific 244, default 277); '
+        'Tier2: Jha(2026)Indian Ocean LL (234-256); '
+        'Tier3: Anticamara(2011)By continent (LL/PS/TP, Flag=ALL, Sector=I).'
     )
     prior.attrs['total_parameters'] = len(prior)
     prior.attrs['sections'] = sorted(prior['Param_Section'].unique())
@@ -1913,7 +1903,7 @@ def build_prior_matrix(xlsx_path=None):
         sec_name = section_names.get(sec, sec)
         # Count NaN values in this section
         n_nan_best = prior.loc[sec_mask, 'Value_Best'].isna().sum()
-        gap_note = f' [{n_nan_best} 待填]' if n_nan_best > 0 else ''
+        gap_note = f' [{n_nan_best} To be filled in]' if n_nan_best > 0 else ''
         print(f"    [{sec}] {sec_name}: {n_params} rows, {n_codes} unique codes{gap_note}")
 
     return prior
@@ -1921,7 +1911,7 @@ def build_prior_matrix(xlsx_path=None):
 
 def build_species_cf_matrix(xlsx_path=XLSX_PATH):
     """
-    Build the Species_CF_Matrix from Sheet 2 ('资源耗竭影响评估').
+    Build the Species_CF_Matrix from Sheet 2 ('resource depletion impact assessment').
 
     The raw sheet is already well-structured. We:
     1. Read and clean column names
@@ -1934,17 +1924,17 @@ def build_species_cf_matrix(xlsx_path=XLSX_PATH):
         Common_Name, Scientific_Name, CF_median, CF_min, CF_max
     """
     print("\n" + "=" * 70)
-    print("  Building Matrix 2: Species_CF_Matrix (物种特征化因子矩阵)")
+    print("  Building Matrix 2: Species_CF_Matrix (Species characterization factor matrix)")
     print("=" * 70)
 
     # Read raw sheet
-    df_raw = pd.read_excel(xlsx_path, sheet_name='资源耗竭影响评估')
+    df_raw = pd.read_excel(xlsx_path, sheet_name='\u8d44\u6e90\u8017\u7aed\u5f71\u54cd\u8bc4\u4f30')
 
     # Standardize column names
     col_map = {
-        '物种 (Common name)': 'Common_Name',
-        '学名 (Scientific name)': 'Scientific_Name',
-        'CF (中值)': 'CF_median',
+        '\u7269\u79cd (Common name)': 'Common_Name',
+        '\u5b66\u540d (Scientific name)': 'Scientific_Name',
+        'CF (\u4e2d\u503c)': 'CF_median',
         'CF min': 'CF_min',
         'CF max': 'CF_max',
     }
@@ -1990,7 +1980,7 @@ def build_species_cf_matrix(xlsx_path=XLSX_PATH):
     df = pd.concat([df, default_row], ignore_index=True)
 
     # Add metadata
-    df.attrs['description'] = '物种特征化因子矩阵 — 金枪鱼及兼捕物种 CF 值'
+    df.attrs['description'] = 'Species characterization factor matrix — Tuna and by-catch species CF Value'
     df.attrs['default_row_note'] = (
         f'DEFAULT row CF_median={default_cf:.2e} = geometric mean of all known species; '
         f'used for unknown bycatch in LCA resource depletion assessment'
@@ -2005,12 +1995,12 @@ def build_species_cf_matrix(xlsx_path=XLSX_PATH):
 
 
 # =============================================================================
-# Matrix 3: Scenario_Multiplier_Matrix (情景乘数矩阵)
+# Matrix 3: Scenario_Multiplier_Matrix (Scenario Multiplier Matrix)
 # =============================================================================
 
 def build_scenario_multiplier_matrix(xlsx_path=XLSX_PATH):
     """
-    Build the Scenario_Multiplier_Matrix from Sheet 3 ('情景分析').
+    Build the Scenario_Multiplier_Matrix from Sheet 3 ('scenario analysis').
 
     Parse Chinese text descriptions into numeric Fuel_Multiplier and GHG_Multiplier.
     Scenarios with unquantified measures are flagged as 'qualitative_only'.
@@ -2022,16 +2012,16 @@ def build_scenario_multiplier_matrix(xlsx_path=XLSX_PATH):
         Fuel_Multiplier, GHG_Multiplier, Is_Quantified, Source
     """
     print("\n" + "=" * 70)
-    print("  Building Matrix 3: Scenario_Multiplier_Matrix (情景乘数矩阵)")
+    print("  Building Matrix 3: Scenario_Multiplier_Matrix (Scenario Multiplier Matrix)")
     print("=" * 70)
 
     # Read raw sheet
-    df_raw = pd.read_excel(xlsx_path, sheet_name='情景分析', header=None)
+    df_raw = pd.read_excel(xlsx_path, sheet_name='\u60c5\u666f\u5206\u6790', header=None)
 
-    # Find the header row (row containing '措施类别')
+    # Find the header row (row containing 'measure category')
     header_row = None
     for i, row in df_raw.iterrows():
-        if any('措施类别' in safe_str(v) for v in row.values):
+        if any('\u63aa\u65bd\u7c7b\u522b' in safe_str(v) for v in row.values):
             header_row = i
             break
 
@@ -2040,7 +2030,7 @@ def build_scenario_multiplier_matrix(xlsx_path=XLSX_PATH):
         header_row = 1
 
     # Extract data rows (after header)
-    # Column mapping (by position): 0=措施类别, 1=具体措施, 2=取值, 3=来源, 4=说明
+    # Column mapping (by position): 0=measure category, 1=Specific measures, 2=Value, 3=Source, 4=Annotations
     data_rows = []
     for i in range(header_row + 1, len(df_raw)):
         row = df_raw.iloc[i]
@@ -2053,7 +2043,7 @@ def build_scenario_multiplier_matrix(xlsx_path=XLSX_PATH):
         # Skip rows that are section headers or empty
         if not measure and not value_text:
             continue
-        if category in ('情景分析模型', '措施类别'):
+        if category in ('\u60c5\u666f\u5206\u6790\u6a21\u578b', '\u63aa\u65bd\u7c7b\u522b'):
             continue
 
         data_rows.append({
@@ -2078,14 +2068,14 @@ def build_scenario_multiplier_matrix(xlsx_path=XLSX_PATH):
 
         # Determine if the parsed value should be treated as fuel or GHG
         # Alternative fuels typically report GHG/carbon reductions, not direct fuel savings
-        is_alt_fuel = ('替代燃料' in cat or
-                       any(kw in desc for kw in ['甲醇替代', 'LPG替代', 'LNG替代', 'CNG',
-                                                 '生物柴油', '生物燃料', '氢-柴油',
-                                                 '沼气', '甲醇-柴油', '氢-柴油',
-                                                 '电力（LFP', '液化石油气']))
-        is_refrigerant = '制冷剂' in cat
-        is_gear_change = '更换渔具' in cat
-        is_baseline = '基准' in cat or '综合结论' in cat
+        is_alt_fuel = ('\u66ff\u4ee3\u71c3\u6599' in cat or
+                       any(kw in desc for kw in ['\u7532\u9187\u66ff\u4ee3', 'LPG\u66ff\u4ee3', 'LNG\u66ff\u4ee3', 'CNG',
+                                                 '\u751f\u7269\u67f4\u6cb9', '\u751f\u7269\u71c3\u6599', '\u6c22-\u67f4\u6cb9',
+                                                 '\u6cbc\u6c14', '\u7532\u9187-\u67f4\u6cb9', '\u6c22-\u67f4\u6cb9',
+                                                 '\u7535\u529b（LFP', '\u6db2\u5316\u77f3\u6cb9\u6c14']))
+        is_refrigerant = '\u5236\u51b7\u5242' in cat
+        is_gear_change = '\u66f4\u6362\u6e14\u5177' in cat
+        is_baseline = '\u57fa\u51c6' in cat or '\u7efc\u5408\u7ed3\u8bba' in cat
 
         # Try to parse fuel savings
         fuel_low, fuel_high, fuel_central = parse_percent_range(text)
@@ -2104,7 +2094,7 @@ def build_scenario_multiplier_matrix(xlsx_path=XLSX_PATH):
         # to avoid double-counting the same text as both fuel and GHG
         if ghg_mult is not None and fuel_central is not None:
             # Check if the text is primarily about GHG/CO2 (not fuel)
-            if re.search(r'(?:GHG|CO₂?|CO2|温室|碳排放?)', text):
+            if re.search(r'(?:GHG|CO₂?|CO2|\u6e29\u5ba4|\u78b3\u6392\u653e?)', text):
                 fuel_central = None
 
         # For refrigerants, the reduction is in GWP impact, not fuel
@@ -2121,8 +2111,8 @@ def build_scenario_multiplier_matrix(xlsx_path=XLSX_PATH):
         if ghg_mult is not None:
             ghg_mult = round(ghg_mult, 3)
 
-        # Additional checks: text explicitly says "未量化" or contains non-percentage units
-        if '未量化' in text or '未量化' in desc:
+        # Additional checks: text explicitly says "not quantified" or contains non-percentage units
+        if '\u672a\u91cf\u5316' in text or '\u672a\u91cf\u5316' in desc:
             quantified = False
         if is_gear_change:
             # Gear change rows often have bycatch mortality rates (0.05 vs 0.25) — not fuel
@@ -2137,15 +2127,15 @@ def build_scenario_multiplier_matrix(xlsx_path=XLSX_PATH):
     df['GHG_Multiplier'] = ghg_mults
     df['Is_Quantified'] = is_quantified
 
-    # ---- Handle "同上" (same as above) rows ----
+    # ---- Handle "same as above" (same as above) rows ----
     # These are duplicate literature sources citing the same measure.
-    # They inherit the multiplier from the nearest non-同上 row above,
+    # They inherit the multiplier from the nearest non-same as above row above,
     # and are marked as "duplicate reference" in the description.
-    same_as_above_refs = {}  # track which primary row each 同上 row references
+    same_as_above_refs = {}  # track which primary row each same as above row references
     for i in range(len(df)):
-        if df.loc[i, 'Measure_Description'].strip() == '同上':
+        if df.loc[i, 'Measure_Description'].strip() == '\u540c\u4e0a':
             for j in range(i - 1, -1, -1):
-                if df.loc[j, 'Measure_Description'].strip() != '同上':
+                if df.loc[j, 'Measure_Description'].strip() != '\u540c\u4e0a':
                     df.loc[i, 'Fuel_Multiplier'] = df.loc[j, 'Fuel_Multiplier']
                     df.loc[i, 'GHG_Multiplier'] = df.loc[j, 'GHG_Multiplier']
                     df.loc[i, 'Is_Quantified'] = df.loc[j, 'Is_Quantified']
@@ -2154,17 +2144,17 @@ def build_scenario_multiplier_matrix(xlsx_path=XLSX_PATH):
 
     # ---- Special handling for baseline fuel consumption rows ----
     # These are absolute consumption values (L/kg), not multipliers
-    mask_baseline = df['Measure_Category'].str.contains('基准', na=False)
+    mask_baseline = df['Measure_Category'].str.contains('\u57fa\u51c6', na=False)
     df.loc[mask_baseline, 'Is_Quantified'] = False
 
-    # ---- Special handling for "综合结论" (summary) rows ----
+    # ---- Special handling for "Consolidated conclusions" (summary) rows ----
     # These are global statistics, not scenario measures
-    mask_summary = df['Measure_Category'].str.contains('综合结论', na=False)
+    mask_summary = df['Measure_Category'].str.contains('\u7efc\u5408\u7ed3\u8bba', na=False)
     df.loc[mask_summary, 'Is_Quantified'] = False
 
     # ---- Assign Scenario_ID ----
     # S1, S2, ... for quantified; Q1, Q2, ... for qualitative
-    # "同上" rows get sub-IDs referencing their primary (e.g., S6a, S6b)
+    # "same as above" rows get sub-IDs referencing their primary (e.g., S6a, S6b)
     q_count, s_count = 0, 0
     primary_s_ids = {}  # row index → S number for the primary entry
     scenario_ids = []
@@ -2177,7 +2167,7 @@ def build_scenario_multiplier_matrix(xlsx_path=XLSX_PATH):
                 # Walk back to find the S-number already assigned
                 primary_s_num = primary_s_ids.get(primary_idx)
                 if primary_s_num is not None:
-                    # Count how many 同上 refs point to same primary
+                    # Count how many same as above refs point to same primary
                     same_count = sum(1 for v in same_as_above_refs.values() if v == primary_idx)
                     refs_before = sum(1 for k, v in same_as_above_refs.items()
                                      if v == primary_idx and k <= i)
@@ -2239,7 +2229,7 @@ def build_scenario_multiplier_matrix(xlsx_path=XLSX_PATH):
     df = df[cols].copy()
 
     # Add metadata
-    df.attrs['description'] = '情景乘数矩阵 — 减排措施的节油/减排乘数'
+    df.attrs['description'] = 'Scenario Multiplier Matrix — Oil saving for emission reduction measures/Emission reduction multiplier'
     df.attrs['usage'] = (
         'Fuel_Multiplier < 1 = fuel saving; GHG_Multiplier < 1 = GHG reduction. '
         'Q-prefix scenarios are qualitative only (no numeric multiplier).'
@@ -2255,12 +2245,12 @@ def build_scenario_multiplier_matrix(xlsx_path=XLSX_PATH):
 
 
 # =============================================================================
-# Matrix 4: MonteCarlo_Config_Matrix (蒙特卡洛抽样配置矩阵)
+# Matrix 4: MonteCarlo_Config_Matrix (Monte Carlo Sample Configuration Matrix)
 # =============================================================================
 
 def build_montecarlo_config_matrix(xlsx_path=XLSX_PATH):
     """
-    Build the MonteCarlo_Config_Matrix from Sheet 4 ('模型参数类型').
+    Build the MonteCarlo_Config_Matrix from Sheet 4 ('model parameter type').
 
     The raw Sheet 4 defines 3 macro-categories of parameters with sampling guidance.
     Wildcard entries (EMISSION_FACTOR_*, MATERIAL_RATIO_*, LIFESPAN_*,
@@ -2276,29 +2266,29 @@ def build_montecarlo_config_matrix(xlsx_path=XLSX_PATH):
         Covered_Prior_Codes
     """
     print("\n" + "=" * 70)
-    print("  Building Matrix 4: MonteCarlo_Config_Matrix (蒙特卡洛抽样配置矩阵)")
+    print("  Building Matrix 4: MonteCarlo_Config_Matrix (Monte Carlo Sample Configuration Matrix)")
     print("=" * 70)
 
     # Parse the raw Sheet 4 to extract category-level metadata
-    df_raw = pd.read_excel(xlsx_path, sheet_name='模型参数类型')
+    df_raw = pd.read_excel(xlsx_path, sheet_name='\u6a21\u578b\u53c2\u6570\u7c7b\u578b')
     col_map = {
-        '参数分类': 'Param_Category',
-        '代码中的具体参数': 'Param_Code',
-        '核心特征与物理意义': 'Physical_Meaning',
-        '蒙特卡洛抽样策略建议': 'Sampling_Strategy_Raw',
+        '\u53c2\u6570\u5206\u7c7b': 'Param_Category',
+        '\u4ee3\u7801\u4e2d\u7684\u5177\u4f53\u53c2\u6570': 'Param_Code',
+        '\u6838\u5fc3\u7279\u5f81\u4e0e\u7269\u7406\u610f\u4e49': 'Physical_Meaning',
+        '\u8499\u7279\u5361\u6d1b\u62bd\u6837\u7b56\u7565\u5efa\u8bae': 'Sampling_Strategy_Raw',
     }
     df_raw = df_raw.rename(columns=col_map)
 
     # Extract category-level info from raw rows
     # Row structure (from Sheet 4):
-    #   [1] 一、时间/行为型变量 | T_map (年作业天数) | 与船舶物理规模无关... | 连续概率分布
-    #   [3] (Time / Behavior) | H_map (日作业小时) | | 三角分布 或 PERT分布
+    #   [1] One, Time/Behavior Variables | T_map (Annual days of operation) | Its not about the physical size of the ship... | Continuous Probability Distribution
+    #   [3] (Time / Behavior) | H_map (Daily working hours) | | Triangular distribution or PERT Distribution
     #   [5] | HOURS_PER_SET | |
     #   [7] | HOOKS_PER_DAY | |
-    #   [8] 二、规模依赖型变量 | gear_int | 受物理定律... | 截断与离散抽样池
-    #   [10] (Scale-dependent) | SFR_map | | 物理极值截断...
+    #   [8] Two, Size Dependent Variable | gear_int | By the laws of physics... | Interrupt and separate sampling pools
+    #   [10] (Scale-dependent) | SFR_map | | Physical polar cut-off...
     #   [12] | BAIT_WEIGHT_PER_HOOK_KG | |
-    #   [13] 三、理化与工程常数 | EMISSION_FACTOR_* | 基础工业标准... | 正态/对数正态分布
+    #   [13] III, Science and Engineering Constant | EMISSION_FACTOR_* | Basic industry standards... | normal/logarithmic normal distribution
     #   [15] (Physical & Engineering) | MATERIAL_RATIO_* | | ...
     #   [17] | LIFESPAN_* | |
     #   [19] | MAINTENANCE_RATE_* | |
@@ -2322,307 +2312,307 @@ def build_montecarlo_config_matrix(xlsx_path=XLSX_PATH):
     # enabling full traceability between the two matrices.
 
     mc_entries = [
-        # ---- Category 1: 时间/行为型变量 (Time/Behavior) ----
+        # ---- Category 1: Time/Behavior Variables (Time/Behavior) ----
         # T_map (DAS) — 3-tier data hierarchy
         ('T_map_DAS', 'Triangular',
-         '年作业天数（Days at Sea）。数据优先级: Tier1 Parker(2014)按大洋PS, '
-         'Tier2 Jha(2026)印度洋LL, Tier3 Anticamara(2011)按大洲兜底。',
-         '按 Flag×Gear×Sector 组合查阅文献确定最小值、众数和最大值，使用三角分布独立抽样。'
-         'Parker数据适用于1990年后FAD时代围网; Anticamara适用于历史回溯(1950-2010)及非PS船型。',
-         '一、时间/行为型变量 (Time/Behavior)', 1,
+         'Annual days of operation (Days at Sea) . Data Priority: Tier1 Parker(2014)By Ocean PS, '
+         'Tier2 Jha(2026)Indian Ocean LL, Tier3 Anticamara(2011)By continent. ',
+         'Press Flag×Gear×Sector A combination of reference literature to determine minimum values, Mass and Max, Independent sampling using triangulation. '
+         'Parker Data applicable 1990 After FAD purse-seine fisheries in this era; Anticamara For historical retrospection(1950-2010)and non-governmental organizations PS Type of ship. ',
+         'One, Time/Behavior Variables (Time/Behavior)', 1,
          'T_map_DAS'),
 
         # H_map (Daily Engine Hours)
         ('H_map_Hday', 'Triangular',
-         '日主机运行小时数。',
-         f'查阅文献确定最小值、最可能值和最大值，使用三角分布或PERT分布进行连续抽样。{cat1_detail}',
-         '一、时间/行为型变量 (Time/Behavior)', 1,
+         'daily main engine operating hours. ',
+         f'Check the literature to determine the minimum value, Most likely and maximum, Use triangular distribution or PERT Distribution for continuous sampling. {cat1_detail}',
+         'One, Time/Behavior Variables (Time/Behavior)', 1,
          'H_map_Hday'),
 
         # HOURS_PER_SET
         ('HOURS_PER_SET', 'Triangular',
-         '围网单网耗时（搜寻+作业小时数）。用于Effort标准化: Std_Effort = EffortValue / HOURS_PER_SET。',
-         '查阅文献确定最小/最可能/最大值，使用三角分布连续抽样。该参数直接影响PS Effort标准化分母。',
-         '一、时间/行为型变量 (Time/Behavior)', 1,
+         'purse-seine hours per set (Search+Hours of operation) . For Effort standardisation: Std_Effort = EffortValue / HOURS_PER_SET. ',
+         'Check the literature to determine the minimum/Most likely/maximum, Continuous sampling using triangular distribution. Direct impact of this parameter PS Effort Standard denominator. ',
+         'One, Time/Behavior Variables (Time/Behavior)', 1,
          'HOURS_PER_SET'),
 
         # HOOKS_PER_DAY
         ('HOOKS_PER_DAY', 'Triangular',
-         '延绳钓标准日下钩数。用于Effort标准化: Std_Effort = EffortValue * HOOKS_PER_DAY。',
-         '查阅文献确定最小/最可能/最大值，使用三角分布连续抽样。该参数直接影响LL Effort标准化乘数。',
-         '一、时间/行为型变量 (Time/Behavior)', 1,
+         'standard longline hooks per day. For Effort standardisation: Std_Effort = EffortValue * HOOKS_PER_DAY. ',
+         'Check the literature to determine the minimum/Most likely/maximum, Continuous sampling using triangular distribution. Direct impact of this parameter LL Effort Standardized multipliers. ',
+         'One, Time/Behavior Variables (Time/Behavior)', 1,
          'HOOKS_PER_DAY'),
 
         # LF_move (engine load factor — transit) — added for completeness
         ('LF_move', 'Triangular',
-         '航行阶段发动机负荷因子（占MCR比例）。受船舶类型和Sector影响。',
-         '按 Gear×Sector 组合设定三角分布参数。Industrial: mode≈0.80; APW: mode≈0.79。',
-         '一、时间/行为型变量 (Time/Behavior)', 1,
+         'Engine load factor during the cruise phase (Jim MCR Percentage) . by type of ship and Sector Impact. ',
+         'Press Gear×Sector Group set trigonometric distribution parameters. Industrial: mode≈0.80; APW: mode≈0.79. ',
+         'One, Time/Behavior Variables (Time/Behavior)', 1,
          'LF_move'),
 
         # LF_work (engine load factor — fishing)
         ('LF_work', 'Triangular',
-         '捕捞作业阶段发动机负荷因子（占MCR比例）。受船舶类型和Sector影响，变动大于LF_move。',
-         '按 Gear×Sector 组合设定三角分布参数。I-LL: mode≈0.50; I-PS: mode≈0.65; APW: mode≈0.19。',
-         '一、时间/行为型变量 (Time/Behavior)', 1,
+         'Engine load factors for the fishing operations phase (Jim MCR Percentage) . by type of ship and Sector Impact, Change greater than LF_move. ',
+         'Press Gear×Sector Group set trigonometric distribution parameters. I-LL: mode≈0.50; I-PS: mode≈0.65; APW: mode≈0.19. ',
+         'One, Time/Behavior Variables (Time/Behavior)', 1,
          'LF_work'),
 
-        # ---- Category 2: 规模依赖型变量 (Scale-dependent) ----
+        # ---- Category 2: Size Dependent Variable (Scale-dependent) ----
         # gear_int (Gear intensity factor)
         ('gear_int_PS', 'Truncated',
-         '围网渔具强度系数（吨网具/米船长）。受物理定律和空间几何严格限制，随船长呈阶梯变化。',
-         f'均匀分布(Uniform)，物理极值截断。PS small (<12m): Uniform[0.00912, 0.0179] t/m; PS large (>=12m): Uniform[0.054, 0.251] t/m。{cat2_strategy}',
-         '二、规模依赖型变量 (Scale-dependent)', 2,
+         'purse-seine gear mass per unit vessel length (tonnes of fishing gear/metres of vessel length) . Very limited by the laws of physics and space geometry, varies stepwise with vessel length. ',
+         f'even distribution(Uniform), Physical polar cut-off. PS small (<12m): Uniform[0.00912, 0.0179] t/m; PS large (>=12m): Uniform[0.054, 0.251] t/m. {cat2_strategy}',
+         'Two, Size Dependent Variable (Scale-dependent)', 2,
          'gear_int_PS'),
 
         ('gear_int_LL', 'Truncated',
-         '延绳钓渔具强度系数（吨网具/米船长）。随船舶长度变化。',
-         f'均匀分布(Uniform)，物理极值截断。LL: Uniform[0.03333, 0.13611] t/m (由kg/hook除以3.6转换)。{cat2_strategy}',
-         '二、规模依赖型变量 (Scale-dependent)', 2,
+         'longline gear mass per unit vessel length (tonnes of fishing gear/metres of vessel length) . Changes as long as ship. ',
+         f'even distribution(Uniform), Physical polar cut-off. LL: Uniform[0.03333, 0.13611] t/m (by kg/hook divide by 3.6 Convert). {cat2_strategy}',
+         'Two, Size Dependent Variable (Scale-dependent)', 2,
          'gear_int_LL'),
 
         # SFR_map
         ('SFR_map', 'Truncated',
-         '特定燃油消耗率（tFuel/kWh）。随船长阶梯变化（<12m vs >=12m），受发动机技术代际影响。',
-         f'必须设定物理极值截断(Clipping)，从文献构成的离散池中抽取。{cat2_detail} Industrial: Lognormal(μ=ln(0.00020), σ); APW: Lognormal(μ=ln(0.00035), σ)。',
-         '二、规模依赖型变量 (Scale-dependent)', 2,
+         'Specific fuel consumption rate (tFuel/kWh) . varies stepwise with vessel length (<12m vs >=12m) , Intergenerational effects of engine technology. ',
+         f'A physical polar cut must be set(Clipping), Draw from the discrete pool of literature. {cat2_detail} Industrial: Lognormal(μ=ln(0.00020), σ); APW: Lognormal(μ=ln(0.00035), σ)。',
+         'Two, Size Dependent Variable (Scale-dependent)', 2,
          'SFR_map'),
 
         # BAIT_WEIGHT_PER_HOOK_KG
         ('BAIT_WEIGHT_PER_HOOK_KG', 'Triangular',
-         '延绳钓单钩饵料平均重量（kg/钩）。受目标鱼种和饵料可获得性影响。',
-         f'查阅文献确定最小值、最可能值和最大值，使用三角分布。{cat2_strategy} 默认: mode=0.1 kg/hook。',
-         '二、规模依赖型变量 (Scale-dependent)', 2,
+         'mean bait mass per longline hook (kg/hooks) . Subject to availability of target species and bait. ',
+         f'Check the literature to determine the minimum value, Most likely and maximum, Use Triangular Distribution. {cat2_strategy} default: mode=0.1 kg/hook. ',
+         'Two, Size Dependent Variable (Scale-dependent)', 2,
          'BAIT_WEIGHT_PER_HOOK_KG'),
 
         # AUX_POWER_RATIO
         ('AUX_POWER_RATIO', 'Triangular',
-         '辅机/主机功率比。随船舶吨位和建造年代呈阶梯变化（0.15-0.40）。',
-         '按GT和Builtdate分层设定三角分布: Large(GT>1500)→0.33-0.40; Medium(500-1500, post-1990)→0.25-0.33; Small/Old→0.15-0.25。',
-         '二、规模依赖型变量 (Scale-dependent)', 2,
+         'auxiliary engine/main engine power ratio. Step by tonnage and age of construction (0.15-0.40) . ',
+         'Press GT and Builtdate Layer Set Triangular Distribution: Large(GT>1500)→0.33-0.40; Medium(500-1500, post-1990)→0.25-0.33; Small/Old→0.15-0.25. ',
+         'Two, Size Dependent Variable (Scale-dependent)', 2,
          'AUX_POWER_RATIO | AUX_POWER_RATIO_LARGE | AUX_POWER_RATIO_MEDIUM | AUX_POWER_RATIO_SMALL'),
 
-        # ---- Category 3: 理化与工程常数 (Physical & Engineering Constants) ----
+        # ---- Category 3: Science and Engineering Constant (Physical & Engineering Constants) ----
         # These come from Ecoinvent / standard LCA databases.
         # They are stable physical properties, perturbed with Normal or Lognormal.
 
         # Emission Factors — Upstream (Well-to-Tank, WTT)
         ('EF_WTT_DIESEL', 'Lognormal',
-         '柴油上游(WTT)碳排放因子（kg CO₂eq/kg diesel）。Ecoinvent v3, 1000 MC。',
-         f'对数正态分布。{cat3_strategy} μ=ln(0.369), 95% CI [0.318, 0.441] '
+         'upstream diesel(WTT)carbon emission factor (kg CO₂eq/kg diesel) . Ecoinvent v3, 1000 MC. ',
+         f'logarithmic normal distribution. {cat3_strategy} μ=ln(0.369), 95% CI [0.318, 0.441] '
          '(Ecoinvent v3: market for diesel | Cutoff, U - RoW).',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_WTT_DIESEL'),
 
         ('EF_WTT_GASOLINE', 'Lognormal',
-         '汽油上游(WTT)碳排放因子（kg CO₂eq/kg petrol）。Ecoinvent v3, 1000 MC。',
-         f'对数正态分布。{cat3_strategy} μ=ln(0.535), 95% CI [0.489, 0.595] '
+         'upstream petrol(WTT)carbon emission factor (kg CO₂eq/kg petrol) . Ecoinvent v3, 1000 MC. ',
+         f'logarithmic normal distribution. {cat3_strategy} μ=ln(0.535), 95% CI [0.489, 0.595] '
          '(Ecoinvent v3: market for petrol, two-stroke blend | Cutoff, U - GLO).',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_WTT_GASOLINE'),
 
         # Emission Factors — CO2 from fuel combustion (Tank-to-Wake)
         ('EF_CO2_Diesel', 'Discrete',
-         '柴油CO₂燃烧排放因子（tCO₂/tFuel）。IMO 2020化学计量常数，非统计估计。',
-         f'离散值，不进行MC扰动。{cat3_strategy} 固定: 3.206 (IMO 2020 Fourth GHG Study, 碳元素质量占比化学计量完全氧化)。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'diesel CO₂combustion emission factor (tCO₂/tFuel) . IMO 2020 Chemical measures constant, Non-statistical estimates. ',
+         f'Dispersal value, Not in progress MC Disturbing. {cat3_strategy} Fixed: 3.206 (IMO 2020 Fourth GHG Study, stoichiometric complete oxidation based on the carbon mass fraction). ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_CO2_Diesel'),
 
         ('EF_CO2_Gasoline', 'Normal',
-         '汽油CO₂燃烧排放因子（tCO₂/tFuel）。EPA 2025, 用于小型渔船（APW Sector）。',
-         f'查阅EPA获取CV，正态分布扰动。{cat3_strategy} 默认: μ=3.158 (EPA 2025 Table 2: 8.78 kg/gallon ÷ 2.78 kg/gallon)。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'petrol CO₂combustion emission factor (tCO₂/tFuel) . EPA 2025, For small fishing vessels (APW Sector) . ',
+         f'Access EPA Fetch CV, Normal Distribution Disruption. {cat3_strategy} default: μ=3.158 (EPA 2025 Table 2: 8.78 kg/gallon ÷ 2.78 kg/gallon). ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_CO2_Gasoline'),
 
         # Emission Factors — CH4 (Methane, by fuel and engine type)
         ('EF_CH4_DIESEL_MSD', 'Lognormal',
-         '柴油CH₄排放因子—中速四冲程MSD（g/kWh）。IMO 2020, 渔船主流机型/辅机。',
-         f'对数正态分布。{cat3_strategy} 默认: μ=ln(0.010) (IMO 2020 Fourth GHG Study, IMO标准单位 g/kWh)。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'diesel CH₄emission factor—medium-speed four-stroke MSD (g/kWh) . IMO 2020, Mainstream type of fishing vessel/auxiliary engine. ',
+         f'logarithmic normal distribution. {cat3_strategy} default: μ=ln(0.010) (IMO 2020 Fourth GHG Study, IMO Standard Unit g/kWh). ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_CH4_DIESEL_MSD'),
 
         ('EF_CH4_DIESEL_SSD', 'Lognormal',
-         '柴油CH₄排放因子—低速二冲程SSD（g/kWh）。IMO 2020, 大型转运船主机。',
-         f'对数正态分布。{cat3_strategy} 默认: μ=ln(0.010) (IMO 2020 Fourth GHG Study, IMO标准单位 g/kWh)。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'diesel CH₄emission factor—low-speed two-stroke SSD (g/kWh) . IMO 2020, main engines of large transshipment vessels. ',
+         f'logarithmic normal distribution. {cat3_strategy} default: μ=ln(0.010) (IMO 2020 Fourth GHG Study, IMO Standard Unit g/kWh). ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_CH4_DIESEL_SSD'),
 
         ('EF_CH4_GASOLINE_2STROKE', 'Lognormal',
-         '汽油CH₄排放因子—二冲程舷外机（g/kgFuel）。EPA 2025 Table 5, Ships and Boats。',
-         f'对数正态分布。{cat3_strategy} 默认: μ=ln(3.76) (EPA 2025: 10.45 g/gallon ÷ 2.78 kg/gallon)。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'petrol CH₄emission factor—two-stroke outboard engine (g/kgFuel) . EPA 2025 Table 5, Ships and Boats. ',
+         f'logarithmic normal distribution. {cat3_strategy} default: μ=ln(3.76) (EPA 2025: 10.45 g/gallon ÷ 2.78 kg/gallon). ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_CH4_GASOLINE_2STROKE'),
 
         ('EF_CH4_GASOLINE_4STROKE', 'Lognormal',
-         '汽油CH₄排放因子—四冲程舷外机（g/kgFuel）。EPA 2025 Table 5, Ships and Boats。',
-         f'对数正态分布。{cat3_strategy} 默认: μ=ln(1.50) (EPA 2025: 4.18 g/gallon ÷ 2.78 kg/gallon)。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'petrol CH₄emission factor—four-stroke outboard engine (g/kgFuel) . EPA 2025 Table 5, Ships and Boats. ',
+         f'logarithmic normal distribution. {cat3_strategy} default: μ=ln(1.50) (EPA 2025: 4.18 g/gallon ÷ 2.78 kg/gallon). ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_CH4_GASOLINE_4STROKE'),
 
         # Emission Factors — N2O (Nitrous Oxide, by fuel and engine type)
         ('EF_N2O_DIESEL_MSD', 'Lognormal',
-         '柴油N₂O排放因子—中速四冲程MSD（g/kWh）。IMO 2020, 主力渔船/辅机。',
-         f'对数正态分布。{cat3_strategy} 默认: μ=ln(0.030) (IMO 2020 Fourth GHG Study, IMO标准单位 g/kWh)。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'diesel N₂O emission factor—medium-speed four-stroke MSD (g/kWh) . IMO 2020, Main fishing vessels/auxiliary engine. ',
+         f'logarithmic normal distribution. {cat3_strategy} default: μ=ln(0.030) (IMO 2020 Fourth GHG Study, IMO Standard Unit g/kWh). ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_N2O_DIESEL_MSD'),
 
         ('EF_N2O_DIESEL_SSD', 'Lognormal',
-         '柴油N₂O排放因子—低速二冲程SSD（g/kWh）。IMO 2020, 大型转运船主机。',
-         f'对数正态分布。{cat3_strategy} 默认: μ=ln(0.020) (IMO 2020 Fourth GHG Study, IMO标准单位 g/kWh)。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'diesel N₂O emission factor—low-speed two-stroke SSD (g/kWh) . IMO 2020, main engines of large transshipment vessels. ',
+         f'logarithmic normal distribution. {cat3_strategy} default: μ=ln(0.020) (IMO 2020 Fourth GHG Study, IMO Standard Unit g/kWh). ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_N2O_DIESEL_SSD'),
 
         ('EF_N2O_GASOLINE', 'Lognormal',
-         '汽油N₂O排放因子（g/kgFuel）。EPA 2025 Table 5, Ships and Boats (二冲程与四冲程统一基准)。',
-         f'对数正态分布。{cat3_strategy} 默认: μ=ln(0.04) (EPA 2025: 0.11 g/gallon ÷ 2.78 kg/gallon)。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'petrol N₂O emission factor (g/kgFuel) . EPA 2025 Table 5, Ships and Boats (Two-stroke and four-stroke alignment). ',
+         f'logarithmic normal distribution. {cat3_strategy} default: μ=ln(0.04) (EPA 2025: 0.11 g/gallon ÷ 2.78 kg/gallon). ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_N2O_GASOLINE'),
 
         # Vessel Construction EFs (ecoinvent LCA)
         ('EF_BUILD_PS_STEEL', 'Lognormal',
-         '围网钢船建造碳排放因子（kg CO₂eq/kg vessel）。Ecoinvent v3, 1000 MC。',
-         f'对数正态分布。{cat3_strategy} μ=ln(2.421), 95% CI [2.332, 2.528]. '
-         '1 kg purse seiner steel construction. 同时适用于转运船/辅助船.',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'construction emission factor for steel purse-seine vessels (kg CO₂eq/kg vessel) . Ecoinvent v3, 1000 MC. ',
+         f'logarithmic normal distribution. {cat3_strategy} μ=ln(2.421), 95% CI [2.332, 2.528]. '
+         '1 kg purse seiner steel construction. Its also applicable to transshipment ships/support vessel.',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_BUILD_PS_STEEL | EF_BUILD_TS'),
 
         ('EF_BUILD_PS_WOOD', 'Lognormal',
-         '围网木船建造碳排放因子（kg CO₂eq/kg vessel）。Ecoinvent v3, 1000 MC。',
-         f'对数正态分布。{cat3_strategy} μ=ln(0.578), 95% CI [0.513, 0.678]. '
-         '1 kg purse seiner wood construction. 同时适用于LL小船和TS小船.',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'construction emission factor for wooden purse-seine vessels (kg CO₂eq/kg vessel) . Ecoinvent v3, 1000 MC. ',
+         f'logarithmic normal distribution. {cat3_strategy} μ=ln(0.578), 95% CI [0.513, 0.678]. '
+         '1 kg purse seiner wood construction. Its also applicable LL ♪ The boat and the TS The boat.',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_BUILD_PS_WOOD | EF_BUILD_LL_WOOD'),
 
         ('EF_BUILD_LL_STEEL', 'Lognormal',
-         '延绳钓钢船建造碳排放因子（kg CO₂eq/kg vessel）。Ecoinvent v3, 1000 MC。',
-         f'对数正态分布。{cat3_strategy} μ=ln(1.956), 95% CI [1.877, 2.069]. '
+         'construction emission factor for steel longline vessels (kg CO₂eq/kg vessel) . Ecoinvent v3, 1000 MC. ',
+         f'logarithmic normal distribution. {cat3_strategy} μ=ln(1.956), 95% CI [1.877, 2.069]. '
          '1 kg long liner steel construction.',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_BUILD_LL_STEEL'),
 
         # Vessel Maintenance EFs (ecoinvent LCA)
         ('EF_MAINT_PS_STEEL', 'Lognormal',
-         '围网钢船维护碳排放因子（kg CO₂eq/kg maintenance）。Ecoinvent v3, 1000 MC。',
-         f'对数正态分布。{cat3_strategy} μ=ln(6.744), 95% CI [6.627, 6.883]. '
-         '1 kg purse seiner steel maintenance. 同时适用于转运船/辅助船.',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'maintenance emission factor for steel purse-seine vessels (kg CO₂eq/kg maintenance) . Ecoinvent v3, 1000 MC. ',
+         f'logarithmic normal distribution. {cat3_strategy} μ=ln(6.744), 95% CI [6.627, 6.883]. '
+         '1 kg purse seiner steel maintenance. Its also applicable to transshipment ships/support vessel.',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_MAINT_PS_STEEL | EF_MAINT_TS'),
 
         ('EF_MAINT_PS_WOOD', 'Lognormal',
-         '围网木船维护碳排放因子（kg CO₂eq/kg maintenance）。Ecoinvent v3, 1000 MC。',
-         f'对数正态分布。{cat3_strategy} μ=ln(1.289), 95% CI [1.179, 1.437]. '
-         '1 kg purse seiner wood maintenance. 同时适用于LL小船和TS小船.',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'maintenance emission factor for wooden purse-seine vessels (kg CO₂eq/kg maintenance) . Ecoinvent v3, 1000 MC. ',
+         f'logarithmic normal distribution. {cat3_strategy} μ=ln(1.289), 95% CI [1.179, 1.437]. '
+         '1 kg purse seiner wood maintenance. Its also applicable LL ♪ The boat and the TS The boat.',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_MAINT_PS_WOOD | EF_MAINT_LL_WOOD'),
 
         ('EF_MAINT_LL_STEEL', 'Lognormal',
-         '延绳钓钢船维护碳排放因子（kg CO₂eq/kg maintenance）。Ecoinvent v3, 1000 MC。',
-         f'对数正态分布。{cat3_strategy} μ=ln(4.450), 95% CI [3.777, 5.376]. '
+         'maintenance emission factor for steel longline vessels (kg CO₂eq/kg maintenance) . Ecoinvent v3, 1000 MC. ',
+         f'logarithmic normal distribution. {cat3_strategy} μ=ln(4.450), 95% CI [3.777, 5.376]. '
          '1 kg long liner steel maintenance.',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EF_MAINT_LL_STEEL'),
 
         ('EMISSION_FACTOR_NYLON_PA6', 'Lognormal',
-         '尼龙(PA6)碳排放因子（kg CO₂eq/kg nylon）。自建前景过程，Cradle-to-Gate。',
-         f'对数正态分布。{cat3_strategy} μ=ln(9.885), 95% CI [9.807, 9.969] (自建LCA过程, 1000 MC). '
-         '核心代理: nylon 6 + plastic film extrusion.',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'nylon(PA6)carbon emission factor (kg CO₂eq/kg nylon) . Self-building foreground process, Cradle-to-Gate. ',
+         f'logarithmic normal distribution. {cat3_strategy} μ=ln(9.885), 95% CI [9.807, 9.969] (Self-created LCA Process, 1000 MC). '
+         'Core Agent: nylon 6 + plastic film extrusion.',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EMISSION_FACTOR_NYLON_PA6'),
 
         ('EMISSION_FACTOR_STEEL_GEAR', 'Lognormal',
-         '渔具用钢/金属件碳排放因子（kg CO₂eq/kg steel hardware）。自建前景过程，Cradle-to-Gate。',
-         f'对数正态分布。{cat3_strategy} μ=ln(3.070), 95% CI [2.819, 3.374] (自建LCA过程, 1000 MC). '
-         '投入: low-alloyed steel + metal working average.',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'gear steel/metal-component emission factor (kg CO₂eq/kg steel hardware) . Self-building foreground process, Cradle-to-Gate. ',
+         f'logarithmic normal distribution. {cat3_strategy} μ=ln(3.070), 95% CI [2.819, 3.374] (Self-created LCA Process, 1000 MC). '
+         'Input: low-alloyed steel + metal working average.',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EMISSION_FACTOR_STEEL_GEAR'),
 
         ('EMISSION_FACTOR_BAIT', 'Lognormal',
-         '饵料碳排放因子（kg CO₂eq/kg bait）。小型中上层鱼类，Cradle-to-Gate。',
-         f'对数正态分布。{cat3_strategy} μ=ln(1.606), 95% CI [1.548, 1.670] '
+         'bait emission factor (kg CO₂eq/kg bait) . Small pelagic fish, Cradle-to-Gate. ',
+         f'logarithmic normal distribution. {cat3_strategy} μ=ln(1.606), 95% CI [1.548, 1.670] '
          '(Ecoinvent v3: market for small pelagic fish, fresh, 1000 MC).',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'EMISSION_FACTOR_BAIT'),
 
         # EPA SFR reference values (for cross-validation)
         ('SFR_GASOLINE_4STROKE', 'Triangular',
-         'EPA四冲程汽油舷外机SFR（tFuel/kWh）。用于APW汽油机SFR交叉验证。',
-         f'EPA NR-010f报告, 三角分布。默认: mode=0.000319, min=0.000304, max=0.000334。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'EPA The four-legged gas outboard SFR (tFuel/kWh) . For APW Gasoline SFR Cross Authentication. ',
+         f'EPA NR-010f Report, Triangular distribution. default: mode=0.000319, min=0.000304, max=0.000334. ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'SFR_GASOLINE_4STROKE'),
 
         ('SFR_DIESEL_300_600HP', 'Lognormal',
-         'EPA大型柴油舷内机SFR（tFuel/kWh）。300-600HP (224-447kW)，用于Industrial柴油机SFR交叉验证。',
-         f'EPA NR-009d报告, 对数正态。默认: μ=0.000210 (≈210 g/kWh, ~0.345 lb/hp-hr)。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'EPA large diesel inboard engine SFR (tFuel/kWh) . 300-600HP (224-447kW), For Industrial Diesels SFR Cross Authentication. ',
+         f'EPA NR-009d Report, lognormal. default: μ=0.000210 (≈210 g/kWh, ~0.345 lb/hp-hr). ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'SFR_DIESEL_300_600HP'),
 
         # Material Ratios
         ('MATERIAL_RATIO_STEEL', 'Normal',
-         '船体钢材质量占GT比例。基于船舶设计规范，变异较小。',
-         f'查阅Ecoinvent/造船工程文献获取CV，正态分布。{cat3_strategy} 默认: μ=0.85, σ≈0.02。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'Body steel quality GT Percentage. Ship-based design codes, Less Variation. ',
+         f'Access Ecoinvent/Access to documentation on shipbuilding CV, Normal distribution. {cat3_strategy} default: μ=0.85, σ≈0.02. ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'MATERIAL_RATIO_STEEL'),
 
         ('MATERIAL_RATIO_ENGINE', 'Normal',
-         '发动机铸铁质量占GT比例。',
-         f'正态分布。{cat3_strategy} 默认: μ=0.10, σ≈0.01。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'Engine casting iron mass GT Percentage. ',
+         f'Normal distribution. {cat3_strategy} default: μ=0.10, σ≈0.01. ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'MATERIAL_RATIO_ENGINE'),
 
         ('MATERIAL_RATIO_COPPER', 'Normal',
-         '电力系统铜材质量占GT比例。',
-         f'正态分布。{cat3_strategy} 默认: μ=0.05, σ≈0.01。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'Copper Quality of Electricity System GT Percentage. ',
+         f'Normal distribution. {cat3_strategy} default: μ=0.05, σ≈0.01. ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'MATERIAL_RATIO_COPPER'),
 
         # Lifespans
         ('LIFESPAN_HULL', 'Discrete',
-         '船体寿命（年）。由船舶设计规范和船级社标准决定。',
-         '离散分布或窄三角分布。在LCA中通常取固定值（30年），可通过Bootstrap重抽样船队年龄结构来间接表征变异。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'hull service life (years) . Its determined by the ship design code and the standards of the class societies. ',
+         'Dispersal distribution or narrow triangle distribution. Yes LCA . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  (30 years) , Through Bootstrap The age structure of the re-sampled fleet indirectly indicates a variation in the behaviour of the ship. ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'LIFESPAN_HULL'),
 
         ('LIFESPAN_ENGINE', 'Discrete',
-         '发动机寿命（年）。通常为船体寿命的1/3，10年更换。',
-         '离散分布或窄三角分布。默认: 10年。可通过发动机更换记录验证。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'engine service life (years) . Its usually a hull life 1/3, 10 Yearly replacement. ',
+         'Dispersal distribution or narrow triangle distribution. default: 10 years. It can be verified by engine replacement records. ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'LIFESPAN_ENGINE'),
 
         ('LIFESPAN_COPPER', 'Discrete',
-         '电力系统更新周期（年）。铜缆和配电设备更换频率。',
-         '离散分布。默认: 8年。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'Electricity system update cycle (years) . Frequency of replacement of copper cables and electrical distribution equipment. ',
+         'Dispersal distribution. default: 8 years. ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'LIFESPAN_COPPER'),
 
         ('LIFESPAN_GEAR_PS', 'Triangular',
-         '围网使用寿命（年）。受使用强度和渔场环境（礁石、底质）影响。',
-         '三角分布: min=2, mode=5, max=5。Row 60-61: 企业报告平均3.2年，但行业标准取5年。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'purse-seine service life (years) . Intensity of use and fishery environment (Rocks, Substrate) Impact. ',
+         'Triangular distribution: min=2, mode=5, max=5. Row 60-61: Average of corporate reporting 3.2 years, But industry standards 5 years. ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'LIFESPAN_GEAR_PS'),
 
         ('LIFESPAN_GEAR_LL', 'Triangular',
-         '延绳钓使用寿命（年）。钓具磨损主要由UV降解和物理损耗驱动。',
-         '三角分布: min=2, mode=5, max=5。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'longline service life (years) . The gear is mostly worn out UV Degradation and physical wear and tear drivers. ',
+         'Triangular distribution: min=2, mode=5, max=5. ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'LIFESPAN_GEAR_LL'),
 
         # Maintenance Rates
         ('MAINTENANCE_RATE_STEEL', 'Normal',
-         '船体钢材每2年维护更换比例。船舶维修标准作业参数。',
-         f'查阅船舶维修工程文献获取CV，正态分布。{cat3_strategy} 默认: μ=0.12。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'Shipwork steel every 2 Annual replacement rate for maintenance. Standard operating parameters for ship maintenance. ',
+         f'Access to documentation of ship repair works CV, Normal distribution. {cat3_strategy} default: μ=0.12. ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'MAINTENANCE_RATE_STEEL'),
 
         ('MAINTENANCE_RATE_GEAR_PS', 'Normal',
-         '围网年度维护更换比例（发生于非换代年份）。文献: 20-33%范围。',
-         f'正态分布。{cat3_strategy} 默认: μ=0.25（Row 60: 围网寿命5年但每年替换25%）。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'annual purse-seine maintenance replacement fraction (In a non-generational year) . Documentation: 20-33%Scope. ',
+         f'Normal distribution. {cat3_strategy} default: μ=0.25 (Row 60: purse-seine service life 5 Year but replacement per year 25%) . ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'MAINTENANCE_RATE_GEAR_PS'),
 
         ('MAINTENANCE_RATE_GEAR_LL', 'Normal',
-         '延绳钓年度维护更换比例（发生于非换代年份）。文献: 20-33%范围。',
-         f'正态分布。{cat3_strategy} 默认: μ=0.25（Row 65: 20%+25%）。',
-         '三、理化与工程常数 (Physical & Engineering)', 3,
+         'annual longline maintenance replacement fraction (In a non-generational year) . Documentation: 20-33%Scope. ',
+         f'Normal distribution. {cat3_strategy} default: μ=0.25 (Row 65: 20%+25%) . ',
+         'III, Science and Engineering Constant (Physical & Engineering)', 3,
          'MAINTENANCE_RATE_GEAR_LL'),
     ]
 
@@ -2682,12 +2672,12 @@ def build_montecarlo_config_matrix(xlsx_path=XLSX_PATH):
 
     # Add metadata
     df.attrs['description'] = (
-        '蒙特卡洛抽样配置矩阵 — 全部 29 个具体参数的分布类型与抽样策略。'
-        '由 Sheet 4 的 3 大类宏定义展开为具体参数，与 Prior_Matrix 通过 Covered_Prior_Codes 列联动。'
+        'Monte Carlo Sample Configuration Matrix — All 29 Distribution type for specific parameters and sampling strategy. '
+        'by Sheet 4 of 3 Large macro definitions expanded as specific parameters, and Prior_Matrix Through Covered_Prior_Codes LIBERATION. '
     )
     df.attrs['usage'] = (
-        'Distribution: 推荐概率分布。Arg1/2/3: 分布参数（待填，参见Arg*_Meaning）。'
-        'Clip_Min/Max: 物理截断边界。Covered_Prior_Codes: 对应的Prior_Matrix参数代码。'
+        'Distribution: Recommended Probability Distribution. Arg1/2/3: Distribution Parameters (To be filled in, See Arg*_Meaning) . '
+        'Clip_Min/Max: Physical cut the boundary. Covered_Prior_Codes: Corresponding Prior_Matrix Parameter Code. '
     )
 
     # Print summary

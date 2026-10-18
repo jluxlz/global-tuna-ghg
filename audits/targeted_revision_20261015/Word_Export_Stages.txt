@@ -1,5 +1,0 @@
-﻿2026-10-15T17:58:33 Creating task-owned automation instance
-2026-10-15T17:58:35 Opening read-only main
-2026-10-15T17:59:24 Creating task-owned automation instance
-2026-10-15T17:59:26 Opening read-only main
-2026-10-15T17:59:29 Opened main; exporting PDF

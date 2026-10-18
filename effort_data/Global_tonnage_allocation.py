@@ -3,13 +3,13 @@ import numpy as np
 import sys, os
 from pathlib import Path
 
-# 使用相对于脚本所在目录的路径
+# Use a path to the directory where the script is
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SCRIPT_DIR)
 from flag_utils import normalize_flag_to_iso3
 
 def ensure_flag_iso3(df):
-    """统一 Flag 列：处理 'Country'→'Flag' 重命名 + ISO3 标准化"""
+    """common Flag Column: Processing 'Country'→'Flag' Rename + ISO3 standardisation"""
     if 'Flag' not in df.columns:
         if 'Country' in df.columns:
             df.rename(columns={'Country': 'Flag'}, inplace=True)
@@ -24,13 +24,13 @@ def build_allocation(input_dir=None, output_dir=None):
     input_dir = Path(input_dir or SCRIPT_DIR)
     output_dir = Path(output_dir or SCRIPT_DIR)
     output_dir.mkdir(parents=True, exist_ok=True)
-    print("开始执行 Grid Catch Allocation 数据处理...")
+    print("Start Grid Catch Allocation Data processing...")
 
     # ==========================================
-    # 1. 处理 CCSBT 定制数据 (ISO3 统一)
+    # 1. Processing CCSBT Customise Data (ISO3 common)
     # ==========================================
 
-    # --- 读取并清洗长鳍延绳钓 (LL) ---
+    # --- read and clean albacore longline records (LL) ---
     ll_df = pd.read_excel(os.path.join(SCRIPT_DIR, 'CCSBT', 'source_data', 'CEData_Longline.xlsx'))
     ll_df = ll_df.rename(columns={
         'YEAR': 'Year', 'COUNTRY\nCODE': 'Flag', 'LATITUDE': 'Lat', 'LONGITUDE': 'Lon',
@@ -39,10 +39,10 @@ def build_allocation(input_dir=None, output_dir=None):
     ll_df['Gear'] = 'LL'
     ll_df['SquareTypeCode'] = '5x5'
     ll_df['EffortType'] = 'Number of Hooks'
-    # 【优化1】不再剔除 Retained <= 0 的行，仅将空值填为 0，确保 Effort 被保留！
+    # [Optimize 1]No more cutting Retained <= 0 Yes, Fill empty values only as 0, Make sure Effort Keeped！
     ll_df['Retained'] = pd.to_numeric(ll_df['Retained'], errors='coerce').fillna(0)
 
-    # --- 读取并清洗表层围网 (PS) ---
+    # --- read and clean surface purse-seine records (PS) ---
     ps_df = pd.read_excel(os.path.join(SCRIPT_DIR, 'CCSBT', 'source_data', 'CEData_Surface.xlsx'))
     ps_df = ps_df.rename(columns={
         'YEAR': 'Year', 'COUNTRY\nCODE': 'Flag', 'GEAR\nCODE': 'Gear',
@@ -52,34 +52,34 @@ def build_allocation(input_dir=None, output_dir=None):
     ps_df = ps_df[ps_df['Gear'] == 'PS'].copy()
     ps_df['SquareTypeCode'] = '1x1'
     ps_df['EffortType'] = 'Hours Searched'
-    # 【优化1】同理，围网不剔除空产出网格
+    # [Optimize 1]Same thing, purse seine retains grids without output
     ps_df['Retained'] = pd.to_numeric(ps_df['Retained'], errors='coerce').fillna(0)
 
-    # 合并并聚合
+    # Merge and Convey
     ccsbt_ce = pd.concat([ll_df, ps_df], ignore_index=True)
     ccsbt_ce['Flag'] = ccsbt_ce['Flag'].apply(normalize_flag_to_iso3)
     ccsbt_ce['EffortValue'] = pd.to_numeric(ccsbt_ce['EffortValue'], errors='coerce')
-    # 仅剔除根本没有 Effort 或缺失经纬度的无效脏数据
+    # Just cut out the whole thing Effort or missing invalid dirty data at longitude
     invalid_ce = ccsbt_ce[['EffortValue','Lat','Lon']].isna().any(axis=1) | ~ccsbt_ce['Lat'].between(-90,90) | ~ccsbt_ce['Lon'].between(-180,180)
     ccsbt_ce[invalid_ce].to_csv(output_dir / 'CCSBT_Invalid_Grid_Rows.csv', index=False, encoding='utf-8-sig')
     ccsbt_ce = ccsbt_ce[~invalid_ce].copy()
     ccsbt_ce_agg = ccsbt_ce.groupby(['Year', 'Flag', 'Gear', 'SquareTypeCode', 'Lat', 'Lon', 'EffortType'], as_index=False)[['EffortValue', 'Retained']].sum()
 
-    # 合并 CatchByYMGOLoLa 的总网格吨数
+    # Merge CatchByYMGOLoLa Total ton of grids
     catch_grid = pd.read_excel(os.path.join(SCRIPT_DIR, 'CCSBT', 'source_data', 'CatchByYMGOLoLa.xlsx'), skiprows=6)
     catch_grid.columns = catch_grid.columns.str.replace('\n', ' ').str.strip()
     catch_grid = catch_grid.rename(columns={'Calendar Year': 'Year', 'Latitude': 'Lat', 'Longitude': 'Lon'})
     catch_grid_agg = catch_grid.groupby(['Year', 'Gear', 'Lat', 'Lon'], as_index=False)['Tonnes'].sum()
 
-    # 【关键点】使用 left join（左连接）。如果某网格只有努力量，但 catch_grid 里没有产出，该网格仍保留。
+    # [Key point]Use left join (Left Connection) . If theres a grid that only tries to measure, But catch_grid No output, The grid remains. 
     ccsbt_merged = pd.merge(ccsbt_ce_agg, catch_grid_agg, on=['Year', 'Gear', 'Lat', 'Lon'], how='left')
     ccsbt_merged['Tonnes'] = ccsbt_merged['Tonnes'].fillna(0)
 
-    # 计算网格内总 Retained，用于按比例切分吨数
+    # Calculating grid totals Retained, Tons to be used for pro rata fraction
     grid_retained_totals = ccsbt_merged.groupby(['Year', 'Gear', 'Lat', 'Lon'], as_index=False)['Retained'].sum().rename(columns={'Retained': 'TotalGridRetained'})
     ccsbt_merged = pd.merge(ccsbt_merged, grid_retained_totals, on=['Year', 'Gear', 'Lat', 'Lon'])
 
-    # 如果该国 Retained 为 0，分得 0 吨；如果有值，则按比例切分
+    # If that is the case Retained is 0, Score 0 tonnes; If its worth it, proportionally divided
     ccsbt_merged.loc[(ccsbt_merged['TotalGridRetained'] <= 0) & (ccsbt_merged['Tonnes'] > 0)].to_csv(
         output_dir / 'CCSBT_Unallocated_Grid_Catch.csv', index=False, encoding='utf-8-sig')
     orphan = catch_grid_agg.merge(ccsbt_ce_agg[['Year','Gear','Lat','Lon']].drop_duplicates(),
@@ -97,12 +97,12 @@ def build_allocation(input_dir=None, output_dir=None):
 
 
     # ==========================================
-    # 2. 处理全局数据 (非 CCSBT 的其他组织)
+    # 2. Processing global data (Not CCSBT Other organizations)
     # ==========================================
     df_ann = pd.read_csv(input_dir / 'Global_Annual_Catch.csv')
     df_grid = pd.read_csv(input_dir / 'Global_Grid_Catch_Effort.csv')
 
-    # ISO3 Flag 标准化
+    # ISO3 Flag standardisation
     df_ann = ensure_flag_iso3(df_ann)
     df_grid = ensure_flag_iso3(df_grid)
 
@@ -138,7 +138,7 @@ def build_allocation(input_dir=None, output_dir=None):
                 Count_Only_Rows_Excluded=int(((group[sp]==0)&(group[sp+'n']>0)).sum()) if wt>0 else 0))
     pd.DataFrame(reference_qc).to_csv(output_dir / 'Allocation_Reference_QC.csv', index=False, encoding='utf-8-sig')
 
-    # 对网格数据进行聚合
+    # Aggregation of grid data
     grid_agg = df_grid.groupby(
         ['Organization', 'Year', 'Flag', 'GearTypeCode', 'SquareTypeCode', 'Lat', 'Lon', 'EffortType'],
         as_index=False
@@ -147,14 +147,14 @@ def build_allocation(input_dir=None, output_dir=None):
         'Ref_SKJ': 'sum', 'Ref_BET': 'sum', 'Ref_YFT': 'sum', 'Ref_SBT': 'sum', 'Ref_ALB': 'sum'
     })
 
-    # 纵向相加计算：某国家某年某渔具的“全球总参考产出”
+    # Calculated vertically: Some countrys gear in one year“Overall global reference outputs”
     totals = grid_agg.groupby(['Organization', 'Year', 'Flag', 'GearTypeCode'], as_index=False).agg({
         'Ref_SKJ': 'sum', 'Ref_BET': 'sum', 'Ref_YFT': 'sum', 'Ref_SBT': 'sum', 'Ref_ALB': 'sum'
     }).rename(columns={
         'Ref_SKJ': 'Tot_SKJ', 'Ref_BET': 'Tot_BET', 'Ref_YFT': 'Tot_YFT', 'Ref_SBT': 'Tot_SBT', 'Ref_ALB': 'Tot_ALB'
     })
 
-    # 合并汇总表和名义产量表 (df_ann)
+    # Consolidated summary tables and nominal production tables (df_ann)
     global_merged = pd.merge(grid_agg, totals, on=['Organization', 'Year', 'Flag', 'GearTypeCode'], how='left')
     global_merged = pd.merge(global_merged, df_ann, on=['Organization', 'Year', 'Flag', 'GearTypeCode'], how='left', validate='many_to_one')
 
@@ -167,8 +167,8 @@ def build_allocation(input_dir=None, output_dir=None):
         coverage[sp+'_Unallocated_Tonnes'] = coverage[sp].where(coverage['Tot_'+sp].fillna(0)<=0,0)
     coverage.reset_index().to_csv(output_dir / 'Allocation_Coverage_QC.csv', index=False, encoding='utf-8-sig')
 
-    # 【优化2执行】按照该物种在不同网格里的真实产出比例（而不是 Effort），切分该物种的全球名义总吨数
-    # 如果某网格 Ref = 0，那么切分到的 Tonnes 为 0，但它的 EffortValue 依然完整保留！
+    # [Optimize 2 Implementation]In proportion to the real output of the species in different grids (No, its not Effort) , Number of nominal tons of the species in nominal terms
+    # If theres a grid Ref = 0, Then well get a cut Tonnes is 0, But its EffortValue Still complete！
     global_merged['SKJ_Tonnes'] = np.where(global_merged['Tot_SKJ'] > 0, global_merged['SKJ'] * (global_merged['Ref_SKJ'] / global_merged['Tot_SKJ']), 0.0)
     global_merged['BET_Tonnes'] = np.where(global_merged['Tot_BET'] > 0, global_merged['BET'] * (global_merged['Ref_BET'] / global_merged['Tot_BET']), 0.0)
     global_merged['YFT_Tonnes'] = np.where(global_merged['Tot_YFT'] > 0, global_merged['YFT'] * (global_merged['Ref_YFT'] / global_merged['Tot_YFT']), 0.0)
@@ -179,7 +179,7 @@ def build_allocation(input_dir=None, output_dir=None):
     global_final = global_final[['Organization', 'Year', 'Flag', 'Gear', 'SquareTypeCode', 'Lat', 'Lon', 'EffortType', 'EffortValue', 'SKJ_Tonnes', 'BET_Tonnes', 'YFT_Tonnes', 'SBT_Tonnes', 'ALB_Tonnes']]
 
     # ==========================================
-    # 3. 最终汇总与导出
+    # 3. Final summary and export
     # ==========================================
     master_df = pd.concat([ccsbt_final, global_final], ignore_index=True)
     master_df['ALB_Tonnes'] = master_df['ALB_Tonnes'].fillna(0)
@@ -191,7 +191,7 @@ def build_allocation(input_dir=None, output_dir=None):
         raise ValueError('Invalid or negative allocated catch / effort')
 
     master_df.to_csv(output_dir / 'Grid_Catch_Allocation.csv', index=False, encoding='utf-8-sig')
-    print(f"处理完毕！Grid_Catch_Allocation.csv 已生成，总计 {len(master_df)} 行。")
+    print(f"Were done！Grid_Catch_Allocation.csv Generated, Total {len(master_df)} Okay. ")
     return master_df
 
 

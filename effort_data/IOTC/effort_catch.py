@@ -5,13 +5,13 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from flag_utils import normalize_flag_to_iso3, is_allowed_iso3
 
 def safe_decode_cwp_grid(df, grid_col='FISHING_GROUND_CODE'):
-    """极其安全的 CWP 网格坐标解码函数，防止因未知代码报错"""
+    """Its extremely safe CWP Grid Coordinates Decoding Function, To prevent error due to unknown code"""
     df = df.copy()
     
-    # 清理字符串，去掉可能的 ".0" 后缀
+    # Clear String, Get rid of the possibility ".0" Suffix
     grids = df[grid_col].astype(str).str.strip().str.replace(r'\.0$', '', regex=True)
     
-    # 筛选出严格符合 7位数字 的合法网格代码
+    # Filter strictly in line 7 Digits Legal grid code
     valid_mask = grids.str.match(r'^\d{7}$') & grids.str[0].isin(['5','6']) & grids.str[1].isin(['1','2','3','4'])
     valid_mask &= pd.to_numeric(grids.str[2:4], errors='coerce').lt(90) & pd.to_numeric(grids.str[4:7], errors='coerce').lt(180)
     
@@ -27,11 +27,11 @@ def safe_decode_cwp_grid(df, grid_col='FISHING_GROUND_CODE'):
         lat_val = valid_grids.str[2:4].astype(int)
         lon_val = valid_grids.str[4:7].astype(int)
         
-        # 提取网格大小 (6: 5x5, 5: 1x1)
+        # Extract grid size (6: 5x5, 5: 1x1)
         sq_types = np.where(size_code == '6', '5x5', 
                    np.where(size_code == '5', '1x1', 'Unknown'))
         
-        # 判断正负号 (1=NE: +,+ ; 2=SE: -,+ ; 3=SW: -,- ; 4=NW: +,-)
+        # Deciding Quantities or Negatives (1=NE: +,+ ; 2=SE: -,+ ; 3=SW: -,- ; 4=NW: +,-)
         lat_sign = np.where(quadrant.isin(['1', '4']), 1, -1)
         lon_sign = np.where(quadrant.isin(['1', '2']), 1, -1)
         
@@ -42,42 +42,42 @@ def safe_decode_cwp_grid(df, grid_col='FISHING_GROUND_CODE'):
     return df
 
 def process_iotc_data(file_path):
-    print("加载原始数据...")
+    print("Load raw data...")
     df = pd.read_csv(file_path)
 
     # ==========================================
-    # 1. 核心过滤: 渔具与物种
+    # 1. Core Filter: Fishing gear and species
     # ==========================================
-    # 只保留 PS(围网) 和 LL(长线)
+    # Only keep PS(purse seine) and LL(Longline)
     df = df[df['GEAR_CODE'].isin(['LL', 'PS'])]
     
     target_species = ['BET', 'SKJ', 'YFT', 'ALB']
     # Keep all LL/PS operation effort, including records without the five target species.
 
     # ==========================================
-    # 2. 国家清洗与过滤
+    # 2. State Purge and Filtering
     # ==========================================
-    print("清洗并过滤国家...")
+    print("Purge and filter the country...")
     df['Flag'] = df['FLEET_CODE'].apply(normalize_flag_to_iso3)
     df = df[df['Flag'].apply(is_allowed_iso3)]
 
     # ==========================================
-    # 3. 空间经纬度解码
+    # 3. Space Latitude Decoding
     # ==========================================
-    print("解码空间经纬度...")
+    print("Decoding Space Latitude...")
     df = safe_decode_cwp_grid(df, 'FISHING_GROUND_CODE')
     
-    # 丢弃那些无法解析坐标的垃圾数据
+    # Discard the trash data that cannot be deciphered by coordinates
     df = df.dropna(subset=['Lat', 'Lon'])
 
     # ==========================================
-    # 4. 数据透视 (扁平化): 防止 EFFORT 努力量重复计算
+    # 4. Data Perspective (flatten): Prevention EFFORT Double-counting of effort
     # ==========================================
-    print("处理努力量与捕获量扁平化透视...")
-    # 把“物种代码”和“单位”拼接，例如 BET_MT(大眼吨数), BET_NO(大眼条数)
+    print("Treatment effort and capture flattening vision...")
+    # Put it on“Species Code”and“Units”Sting, For example BET_MT(Tonnes of big eyes), BET_NO(Number of big-eye bars)
     df['Species_Unit'] = df['SPECIES_CODE'] + '_' + df['CATCH_UNIT_CODE']
 
-    # 处理空值
+    # Handle empty value
     df['EFFORT'] = df['EFFORT'].fillna(0)
     df['EFFORT_UNIT_CODE'] = df['EFFORT_UNIT_CODE'].fillna('UNKNOWN')
     for col in ['FISHERY_CODE','EFFORT_SCHOOL_TYPE_CODE']:
@@ -85,7 +85,7 @@ def process_iotc_data(file_path):
             df[col] = 'UNKNOWN'
         df[col] = df[col].fillna('UNKNOWN')
 
-    # 定义“一次独立的捕捞作业”的维度
+    # Definitions“A stand-alone fishing operation”Dimensions
     operation_keys = [
         'YEAR', 'MONTH_START', 'MONTH_END', 'FISHING_GROUND_CODE', 
         'SquareTypeCode', 'Lat', 'Lon', 'Flag', 'GEAR_CODE', 
@@ -105,16 +105,16 @@ def process_iotc_data(file_path):
     df_pivot[catch_columns] = df_pivot[catch_columns].fillna(0)
 
     # ==========================================
-    # 5. 时空终极聚合: 月转年，网格合并
+    # 5. Aggregation of Time and Space: Year of the monthly transition, Grid Merge
     # ==========================================
-    print("执行年维度与网格维度的终极聚合...")
-    # 聚合依据：去掉月份字段，按下面这些字段进行汇总
+    print("aggregate by year and grid cell...")
+    # Aggregation by: Remove the month field, Summary by these fields below
     agg_group = ['YEAR', 'Flag', 'GEAR_CODE', 'SquareTypeCode', 'EFFORT_UNIT_CODE', 'Lat', 'Lon']
     
-    # 找出透视后所有属于目标鱼类的列名
+    # Find out all the names of the target fish after the viewing
     catch_cols = [c for c in df_pivot.columns if any(c.startswith(s) for s in target_species)]
     
-    # 构建聚合字典 (努力量求和，捕捞量求和)
+    # Build a polygonal dictionary (Im trying to make peace, Harvesting to sum up)
     agg_dict = {'EFFORT': 'sum'}
     for col in catch_cols:
         agg_dict[col] = 'sum'
@@ -122,16 +122,16 @@ def process_iotc_data(file_path):
     df_yearly = df_pivot.groupby(agg_group, as_index=False).agg(agg_dict)
 
     # ==========================================
-    # 6. 最终的规范化 (对齐之前的格式)
+    # 6. Final normativeization (Format before alignment)
     # ==========================================
-    # 基础列重命名
+    # Renaming of the base column
     df_yearly.rename(columns={
         'YEAR': 'Year',
         'GEAR_CODE': 'GearTypeCode',
         'EFFORT_UNIT_CODE': 'EffortType'
     }, inplace=True)
 
-    # 清洗捕获列：重量(MT)去掉后缀，数量(NO)变为小写 n
+    # Purge catch columns: Weight(MT)Remove the suffix, Number(NO)Lower case n
     rename_cols = {}
     for col in catch_cols:
         if col.endswith('_MT'):
@@ -141,10 +141,10 @@ def process_iotc_data(file_path):
             
     df_yearly.rename(columns=rename_cols, inplace=True)
 
-    # 按标准顺序整理列名展示
+    # Standardized presentation of listings
     base_cols = ['Year', 'Flag', 'GearTypeCode', 'SquareTypeCode', 'EffortType', 'Lat', 'Lon', 'EFFORT']
     
-    # 让每一个物种的重量列（如 BET）和数量列（如 BETn）相邻排布
+    # Let each species weigh in (Like BET) and Quantity Columns (Like BETn) Neighborhood
     ordered_catch = []
     for s in target_species:
         if s in df_yearly.columns: ordered_catch.append(s)
@@ -155,10 +155,10 @@ def process_iotc_data(file_path):
     return df_yearly[final_cols]
 
 # ==========================================
-# 执行与保存入口
+# Execute and save entrances
 # ==========================================
 if __name__ == "__main__":
-    # 请在这里填入你本地 IOTC CE 数据集的真实路径
+    # Please fill in your place here IOTC CE The real path to the data set
     input_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\IOTC\source_data\IOTC-DATASETS-2026-02-23-CE-1952-2024.csv'
     output_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\IOTC\IOTC_Grid_Catch_Effort.csv'
     
@@ -167,9 +167,9 @@ if __name__ == "__main__":
         final_df.to_csv(output_file, index=False, encoding='utf-8-sig')
         
         print("\n===============================")
-        print(f"处理完成！\n数据已成功保存至：{output_file}")
+        print(f"Processed！\n Data successfully saved to: {output_file}")
         print("===============================\n")
-        print("数据前瞻:")
+        print("Data foreground:")
         print(final_df.head())
     except FileNotFoundError:
-        print(f"抱歉，没有在指定路径找到文件：{input_file}")
+        print(f"Sorry, No files found in the specified path: {input_file}")

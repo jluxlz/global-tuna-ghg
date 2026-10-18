@@ -1,11 +1,17 @@
-# Fig4 当前版本
+# Figure 4: coupled emission mechanisms
 
-- 绘图：`Figure4_Coupled_Mechanisms_Audited.pdf/png/tiff`；逐面板预览 `Fig4_PanelA_Audited.png` 至 F。
-- 当前绘图代码：`Fig4_Coupled_Mechanisms.r`；数据代码：`preprocess_fig4.py`。
-- 审计与计算边界：`Fig4_Audit_Report.md`；对应图注：`Figure4_Caption_Audited.md`。
-- 可重跑核查：`audit_fig4.py`；结果 `Fig4_QC.json`、`Fig4_Upstream_QC.json` 与各 QC CSV。
-- 2026-10-12 修改前代码/数据/分析图：`_archive_pre_audit_20261012/`（manifest.csv）。删除此备份不会阻止当前数据生产与 QC；历史数值比较将自动跳过。
+`preprocess_fig4.py` produces the analytical panel data;
+`Fig4_Coupled_Mechanisms.r` renders the panels and composite. The audited
+composite is `Figure4_Coupled_Mechanisms_Audited`. Use `audit_fig4.py` for
+repeatable input and panel checks. `Fig4_Coupled_Validation.r` renders the
+independent feasible-catch stock comparison.
 
-无 Audited 后缀的旧分析图片以及 Figure4_Caption.md 保留用于对比，不能代表当前 CSV。`fig4.*` 和 `fig4_new.*` 是用户的 Adobe 产品，未修改。
+Panel c illustrates dynamic gear-level ratios of blends. It is distinct from
+the flag-by-organisation ecological effort multiplier in the production model.
+Panel b uses a 2023 baseline; panels d and e compare against MGO in the same
+year; the production scenarios use a 2025 baseline. Preserve these reference
+conditions when interpreting the panels or comparing saved outputs.
 
-特别注意：c 是原构思的动态 gear ratio-of-blends 示意，不能直接当作生产模型 flag×org 的 Meco。b 相对 2023，d/e 相对同年 MGO，生产模型相对 2025。详情及可复算分量见审计说明。
+Historical design archives and Adobe working products are excluded from the
+public distribution. Source inputs withheld from redistribution are listed in
+`data/external_inputs.csv` at the repository root.

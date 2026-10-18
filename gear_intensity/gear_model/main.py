@@ -1,18 +1,18 @@
 from unit_gears_model.unit_gears.model_library import GearModelLibrary
 
-#加载模型
+#Load Model
 gml = GearModelLibrary()
 gml.load_path('unit_gears_model/models', verbose=False)
 gear_models = next(gml.gear_models())
 attrs1 = [attr for attr in dir(gml) if not attr.startswith('_')]
 attrs2 = [attr for attr in dir(gear_models) if not attr.startswith('_')]
-print(f'GearModelLibrary的属性为{attrs1}')
-print(f'gear_models的属性为{attrs2}')
+print(f'GearModelLibrary has attribute{attrs1}')
+print(f'gear_models has attribute{attrs2}')
 
-#调取所有围网的gear_model
+#retrieve all purse-seine records for gear_model
 gear_models = gml.gear_models(gear='Purse seine')
 
-#不同gear_model的gear_intensity计算
+#Different gear_model of gear_intensity Calculate
 for gear_model in gear_models:
     name = gear_model.name
     param_unit = gear_model.param_unit

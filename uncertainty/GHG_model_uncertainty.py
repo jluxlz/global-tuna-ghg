@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 # ==========================================
-# 🚨 极其关键：强制 Matplotlib 在后台绘图，彻底解决 Tkinter 崩溃问题
+# 🚨 Its very important: Force Matplotlib Backside Drawing, Its done Tkinter Collapse problem
 # ==========================================
 import matplotlib
 matplotlib.use('Agg') 
@@ -18,27 +18,27 @@ warnings.filterwarnings('ignore')
 
 
 # ==========================================
-# 0. 全局参数配置区 (供快速调参)
+# 0. Global Parameter Configuration Area (For Quick Access)
 # ==========================================
-# 🌲 随机森林代理模型超参数 (Random Forest Hyperparameters)
+# 🌲 Random Forest Agent Model Super-parameter (Random Forest Hyperparameters)
 RF_PARAMS = {
-    'n_estimators': 200,      # 决策树的数量 (越大模型越稳定，但训练越慢)
-    'max_depth': 12,          # 树的最大深度 (控制模型复杂度，捕捉非线性交互)
-    'min_samples_split': 2,   # 节点分裂所需的最小样本数
-    'random_state': 42,       # 随机种子，确保结果可复现
-    'n_jobs': -1              # 调用所有 CPU 核心进行并行计算
+    'n_estimators': 200,      # Number of decision trees (The bigger the model the more stable, But the slower the training)
+    'max_depth': 12,          # The maximum depth of the tree (Control Model Complexity, Capture non-linear interaction)
+    'min_samples_split': 2,   # Minimum number of samples required for nodes to split
+    'random_state': 42,       # Random Torrent, Ensuring that results are re-emerging
+    'n_jobs': -1              # Call All CPU Cores are calculated in parallel
 }
 
-# 🎯 蒙特卡洛引擎参数
+# 🎯 parameters for the Monte Carlo engine
 GSA_CONFIG = {
-    'n_simulations': 2000,    # 蒙特卡洛采样的总次数
-    'target_year': 2025,      # 提取敏感性切片的基准年份
-    'seed': 42                # 全局随机种子
+    'n_simulations': 2000,    # Total number of samples taken in Monte Carlo
+    'target_year': 2025,      # Baseline year for extraction of sensitive slices
+    'seed': 42                # Global Random Feeds
 }
 
 
 # ==========================================
-# 1. 基础映射与核心参数定义
+# 1. Base map and core parameter definition
 # ==========================================
 FC_LOOKUP = {
     1950: 1.21, 1951: 1.21, 1952: 1.20, 1953: 1.20, 1954: 1.20, 1955: 1.20,
@@ -70,10 +70,10 @@ EF_bait_base = 0.454
 EF_build_base = 2.228    
 
 # ==========================================
-# 2. 极速 LCA-GSA 蒙特卡洛引擎
+# 2. Extreme Speed LCA-GSA Monte Carlo engine
 # ==========================================
 def generate_gsa_dataset(pmm_files, n_simulations=2000, target_year=2025, min_n=5, seed=42):
-    print(f"\n🚀 启动全生命周期 (LCA) GSA 数据收集引擎 ({n_simulations} 次模拟)...")
+    print(f"\n🚀 Start the whole life cycle (LCA) GSA Data-collection engine ({n_simulations} Simulations)...")
     rng = np.random.RandomState(seed)
     
     pmm_dfs = []
@@ -190,23 +190,23 @@ def generate_gsa_dataset(pmm_files, n_simulations=2000, target_year=2025, min_n=
         gsa_targets.append(Total_LCA_GHG) 
         
         if (i + 1) % 500 == 0:
-            print(f"   已完成 {i+1} / {n_simulations} 次... 耗时: {time.time()-start_time:.1f}s")
+            print(f"   Completed {i+1} / {n_simulations} Number of times... Time-consuming: {time.time()-start_time:.1f}s")
 
     return pd.DataFrame(gsa_features), pd.Series(gsa_targets, name='Total_LCA_GHG')
 
 
 # ==========================================
-# 3. 随机森林与 SHAP 解释引擎 (标题精细分离与对齐版)
+# 3. Random Forest and SHAP Explain the engine (Caption Fine Separation & Aligning)
 # ==========================================
 def run_rf_shap_analysis(X, y, rf_params):
-    print("\n🌲 正在清理数据并训练随机森林代理模型...")
+    print("\n🌲 cleaning data and fitting the random forest surrogate model...")
     
     valid_mask = ~y.isna()
     X_clean = X[valid_mask]
     y_clean = y[valid_mask]
     dropped = len(y) - len(y_clean)
     if dropped > 0:
-        print(f"⚠️ 警告: 已剔除 {dropped} 条包含 NaN 的异常模拟数据。")
+        print(f"⚠️ This function is EXPERIMENTAL: Removed {dropped} The article contains NaN Anomalous simulation data. ")
 
     X_train, X_test, y_train, y_test = train_test_split(X_clean, y_clean, test_size=0.2, random_state=42)
     
@@ -219,11 +219,11 @@ def run_rf_shap_analysis(X, y, rf_params):
     mae = mean_absolute_error(y_test, y_pred)
     mape = mean_absolute_percentage_error(y_test, y_pred) * 100 
     
-    print("\n📊 === 随机森林代理模型评价指标 (Test Set) ===")
-    print(f"✅ R² (决定系数)        : {r2:.4f}")
-    print(f"🎯 RMSE (均方根误差)    : {rmse/1e6:.4f} Mt")
-    print(f"🎯 MAE (平均绝对误差)   : {mae/1e6:.4f} Mt")
-    print(f"📉 MAPE (平均百分比误差): {mape:.3f}%")
+    print("\n📊 === Indicators for the assessment of the random forest agent model (Test Set) ===")
+    print(f"✅ R² (Decision factor)        : {r2:.4f}")
+    print(f"🎯 RMSE (Average square root error)    : {rmse/1e6:.4f} Mt")
+    print(f"🎯 MAE (Average absolute error)   : {mae/1e6:.4f} Mt")
+    print(f"📉 MAPE (Average percentage error): {mape:.3f}%")
     print("================================================\n")
     
     metrics_df = pd.DataFrame({
@@ -232,7 +232,7 @@ def run_rf_shap_analysis(X, y, rf_params):
     })
     metrics_df.to_csv('RF_Surrogate_Model_Metrics.csv', index=False)
     
-    print("🧠 正在计算 SHAP 值并进行顶刊级排版渲染...")
+    print("🧠 Calculating SHAP Valued and typed at the top of the paper...")
     explainer = shap.TreeExplainer(rf)
     shap_values = explainer.shap_values(X_clean)
     
@@ -262,31 +262,31 @@ def run_rf_shap_analysis(X, y, rf_params):
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(16, 14))
     
     # ==========================================
-    # --- 绘制图 (a) ---
+    # --- Draw (a) ---
     # ==========================================
     plt.sca(ax1) 
     shap.summary_plot(shap_values_scaled, X_renamed, plot_type="bar", show=False, color="#2c7fb8", plot_size=None)
     
-    # 🚨 关键分离：(a) 靠左并保留偏移，主标题居中对齐
+    # 🚨 Critical separation: (a) Left and keep the offset, Main title is centred
     ax1.set_title("(a)", fontsize=20, fontweight='bold', loc='left', x=-0.25)
     ax1.set_title("Global Sensitivity Analysis: Feature Importance", fontsize=18, fontweight='bold', loc='center')
     ax1.set_xlabel("mean(|SHAP value|) (Impact on Total GHG in Million tonnes)", fontsize=14)
     
     # ==========================================
-    # --- 绘制图 (b) ---
+    # --- Draw (b) ---
     # ==========================================
     plt.sca(ax2) 
     shap.summary_plot(shap_values_scaled, X_renamed, show=False, cmap='Spectral_r', plot_size=None)
     
-    # 🚨 关键分离：(b) 靠左并保留偏移，主标题居中对齐
+    # 🚨 Critical separation: (b) Left and keep the offset, Main title is centred
     ax2.set_title("(b)", fontsize=20, fontweight='bold', loc='left', x=-0.25)
     ax2.set_title("Global Sensitivity Analysis: Beeswarm Plot", fontsize=18, fontweight='bold', loc='center')
     ax2.set_xlabel("SHAP value (Impact on Total GHG in Million tonnes)", fontsize=14)
     
-    # 先应用自动排版以分配基本间距
+    # Apply the automatic layout first to allocate the basic space
     plt.tight_layout(pad=4.0)
     
-    # 终极对齐术：提取 Bbox，强制统一左边缘和宽度
+    # The ultimate alignment: Extract Bbox, Force unified left edge and width
     fig.canvas.draw()
     pos1 = ax1.get_position()
     pos2 = ax2.get_position()
@@ -302,11 +302,11 @@ def run_rf_shap_analysis(X, y, rf_params):
     plt.savefig('Final_Combined_SHAP_Plot.svg', format='svg', bbox_inches='tight', transparent=False, facecolor='white')
     plt.close()
     
-    print("📁 终极全生命周期 SHAP 拼图及指标报告已成功导出（标题完美分离对齐版）！")
+    print("📁 Final life cycle SHAP The puzzle and the indicator report were successfully exported (Headings are perfectly separate from the alignment) ！")
 
 
 # ==========================================
-# 主执行入口
+# Main Execute Entry
 # ==========================================
 if __name__ == "__main__":
     pmm_file_list = [

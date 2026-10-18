@@ -61,13 +61,13 @@ NEW_EXTRACTED_DIR = BASE_DIR / "new_extracted_vessel_data"
 # Raw (non-unit-converted) output directory — original values preserved
 NEW_EXTRACTED_RAW_DIR = BASE_DIR / "new_extracted_vessel_data_raw"
 
-# Raw data file mapping (Chinese filenames)
+# Raw data file mapping (English filenames)
 RAW_DATA_FILES = {
-    "CCSBT": RAW_DATA_DIR / "CCSBT南方蓝鳍金枪鱼保护委员会.csv",
-    "IATTC": RAW_DATA_DIR / "IATTC美洲热带金枪鱼委员会.xlsx",
-    "ICCAT": RAW_DATA_DIR / "ICCAT国际大西洋金枪鱼保护委员会.xlsx",
-    "IOTC":  RAW_DATA_DIR / "IOTC印度洋金枪鱼委员会.xlsx",
-    "WCPFC": RAW_DATA_DIR / "WCPFC中西太平洋渔业委员会.csv",
+    "CCSBT": RAW_DATA_DIR / "CCSBT_Vessel_Registry.csv",
+    "IATTC": RAW_DATA_DIR / "IATTC_Vessel_Registry.xlsx",
+    "ICCAT": RAW_DATA_DIR / "ICCAT_Vessel_Registry.xlsx",
+    "IOTC":  RAW_DATA_DIR / "IOTC_Vessel_Registry.xlsx",
+    "WCPFC": RAW_DATA_DIR / "WCPFC_Vessel_Registry.csv",
 }
 
 # Existing extracted data (for enrichment)
@@ -137,13 +137,13 @@ def parse_isscfv(filepath: Path) -> dict:
                 continue
             # Section header (Chinese/English category)
             if line.startswith("---"):
-                # e.g. "--- 围网渔船 (Purse seiners) ---"
+                # e.g. "--- purse-seine fishing vessels (Purse seiners) ---"
                 cat_match = re.search(r"\(([^)]+)\)", line)
                 if cat_match:
                     current_category = cat_match.group(1).strip()
                 continue
 
-            # Code line: e.g. "SP (2) - Purse seiners (围网渔船总称)"
+            # Code line: e.g. "SP (2) - Purse seiners (general purse-seine vessel category)"
             match = re.match(r"([A-Z]{2,4})\s*\([^)]+\)\s*-\s*(.+?)$", line)
             if match:
                 code = match.group(1).strip()
@@ -193,7 +193,7 @@ def parse_isscfg(filepath: Path) -> dict:
                     current_category = cat_match.group(1).strip()
                 continue
 
-            # Code line: e.g. "PS (01.1) - Purse seines (围网)"
+            # Code line: e.g. "PS (01.1) - Purse seines (purse seine)"
             match = re.match(r"([A-Z0-9]{2,4})\s*\([^)]+\)\s*-\s*(.+?)$", line)
             if match:
                 code = match.group(1).strip()
@@ -640,7 +640,7 @@ PURSE_SEINE_GEAR_CODES = {"PS", "PS1", "PS2", "LA", "SUX"}
 LONGLINE_GEAR_CODES = {"LL", "LLS", "LLD"}
 
 # Vessel types that are ALWAYS discarded (training, research)
-# Directive 1.1: ZO (科研调查船/research survey) & CO (实习船/training)
+# Directive 1.1: ZO (Scientific research ship/research survey) & CO (Internships/training)
 # unconditionally dropped before any gear matching logic
 DISCARD_VESSEL_TYPES = {"RT", "RTX", "CO", "COX", "RO", "ROX", "ZO", "ZOX"}
 DISCARD_TYPE_NAMES = {"research", "training", "research-training",
@@ -648,13 +648,13 @@ DISCARD_TYPE_NAMES = {"research", "training", "research-training",
                       "patrol", "research and survey",
                       "research survey", "survey vessel"}
 
-# Directive 2.1【跨物理形态过滤】: Physical hull types INELIGIBLE for gear rescue.
+# Directive 2.1[Cross-physical form filter]: Physical hull types INELIGIBLE for gear rescue.
 # Trawlers (TO) = high-resistance; handliners (LH) & gillnetters (GI/GO) = non-standard
 # hull forms. These must NOT be force-fitted into the standardized ocean-going PS/LL fleet,
 # even if their gear field carries PS or LL authorization codes.
 GEAR_RESCUE_BLOCKLIST = {"TO", "TOX", "TW", "LH", "GI", "GO", "GOX", "GND"}
 
-# Directive 3.2【辅助服务主属性锁定】: Supply/auxiliary vessel codes that must remain
+# Directive 3.2[Auxiliary main attribute lock]: Supply/auxiliary vessel codes that must remain
 # locked as SA. Even if these vessels claim PS (purse seine) gear codes, refuse gear
 # rescue and keep their primary SA classification.
 SUPPLY_VESSEL_CODES = {"SP", "SUPP", "SA", "SAX", "SV", "VO", "VOX", "VOS", "VOB"}
@@ -1366,7 +1366,7 @@ def _normalize_type_value(raw_val: str) -> str:
         "BHP": "BHP",
         "UNK": "UNK",
         "UNKNOWN": "UNK",
-        "?": "",    # 占位符/未知 → 清空
+        "?": "",    # Placeholder/Unknown → Clear
     }
     # Exact match first
     if s in type_map:
@@ -1598,7 +1598,7 @@ def extract_iatc(filepath: Path, isscfv: dict, isscfg: dict) -> pd.DataFrame:
 
         # Extract type metadata
         length_type = _normalize_type_value(row.get(cols["length_type_col"], ""))
-        # IATTC "Gross tonnage (t)" = Gross Tonnage (GT), "(t)" 仅表示单位为吨
+        # IATTC "Gross tonnage (t)" = Gross Tonnage (GT), "(t)" in tons only
         tonnage_type = "GT"
         # IATTC engine power column name implies HP
         power_col_name = str(cols["engine_power_col"]) if cols["engine_power_col"] else ""

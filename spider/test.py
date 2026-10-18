@@ -1,4 +1,4 @@
-# ========== 基础依赖 ==========
+# ========== Basic Dependence ==========
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -16,11 +16,11 @@ import traceback
 from datetime import datetime
 import openpyxl
 from openpyxl.styles import Font, Alignment, PatternFill
-import html  # 处理HTML转义
+import html  # Processing HTML Transfer
 import pandas as pd
 
-# ========== 全局配置（批量处理+统一表头） ==========
-# 1. 多账号配置
+# ========== Global Configuration (Bulk processing+Unified Header)  ==========
+# 1. Multi-Account Configuration
 ACCOUNTS = [
     {"username": "alsxm", "password": "@Sjnzds20021211"},
     {"username": "xmu01", "password": "@Sjnzds20021211"},
@@ -28,17 +28,17 @@ ACCOUNTS = [
     {"username": "xmu03", "password": "@Sjnzds20021211"},
 ]
 
-# 2. 文件路径配置（改为当前工作目录下的路径）
+# 2. File Path Configuration (Change to Path under Current Work Directory) 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # spider/
-ROOT_DIR = os.path.dirname(BASE_DIR)  # 项目根目录
+ROOT_DIR = os.path.dirname(BASE_DIR)  # Project Root Directory
 INPUT_FOLDER = os.path.join(ROOT_DIR, "vessel_data_extract", "new_extracted_vessel_data")
 OUTPUT_FOLDER = os.path.join(BASE_DIR, "output")
 DRIVER_PATH = os.path.join(BASE_DIR, "msedgedriver.exe")
 
-# 确保输出目录存在
+# Ensure that output directory exists
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-# 3. 关键配置：补充shipname变体 + 建造年份 + 总吨的常见表头变体
+# 3. Key Configuration: Supplementary shipname Variable + year built + Common surface-head variants of gross tons
 UNIFIED_HEADERS = {
     "imo": ["imo", "IMO", "Imo"],
     "call_sign": ["call_sign", "Call_Sign", "call sign", "Call Sign", "callsign", "Callsign"],
@@ -52,28 +52,28 @@ UNIFIED_HEADERS = {
                       "gross tonnage", "Gross Tonnage", "tonnage", "Tonnage", "gt", "GT",
                       "gross registered tonnage", "Gross Registered Tonnage"],
 }
-HEADLESS_MODE = False  # 无头模式
+HEADLESS_MODE = False  # Headless Mode
 
-# ========== 自定义异常（搜索次数限制） ==========
+# ========== Custom anomalies (limit on number of searches)  ==========
 class SearchLimitReachedException(Exception):
-    """账号搜索次数达到上限的异常"""
+    """Aberrations with the maximum number of account searches"""
     pass
 
-# ========== 工具函数：解析Tooltipster API返回内容 ==========
+# ========== Tool Functions: Parsing Tooltipster API Return to Content ==========
 def parse_tooltipster_data(tooltip_text):
     """
-    全面解析Tooltipster API返回的原始字符串，精准提取以下5个核心字段：
-    - Gross tonnage (总吨)
-    - Call sign (呼号)
+    Full Parsing Tooltipster API Original string returned, Precision extraction below 5 Core Fields: 
+    - Gross tonnage (gross tonnage)
+    - Call sign (Call sign)
     - MMSI
-    - Ship type (detailed) (详细船舶类型)
-    - Year of build / Date of build (建造年份)
-    同时保留 registered_owner 等辅助字段。
+    - Ship type (detailed) (Detailed type of ship)
+    - Year of build / Date of build (year built)
+    Keep it at the same time registered_owner Waiting for auxiliary fields. 
     """
     if not tooltip_text:
         return {}
 
-    # 处理 HTML 转义并标准化换行
+    # Processing HTML Translating and standardizing line breaks
     decoded_text = html.unescape(str(tooltip_text))
     clean_text = decoded_text.replace("<br/>", "\n").replace("<br>", "\n").replace("<BR/>", "\n").replace("<BR>", "\n")
 
@@ -81,18 +81,18 @@ def parse_tooltipster_data(tooltip_text):
     ship_info = {}
     for line in lines:
         if ":" in line:
-            # 只分割第一个冒号，避免值里包含冒号
+            # Only split the first colon, Avoid including colons in the value
             key_part, value_part = line.split(":", 1)
             key = key_part.strip().lower().replace(" ", "_").replace("(", "").replace(")", "")
             value = value_part.strip()
             ship_info[key] = value
 
-    # ── 正则兜底：如果分行解析未命中关键字段，尝试从原始文本中提取 ──
+    # ── Its the bottom of the line: If the break-up parses the key fields that are not hit, Try to extract from the original text ──
     def regex_fallback(pattern, text, default=""):
         m = re.search(pattern, text, re.IGNORECASE)
         return m.group(1).strip() if m else default
 
-    # 提取建造年份（优先从已解析字典取，其次正则匹配4位年份）
+    # Year of extraction for construction (Prefer from parsed dictionary, Second regular match 4 Year in) 
     build_date = (
         ship_info.get("year_of_build", "") or
         ship_info.get("date_of_build", "") or
@@ -102,7 +102,7 @@ def parse_tooltipster_data(tooltip_text):
     if not build_date:
         build_date = regex_fallback(r"(?:year\s*of\s*build|date\s*of\s*build|built)\s*[:\-]\s*(\d{4})", clean_text)
 
-    # 提取总吨（支持 "Gross tonnage: 1234" 或 "GT: 1234"）
+    # Total ton extracted (Support "Gross tonnage: 1234" or "GT: 1234") 
     gross_tonnage = (
         ship_info.get("gross_tonnage", "") or
         ship_info.get("gt", "") or
@@ -110,20 +110,20 @@ def parse_tooltipster_data(tooltip_text):
     )
     if not gross_tonnage:
         gross_tonnage = regex_fallback(r"(?:gross\s*tonnage|gt)\s*[:\-]\s*([\d,]+\.?\d*)", clean_text)
-    # 清理逗号（千分位）
+    # Clear Comma (Thousands of places) 
     gross_tonnage = gross_tonnage.replace(",", "").strip() if gross_tonnage else ""
 
-    # 提取呼号
+    # Extracting call sign
     call_sign = (
         ship_info.get("call_sign", "") or
         ship_info.get("callsign", "") or
         ship_info.get("call_sign_", "")
     )
 
-    # 提取MMSI
+    # Extract MMSI
     mmsi = ship_info.get("mmsi", "")
 
-    # 提取详细船舶类型
+    # Type of ship to be extracted
     ship_type_detailed = (
         ship_info.get("ship_type_detailed", "") or
         ship_info.get("ship_type", "") or
@@ -131,7 +131,7 @@ def parse_tooltipster_data(tooltip_text):
         ship_info.get("type_of_ship", "")
     )
 
-    # 提取注册船东
+    # Registered shipowners extracted
     registered_owner = (
         ship_info.get("registered_owner", "") or
         ship_info.get("owner", "") or
@@ -148,7 +148,7 @@ def parse_tooltipster_data(tooltip_text):
     }
     return standardized_info
 
-# ========== 爬虫类（仅Tooltipster API提取+分级查询） ==========
+# ========== reptiles (Only Tooltipster API Extract+Queue Query)  ==========
 class IMO_Edge_Crawler:
     def __init__(self, username: str, password: str, headless: bool = False):
         self.username = username
@@ -156,110 +156,110 @@ class IMO_Edge_Crawler:
         self.headless = headless
         self.driver = self._init_edge_driver()
         self.wait = WebDriverWait(self.driver, 30, poll_frequency=0.5)
-        self.is_logged = False  # 标记是否已登录
+        self.is_logged = False  # Whether the tag is entered or not
 
     def _init_edge_driver(self) -> webdriver.Edge:
-        """初始化Edge驱动，保证会话稳定性"""
+        """Initialization Edge Driver, Guaranteed session stability"""
         edge_options = Options()
-        # 核心稳定参数
+        # Core stabilization parameters
         edge_options.add_argument("--disable-blink-features=AutomationControlled")
         edge_options.add_experimental_option("excludeSwitches", ["enable-automation"])
         edge_options.add_experimental_option("useAutomationExtension", False)
         edge_options.add_argument("--start-maximized")
         edge_options.add_argument("--ignore-certificate-errors")
-        # 禁用自动关闭/休眠
+        # Disable AutoClose/Sleeping
         edge_options.add_argument("--disable-background-timer-throttling")
         edge_options.add_argument("--disable-backgrounding-occluded-windows")
 
-        # Edge浏览器路径（确认你的路径正确）
+        # Edge Browser Path (Make sure your path is correct) 
         edge_binary_path = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
         if os.path.exists(edge_binary_path):
             edge_options.binary_location = edge_binary_path
 
-        # 无头模式
+        # Headless Mode
         if self.headless:
             edge_options.add_argument("--headless=new")
             edge_options.add_argument("--window-size=1920,1080")
 
-        # 禁用驱动日志，提升稳定性
+        # Disable Driver Log, Raise stability
         service = Service(
             executable_path=DRIVER_PATH,
             log_path=os.devnull
         )
 
-        # 初始化驱动
+        # Initialization driver
         driver = webdriver.Edge(service=service, options=edge_options)
         driver.set_page_load_timeout(300)
         driver.set_script_timeout(300)
 
-        # 移除webdriver标识
+        # Remove webdriver Marking
         driver.execute_cdp_cmd(
             "Page.addScriptToEvaluateOnNewDocument",
             {"source": "Object.defineProperty(navigator, 'webdriver', {get: () => undefined});"}
         )
-        print(f"✅ 浏览器初始化完成（账号：{self.username}）")
+        print(f"✅ Browser Initialization complete (Account: {self.username}）")
         return driver
 
     def _reinit_driver(self):
-        """会话失效时重新初始化驱动"""
+        """Re-initiating the driver when the session fails"""
         try:
             if self.driver:
                 self.driver.quit()
-                print(f"ℹ️ 关闭账号{self.username}的浏览器")
+                print(f"ℹ️ Close Account{self.username}Browser")
         except Exception as e:
-            print(f"⚠️ 浏览器关闭异常：{str(e)}")
+            print(f"⚠️ Browser off abnormal: {str(e)}")
 
         self.driver = self._init_edge_driver()
         self.wait = WebDriverWait(self.driver, 30, poll_frequency=0.5)
-        self.is_logged = False  # 重新初始化后标记为未登录
-        print("✅ 重新初始化浏览器会话完成")
+        self.is_logged = False  # Mark after re-initialising as not login
+        print("✅ Re-initialize browser session complete")
 
     def _check_search_limit(self) -> bool:
-        """检测搜索限制"""
+        """Check search limits"""
         try:
             content_td = self.wait.until(EC.presence_of_element_located((By.ID, "content")))
             content_text = content_td.text.strip()
             if "Search Limit Reached" in content_text and "You can try again on" in content_text:
-                print(f"\n\U0001f6a8 账号{self.username}触发搜索限制！")
-                print(f"\U0001f4dd 限制信息：{content_text[:120]}...")
+                print(f"\n\U0001f6a8 Account{self.username}Activate search limits！")
+                print(f"\U0001f4dd Limit Information: {content_text[:120]}...")
                 return True
         except (TimeoutException, NoSuchElementException):
             pass
         return False
 
     def _stable_login(self) -> bool:
-        """核心登录逻辑（仅登录一次）"""
+        """Core login logic (Login only once) """
         if self.is_logged:
-            return True  # 已登录则直接返回成功
+            return True  # Login is a success
 
         try:
-            # Step1：访问登录页
+            # Step1: Access to Login Pages
             self.driver.get("https://webaccounts.imo.org/Common/WebLogin.aspx?LoggedOut=Yes")
             self.wait.until(EC.title_contains("IMO Web Accounts"))
-            print(f"✅ 登录页加载完成 | URL: {self.driver.current_url}")
+            print(f"✅ Login complete | URL: {self.driver.current_url}")
 
-            # 选择Public User类型
+            # Selection Public User Type
             ddl_authority = self.wait.until(EC.element_to_be_clickable((By.ID, "ctl00_cpMain_ddlAuthorityType")))
             ddl_authority.click()
             self.wait.until(EC.element_to_be_clickable((By.XPATH, "//option[@value='PUBLIC']"))).click()
-            print("✅ 已选择Public User类型")
+            print("✅ Selected Public User Type")
             time.sleep(1)
 
-            # 输入用户名
+            # Enter User Name
             username_input = self.wait.until(EC.visibility_of_element_located((By.ID, "ctl00_cpMain_txtUsername")))
             username_input.clear()
             username_input.send_keys(self.username)
             time.sleep(random.uniform(0.3, 0.8))
-            print(f"✅ 已输入用户名: {self.username}")
+            print(f"✅ Username entered: {self.username}")
             time.sleep(10)
 
-            # 点击Step1（下一个）
+            # Click Step1 (Next) 
             btn_step1 = self.wait.until(EC.element_to_be_clickable((By.ID, "ctl00_cpMain_btnStep1")))
             btn_step1.click()
             time.sleep(1.5)
-            print(f"✅ 点击Step1按钮 | URL: {self.driver.current_url}")
+            print(f"✅ Click Step1 button | URL: {self.driver.current_url}")
 
-            # Step2：输入密码
+            # Step2: Enter Password
             try:
                 password_input = self.wait.until(EC.visibility_of_element_located((By.ID, "ctl00_cpMain_txtPassword")))
             except:
@@ -267,45 +267,45 @@ class IMO_Edge_Crawler:
             password_input.clear()
             password_input.send_keys(self.password)
             time.sleep(random.uniform(0.3, 0.8))
-            print("✅ 已输入密码")
+            print("✅ Password entered")
 
-            # 点击登录按钮（Step2）
+            # Click the login button (Step2) 
             try:
                 btn_step2 = self.driver.find_element(By.ID, "ctl00_cpMain_btnStep2")
             except:
-                btn_step2 = self.driver.find_element(By.XPATH, "//input[@value='登录']")
+                btn_step2 = self.driver.find_element(By.XPATH, "//input[@value='Login']")
             self.driver.execute_script("arguments[0].click();", btn_step2)
-            print(f"✅ 点击登录按钮 | URL: {self.driver.current_url}")
+            print(f"✅ Click the login button | URL: {self.driver.current_url}")
 
-            # 等待跳转并验证
+            # Waiting to jump and verify
             time.sleep(3)
             current_url = self.driver.current_url
             current_title = self.driver.title
-            print(f"⚠️ 登录后状态 | URL: {current_url} | 标题: {current_title}")
+            print(f"⚠️ Post-Link State | URL: {current_url} | Title: {current_title}")
 
-            # 登录成功判定：进入账户页或GISIS页
+            # Login successful: Enter account page or GISIS Page
             if "webaccounts.imo.org/Public/" in current_url or "IMO Web Accounts" in current_title:
-                print("\U0001f389 登录操作完成（进入账户页/GISIS页）")
-                # 导航到GISIS船舶页
+                print("\U0001f389 Login complete (Enter Account Page/GISIS Page) ")
+                # Navigate to GISIS Shippage
                 if "IMO Web Accounts" in self.driver.title:
-                    print("ℹ️ 已登录到账户详情页，开始导航到GISIS...")
-                    # 点击菜单按钮
+                    print("ℹ️ Logged into account details page, Starting navigation GISIS...")
+                    # Click on the menu button
                     menu_btn = self.wait.until(
                         EC.element_to_be_clickable((By.CLASS_NAME, "navbar-toggler"))
                     )
                     if menu_btn.is_displayed():
                         self.driver.execute_script("arguments[0].click();", menu_btn)
-                        print("✅ 菜单按钮点击成功，等待展开...")
-                        # 等待菜单展开
+                        print("✅ Menu button clicked successfully, Waiting for expansion...")
+                        # Waiting for menu to expand
                         self.wait.until(
                             EC.visibility_of_element_located((By.XPATH, "//div[@class='drawer app-list-drawer shadow uk-dropdown uk-open']"))
                         )
                         time.sleep(1)
                     else:
-                        print("❌ 菜单按钮不可见")
+                        print("❌ Menu buttons are invisible")
                         return False
 
-                    # 精准定位GISIS链接
+                    # Precise positioning GISIS Link
                     gisis_link = self.wait.until(
                         EC.element_to_be_clickable((By.XPATH,
                             "//ul[@class='list-underlined list-checkbox-items']/li/a[text()='GISIS' and @href='https://gisis.imo.org/']"
@@ -315,35 +315,35 @@ class IMO_Edge_Crawler:
                         self.driver.execute_script("arguments[0].scrollIntoView(true);", gisis_link)
                         time.sleep(0.5)
                         gisis_link.click()
-                        print("✅ GISIS链接点击成功，等待跳转...")
+                        print("✅ GISIS Link click successfully, ♪ Waiting for the jump ♪...")
                     else:
-                        print("❌ GISIS链接不可见")
+                        print("❌ GISIS Link Not Found")
                         return False
 
-                    # 等待跳转到GISIS并导航到船舶页
+                    # Waiting to jump to GISIS ♪ And navigate to the ships page ♪
                     self.wait.until(EC.url_contains("gisis.imo.org"))
                     time.sleep(2)
                     self.driver.get("https://gisis.imo.org/Public/SHIPS/Default.aspx")
                     time.sleep(2)
-                    print(f"\U0001f389 成功导航到GISIS船舶页 | URL: {self.driver.current_url}")
+                    print(f"\U0001f389 Successfully Navigated GISIS Shippage | URL: {self.driver.current_url}")
 
-                self.is_logged = True  # 标记为已登录
+                self.is_logged = True  # Mark as Login
                 return True
             else:
                 self.driver.save_screenshot("login_failed_redirect.png")
-                print(f"❌ 登录后未跳转目标页 | URL: {current_url}")
+                print(f"❌ Do not jump to target page after login | URL: {current_url}")
                 return False
 
         except Exception as e:
-            # 打印详细异常信息
+            # Print Details of Abnormal Information
             error_detail = traceback.format_exc()
-            print(f"❌ _stable_login异常: {str(e)}")
-            print(f"异常详情:\n{error_detail}")
+            print(f"❌ _stable_login Its an anomaly: {str(e)}")
+            print(f"Unusual details:\n{error_detail}")
             self.driver.save_screenshot("stable_login_error.png")
             raise e
 
     def login_imo(self) -> bool:
-        """登录+导航到GISIS（仅登录一次）"""
+        """Login+Navigate to GISIS (Login only once) """
         max_retry = 3
         for i in range(max_retry):
             try:
@@ -351,160 +351,160 @@ class IMO_Edge_Crawler:
                 if login_result:
                     return True
                 else:
-                    print(f"⚠️ 第{i+1}次登录操作失败，重试中...")
+                    print(f"⚠️ Its... its... its... its... its{i+1}The login operation failed, Retrying...")
                     time.sleep(3)
 
             except TimeoutException as e:
-                print(f"⚠️ 第{i+1}次登录超时：{str(e)}")
+                print(f"⚠️ Its... its... its... its... its{i+1}Login timed out: {str(e)}")
                 time.sleep(3)
             except WebDriverException as e:
                 if "invalid session id" in str(e) or "disconnected" in str(e):
-                    print(f"⚠️ 第{i+1}次会话失效，重新初始化...")
+                    print(f"⚠️ Its... its... its... its... its{i+1}Session Expires, Re-introduction...")
                     self._reinit_driver()
                 else:
-                    print(f"⚠️ 第{i+1}次WebDriver异常：{str(e)}")
+                    print(f"⚠️ Its... its... its... its... its{i+1}Number of times WebDriver Its an anomaly: {str(e)}")
                     time.sleep(3)
             except Exception as e:
-                print(f"⚠️ 第{i+1}次未知异常：{str(e)}")
+                print(f"⚠️ Its... its... its... its... its{i+1}Unknown anomalies: {str(e)}")
                 self.driver.save_screenshot(f"gisis_nav_error_{i+1}.png")
                 time.sleep(3)
-        print("❌ 重试3次后仍登录失败")
+        print("❌ Retry 3 After that, the login failed")
         return False
 
     def _single_query(self, imo: str, call: str, name: str) -> dict:
-        """单次查询逻辑（仅Tooltipster API提取，无点击跳转）"""
+        """Single Query Logic (Only Tooltipster API Extract, No click to Jump) """
         try:
-            # 确保在GISIS船舶页
+            # Ensure GISIS Shippage
             self.driver.get("https://gisis.imo.org/Public/SHIPS/Default.aspx")
-            time.sleep(1)  # 页面加载稳定
+            time.sleep(1)  # Page Loading Stable
 
-            # 清空并填充指定参数
-            # 填充IMO
+            # Empty and fill specified parameters
+            # Fill IMO
             imo_input = self.wait.until(EC.visibility_of_element_located((By.ID, "ctl00_bodyPlaceHolder_Default_tbxShipImoNumber")))
             imo_input.clear()
             if imo:
                 imo_input.send_keys(imo)
 
-            # 填充Call sign
+            # Fill Call sign
             call_input = self.wait.until(EC.visibility_of_element_located((By.ID, "ctl00_bodyPlaceHolder_Default_tbxShipCallSign")))
             call_input.clear()
             if call:
                 call_input.send_keys(call)
 
-            # 填充Ship name
+            # Fill Ship name
             name_input = self.wait.until(EC.visibility_of_element_located((By.ID, "ctl00_bodyPlaceHolder_Default_tbxShipName")))
             name_input.clear()
             if name:
                 name_input.send_keys(name)
 
             time.sleep(0.5)
-            # 点击搜索按钮
+            # Click Search button
             search_btn = self.driver.find_element(By.ID, "ctl00_bodyPlaceHolder_Default_btnSearchShips")
             self.driver.execute_script("arguments[0].click();", search_btn)
             time.sleep(3)
-            print(f"✅ 执行查询 | IMO:{imo} | CallSign:{call} | ShipName:{name}")
+            print(f"✅ Execute Query | IMO:{imo} | CallSign:{call} | ShipName:{name}")
 
-            # 检测「无船舶数据」提示
+            # Test「No ship data」Hint
             try:
                 no_ship_elem = self.driver.find_element(By.XPATH, "//p[@class='disabled' and contains(text(), 'No ships found')]")
                 if no_ship_elem.is_displayed():
-                    print(f"⚠️ 无船舶数据 | IMO:{imo} | CallSign:{call} | ShipName:{name}")
+                    print(f"⚠️ No ship data | IMO:{imo} | CallSign:{call} | ShipName:{name}")
                     return {"no_data": True}
             except NoSuchElementException:
                 pass
 
-            # 检测搜索次数限制
+            # Check limit on number of searches
             if self._check_search_limit():
-                raise SearchLimitReachedException(f"账号{self.username}搜索次数上限")
+                raise SearchLimitReachedException(f"Account{self.username}Maximum number of searches")
 
-            # 等待结果表格加载并定位目标行
+            # Waiting for result table to load and locate target rows
             self.wait.until(EC.presence_of_element_located((By.ID, "ctl00_bodyPlaceHolder_Default_gridShips")))
             target_row = self.wait.until(EC.presence_of_element_located((By.XPATH, "//tr[contains(@class, 'gridviewer_row')][1]")))
-            print("✅ 找到结果行，调用Tooltipster API提取内存数据...")
+            print("✅ Find results, Call Tooltipster API Extracting Memory Data...")
 
-            # ========== 仅保留：Tooltipster插件API提取核心逻辑 ==========
+            # ========== Only keep: Tooltipster Plugin API Draw core logic ==========
             raw_data = self.driver.execute_script("""
                 var $el = $(arguments[0]);
                 if ($el.hasClass('tooltipstered')) {
-                    // 尝试 Tooltipster 标准 API 获取内容
+                    // Try Tooltipster standard API Retrieving content
                     try { return $el.tooltipster('content'); } catch(e) {}
-                    // 尝试从 jQuery data 缓存获取
+                    // Try from jQuery data Cache Fetch
                     try { return $el.data('tooltipsterContent'); } catch(e) {}
                 }
                 return null;
             """, target_row)
 
-            # ========== 解析Tooltipster API返回结果 ==========
+            # ========== Parsing Tooltipster API Returns result ==========
             if raw_data:
-                print(f"✅ Tooltipster API提取成功，开始解析数据...")
+                print(f"✅ Tooltipster API Extracted successfully, Start parsing data...")
                 ship_detail = parse_tooltipster_data(raw_data)
-                ship_detail["query_process"] = f"查询成功(IMO:{imo}|Call:{call}|Name:{name})"
+                ship_detail["query_process"] = f"Query successful(IMO:{imo}|Call:{call}|Name:{name})"
                 ship_detail["need_manual_check"] = False
                 return ship_detail
             else:
-                print("❌ Tooltipster API提取失败（返回空数据）")
-                return {"error": "Tooltipster API提取失败", "need_manual_check": True, "query_process": f"提取失败(IMO:{imo}|Call:{call}|Name:{name})"}
+                print("❌ Tooltipster API Failed to extract (Go back to empty data) ")
+                return {"error": "Tooltipster API Failed to extract", "need_manual_check": True, "query_process": f"Failed to extract(IMO:{imo}|Call:{call}|Name:{name})"}
 
         except SearchLimitReachedException:
             raise
         except Exception as e:
             error_msg = str(e)[:50]
-            print(f"❌ 单次查询异常：{error_msg}")
-            return {"error": error_msg, "need_manual_check": True, "query_process": f"查询异常：{error_msg}"}
+            print(f"❌ One query is abnormal: {error_msg}")
+            return {"error": error_msg, "need_manual_check": True, "query_process": f"Query anomaly: {error_msg}"}
 
     def query_imo_ship(self, imo_number: str = "", call_sign: str = "", ship_name: str = "") -> dict:
-        """查询单个船舶数据（修复分级逻辑：IMO→CallSign→ShipName依次查询）"""
+        """Querying data on individual ships (Fix the hierarchical logic: IMO→CallSign→ShipName Query in turn) """
         if not self.is_logged:
-            print(f"⚠️ 会话未登录，先尝试登录...")
+            print(f"⚠️ Session not login, Try login first...")
             if not self.login_imo():
-                return {"error": f"账号{self.username}登录失败"}
+                return {"error": f"Account{self.username}Login failed"}
 
-        # ========== 修复后的分级查询执行流程 ==========
-        query_id = imo_number or call_sign or (ship_name[:20] if ship_name else "无标识")
-        print(f"\n===== 开始分级查询 [{query_id}] =====")
+        # ========== Rehabilitated Query Execution Process ==========
+        query_id = imo_number or call_sign or (ship_name[:20] if ship_name else "No marking")
+        print(f"\n===== Start tiered query [{query_id}] =====")
 
         final_result = None
         query_steps = []
 
-        # 步骤1：查询IMO（如果有）
+        # Steps 1: Query IMO (If there were) 
         if imo_number:
             query_steps.append(f"IMO:{imo_number}")
             imo_result = self._single_query(imo=imo_number, call="", name="")
             if not imo_result.get("no_data") and not imo_result.get("error"):
                 final_result = imo_result
-                final_result["query_process"] = f"优先查询(IMO)成功 | {final_result.get('query_process', '')}"
+                final_result["query_process"] = f"Priority Query(IMO)Success | {final_result.get('query_process', '')}"
 
-        # 步骤2：IMO查不到，查询CallSign（如果有）
+        # Steps 2: IMO I cant find it, Query CallSign (If there were) 
         if not final_result and call_sign:
             query_steps.append(f"CallSign:{call_sign}")
             call_result = self._single_query(imo="", call=call_sign, name="")
             if not call_result.get("no_data") and not call_result.get("error"):
                 final_result = call_result
-                final_result["query_process"] = f"兜底查询(CallSign)成功 | {final_result.get('query_process', '')}"
+                final_result["query_process"] = f"Query(CallSign)Success | {final_result.get('query_process', '')}"
 
-        # 步骤3：CallSign查不到，查询ShipName（如果有）
+        # Steps 3: CallSign I cant find it, Query ShipName (If there were) 
         if not final_result and ship_name:
             query_steps.append(f"ShipName:{ship_name[:20]}")
             name_result = self._single_query(imo="", call="", name=ship_name)
             if not name_result.get("no_data") and not name_result.get("error"):
                 final_result = name_result
-                final_result["query_process"] = f"最后兜底查询(ShipName)成功 | {final_result.get('query_process', '')}"
+                final_result["query_process"] = f"The last question(ShipName)Success | {final_result.get('query_process', '')}"
 
-        # 所有步骤都查不到
+        # I cant find any of the steps
         if not final_result:
             final_result = {
                 "no_data": True,
-                "query_process": f"所有查询方式均无结果 | 尝试步骤：{','.join(query_steps)}",
+                "query_process": f"All access methods were inconclusive | Try Step: {','.join(query_steps)}",
                 "need_manual_check": True
             }
 
-        # ========== 打印结果逻辑 ==========
+        # ========== Print result logic ==========
         if final_result.get("error") or final_result.get("no_data"):
-            print(f"\n⚠️ 分级查询 [{query_id}] 无有效结果 | 状态：{final_result.get('query_process')}")
+            print(f"\n⚠️ Queue Query [{query_id}] No effective outcome | Status: {final_result.get('query_process')}")
         else:
-            print(f"\n\U0001f389 分级查询 [{query_id}] 成功！| 过程：{final_result['query_process']}")
+            print(f"\n\U0001f389 Queue Query [{query_id}] Success！| Process: {final_result['query_process']}")
             print("=" * 50)
-            print("【提取信息】")
+            print("[Can not open message]")
             for k, v in final_result.items():
                 if k not in ["query_process", "need_manual_check", "error", "no_data"]:
                     print(f"  {k}: {v}")
@@ -513,15 +513,15 @@ class IMO_Edge_Crawler:
         return final_result
 
     def close(self):
-        """安全关闭浏览器"""
+        """Secure Close Browser"""
         try:
             if hasattr(self, 'driver') and self.driver:
                 self.driver.quit()
-                print(f"✅ 账号{self.username}浏览器已安全关闭")
+                print(f"✅ Account{self.username}Browsers off secure")
         except Exception as e:
-            print(f"⚠️ 账号{self.username}浏览器关闭失败：{str(e)}")
+            print(f"⚠️ Account{self.username}Failed to close browser: {str(e)}")
 
-# ========== 断点处理（每个文件独立） ==========
+# ========== Breakpoint Processing (Separate each file)  ==========
 def get_breakpoint_path(file_name: str) -> str:
     return os.path.join(OUTPUT_FOLDER, f"{file_name}_breakpoint.json")
 
@@ -534,7 +534,7 @@ def save_breakpoint(file_name: str, current_row: int, account_index: int):
     }
     with open(breakpoint_path, "w", encoding="utf-8") as f:
         json.dump(breakpoint_data, f, ensure_ascii=False, indent=4)
-    print(f"\U0001f4cc 保存断点：行{current_row} | 账号索引{account_index}（文件：{file_name}）")
+    print(f"\U0001f4cc Save Breakpoints: Okay{current_row} | Index of accounts{account_index} (Documentation: {file_name}）")
 
 def load_breakpoint(file_name: str) -> tuple:
     breakpoint_path = get_breakpoint_path(file_name)
@@ -545,25 +545,25 @@ def load_breakpoint(file_name: str) -> tuple:
             current_row = data.get("current_row", 2)
             account_index = data.get("account_index", 0)
             if account_index >= len(ACCOUNTS):
-                print(f"⚠️ 账号索引{account_index}越界，重置为0")
+                print(f"⚠️ Index of accounts{account_index}Cross-border, Reset As 0")
                 account_index = 0
-            print(f"\U0001f4e5 加载断点：行{current_row} | 账号索引{account_index}（文件：{file_name}）")
+            print(f"\U0001f4e5 Load Breakpoint: Okay{current_row} | Index of accounts{account_index} (Documentation: {file_name}）")
             return current_row, account_index
         except Exception as e:
-            print(f"⚠️ 断点文件损坏（{file_name}）：{str(e)}，用初始值")
+            print(f"⚠️ Breakpoint file damaged ({file_name}）：{str(e)}, Use initial value")
     else:
-        print(f"⚠️ 无断点文件（{file_name}），用初始值")
+        print(f"⚠️ No Breakpoint File ({file_name}) , Use initial value")
     return 2, 0
 
-# ========== 值清洗工具 ==========
+# ========== Value Purge Tool ==========
 def safe_str(val) -> str:
-    """将值转为字符串，处理 NaN 和浮点整数"""
+    """Convert value to string, Processing NaN & Float Integer"""
     if pd.isna(val) or val is None:
         return ""
     s = str(val).strip()
     if s.lower() == "nan" or s.lower() == "none":
         return ""
-    # 清理浮点整数（如 "2003.0" → "2003"）
+    # Clear Float Integer (Like "2003.0" → "2003") 
     if s.endswith(".0") and s.count(".") == 1:
         try:
             float(s)
@@ -573,89 +573,89 @@ def safe_str(val) -> str:
     return s
 
 def normalize_for_compare(val) -> str:
-    """标准化用于比对的值：去空格、去逗号、统一小写"""
+    """Standard value for matching: Go to space, Go to comma, Uniform lowercase"""
     s = safe_str(val)
     if not s:
         return ""
-    # 去掉千分位逗号
+    # remove thousands separators
     s = s.replace(",", "").replace("，", "")
-    # 统一空格
+    # Unified Space
     s = s.strip()
     return s
 
-# ========== Excel处理（支持CSV和XLSX输入 + 原始数据比对） ==========
+# ========== Excel Processing (Support CSV and XLSX Enter + Raw Data Match)  ==========
 def read_input_excel(file_path: str) -> list:
     """
-    核心：遍历所有列，匹配所有字段（无关列顺序）。
-    支持 .csv 和 .xlsx 格式。
-    新增：读取原始 Builtdate（建造年份）和 Tonnage（总吨）列用于后续比对。
+    Core: Walk Through All Columns, Match All Fields (Irrelevance of the order of columns) . 
+    Support .csv and .xlsx Format. 
+    Add: Read Original Builtdate (year built) and Tonnage (gross tonnage) Column for Follow-up Matching. 
     """
     try:
         file_name = os.path.basename(file_path)
         file_ext = os.path.splitext(file_path)[1].lower()
 
-        # ── CSV 文件：使用 pandas 读取 ──
+        # ── CSV Documentation: Use pandas Read ──
         if file_ext == ".csv":
             df = pd.read_csv(file_path, encoding="utf-8-sig", dtype=str)
-            # 标准化列名
+            # Standardized listing
             columns = list(df.columns)
-            # 构建 header_map
+            # Build header_map
             header_map = {"imo": None, "call_sign": None, "ship_name": None,
                           "build_date": None, "gross_tonnage": None}
-            print(f"\n=== 开始识别{file_name}的统一表头（CSV模式） ===")
+            print(f"\n=== Start recognition{file_name}Uniform chart header (CSV mode)  ===")
             for col_idx, original_header in enumerate(columns):
                 processed_header = str(original_header).replace("_", " ").lower().strip()
 
-                # 匹配IMO列
+                # Match IMO Column
                 if header_map["imo"] is None:
                     for imo_var in UNIFIED_HEADERS["imo"]:
                         if processed_header == imo_var.replace("_", " ").lower():
                             header_map["imo"] = col_idx
-                            print(f"✅ 第{col_idx+1}列：'{original_header}' → 匹配为IMO列")
+                            print(f"✅ Its... its... its... its... its{col_idx+1}Column: '{original_header}' → Match As IMO Column")
                             break
 
-                # 匹配CallSign列
+                # Match CallSign Column
                 if header_map["call_sign"] is None:
                     for call_var in UNIFIED_HEADERS["call_sign"]:
                         if processed_header == call_var.replace("_", " ").lower():
                             header_map["call_sign"] = col_idx
-                            print(f"✅ 第{col_idx+1}列：'{original_header}' → 匹配为CallSign列")
+                            print(f"✅ Its... its... its... its... its{col_idx+1}Column: '{original_header}' → Match As CallSign Column")
                             break
 
-                # 匹配ShipName列
+                # Match ShipName Column
                 if header_map["ship_name"] is None:
                     for name_var in UNIFIED_HEADERS["ship_name"]:
                         if processed_header == name_var.replace("_", " ").lower():
                             header_map["ship_name"] = col_idx
-                            print(f"✅ 第{col_idx+1}列：'{original_header}' → 匹配为ShipName列")
+                            print(f"✅ Its... its... its... its... its{col_idx+1}Column: '{original_header}' → Match As ShipName Column")
                             break
 
-                # 匹配Builtdate列（建造年份）
+                # Match Builtdate Column (year built) 
                 if header_map["build_date"] is None:
                     for bd_var in UNIFIED_HEADERS["build_date"]:
                         if processed_header == bd_var.replace("_", " ").lower():
                             header_map["build_date"] = col_idx
-                            print(f"✅ 第{col_idx+1}列：'{original_header}' → 匹配为建造年份列")
+                            print(f"✅ Its... its... its... its... its{col_idx+1}Column: '{original_header}' → Match to the construction year columns")
                             break
 
-                # 匹配Gross Tonnage列（总吨）
+                # Match Gross Tonnage Column (gross tonnage) 
                 if header_map["gross_tonnage"] is None:
                     for gt_var in UNIFIED_HEADERS["gross_tonnage"]:
                         if processed_header == gt_var.replace("_", " ").lower():
                             header_map["gross_tonnage"] = col_idx
-                            print(f"✅ 第{col_idx+1}列：'{original_header}' → 匹配为总吨列")
+                            print(f"✅ Its... its... its... its... its{col_idx+1}Column: '{original_header}' → Match to Total Trail")
                             break
 
-            # 校验IMO/呼号/船名三个核心字段
+            # Verify IMO/Call sign/Three core fields for ship names
             missing_fields = [k for k in ["imo", "call_sign", "ship_name"] if header_map[k] is None]
             if missing_fields:
-                print(f"\n❌ 错误：{file_name} 未匹配到以下核心字段：{missing_fields}")
-                print(f"   支持的列名变体：{ {k: UNIFIED_HEADERS[k] for k in missing_fields} }")
+                print(f"\n❌ Error: {file_name} The following core fields were not matched: {missing_fields}")
+                print(f"   Supported change in listing: { {k: UNIFIED_HEADERS[k] for k in missing_fields} }")
                 return []
 
-            # 读取数据行
+            # Read Data Rows
             ship_data_list = []
-            print(f"\n=== 开始读取{file_name}的数据 ===")
+            print(f"\n=== Start reading{file_name}Data ===")
             for row_idx in range(len(df)):
                 imo = safe_str(df.iloc[row_idx, header_map["imo"]])
                 call_sign = safe_str(df.iloc[row_idx, header_map["call_sign"]])
@@ -663,13 +663,13 @@ def read_input_excel(file_path: str) -> list:
                 original_build_date = safe_str(df.iloc[row_idx, header_map["build_date"]]) if header_map["build_date"] is not None else ""
                 original_gross_tonnage = safe_str(df.iloc[row_idx, header_map["gross_tonnage"]]) if header_map["gross_tonnage"] is not None else ""
 
-                # 跳过所有字段为空的行
+                # Skip all fields to empty rows
                 if not imo and not call_sign and not ship_name:
-                    print(f"⚠️ 跳过空行：第{row_idx+2}行（所有核心字段均为空）")
+                    print(f"⚠️ Skip empty lines: Its... its... its... its... its{row_idx+2}Okay (All core fields are empty) ")
                     continue
 
-                excel_row = row_idx + 2  # CSV行号+2 = Excel风格的行号（含表头）
-                print(f"✅ 第{excel_row}行：ShipName='{ship_name}' | IMO='{imo}' | CallSign='{call_sign}' | 原建造年份='{original_build_date}' | 原总吨='{original_gross_tonnage}'")
+                excel_row = row_idx + 2  # CSV Line Number+2 = Excel Line Numbers of Styles (Including tabular headers) 
+                print(f"✅ Its... its... its... its... its{excel_row}Okay: ShipName='{ship_name}' | IMO='{imo}' | CallSign='{call_sign}' | Original year of construction='{original_build_date}' | Original gross tons='{original_gross_tonnage}'")
                 ship_data_list.append({
                     "row": excel_row,
                     "imo": imo,
@@ -679,10 +679,10 @@ def read_input_excel(file_path: str) -> list:
                     "original_gross_tonnage": original_gross_tonnage
                 })
 
-            print(f"\n✅ 读取完成：{file_name} 共{len(ship_data_list)}条有效数据")
+            print(f"\n✅ Read Completed: {file_name} Total{len(ship_data_list)}Effective data")
             return ship_data_list
 
-        # ── XLSX 文件：保持原有 openpyxl 逻辑 ──
+        # ── XLSX Documentation: Maintain as before openpyxl Logic ──
         else:
             wb = openpyxl.load_workbook(file_path, data_only=True)
             sheet = wb.active
@@ -690,7 +690,7 @@ def read_input_excel(file_path: str) -> list:
             header_map = {"imo": None, "call_sign": None, "ship_name": None,
                           "build_date": None, "gross_tonnage": None}
 
-            print(f"\n=== 开始识别{file_name}的统一表头（XLSX模式） ===")
+            print(f"\n=== Start recognition{file_name}Uniform chart header (XLSX mode)  ===")
             for col in range(1, sheet.max_column + 1):
                 original_header = str(sheet.cell(row=1, column=col).value).strip() if sheet.cell(row=1, column=col).value else ""
                 processed_header = original_header.replace("_", " ").lower()
@@ -699,55 +699,55 @@ def read_input_excel(file_path: str) -> list:
                     for imo_var in UNIFIED_HEADERS["imo"]:
                         if processed_header == imo_var.replace("_", " ").lower():
                             header_map["imo"] = col
-                            print(f"✅ 第{col}列：'{original_header}' → 匹配为IMO列")
+                            print(f"✅ Its... its... its... its... its{col}Column: '{original_header}' → Match As IMO Column")
                             break
 
                 if header_map["call_sign"] is None:
                     for call_var in UNIFIED_HEADERS["call_sign"]:
                         if processed_header == call_var.replace("_", " ").lower():
                             header_map["call_sign"] = col
-                            print(f"✅ 第{col}列：'{original_header}' → 匹配为CallSign列")
+                            print(f"✅ Its... its... its... its... its{col}Column: '{original_header}' → Match As CallSign Column")
                             break
 
                 if header_map["ship_name"] is None:
                     for name_var in UNIFIED_HEADERS["ship_name"]:
                         if processed_header == name_var.replace("_", " ").lower():
                             header_map["ship_name"] = col
-                            print(f"✅ 第{col}列：'{original_header}' → 匹配为ShipName列")
+                            print(f"✅ Its... its... its... its... its{col}Column: '{original_header}' → Match As ShipName Column")
                             break
 
                 if header_map["build_date"] is None:
                     for bd_var in UNIFIED_HEADERS["build_date"]:
                         if processed_header == bd_var.replace("_", " ").lower():
                             header_map["build_date"] = col
-                            print(f"✅ 第{col}列：'{original_header}' → 匹配为建造年份列")
+                            print(f"✅ Its... its... its... its... its{col}Column: '{original_header}' → Match to the construction year columns")
                             break
 
                 if header_map["gross_tonnage"] is None:
                     for gt_var in UNIFIED_HEADERS["gross_tonnage"]:
                         if processed_header == gt_var.replace("_", " ").lower():
                             header_map["gross_tonnage"] = col
-                            print(f"✅ 第{col}列：'{original_header}' → 匹配为总吨列")
+                            print(f"✅ Its... its... its... its... its{col}Column: '{original_header}' → Match to Total Trail")
                             break
 
-            # 校验核心字段
-            print(f"\n=== 表头匹配结果汇总 ===")
+            # Verify Core Fields
+            print(f"\n=== Summary of results for table header matching ===")
             for field in ["imo", "call_sign", "ship_name", "build_date", "gross_tonnage"]:
                 col_idx = header_map[field]
                 if col_idx is not None:
-                    print(f"✅ {field} → 第{col_idx}列")
+                    print(f"✅ {field} → Its... its... its... its... its{col_idx}Column")
                 else:
-                    print(f"⚠️ {field} → 未匹配到（非核心字段可忽略）")
+                    print(f"⚠️ {field} → Not matched (Non-core field is negligible) ")
 
             missing_fields = [k for k in ["imo", "call_sign", "ship_name"] if header_map[k] is None]
             if missing_fields:
-                print(f"\n❌ 错误：{file_name} 未匹配到以下核心字段：{missing_fields}")
+                print(f"\n❌ Error: {file_name} The following core fields were not matched: {missing_fields}")
                 wb.close()
                 return []
-            print(f"✅ 所有核心表头匹配完成！")
+            print(f"✅ All core table header matches complete！")
 
-            # 读取数据行
-            print(f"\n=== 开始读取{file_name}的数据 ===")
+            # Read Data Rows
+            print(f"\n=== Start reading{file_name}Data ===")
             for row in range(2, sheet.max_row + 1):
                 imo = ""
                 call_sign = ""
@@ -765,7 +765,7 @@ def read_input_excel(file_path: str) -> list:
                     name_val = sheet.cell(row=row, column=header_map["ship_name"]).value
                     ship_name = safe_str(name_val)
 
-                # 读取原始建造年份和总吨
+                # Read original construction year and gross tonnes
                 original_build_date = ""
                 if header_map["build_date"]:
                     bd_val = sheet.cell(row=row, column=header_map["build_date"]).value
@@ -777,10 +777,10 @@ def read_input_excel(file_path: str) -> list:
                     original_gross_tonnage = safe_str(gt_val)
 
                 if not imo and not call_sign and not ship_name:
-                    print(f"⚠️ 跳过空行：第{row}行（所有字段均为空）")
+                    print(f"⚠️ Skip empty lines: Its... its... its... its... its{row}Okay (All fields are empty) ")
                     continue
 
-                print(f"✅ 第{row}行：ShipName='{ship_name}' | IMO='{imo}' | CallSign='{call_sign}' | 原建造年份='{original_build_date}' | 原总吨='{original_gross_tonnage}'")
+                print(f"✅ Its... its... its... its... its{row}Okay: ShipName='{ship_name}' | IMO='{imo}' | CallSign='{call_sign}' | Original year of construction='{original_build_date}' | Original gross tons='{original_gross_tonnage}'")
                 ship_data_list.append({
                     "row": row,
                     "imo": imo,
@@ -791,20 +791,20 @@ def read_input_excel(file_path: str) -> list:
                 })
 
             wb.close()
-            print(f"\n✅ 读取完成：{file_name} 共{len(ship_data_list)}条有效数据")
+            print(f"\n✅ Read Completed: {file_name} Total{len(ship_data_list)}Effective data")
             return ship_data_list
 
     except Exception as e:
-        print(f"❌ 读取{os.path.basename(file_path)}失败：{str(e)}")
+        print(f"❌ Read{os.path.basename(file_path)}Failed: {str(e)}")
         traceback.print_exc()
         return []
 
 
 def compare_and_judge(new_val: str, old_val: str, field_name: str) -> tuple:
     """
-    比对单个字段的新旧值。
-    返回: (比较状态码, 描述文本)
-    状态码: "match" | "updated" | "filled" | "both_empty" | "new_empty"
+    Compares old and new values to single fields. 
+    Back: (Compare status code, Description Text)
+    Status Code: "match" | "updated" | "filled" | "both_empty" | "new_empty"
     """
     new_norm = normalize_for_compare(new_val)
     old_norm = normalize_for_compare(old_val)
@@ -812,34 +812,34 @@ def compare_and_judge(new_val: str, old_val: str, field_name: str) -> tuple:
     if not old_norm and not new_norm:
         return ("both_empty", "")
     if not old_norm and new_norm:
-        return ("filled", f"{field_name}原数据为空，已补充")
+        return ("filled", f"{field_name}original value missing, filled")
     if old_norm and not new_norm:
-        return ("new_empty", f"{field_name}爬取为空(旧值:{old_val})")
+        return ("new_empty", f"{field_name}Crawl as Empty(Old value:{old_val})")
     if old_norm == new_norm:
         return ("match", "")
     else:
-        return ("updated", f"{field_name}(旧值:{old_val}->新值:{new_val})")
+        return ("updated", f"{field_name}(Old value:{old_val}->New value:{new_val})")
 
 
 def build_comparison_judgment(new_build_date: str, new_gross_tonnage: str,
                                old_build_date: str, old_gross_tonnage: str) -> str:
     """
-    综合比对建造年份和总吨，生成"数据比对判定"文本。
+    Year of construction combined and gross tonnes, Generate"Data match determination"Text. 
     """
-    bd_status, bd_msg = compare_and_judge(new_build_date, old_build_date, "建造年份")
-    gt_status, gt_msg = compare_and_judge(new_gross_tonnage, old_gross_tonnage, "总吨")
+    bd_status, bd_msg = compare_and_judge(new_build_date, old_build_date, "year built")
+    gt_status, gt_msg = compare_and_judge(new_gross_tonnage, old_gross_tonnage, "gross tonnage")
 
     all_statuses = [bd_status, gt_status]
 
-    # 两个都匹配 → 完全一致
+    # Both of them → identical
     if all(s in ("match", "both_empty") for s in all_statuses) and "match" in all_statuses:
-        return "完全一致"
+        return "identical"
 
-    # 两个都是原数据为空且爬取为空
+    # Both of them were empty and crawled empty
     if all(s == "both_empty" for s in all_statuses):
-        return "原数据为空，爬取数据亦为空"
+        return "original value missing, Crawling data is empty"
 
-    # 构建变更描述
+    # Build Change Description
     changes = []
     if bd_msg:
         changes.append(bd_msg)
@@ -847,21 +847,21 @@ def build_comparison_judgment(new_build_date: str, new_gross_tonnage: str,
         changes.append(gt_msg)
 
     if not changes:
-        return "完全一致"
+        return "identical"
 
-    # 判断总体状态
+    # To judge the overall state
     has_filled = "filled" in all_statuses
     has_updated = "updated" in all_statuses
     has_new_empty = "new_empty" in all_statuses
 
     if has_updated and has_filled:
-        prefix = "数据有更新+补充: "
+        prefix = "data updated+Supplementary: "
     elif has_updated:
-        prefix = "数据有更新: "
+        prefix = "data updated: "
     elif has_filled and not has_updated:
-        prefix = "原数据为空，已补充: "
+        prefix = "original value missing, filled: "
     elif has_new_empty:
-        prefix = "注意-爬取数据缺失: "
+        prefix = "attention-Crawling data missing: "
     else:
         prefix = ""
 
@@ -869,36 +869,36 @@ def build_comparison_judgment(new_build_date: str, new_gross_tonnage: str,
 
 
 def init_result_excel(file_name: str) -> tuple:
-    """初始化结果Excel（含比对诊断列）"""
+    """Initialization of results Excel (Diagnosis column) """
     result_excel_path = os.path.join(OUTPUT_FOLDER, f"{file_name}_result.xlsx")
     if os.path.exists(result_excel_path):
         wb = openpyxl.load_workbook(result_excel_path)
-        print(f"\U0001f4ca 加载现有结果文件：{os.path.basename(result_excel_path)}")
+        print(f"\U0001f4ca Loading existing outcome documents: {os.path.basename(result_excel_path)}")
     else:
         wb = openpyxl.Workbook()
         sheet = wb.active
-        sheet.title = f"{file_name}船舶查询结果"
-        # 完整结果表头（含新增的诊断列）
+        sheet.title = f"{file_name}Ship search results"
+        # Full Results Table (Include new diagnostic columns) 
         headers = [
-            "查询标识",           # 1
-            "原始行号",           # 2
-            "船名(输入)",          # 3
-            "IMO编码(输入)",       # 4
-            "呼号(输入)",          # 5
+            "Query Identification",           # 1
+            "Original Line Number",           # 2
+            "Name of ship(Enter)",          # 3
+            "IMO Encoding(Enter)",       # 4
+            "Call sign(Enter)",          # 5
             "MMSI",               # 6
-            "建造日期",            # 7
-            "总吨",               # 8
-            "详细船舶类型",         # 9
-            "呼号(爬取)",          # 10
-            "注册船东",            # 11
-            "原建造年份",          # 12  ← 新增：输入文件中的原值
-            "原总吨数",            # 13  ← 新增：输入文件中的原值
-            "数据比对判定",         # 14  ← 新增：比对诊断结果
-            "错误信息",            # 15
-            "查询过程",            # 16
-            "是否需人工查询"        # 17
+            "Built_Date",            # 7
+            "gross tonnage",               # 8
+            "Detailed type of ship",         # 9
+            "Call sign(Crawl)",          # 10
+            "Registered shipowner",            # 11
+            "Original year of construction",          # 12  ← Add: Enter the original value of the file
+            "Original total tons",            # 13  ← Add: Enter the original value of the file
+            "Data match determination",         # 14  ← Add: Compared to the diagnosis
+            "Error message",            # 15
+            "Query process",            # 16
+            "Whether manual queries are required"        # 17
         ]
-        # 设置表头样式
+        # Set table header styles
         header_fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
         header_font = Font(bold=True, size=11, color="FFFFFF")
         for col_idx, header in enumerate(headers, 1):
@@ -906,24 +906,24 @@ def init_result_excel(file_name: str) -> tuple:
             cell.font = header_font
             cell.alignment = Alignment(horizontal="center", vertical="center")
             cell.fill = header_fill
-        # 设置列宽
+        # Set Column Width
         col_widths = {1: 22, 2: 10, 3: 22, 4: 16, 5: 14, 6: 14, 7: 12, 8: 12,
                       9: 20, 10: 14, 11: 26, 12: 14, 13: 12, 14: 48, 15: 26, 16: 50, 17: 14}
         for col_idx, width in col_widths.items():
             sheet.column_dimensions[openpyxl.utils.get_column_letter(col_idx)].width = width
-        # 冻结首行
+        # Freeze first row
         sheet.freeze_panes = "A2"
         wb.save(result_excel_path)
-        print(f"\U0001f4ca 新建结果文件：{os.path.basename(result_excel_path)}")
+        print(f"\U0001f4ca New outcome document: {os.path.basename(result_excel_path)}")
     return wb, result_excel_path
 
 
 def write_result_to_excel(wb: openpyxl.Workbook, excel_path: str, ship_data: dict, query_result: dict):
-    """写入查询结果（含比对诊断列）"""
+    """Writing Query Results (Diagnosis column) """
     sheet = wb.active
     next_row = sheet.max_row + 1
 
-    # 从查询结果中提取爬取到的字段
+    # Extracting the crawling field from the query result
     new_build_date = query_result.get("build_date", "")
     new_gross_tonnage = query_result.get("gross_tonnage", "")
     new_call_sign = query_result.get("call_sign", "")
@@ -931,101 +931,101 @@ def write_result_to_excel(wb: openpyxl.Workbook, excel_path: str, ship_data: dic
     new_ship_type = query_result.get("ship_type_detailed", "")
     new_owner = query_result.get("registered_owner", "")
 
-    # 从输入文件中提取原始值
+    # Extract original values from input files
     old_build_date = ship_data.get("original_build_date", "")
     old_gross_tonnage = ship_data.get("original_gross_tonnage", "")
 
-    # 生成数据比对判定
+    # Generate data matching determinations
     comparison_judgment = build_comparison_judgment(
         new_build_date, new_gross_tonnage,
         old_build_date, old_gross_tonnage
     )
 
-    # ── 写入各列 ──
-    # 列1：查询标识
-    sheet.cell(row=next_row, column=1, value=ship_data.get("imo") or ship_data.get("call_sign") or (ship_data.get("ship_name")[:20] if ship_data.get("ship_name") else "无标识"))
-    # 列2：原始行号
+    # ── Write Columns ──
+    # Column 1: Query Identification
+    sheet.cell(row=next_row, column=1, value=ship_data.get("imo") or ship_data.get("call_sign") or (ship_data.get("ship_name")[:20] if ship_data.get("ship_name") else "No marking"))
+    # Column 2: Original Line Number
     sheet.cell(row=next_row, column=2, value=ship_data.get("row"))
-    # 列3：船名(输入)
+    # Column 3: Name of ship(Enter)
     sheet.cell(row=next_row, column=3, value=ship_data.get("ship_name", ""))
-    # 列4：IMO编码(输入)
+    # Column 4: IMO Encoding(Enter)
     sheet.cell(row=next_row, column=4, value=ship_data.get("imo", ""))
-    # 列5：呼号(输入)
+    # Column 5: Call sign(Enter)
     sheet.cell(row=next_row, column=5, value=ship_data.get("call_sign", ""))
-    # 列6：MMSI（爬取）
+    # Column 6: MMSI (Crawl) 
     sheet.cell(row=next_row, column=6, value=new_mmsi)
-    # 列7：建造日期（爬取）
+    # Column 7: Built_Date (Crawl) 
     sheet.cell(row=next_row, column=7, value=new_build_date)
-    # 列8：总吨（爬取）
+    # Column 8: gross tonnage (Crawl) 
     sheet.cell(row=next_row, column=8, value=new_gross_tonnage)
-    # 列9：详细船舶类型（爬取）
+    # Column 9: Detailed type of ship (Crawl) 
     sheet.cell(row=next_row, column=9, value=new_ship_type)
-    # 列10：呼号(爬取)
+    # Column 10: Call sign(Crawl)
     sheet.cell(row=next_row, column=10, value=new_call_sign)
-    # 列11：注册船东（爬取）
+    # Column 11: Registered shipowner (Crawl) 
     sheet.cell(row=next_row, column=11, value=new_owner)
-    # 列12：原建造年份（输入文件原值）
+    # Column 12: Original year of construction (Enter the original value of the file) 
     sheet.cell(row=next_row, column=12, value=old_build_date)
-    # 列13：原总吨数（输入文件原值）
+    # Column 13: Original total tons (Enter the original value of the file) 
     sheet.cell(row=next_row, column=13, value=old_gross_tonnage)
-    # 列14：数据比对判定
+    # Column 14: Data match determination
     sheet.cell(row=next_row, column=14, value=comparison_judgment)
-    # 列15：错误信息
-    sheet.cell(row=next_row, column=15, value=query_result.get("error", "") or (query_result.get("no_data") and "无匹配数据" or ""))
-    # 列16：查询过程
+    # Column 15: Error message
+    sheet.cell(row=next_row, column=15, value=query_result.get("error", "") or (query_result.get("no_data") and "No match" or ""))
+    # Column 16: Query process
     sheet.cell(row=next_row, column=16, value=query_result.get("query_process", ""))
-    # 列17：是否需人工查询
-    sheet.cell(row=next_row, column=17, value="是" if query_result.get("need_manual_check") else "否")
+    # Column 17: Whether manual queries are required
+    sheet.cell(row=next_row, column=17, value="is" if query_result.get("need_manual_check") else "no")
 
-    # ── 高亮比对判定列 ──
+    # ── Highlights vs. Decision Rows ──
     judgment_cell = sheet.cell(row=next_row, column=14)
     judgment_cell.alignment = Alignment(wrap_text=True, vertical="center")
-    if "完全一致" in comparison_judgment:
+    if "identical" in comparison_judgment:
         judgment_cell.font = Font(color="006100")
         judgment_cell.fill = PatternFill(start_color="C6EFCE", end_color="C6EFCE", fill_type="solid")
-    elif "数据有更新" in comparison_judgment:
+    elif "data updated" in comparison_judgment:
         judgment_cell.font = Font(color="9C5700", bold=True)
         judgment_cell.fill = PatternFill(start_color="FFEB9C", end_color="FFEB9C", fill_type="solid")
-    elif "原数据为空，已补充" in comparison_judgment:
+    elif "original value missing, filled" in comparison_judgment:
         judgment_cell.font = Font(color="0066CC")
         judgment_cell.fill = PatternFill(start_color="DAEEF3", end_color="DAEEF3", fill_type="solid")
-    elif "注意" in comparison_judgment:
+    elif "attention" in comparison_judgment:
         judgment_cell.font = Font(color="9C0006")
         judgment_cell.fill = PatternFill(start_color="FFC7CE", end_color="FFC7CE", fill_type="solid")
 
     wb.save(excel_path)
-    print(f"\U0001f4dd 写入结果：第{next_row}行（原始行：{ship_data.get('row')}）| 比对判定：{comparison_judgment}")
+    print(f"\U0001f4dd Writing Results: Its... its... its... its... its{next_row}Okay (Original Line: {ship_data.get('row')}) | Matching of determinations: {comparison_judgment}")
 
 
-# ========== 单文件处理 ==========
+# ========== Single file processing ==========
 def process_single_excel(xlsx_file: str, current_idx: int, total_count: int):
-    """处理单个Excel文件"""
+    """Deal with Single Excel Documentation"""
     file_name = os.path.basename(xlsx_file).replace(".xlsx", "").replace(".csv", "")
     print(f"\n" + "="*100)
-    print(f"\U0001f680 开始处理第{current_idx}/{total_count}个文件：{os.path.basename(xlsx_file)}")
+    print(f"\U0001f680 Start processing number one{current_idx}/{total_count}File: {os.path.basename(xlsx_file)}")
     print("="*100)
 
-    # 1. 读取数据
+    # 1. Read Data
     ship_data_list = read_input_excel(xlsx_file)
     if not ship_data_list:
-        print(f"❌ {os.path.basename(xlsx_file)} 无有效数据，跳过处理")
+        print(f"❌ {os.path.basename(xlsx_file)} No valid data, Skip Processing")
         return
 
-    # 2. 初始化结果Excel
+    # 2. Initialization of results Excel
     result_wb, result_excel_path = init_result_excel(file_name)
 
-    # 3. 加载断点
+    # 3. Load Breakpoint
     start_row, current_account_idx = load_breakpoint(file_name)
     pending_data = [data for data in ship_data_list if data["row"] >= start_row]
     if not pending_data:
-        print(f"\U0001f389 {os.path.basename(xlsx_file)} 所有数据已处理完成")
+        print(f"\U0001f389 {os.path.basename(xlsx_file)} All data processed")
         result_wb.close()
         return
-    print(f"\U0001f4cb 待处理：{len(pending_data)}条数据 | 从第{start_row}行开始 | 当前账号索引：{current_account_idx}")
+    print(f"\U0001f4cb Pending: {len(pending_data)}Data | From the first{start_row}Line Start | Index to Current Account: {current_account_idx}")
 
-    # 4. 初始化爬虫
+    # 4. Initial reptiles
     if current_account_idx >= len(ACCOUNTS):
-        print(f"❌ 账号索引{current_account_idx}越界（共{len(ACCOUNTS)}个账号）")
+        print(f"❌ Index of accounts{current_account_idx}Cross-border (Total{len(ACCOUNTS)}Account) ")
         result_wb.close()
         return
     current_account = ACCOUNTS[current_account_idx]
@@ -1037,93 +1037,93 @@ def process_single_excel(xlsx_file: str, current_idx: int, total_count: int):
             headless=HEADLESS_MODE
         )
         if not crawler.login_imo():
-            print(f"❌ 账号{current_account['username']}登录失败，切换账号")
-            raise Exception("初始账号登录失败")
+            print(f"❌ Account{current_account['username']}Login failed, Switch account number")
+            raise Exception("Initial account login failed")
     except Exception as e:
-        print(f"❌ 爬虫初始化失败：{str(e)}")
+        print(f"❌ The reptiles have failed to start: {str(e)}")
         if crawler:
             crawler.close()
         result_wb.close()
         return
 
-    # 5. 处理数据
+    # 5. Processing of data
     try:
         for ship_data in pending_data:
             current_data_row = ship_data["row"]
             print(f"\n" + "-"*60)
-            print(f"\U0001f504 处理进度：原始行{current_data_row}（账号：{current_account['username']}）")
+            print(f"\U0001f504 Processing progress: Original Line{current_data_row} (Account: {current_account['username']}）")
             print("-"*60)
 
             try:
-                # 执行分级查询
+                # Execute Queries
                 query_result = crawler.query_imo_ship(
                     imo_number=ship_data["imo"],
                     call_sign=ship_data["call_sign"],
                     ship_name=ship_data["ship_name"]
                 )
 
-                # 写入结果
+                # Writing Results
                 write_result_to_excel(result_wb, result_excel_path, ship_data, query_result)
 
-                # 保存断点
+                # Save Breakpoints
                 save_breakpoint(file_name, current_data_row + 1, current_account_idx)
 
-                # 反爬延迟
+                # Recline Delay
                 time.sleep(random.uniform(2, 4))
 
             except SearchLimitReachedException:
-                # 切换账号：循环遍历所有剩余账号，直到找到可用的
-                print(f"\n\U0001f6a8 账号{current_account['username']}达到搜索限制，开始循环切换剩余账号")
+                # Switch account number: Recycle through all remaining accounts, Until we find out whats available
+                print(f"\n\U0001f6a8 Account{current_account['username']}Access to search limit, Start recycling to switch the remaining account")
                 crawler.close()
-                switch_success = False  # 标记是否切换到可用账号
+                switch_success = False  # Mark whether to switch to a valid account
 
-                # 循环遍历剩余所有账号（从当前下一个开始）
+                # Queue through all the remaining accounts (From the current next) 
                 while current_account_idx + 1 < len(ACCOUNTS):
                     current_account_idx += 1
                     current_account = ACCOUNTS[current_account_idx]
-                    print(f"\U0001f504 尝试切换到账号：{current_account['username']}（索引：{current_account_idx}）")
+                    print(f"\U0001f504 Try to switch to account: {current_account['username']} (Index: {current_account_idx}）")
 
-                    # 初始化新账号并尝试登录
+                    # Initialize a new account and try login
                     crawler = IMO_Edge_Crawler(
                         username=current_account["username"],
                         password=current_account["password"],
                         headless=HEADLESS_MODE
                     )
                     if crawler.login_imo():
-                        print(f"✅ 账号{current_account['username']}切换并登录成功")
+                        print(f"✅ Account{current_account['username']}Toggle and login successfully")
                         switch_success = True
-                        break  # 找到可用账号，终止循环
+                        break  # Found Available Account, Disable the loop
                     else:
-                        print(f"❌ 账号{current_account['username']}登录失败，继续切换下一个")
-                        crawler.close()  # 关闭登录失败的浏览器
+                        print(f"❌ Account{current_account['username']}Login failed, Continue Switching Next")
+                        crawler.close()  # Closed login failed browser
 
-                # 切换结果判断
+                # Switch results to judgement
                 if not switch_success:
-                    # 所有剩余账号都不可用
-                    print(f"❌ 所有账号已用尽/登录失败，停止处理当前文件")
+                    # All remaining accounts are not available
+                    print(f"❌ All accounts are exhausted/Login failed, Stop processing the current file")
                     save_breakpoint(file_name, current_data_row, current_account_idx)
                     crawler.close() if crawler else None
-                    break  # 终止当前文件处理
+                    break  # Disable current file processing
                 else:
-                    # 切换到可用账号，重新处理当前行
-                    print(f"\U0001f504 用新账号{current_account['username']}重新处理行{current_data_row}")
+                    # Switch to Available Account, Recursing the current line
+                    print(f"\U0001f504 Use new account{current_account['username']}Reprocess Rows{current_data_row}")
                     query_result = crawler.query_imo_ship(
                         imo_number=ship_data["imo"],
                         call_sign=ship_data["call_sign"],
                         ship_name=ship_data["ship_name"]
                     )
-                    # 写入结果+保存断点
+                    # Writing Results+Save Breakpoints
                     write_result_to_excel(result_wb, result_excel_path, ship_data, query_result)
                     save_breakpoint(file_name, current_data_row + 1, current_account_idx)
-                    time.sleep(random.uniform(2, 4))  # 反爬延迟
+                    time.sleep(random.uniform(2, 4))  # Recline Delay
 
             except Exception as e:
                 error_msg = str(e)[:100]
-                print(f"❌ 处理行{current_data_row}异常：{error_msg}")
-                # 写入错误结果
+                print(f"❌ Handle Rows{current_data_row}Its an anomaly: {error_msg}")
+                # Writing Error
                 error_result = {
                     "error": error_msg,
-                    "query_process": f"处理异常：{error_msg}",
+                    "query_process": f"Deal with anomalies: {error_msg}",
                     "need_manual_check": True
                 }
                 write_result_to_excel(result_wb, result_excel_path, ship_data, error_result)
@@ -1131,46 +1131,46 @@ def process_single_excel(xlsx_file: str, current_idx: int, total_count: int):
                 time.sleep(random.uniform(2, 4))
 
     except Exception as e:
-        print(f"❌ 批量处理异常：{str(e)}")
+        print(f"❌ Batch processing anomalies: {str(e)}")
     finally:
         if crawler:
             crawler.close()
         result_wb.close()
 
-# ========== 主入口 ==========
+# ========== Main entrance ==========
 if __name__ == "__main__":
-    # 修复 Windows GBK 编码问题
+    # Repair Windows GBK Encoding problem
     if sys.platform == "win32":
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-    # 获取输入文件夹下的所有CSV和Excel文件（排除 Flag_Code_Mapping.csv）
+    # Fetch All Under Input Folder CSV and Excel Documentation (Exclude Flag_Code_Mapping.csv) 
     all_files = []
     for f in os.listdir(INPUT_FOLDER):
         if f.endswith(".csv") or f.endswith(".xlsx"):
-            # 排除 Flag_Code_Mapping.csv（非船舶数据）
+            # Exclude Flag_Code_Mapping.csv (Non-ship data) 
             if "flag_code_mapping" in f.lower() or "flag" in f.lower():
-                print(f"⚠️ 跳过非船舶数据文件：{f}")
+                print(f"⚠️ Skip non-ship data files: {f}")
                 continue
             all_files.append(os.path.join(INPUT_FOLDER, f))
 
     if not all_files:
-        print(f"❌ 输入文件夹{INPUT_FOLDER}下未找到船舶数据文件（CSV/XLSX）")
+        print(f"❌ Enter Folder{INPUT_FOLDER}No ship data file found (CSV/XLSX) ")
         exit(1)
 
-    # 按文件名排序
+    # Sort by File Name
     all_files.sort()
 
     print(f"\n{'='*80}")
-    print(f"  IMO 船舶数据爬虫 - 增强版")
-    print(f"  输入目录: {INPUT_FOLDER}")
-    print(f"  输出目录: {OUTPUT_FOLDER}")
-    print(f"  待处理文件: {len(all_files)} 个")
+    print(f"  IMO Ship data reptiles - Enhanced version")
+    print(f"  Input Directory: {INPUT_FOLDER}")
+    print(f"  Output Directory: {OUTPUT_FOLDER}")
+    print(f"  Documents to be processed: {len(all_files)} One")
     for f in all_files:
         print(f"    - {os.path.basename(f)}")
     print(f"{'='*80}")
 
-    # 按顺序处理每个文件
+    # Sort each document sequentially
     total_files = len(all_files)
     for idx, xlsx_file in enumerate(all_files, 1):
         process_single_excel(xlsx_file, idx, total_files)
 
-    print(f"\n\U0001f389 所有{total_files}个文件处理完成！结果文件已保存到：{OUTPUT_FOLDER}")
+    print(f"\n\U0001f389 All{total_files}Documents processed！Outcome document saved: {OUTPUT_FOLDER}")

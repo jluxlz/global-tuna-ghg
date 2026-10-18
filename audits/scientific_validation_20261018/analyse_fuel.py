@@ -31,7 +31,7 @@ def main():
         ids.append(dict(Identifier=col,Present=int(valid.sum()),Duplicate_nonblank_rows=int(s[valid].duplicated(keep=False).sum()),Duplicate_values=int(s[valid][s[valid].duplicated()].nunique())))
     pd.DataFrame(ids).to_csv(O/'Fuel_Identifier_QC.csv',index=False)
     # Authorisation periods show permission, never proof of fishing activity.
-    raw=pd.read_csv(R/'raw_vessel_data/WCPFC中西太平洋渔业委员会.csv',low_memory=False)
+    raw=pd.read_csv(R/'raw_vessel_data/WCPFC_Vessel_Registry.csv',low_memory=False)
     key='International Radio Call Sign';start='Start of period of validity of authorization';end='End of period of validity of authorization'
     raw['Call_key']=raw[key].astype(str).str.strip().str.upper();raw=raw[~raw.Call_key.isin(['NAN','','NONE'])]
     raw['Auth_start']=pd.to_datetime(raw[start],errors='coerce');raw['Auth_end']=pd.to_datetime(raw[end],errors='coerce')

@@ -25,11 +25,11 @@ NEW_EXTRACTED_DIR = BASE_DIR / "new_extracted_vessel_data"
 RAW_DATA_DIR = ROOT_DIR / "raw_vessel_data"
 
 RAW_DATA_FILES = {
-    "CCSBT": RAW_DATA_DIR / "CCSBT南方蓝鳍金枪鱼保护委员会.csv",
-    "IATTC": RAW_DATA_DIR / "IATTC美洲热带金枪鱼委员会.xlsx",
-    "ICCAT": RAW_DATA_DIR / "ICCAT国际大西洋金枪鱼保护委员会.xlsx",
-    "IOTC":  RAW_DATA_DIR / "IOTC印度洋金枪鱼委员会.xlsx",
-    "WCPFC": RAW_DATA_DIR / "WCPFC中西太平洋渔业委员会.csv",
+    "CCSBT": RAW_DATA_DIR / "CCSBT_Vessel_Registry.csv",
+    "IATTC": RAW_DATA_DIR / "IATTC_Vessel_Registry.xlsx",
+    "ICCAT": RAW_DATA_DIR / "ICCAT_Vessel_Registry.xlsx",
+    "IOTC":  RAW_DATA_DIR / "IOTC_Vessel_Registry.xlsx",
+    "WCPFC": RAW_DATA_DIR / "WCPFC_Vessel_Registry.csv",
 }
 
 def safe_str(val):
@@ -62,14 +62,14 @@ def validate_ccsbt():
     ts_total = int(ts_sources.sum()) if len(ts_sources) > 0 else 0
     sa_total = int(sa_sources.sum()) if len(sa_sources) > 0 else 0
 
-    print(f" ({total:,} 艘)", end="")
+    print(f" ({total:,} One)", end="")
     # For CCSBT, PS,LL was previously 4 → now 0 due to Directive 3.1
     if psll_total == 0:
-        print(" ✅ Directive 3.1生效：PS+LL双标签强制→LL")
+        print(" ✅ Directive 3.1 Entry into force: PS+LL Double Label Force→LL")
     else:
-        print(" ✅ 无异常")
+        print(" ✅ No abnormality")
 
-    print(f"\n  VesselType\t数量\t来源 (SourceVesselType)")
+    print(f"\n  VesselType\t Number\t Source (SourceVesselType)")
 
     # LL breakdown
     if ll_total > 0:
@@ -110,10 +110,10 @@ def validate_ccsbt():
     # Verify: Other liners→LL should all have LL gear
     ll_rescued = df[(df["VesselType"] == "LL") & (df["SourceVesselType"].str.lower().str.contains("other|multi|bait|hand|troll", na=False))]
 
-    print(f"\n  核验项（指令变更后）:")
-    print(f"  • PS,LL 组合: {psll_total} 艘 — Directive 3.1强制→LL（SBT超低温延绳钓现实）")
-    print(f"  • CCSBT历次PS,LL的4艘(Other liners)现已全部归入LL")
-    print(f"  • 被丢弃的TO/Trawler/Gillnet/Handline等: 因Directive 2.1 hull blocklist截断")
+    print(f"\n  Verification (After the change of command) :")
+    print(f"  • PS,LL Group: {psll_total} One — Directive 3.1 Force→LL (SBT ultralow-temperature longline operating conditions) ")
+    print(f"  • CCSBT Previous PS,LL of 4 One(Other liners)All of them now LL")
+    print(f"  • Abandoned TO/Trawler/Gillnet/Handline Wait: Because Directive 2.1 hull blocklist truncated")
 
     return {"org": "CCSBT", "total": total, "ll": ll_total, "ps": ps_total,
             "ps_ll": psll_total, "ts": ts_total, "sa": sa_total}
@@ -143,11 +143,11 @@ def validate_iatc():
     mo_kept = len(df[df["VesselType"] == "MO"])
 
     if mo_kept == 0:
-        print(f" ({total:,} 艘) ⚠️ Directive 1.2生效：MO全部丢弃({mo_discarded}艘)")
+        print(f" ({total:,} One) ⚠️ Directive 1.2 Entry into force: MO Discard All({mo_discarded}One)")
     else:
-        print(f" ({total:,} 艘)")
+        print(f" ({total:,} One)")
 
-    print(f"\n  VesselType\t数量\t来源")
+    print(f"\n  VesselType\t Number\t Source")
     if ll_total > 0:
         parts = []
         for src, cnt in ll_sources.items():
@@ -166,11 +166,11 @@ def validate_iatc():
         if flag_col:
             mo_flags = raw_mo[flag_col].value_counts().head(5)
             flag_parts = [f"{f}({c})" for f, c in mo_flags.items()]
-            print(f"\n  说明: IATTC源数据Gear列是文字描述（\"Longline\", \"Multi-purpose\", \"Purse seine\"）")
-            print(f"  指令1.2: {mo_discarded}艘\"Multi-purpose\" 被LCA 5%截断法则剔除（无金枪鱼目标网具标识）")
+            print(f"\n  Annotations: IATTC Source data Gear Columns are text descriptions (\"Longline\", \"Multi-purpose\", \"Purse seine\") ")
+            print(f"  Command 1.2: {mo_discarded}One\"Multi-purpose\" By LCA 5%Cut the rule (No marking of tuna target nets) ")
             if flag_parts:
-                print(f"  主要来源国: {', '.join(flag_parts)}")
-            print(f"  相比旧逻辑，+{mo_discarded}艘MO被丢弃，防止沿海多物种轮作经济分配误差")
+                print(f"  Main source countries: {', '.join(flag_parts)}")
+            print(f"  Compared to old logic, +{mo_discarded}One MO Abandoned, Prevention of economic errors in multi-species rotations along the coast")
 
     return {"org": "IATTC", "total": total, "ll": ll_total, "ps": ps_total,
             "ps_ll": 0, "ts": 0, "sa": 0, "mo_discarded": mo_discarded}
@@ -195,9 +195,9 @@ def validate_iccat():
     ts_total = int(ts_sources.sum()) if len(ts_sources) > 0 else 0
     sa_total = int(sa_sources.sum()) if len(sa_sources) > 0 else 0
 
-    print(f" ({total:,} 艘) ✅ 全部通过源数据交叉验证")
+    print(f" ({total:,} One) ✅ Cross-check all with source data")
 
-    print(f"\n  VesselType\t数量\t来源")
+    print(f"\n  VesselType\t Number\t Source")
 
     if ll_total > 0:
         parts = []
@@ -221,7 +221,7 @@ def validate_iccat():
         print(f"  TS\t{ts_total:,}\t{', '.join(parts)}")
 
     # Key verification items: for each mapping, show what gear codes they have
-    print(f"\n  关键核验项（已逐条与源数据 IsscfvCode × IsscfgCode 对照）:")
+    print(f"\n  Key Verification Items (Article-by-article and source data IsscfvCode × IsscfgCode Comparison) :")
 
     # Get gear column from raw
     gear_col = "IsscfgCode"
@@ -241,17 +241,17 @@ def validate_iccat():
         cnt = len(subset)
         if cnt > 0:
             # Try to get gear info from raw data by matching on vessel name
-            print(f"    {label}: {cnt} 艘", end="")
+            print(f"    {label}: {cnt} One", end="")
             if source_type == "SV":
-                print(" ✅ ICCAT体系SV=Support Vessel(补给船)")
+                print(" ✅ ICCAT System SV=Support Vessel(Replenishment vessel)")
             elif source_type == "FO":
-                print(" ✅ 冷藏运输船归入转运/辅助船")
+                print(" ✅ Refrigerated transport vessel classified as trans-shipment/support vessel")
             elif source_type == "SP":
-                print(" ✅ 围网渔船")
+                print(" ✅ purse-seine fishing vessels")
             elif source_type == "MO":
-                print(" ✅ ISSCFV=MO(多用途船), gear=LL→延绳钓")
+                print(" ✅ ISSCFV=MO(Multi-purpose vessels), gear=LL→longline")
             elif source_type == "LH":
-                print(" ✅ 手钓船但有LL渔具授权")
+                print(" ✅ Ill take a boat but Ill take care of it LL Fishing gear authorization")
             else:
                 print(" ✅")
 
@@ -259,9 +259,9 @@ def validate_iccat():
     blocked_types = {"TO", "TOX", "TW", "LH", "GI", "GO", "GOX", "GND"}
     blocked_vessels = df[df["SourceVesselType"].str.upper().isin(blocked_types)]
     if len(blocked_vessels) > 0:
-        print(f"    ⚠️ Directive 2.1检查: {len(blocked_vessels)}艘hull-blocked类型仍被提取")
+        print(f"    ⚠️ Directive 2.1 Inspection: {len(blocked_vessels)}One hull-blocked Type still extracted")
     else:
-        print(f"    ✅ Directive 2.1: 所有hull-blocked类型(TO/LH/GI/GO)已正确截断，无漏网")
+        print(f"    ✅ Directive 2.1: All hull-blocked Type(TO/LH/GI/GO)Interrupted correctly, No leaks")
 
     # Check discarded MO vessels reason
     raw_mo = raw[raw[vt_col].astype(str).str.upper().str.strip() == "MO"]
@@ -275,7 +275,7 @@ def validate_iccat():
         discarded_mo = raw_mo[raw_mo["VesselName"].astype(str).str.strip().isin(discarded_mo_names)]
         mo_gears = discarded_mo[gear_col].dropna().value_counts().head(8)
         gear_parts = [f"{g}({c})" for g, c in mo_gears.items()]
-        print(f"    被丢弃的{len(discarded_mo_names)}艘MO: gear={', '.join(gear_parts)} — 均无LL/PS渔具，正确过滤")
+        print(f"    Abandoned{len(discarded_mo_names)}One MO: gear={', '.join(gear_parts)} — None LL/PS Fishing gear, Right Filter")
 
     return {"org": "ICCAT", "total": total, "ll": ll_total, "ps": ps_total,
             "ps_ll": 0, "ts": ts_total, "sa": sa_total}
@@ -304,9 +304,9 @@ def validate_iotc():
     lc_as_ts = len(df[(df["VesselType"] == "TS") & (df["SourceVesselType"].str.upper() == "LC")])
     lc_as_ll = len(df[(df["VesselType"] == "LL") & (df["SourceVesselType"].str.upper() == "LC")])
 
-    print(f" ({total:,} 艘) ✅ 全部通过源数据交叉验证")
+    print(f" ({total:,} One) ✅ Cross-check all with source data")
 
-    print(f"\n  VesselType\t数量\t来源")
+    print(f"\n  VesselType\t Number\t Source")
 
     if ll_total > 0:
         parts = []
@@ -329,7 +329,7 @@ def validate_iotc():
             parts.append(f"{src}({cnt})")
         print(f"  TS\t{ts_total:,}\t{', '.join(parts)}")
 
-    print(f"\n  关键核验项:")
+    print(f"\n  Key Verification Items:")
 
     mappings = [
         ("MU→LL", "LL", "MU"),
@@ -344,30 +344,30 @@ def validate_iotc():
         subset = df[(df["VesselType"] == vessel_type) & (df["SourceVesselType"] == source_type)]
         cnt = len(subset)
         if cnt > 0:
-            print(f"    {label}: {cnt} 艘", end="")
+            print(f"    {label}: {cnt} One", end="")
             if source_type == "SP":
-                print(" ✅ IOTC体系SP=Supply Vessel(补给船)，Directive 3.2锁定SA")
+                print(" ✅ IOTC System SP=Supply Vessel(Replenishment vessel), Directive 3.2 Lock SA")
             elif source_type == "CF":
-                print(" ✅ Cargo Freezer→转运船")
+                print(" ✅ Cargo Freezer→transshipment vessel")
             elif source_type == "LC":
-                print(" ✅ 指令2.2: Longliner+Carrier强制降级为TS(转运船)，纯航运油耗分摊")
+                print(" ✅ Command 2.2: Longliner+Carrier Force down as TS(transshipment vessel), Total shipping oil consumption assessed")
             elif source_type == "LB":
-                print(" ✅ IOTC代码LB=Longliner+Pole&Line")
+                print(" ✅ IOTC Code LB=Longliner+Pole&Line")
             elif source_type == "MU":
-                print(" ✅ 多用途船含LL渔具")
+                print(" ✅ Multi-purpose vessel content LL Fishing gear")
             elif source_type == "GI":
-                print(" ✅ 刺网船但同时有延绳钓渔具（Directive 2.1仅截断纯刺网，含LL的GI可保留）")
+                print(" ✅ The gillboats are accompanied by longline fishing gear (Directive 2.1 Just cut off the net, Ham LL of GI Reservable) ")
             else:
                 print(" ✅")
 
     # Check GI discard: only pure gillnet without LL gear should be discarded
     gi_kept = len(df[(df["VesselType"] == "LL") & (df["SourceVesselType"].str.upper() == "GI")])
     if gi_kept > 0:
-        print(f"    说明: {gi_kept}艘GI(Gillnetter)因同时持有LL渔具代码而被提取（非纯刺网）")
+        print(f"    Annotations: {gi_kept}One GI(Gillnetter)Because its simultaneously held LL The gear code was extracted (Not pure gillnets) ")
 
     # Check supply lock (Directive 3.2)
     sp_count = len(df[(df["VesselType"] == "SA") & (df["SourceVesselType"].str.upper() == "SP")])
-    print(f"    ✅ Directive 3.2: {sp_count}艘SP/SUPP被锁定为SA，拒绝渔具救援")
+    print(f"    ✅ Directive 3.2: {sp_count}One SP/SUPP Locked As SA, Refuse fishing gear")
 
     return {"org": "IOTC", "total": total, "ll": ll_total, "ps": ps_total,
             "ps_ll": 0, "ts": ts_total, "sa": sa_total}
@@ -396,11 +396,11 @@ def validate_wcpfc():
     zo_kept = len(df[df["SourceVesselType"].str.upper() == "ZO"])
 
     if zo_kept == 0:
-        print(f" ({total:,} 艘) ✅ Directive 1.1生效：ZO全部丢弃（科研调查船→非商业供应链）")
+        print(f" ({total:,} One) ✅ Directive 1.1 Entry into force: ZO Discard All (Scientific research ship→Non-commercial supply chains) ")
     else:
-        print(f" ({total:,} 艘) ✅ 全部通过源数据交叉验证")
+        print(f" ({total:,} One) ✅ Cross-check all with source data")
 
-    print(f"\n  VesselType\t数量\t来源")
+    print(f"\n  VesselType\t Number\t Source")
 
     if ll_total > 0:
         parts = []
@@ -423,7 +423,7 @@ def validate_wcpfc():
             parts.append(f"{src}({cnt})")
         print(f"  SA\t{sa_total:,}\t{', '.join(parts)}")
 
-    print(f"\n  关键核验项:")
+    print(f"\n  Key Verification Items:")
 
     # Check LP→LL mapping
     lp_to_ll = len(df[(df["VesselType"] == "LL") & (df["SourceVesselType"].str.upper() == "LP")])
@@ -432,19 +432,19 @@ def validate_wcpfc():
     vob_to_sa = len(df[(df["VesselType"] == "SA") & (df["SourceVesselType"].str.upper() == "VOB")])
 
     if lp_to_ll > 0:
-        print(f"    LP→LL: {lp_to_ll} 艘 ✅ 竿钓船但有LLD渔具")
+        print(f"    LP→LL: {lp_to_ll} One ✅ - A boat. - Yeah LLD Fishing gear")
     if lt_to_ll > 0:
-        print(f"    LT→LL: {lt_to_ll} 艘 ✅ 曳绳钓船但有LL/LLD渔具")
+        print(f"    LT→LL: {lt_to_ll} One ✅ The ropes, but there are LL/LLD Fishing gear")
 
-    print(f"    ZO→DISCARD [Directive 1.1]: ZO(科研调查船)不再→LL，直接丢弃 ✅")
-    print(f"    VOS→SA: {vos_to_sa} 艘 ✅ WCPFC体系VOS=Support Vessel")
-    print(f"    VOB→SA: {vob_to_sa} 艘 ✅ WCPFC体系VOB=Bunkering Vessel")
+    print(f"    ZO→DISCARD [Directive 1.1]: ZO(Scientific research ship)Not anymore→LL, Throw it away ✅")
+    print(f"    VOS→SA: {vos_to_sa} One ✅ WCPFC System VOS=Support Vessel")
+    print(f"    VOB→SA: {vob_to_sa} One ✅ WCPFC System VOB=Bunkering Vessel")
 
     # Show what was discarded vs old behavior
     if zo_kept == 0:
         # Count ZO in raw data
         raw_zo = raw[raw["Type of vessel"].astype(str).str.upper().str.strip() == "ZO"]
-        print(f"    旧逻辑ZO→VO(Support)→{len(raw_zo)}艘被保留；新逻辑ZO→RT(Discard)→全部{len(raw_zo)}艘丢弃")
+        print(f"    Old logic ZO→VO(Support)→{len(raw_zo)}One is reserved; New Logic ZO→RT(Discard)→All{len(raw_zo)}Throw it away")
 
     return {"org": "WCPFC", "total": total, "ll": ll_total, "ps": ps_total,
             "ps_ll": 0, "ts": ts_total, "sa": sa_total}
@@ -453,8 +453,8 @@ def validate_wcpfc():
 # ── Main Report ──
 def main():
     print("=" * 70)
-    print("  提取结果核验报告（指令修改后 — Directive Compliance Verification）")
-    print(f"  生成时间: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("  Verification report for extraction results (Command modified — Directive Compliance Verification) ")
+    print(f"  Generate time: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 70)
 
     results = []
@@ -466,9 +466,9 @@ def main():
 
     # ── Summary ──
     print(f"\n{'─' * 60}")
-    print(f"  总结")
+    print(f"  Summary")
     print(f"{'─' * 60}")
-    print(f"  {'状态':<12} {'说明'}")
+    print(f"  {'Status':<12} {'Annotations'}")
     print(f"  {'─' * 12} {'─' * 45}")
 
     for r in results:
@@ -482,40 +482,40 @@ def main():
 
         notes = []
         if org == "CCSBT":
-            notes.append(f"PS,LL({ps_ll})因Directive 3.1强制→LL；gear rescue全部正确")
+            notes.append(f"PS,LL({ps_ll})Because Directive 3.1 Force→LL; gear rescue All correct")
         elif org == "IATTC":
             mo_d = r.get("mo_discarded", 0)
-            notes.append(f"MO({mo_d})因Directive 1.2全部丢弃(LCA 5%截断)")
+            notes.append(f"MO({mo_d})Because Directive 1.2 Discard All(LCA 5%truncated)")
         elif org == "ICCAT":
-            notes.append("MO→LL, SV→SA, FO→TS全部正确；Directive 2.1 hull blocklist生效")
+            notes.append("MO→LL, SV→SA, FO→TS All correct; Directive 2.1 hull blocklist Entry into force")
         elif org == "IOTC":
-            notes.append(f"LC→TS({r.get('ts', 0)-85}艘因指令2.2新增)；SP→SA({sa})锁定")
+            notes.append(f"LC→TS({r.get('ts', 0)-85}Its a command 2.2 Add); SP→SA({sa})Lock")
         elif org == "WCPFC":
-            notes.append("ZO→DISCARD(Directive 1.1)；VOS/VOB→SA全部正确")
+            notes.append("ZO→DISCARD(Directive 1.1); VOS/VOB→SA All correct")
 
         status = "✅"
         print(f"  {status} {org:<10} {', '.join(notes)}")
 
     # ── Directive Change Summary ──
     print(f"\n{'─' * 60}")
-    print(f"  指令变更影响汇总")
+    print(f"  Summary of the impact of the change of instructions")
     print(f"{'─' * 60}")
 
     changes = [
-        ("指令1.1", "ZO/CO无条件丢弃", "WCPFC: ZO从VO(Support)→RT(Discard)，~18艘不再进入LL组"),
-        ("指令1.2", "IATTC MO截断", "IATTC: MO(Multi-purpose)~699艘从保留→丢弃"),
-        ("指令2.1", "Hull Blocklist", "TO/LH/GI/GO等物理船型禁止Gear Rescue进入PS/LL"),
-        ("指令2.2", "IOTC LC降级", "IOTC: LC从LL(Longliner)→TS(Transshipment)，~7艘变更"),
-        ("指令3.1", "CCSBT双标签→LL", "CCSBT: PS+LL双标签不再产出PS,LL组合，全部强制→LL"),
-        ("指令3.2", "Supply锁定SA", "SP/SUPP等补给船拒绝Gear Rescue，强制保留SA主分类"),
+        ("Command 1.1", "ZO/CO Unconditional discard", "WCPFC: ZO From VO(Support)→RT(Discard), ~18 No more ships LL Group"),
+        ("Command 1.2", "IATTC MO truncated", "IATTC: MO(Multi-purpose)~699 One from the one→Discard"),
+        ("Command 2.1", "Hull Blocklist", "TO/LH/GI/GO Not allowed in the physical ship Gear Rescue Enter PS/LL"),
+        ("Command 2.2", "IOTC LC Downgrade", "IOTC: LC From LL(Longliner)→TS(Transshipment), ~7 Change"),
+        ("Command 3.1", "CCSBT Double Label→LL", "CCSBT: PS+LL Double tab does not output PS,LL Group, Force All→LL"),
+        ("Command 3.2", "Supply Lock SA", "SP/SUPP When the supply ship refuses Gear Rescue, Compulsory reservation SA Main Category"),
     ]
 
-    print(f"  {'指令':<10} {'变更':<18} {'影响'}")
+    print(f"  {'Command':<10} {'Change':<18} {'Impact'}")
     print(f"  {'─' * 10} {'─' * 18} {'─' * 45}")
     for directive, change, impact in changes:
         print(f"  {directive:<10} {change:<18} {impact}")
 
-    print(f"\n  验证完毕。所有指令均已生效，交叉核验通过。")
+    print(f"\n  Validation complete. All instructions are in force, Cross-check pass. ")
 
 if __name__ == "__main__":
     if sys.platform == "win32":

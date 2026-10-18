@@ -5,27 +5,27 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # ============================================================
-# Step 1 & 2: 历史马力演进查询表 -- 数据预处理与查询函数
-# 基于 PNAS (Rousseau et al., 2019) 真实历史船队物理参数
+# Step 1 & 2: Historical Force Evolution Query Table -- Data Pre-processing and Query Functions
+# Based PNAS (Rousseau et al., 2019) Real History Fleet Physical Parameters
 # ============================================================
 
-# ---- Flag 说明 ----
-# vessel 数据中的 Flag 现在统一为 ISO3 代码 (flag_utils.py)
-# 无需转换 — 直接作为查询键使用
+# ---- Flag Annotations ----
+# vessel Data Flag And now were united ISO3 Code (flag_utils.py)
+# No conversion required — Use direct as a query key
 
-# ---- Gear 映射 ----
-# 将 vessel 数据中的 VesselType (LL, PS, TS) 映射到 CSV 中的 Gear 类别
+# ---- Gear Map ----
+# Will vessel Data VesselType (LL, PS, TS) Map to CSV Medium Gear Category
 GEAR_MAPPING = {
     'LL': 'Lines_Longlines',
     'PS': 'Seine_Purse_Seine',
     'TS': 'Trawl_Midwater_or_Unsp',
 }
 
-# ---- Length(m) -> CSV Length_Category 映射 ----
+# ---- Length(m) -> CSV Length_Category Map ----
 def map_length_to_csv_category(length_m):
-    """将数值 Length(m) 映射到 CSV 中的 Length_Category 分箱"""
+    """, the value will be added Length(m) Map to CSV Medium Length_Category Boxes"""
     if length_m < 6:
-        return '6-12m'   # 兜底：极小的船归入最小档
+        return '6-12m'   # Take the bottom: A very small ship is kept in the lowest gear
     elif length_m < 12:
         return '6-12m'
     elif length_m < 24:
@@ -37,65 +37,65 @@ def map_length_to_csv_category(length_m):
 
 
 # ============================================================
-# 主预处理函数
+# Main pre-processing function
 # ============================================================
 
 def build_power_discount_lookup(csv_path, baseline_year=2015, verbose=True):
     """
-    构建"历史马力演进查询表"。
+    Build"Historical Force Evolution Query Table". 
 
-    参数
+    parameter
     ----------
     csv_path : str
-        PNAS 历史船队数据 CSV 的路径。
+        PNAS Historical fleet data CSV Paths of the. 
     baseline_year : int
-        基准年份 (默认 2015)，用于提取现代基准功率。
+        Base year (default 2015), For extraction of modern baseline power. 
     verbose : bool
-        是否打印预处理日志。
+        Whether to print pre-processing logs. 
 
-    返回
+    Back
     -------
     lookup : dict
-        主查询字典，键为 (Country_ISO3, Gear_CSV, Length_Category, Year)，
-        值为 Power_Discount_Factor。
+        Main Query Dictionary, Keys (Country_ISO3, Gear_CSV, Length_Category, Year), 
+        Value is Power_Discount_Factor. 
     fallback_global : dict
-        全球平均兜底字典，键为 (Gear_CSV, Length_Category, Year)。
+        Global Average Dictionary, Keys (Gear_CSV, Length_Category, Year). 
     fallback_group_nearest : dict
-        按组最近年份兜底字典，键为 (Country_ISO3, Gear_CSV, Length_Category)，
-        值为 (years_array, factors_array) 元组，用于线性插值或最近邻。
+        Dictionary by group for the most recent year, Keys (Country_ISO3, Gear_CSV, Length_Category), 
+        Value is (years_array, factors_array) Group, For linear plugs or nearest neighbours. 
     fallback_global_nearest : dict
-        全球维度的最近年份兜底，键为 (Gear_CSV, Length_Category)。
+        The latest year of global dimensions, Keys (Gear_CSV, Length_Category). 
     """
     if verbose:
-        print(f"[预处理] 正在读取 PNAS 历史船队数据: {csv_path} ...")
+        print(f"[Pre-treatment] Reading PNAS Historical fleet data: {csv_path} ...")
 
     df_raw = pd.read_csv(csv_path, skiprows=[1])
 
-    # ---- 清理 ----
+    # ---- Clean ----
     for col in ['NV', 'P', 'Year']:
         df_raw[col] = pd.to_numeric(df_raw[col], errors='coerce')
     df_raw['Country'] = df_raw['Country'].astype(str).str.strip()
     df_raw['Gear'] = df_raw['Gear'].astype(str).str.strip()
     df_raw['Length_Category'] = df_raw['Length_Category'].astype(str).str.strip()
 
-    # 剔除无效行 (NV <= 0 或 P <= 0)
+    # Deleting invalid lines (NV <= 0 or P <= 0)
     df = df_raw[(df_raw['NV'] > 0) & (df_raw['P'] > 0)].copy()
 
-    # ---- 计算单船平均真实功率 ----
+    # ---- Calculating the average real power of a single ship ----
     df['Avg_Power'] = df['P'] / df['NV']
 
     if verbose:
-        print(f"   有效数据行数: {len(df):,}")
-        print(f"   年份跨度: {int(df['Year'].min())} - {int(df['Year'].max())}")
-        print(f"   唯一国家数: {df['Country'].nunique()}")
-        print(f"   唯一 Gear 类型: {df['Gear'].nunique()}")
-        print(f"   唯一 Length_Category: {sorted(df['Length_Category'].unique())}")
+        print(f"   Number of valid data lines: {len(df):,}")
+        print(f"   Year span: {int(df['Year'].min())} - {int(df['Year'].max())}")
+        print(f"   Number of only countries: {df['Country'].nunique()}")
+        print(f"   Only Gear Type: {df['Gear'].nunique()}")
+        print(f"   Only Length_Category: {sorted(df['Length_Category'].unique())}")
 
-    # ---- 提取基准年份的 Base_Power ----
-    # 如果 baseline_year 不存在，则取该组最近的有效年份
+    # ---- From base year Base_Power ----
+    # If baseline_year Cannot initialise Evolutions mail component, and the most recent valid year of the group
     base_data = df[df['Year'] == baseline_year].copy()
 
-    # 对于 baseline_year 缺失的组，向前/向后搜索最近年份
+    # Yes baseline_year Missing Group, Forward/Search backwards for the most recent year
     all_groups = df[['Country', 'Gear', 'Length_Category']].drop_duplicates()
     base_power_map = {}
 
@@ -105,15 +105,15 @@ def build_power_discount_lookup(csv_path, baseline_year=2015, verbose=True):
                            (base_data['Gear'] == g) &
                            (base_data['Length_Category'] == lc)]
         if len(subset) > 0:
-            # 取该组在 baseline_year 的所有记录加权平均
+            # Take the team baseline_year weighted average of all records
             base_power_map[(c, g, lc)] = (subset['P'].sum() / subset['NV'].sum())
         else:
-            # 寻找最近有效年份
+            # Looking for the latest effective year
             hist = df[(df['Country'] == c) &
                       (df['Gear'] == g) &
                       (df['Length_Category'] == lc)]
             if len(hist) > 0:
-                # 找最接近 baseline_year 的年份
+                # Find the closest baseline_year Year(s)
                 hist_years = hist['Year'].values
                 nearest_idx = np.argmin(np.abs(hist_years - baseline_year))
                 nearest_year = hist_years[nearest_idx]
@@ -122,9 +122,9 @@ def build_power_discount_lookup(csv_path, baseline_year=2015, verbose=True):
                                               nearest_subset['NV'].sum())
 
     if verbose:
-        print(f"   基准 (Base_Power) 覆盖组数: {len(base_power_map)}")
+        print(f"   baseline (Base_Power) Overwrite Cluster Number: {len(base_power_map)}")
 
-    # ---- 合并 Base_Power 回主表，计算 Power_Discount_Factor ----
+    # ---- Merge Base_Power Back to the master table, Calculate Power_Discount_Factor ----
     base_df = pd.DataFrame([
         {'Country': k[0], 'Gear': k[1], 'Length_Category': k[2],
          'Base_Power': v}
@@ -133,29 +133,29 @@ def build_power_discount_lookup(csv_path, baseline_year=2015, verbose=True):
     df = df.merge(base_df, on=['Country', 'Gear', 'Length_Category'], how='inner')
     df['Power_Discount_Factor'] = df['Avg_Power'] / df['Base_Power']
 
-    # 裁剪极端值：折扣因子不应 > 1.5（历史船不可能比现代船强太多）且 > 0
+    # Crop Extremes: The discount factor should not > 1.5 (Theres no way history can be so much stronger than modern ships) and > 0
     df['Power_Discount_Factor'] = df['Power_Discount_Factor'].clip(0.01, 1.5)
 
     if verbose:
         f = df['Power_Discount_Factor']
-        print(f"   Power_Discount_Factor 分布:")
-        print(f"      均值={f.mean():.3f}, 中位数={f.median():.3f}, "
+        print(f"   Power_Discount_Factor Distribution:")
+        print(f"      mean={f.mean():.3f}, median={f.median():.3f}, "
               f"P5={f.quantile(0.05):.3f}, P95={f.quantile(0.95):.3f}")
 
-    # ---- 构建 O(1) 查询字典 ----
-    # Level 1: 精确查询 (Country, Gear, Length_Category, Year) -> Discount Factor
+    # ---- Build O(1) Query Dictionary ----
+    # Level 1: Accurate Query (Country, Gear, Length_Category, Year) -> Discount Factor
     lookup = {}
     for _, row in df.iterrows():
         key = (row['Country'], row['Gear'], row['Length_Category'], int(row['Year']))
         lookup[key] = row['Power_Discount_Factor']
 
-    # Level 2: 全球平均兜底 (Gear, Length_Category, Year) -> Discount Factor
+    # Level 2: Global average (Gear, Length_Category, Year) -> Discount Factor
     global_avg = df.groupby(['Gear', 'Length_Category', 'Year'])['Power_Discount_Factor'].mean()
     fallback_global = {}
     for (g, lc, y), val in global_avg.items():
         fallback_global[(g, lc, int(y))] = val
 
-    # Level 3: 按组最近年份数组 (Country, Gear, Length_Category) -> (years_array, factors_array)
+    # Level 3: Groups by the most recent year of the group (Country, Gear, Length_Category) -> (years_array, factors_array)
     fallback_group_nearest = {}
     for (c, g, lc), grp in df.groupby(['Country', 'Gear', 'Length_Category']):
         grp_sorted = grp.sort_values('Year')
@@ -164,7 +164,7 @@ def build_power_discount_lookup(csv_path, baseline_year=2015, verbose=True):
             grp_sorted['Power_Discount_Factor'].values
         )
 
-    # Level 4: 全球维度最近年份数组
+    # Level 4: The most recent year of global dimensions
     fallback_global_nearest = {}
     for (g, lc), grp in df.groupby(['Gear', 'Length_Category']):
         grp_sorted = grp.sort_values('Year')
@@ -174,90 +174,90 @@ def build_power_discount_lookup(csv_path, baseline_year=2015, verbose=True):
         )
 
     if verbose:
-        print(f"   Level-1 精确查询键数: {len(lookup):,}")
-        print(f"   Level-2 全球平均键数: {len(fallback_global):,}")
-        print(f"   Level-3 分组最近年键数: {len(fallback_group_nearest):,}")
-        print(f"   Level-4 全球最近年键数: {len(fallback_global_nearest):,}")
+        print(f"   Level-1 Number of accurate query keys: {len(lookup):,}")
+        print(f"   Level-2 Global average number of keys: {len(fallback_global):,}")
+        print(f"   Level-3 Group the most recent years: {len(fallback_group_nearest):,}")
+        print(f"   Level-4 Recent Global Keys: {len(fallback_global_nearest):,}")
 
     return (lookup, fallback_global,
             fallback_group_nearest, fallback_global_nearest)
 
 
 # ============================================================
-# 查询函数 -- 供蒙特卡洛主循环调用 (O(1) 摊销)
+# Query Functions -- For Monte Carlos main loop call (O(1) amortization)
 # ============================================================
 
 def query_power_discount(flag_full, gear_vessel, length_m, year,
                          lookup_data, hard_floor=0.6,
                          annual_decay_rate=0.018):
     """
-    查询给定船只参数对应的 Power_Discount_Factor。
+    Querying the parameters of the given vessel Power_Discount_Factor. 
 
-    参数
+    parameter
     ----------
     flag_full : str
-        vessel 数据中的 Flag (全名, 如 'Australia', 'South Korea')。
+        vessel Data Flag (Full name, Like 'Australia', 'South Korea'). 
     gear_vessel : str
-        vessel 数据中的 VesselType (如 'LL', 'PS', 'TS')。
+        vessel Data VesselType (Like 'LL', 'PS', 'TS'). 
     length_m : float
-        vessel 数据中的 Length(m) 数值。
+        vessel Data Length(m) Value. 
     year : int
-        目标年份 (通常是 Builtdate / 建造年份)。
+        Target year (Usually Builtdate / year built). 
     lookup_data : tuple
-        build_power_discount_lookup() 的返回值。
+        build_power_discount_lookup() Return value of the. 
     hard_floor : float
-        硬保底最低折扣系数 (默认 0.6)。
+        Minimum discount factor for the mandatory base (default 0.6). 
     annual_decay_rate : float
-        极早期全局兜底时的年衰减率 (默认 ~1.8%，约等于 0.982/年)。
+        The annual decay rate of the early global bust (default ~1.8%, Approx. equals 0.982/years). 
 
-    返回
+    Back
     -------
     discount_factor : float
-        历史功率折减乘数，范围 [hard_floor, 1.5]。
+        Historical power discount multiplier, Scope [hard_floor, 1.5]. 
     """
     (lookup, fallback_global,
      fallback_group_nearest, fallback_global_nearest) = lookup_data
 
-    # ---- 转换参数到 CSV 键空间 ----
+    # ---- Convert Parameter To CSV Key Space ----
     # Country: already ISO3 from unified pipeline
     country_iso3 = flag_full
 
-    # Gear: LL/PS/TS -> CSV Gear 名称
+    # Gear: LL/PS/TS -> CSV Gear Name
     gear_csv = GEAR_MAPPING.get(gear_vessel)
     if gear_csv is None:
-        gear_csv = gear_vessel  # 直接尝试原始值
+        gear_csv = gear_vessel  # Try raw values directly
 
-    # Length_Category: 数值 -> CSV 分箱
+    # Length_Category: Value -> CSV Boxes
     len_cat_csv = map_length_to_csv_category(length_m)
 
-    # ---- Level 1: 精确查询 (Country, Gear, Length_Category, Year) ----
+    # ---- Level 1: Accurate Query (Country, Gear, Length_Category, Year) ----
     if country_iso3 is not None and gear_csv is not None:
         key = (country_iso3, gear_csv, len_cat_csv, int(year))
         if key in lookup:
             return np.clip(lookup[key], hard_floor, 1.5)
 
-    # ---- Level 2: 全球平均兜底 (Gear, Length_Category, Year) ----
+    # ---- Level 2: Global average (Gear, Length_Category, Year) ----
     if gear_csv is not None:
         key = (gear_csv, len_cat_csv, int(year))
         if key in fallback_global:
             return np.clip(fallback_global[key], hard_floor, 1.5)
 
-    # ---- Level 3: 按组最近年份插值 (Country, Gear, Length_Category) ----
+    # ---- Level 3: use the nearest observed year within each group (Country, Gear, Length_Category) ----
     if country_iso3 is not None and gear_csv is not None:
         group_key = (country_iso3, gear_csv, len_cat_csv)
         if group_key in fallback_group_nearest:
             years_arr, factors_arr = fallback_group_nearest[group_key]
             return _nearest_or_interpolate(year, years_arr, factors_arr, hard_floor)
 
-    # ---- Level 4: 全球维度最近年份插值 (Gear, Length_Category) ----
+    # ---- Level 4: Label value for the most recent year of global dimensions (Gear, Length_Category) ----
     if gear_csv is not None:
         group_key = (gear_csv, len_cat_csv)
         if group_key in fallback_global_nearest:
             years_arr, factors_arr = fallback_global_nearest[group_key]
             return _nearest_or_interpolate(year, years_arr, factors_arr, hard_floor)
 
-    # ---- Level 5: 极早期全局兜底 ----
-    # 以 2015 为锚点，每年按 annual_decay_rate 指数衰减
+    # ---- Level 5: Its an early global game ----
+    # By 2015 For anchor, Annual rate annual_decay_rate Index decay
     ref_year = 2015
     year_diff = max(0, ref_year - int(year))
     hard_decay = np.exp(-annual_decay_rate * year_diff)
@@ -266,28 +266,28 @@ def query_power_discount(flag_full, gear_vessel, length_m, year,
 
 def _nearest_or_interpolate(target_year, years_arr, factors_arr, hard_floor):
     """
-    从 (years_arr, factors_arr) 中提取最接近 target_year 的折扣因子。
-    使用最近邻；如果 target_year 在两个已知年份之间则线性插值。
+    From (years_arr, factors_arr) The nearest extraction target_year The discount factor. 
+    Use Recent Neighbours; If target_year linearly interpolate between the two observed years. 
     """
     if len(years_arr) == 0:
         return hard_floor
 
-    # 精确匹配
+    # Accurate Match
     exact_idx = np.where(years_arr == int(target_year))[0]
     if len(exact_idx) > 0:
         return np.clip(factors_arr[exact_idx[0]], hard_floor, 1.5)
 
-    # 线性插值 / 最近邻
+    # linear interpolation / Nearest neighbor
     idx = np.searchsorted(years_arr, int(target_year))
 
     if idx == 0:
-        # 目标年份早于所有已知年份 -> 最近邻 (最早年份)
+        # Target year earlier than all known years -> Nearest neighbor (Early years)
         return np.clip(factors_arr[0], hard_floor, 1.5)
     elif idx >= len(years_arr):
-        # 目标年份晚于所有已知年份 -> 最近邻 (最晚年)
+        # Target year is later than all known years -> Nearest neighbor (At the latest)
         return np.clip(factors_arr[-1], hard_floor, 1.5)
     else:
-        # 在两个已知年份之间 -> 线性插值
+        # Between two known years -> linear interpolation
         y1, y2 = years_arr[idx - 1], years_arr[idx]
         f1, f2 = factors_arr[idx - 1], factors_arr[idx]
         frac = (int(target_year) - y1) / (y2 - y1)
@@ -295,13 +295,13 @@ def _nearest_or_interpolate(target_year, years_arr, factors_arr, hard_floor):
 
 
 # ============================================================
-# 便捷初始化函数 -- 一次性构建并返回 lookup 包
+# Easy Initialisation Function -- Build and return one-time lookup Bag
 # ============================================================
 
 def init_power_discount_lookup(csv_path, baseline_year=2015):
     """
-    一次性初始化所有查询结构，返回可直接传入 query_power_discount 的 tuple。
-    用法:
+    Initialize all query structures at once, Return to direct access query_power_discount of tuple. 
+    Usage:
         lookup_data = init_power_discount_lookup(csv_path)
         factor = query_power_discount(flag, gear, length, year, lookup_data)
     """
@@ -309,17 +309,17 @@ def init_power_discount_lookup(csv_path, baseline_year=2015):
 
 
 # ============================================================
-# 向量化批量查询 -- 供蒙特卡洛主循环高效调用
+# Quantified Bulk Query -- For the Monte Carlo main loop, efficient call
 # ============================================================
 
 def query_power_discount_vectorized(flags_full, gears_vessel, lengths_m, years,
                                     lookup_data, hard_floor=0.6,
                                     annual_decay_rate=0.018):
     """
-    批量查询 Power_Discount_Factor，返回与输入等长的 numpy 数组。
-    对于大多数 hit 走快速字典查询路径，少数 miss 走逐元素兜底。
+    Batch Query Power_Discount_Factor, Returns and Enter Long numpy Array. 
+    For most hit Take Quick Dictionary Query Path, A few miss Were going to take the elements. 
 
-    参数 -- 均为等长 1D array-like。
+    parameter -- Theyre all long 1D array-like. 
     """
     n = len(flags_full)
     results = np.full(n, np.nan, dtype=float)
@@ -327,7 +327,7 @@ def query_power_discount_vectorized(flags_full, gears_vessel, lengths_m, years,
     (lookup, fallback_global,
      fallback_group_nearest, fallback_global_nearest) = lookup_data
 
-    # 预处理转换
+    # Pre-processing conversion
     countries_iso3 = np.array(flags_full, dtype=object)  # Already ISO3 from unified pipeline
     gears_csv = np.array([
         GEAR_MAPPING.get(g, g) for g in gears_vessel
@@ -337,8 +337,8 @@ def query_power_discount_vectorized(flags_full, gears_vessel, lengths_m, years,
     ], dtype=object)
     years_int = np.array(years, dtype=int)
 
-    # ---- Pass 1: Level-1 精确查询 (向量化) ----
-    # 构建查询键列表，批量检查
+    # ---- Pass 1: Level-1 Accurate Query (Quantification) ----
+    # Building Query Key List, Bulk Check
     for i in range(n):
         ci = countries_iso3[i]
         gi = gears_csv[i]
@@ -349,7 +349,7 @@ def query_power_discount_vectorized(flags_full, gears_vessel, lengths_m, years,
             if key in lookup:
                 results[i] = lookup[key]
 
-    # ---- Pass 2: Level-2 全球平均兜底 ----
+    # ---- Pass 2: Level-2 Global average ----
     mask_miss = np.isnan(results)
     for i in np.where(mask_miss)[0]:
         gi = gears_csv[i]
@@ -360,7 +360,7 @@ def query_power_discount_vectorized(flags_full, gears_vessel, lengths_m, years,
             if key in fallback_global:
                 results[i] = fallback_global[key]
 
-    # ---- Pass 3-5: 兜底逐元素处理 ----
+    # ---- Pass 3-5: Pivot to Element ----
     mask_still_miss = np.isnan(results)
     for i in np.where(mask_still_miss)[0]:
         ci = countries_iso3[i]
@@ -368,7 +368,7 @@ def query_power_discount_vectorized(flags_full, gears_vessel, lengths_m, years,
         li = len_cats_csv[i]
         yi = years_int[i]
 
-        # Level 3: 按组最近年份
+        # Level 3: By group of most recent years
         found = False
         if ci is not None and gi is not None:
             group_key = (ci, gi, li)
@@ -377,7 +377,7 @@ def query_power_discount_vectorized(flags_full, gears_vessel, lengths_m, years,
                 results[i] = _nearest_or_interpolate(yi, years_arr, factors_arr, hard_floor)
                 found = True
 
-        # Level 4: 全球最近年份
+        # Level 4: Recent global years
         if not found and gi is not None:
             group_key = (gi, li)
             if group_key in fallback_global_nearest:
@@ -385,36 +385,36 @@ def query_power_discount_vectorized(flags_full, gears_vessel, lengths_m, years,
                 results[i] = _nearest_or_interpolate(yi, years_arr, factors_arr, hard_floor)
                 found = True
 
-        # Level 5: 硬兜底
+        # Level 5: Its hard
         if not found:
             ref_year = 2015
             year_diff = max(0, ref_year - yi)
             results[i] = np.exp(-annual_decay_rate * year_diff)
 
-    # 全局裁剪
+    # Global Crop
     results = np.clip(results, hard_floor, 1.5)
     return results
 
 
 # ============================================================
-# 诊断 / 检验工具
+# Diagnosis / Test Tool
 # ============================================================
 
 def print_lookup_summary(lookup_data):
-    """打印查询表的覆盖度摘要"""
+    """Prints the coverage summary of the Query Table"""
     (lookup, fallback_global,
      fallback_group_nearest, fallback_global_nearest) = lookup_data
 
     print("\n" + "=" * 50)
-    print("  Power Discount Factor 查询表 -- 覆盖度摘要")
+    print("  Power Discount Factor Query Table -- Coverage Summary")
     print("=" * 50)
-    print(f"  Level-1 精确键数:           {len(lookup):>10,}")
-    print(f"  Level-2 全球平均键数:       {len(fallback_global):>10,}")
-    print(f"  Level-3 分组最近年键数:     {len(fallback_group_nearest):>10,}")
-    print(f"  Level-4 全球最近年键数:     {len(fallback_global_nearest):>10,}")
+    print(f"  Level-1 Accurate key counts:           {len(lookup):>10,}")
+    print(f"  Level-2 Global average number of keys:       {len(fallback_global):>10,}")
+    print(f"  Level-3 Group the most recent years:     {len(fallback_group_nearest):>10,}")
+    print(f"  Level-4 Recent Global Keys:     {len(fallback_global_nearest):>10,}")
 
-    # 各 Gear 的覆盖度
-    print("\n  各 Gear x Length_Category 的 Base_Power 覆盖:")
+    # Each Gear Coverage
+    print("\n  Each Gear x Length_Category of Base_Power Overwrite:")
     for gear in sorted(set(k[0] for k in fallback_global_nearest.keys())):
         for lc in sorted(set(k[1] for k in fallback_global_nearest.keys() if k[0] == gear)):
             key = (gear, lc)

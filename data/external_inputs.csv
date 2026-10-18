@@ -31,18 +31,18 @@ model_parameters/Model_parameters.xlsx,See source annotations in the model and p
 model_parameters/Scenario_Fuel_Parameters.xlsx,See source annotations in the model and parameter builders,Excluded original/third-party input; obtain under provider terms
 model_parameters/Scenario_Fuel_Price_Matrix.xlsx,See source annotations in the model and parameter builders,Excluded original/third-party input; obtain under provider terms
 model_parameters/Scenario_Fuel_Price_Matrix_backup_v4.xlsx,See source annotations in the model and parameter builders,Excluded original/third-party input; obtain under provider terms
-model_parameters/量化参数.xlsx,See source annotations in the model and parameter builders,Excluded original/third-party input; obtain under provider terms
-raw_vessel_data/CCSBT南方蓝鳍金枪鱼保护委员会.csv,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
-raw_vessel_data/CCSBT字段.xlsx,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
-raw_vessel_data/IATTC字段.xlsx,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
-raw_vessel_data/IATTC美洲热带金枪鱼委员会.xlsx,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
-raw_vessel_data/ICCAT国际大西洋金枪鱼保护委员会.xlsx,https://www.iccat.int/,Excluded original/third-party input; obtain under provider terms
-raw_vessel_data/ICCAT字段.xlsx,https://www.iccat.int/,Excluded original/third-party input; obtain under provider terms
-raw_vessel_data/IOTC印度洋金枪鱼委员会.xlsx,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
-raw_vessel_data/IOTC字段.xlsx,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
-raw_vessel_data/WCPFC中西太平洋渔业委员会.csv,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
-raw_vessel_data/WCPFC字段.xlsx,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
-raw_vessel_data/金枪鱼渔船数量.xlsx,See source annotations in the model and parameter builders,Excluded original/third-party input; obtain under provider terms
+model_parameters/Quantified_Parameters.xlsx,See source annotations in the model and parameter builders,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/CCSBT_Vessel_Registry.csv,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/CCSBT_Field_Definitions.xlsx,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/IATTC_Field_Definitions.xlsx,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/IATTC_Vessel_Registry.xlsx,https://www.iattc.org/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/ICCAT_Vessel_Registry.xlsx,https://www.iccat.int/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/ICCAT_Field_Definitions.xlsx,https://www.iccat.int/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/IOTC_Vessel_Registry.xlsx,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/IOTC_Field_Definitions.xlsx,https://iotc.org/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/WCPFC_Vessel_Registry.csv,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/WCPFC_Field_Definitions.xlsx,https://www.wcpfc.int/,Excluded original/third-party input; obtain under provider terms
+raw_vessel_data/Tuna_Vessel_Counts.xlsx,See source annotations in the model and parameter builders,Excluded original/third-party input; obtain under provider terms
 shape_file/CCSBT/RFB_CCSBT.cst,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
 shape_file/CCSBT/RFB_CCSBT.dbf,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms
 shape_file/CCSBT/RFB_CCSBT.prj,https://www.ccsbt.org/,Excluded original/third-party input; obtain under provider terms

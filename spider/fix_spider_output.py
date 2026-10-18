@@ -45,14 +45,14 @@ FILE_MAPPING = {
 }
 
 # Column positions in spider output Excel
-COL_IMO_INPUT = 4       # IMO编码(输入)
-COL_CALLSIGN_INPUT = 5  # 呼号(输入)
-COL_SHIPNAME_INPUT = 3  # 船名(输入)
-COL_NEW_BUILD_DATE = 7  # 建造日期（爬取）
-COL_NEW_TONNAGE = 8     # 总吨（爬取）
-COL_OLD_BUILD_DATE = 12 # 原建造年份
-COL_OLD_TONNAGE = 13    # 原总吨数
-COL_JUDGMENT = 14       # 数据比对判定
+COL_IMO_INPUT = 4       # IMO Encoding(Enter)
+COL_CALLSIGN_INPUT = 5  # Call sign(Enter)
+COL_SHIPNAME_INPUT = 3  # Name of ship(Enter)
+COL_NEW_BUILD_DATE = 7  # Built_Date (Crawl) 
+COL_NEW_TONNAGE = 8     # gross tonnage (Crawl) 
+COL_OLD_BUILD_DATE = 12 # Original year of construction
+COL_OLD_TONNAGE = 13    # Original total tons
+COL_JUDGMENT = 14       # Data match determination
 
 
 def safe_str(val) -> str:
@@ -89,28 +89,28 @@ def compare_and_judge(new_val: str, old_val: str, field_name: str) -> tuple:
     if not old_norm and not new_norm:
         return ("both_empty", "")
     if not old_norm and new_norm:
-        return ("filled", f"{field_name}原数据为空，已补充")
+        return ("filled", f"{field_name}original value missing, filled")
     if old_norm and not new_norm:
-        return ("new_empty", f"{field_name}爬取为空(旧值:{old_val})")
+        return ("new_empty", f"{field_name}Crawl as Empty(Old value:{old_val})")
     if old_norm == new_norm:
         return ("match", "")
     else:
-        return ("updated", f"{field_name}(旧值:{old_val}->新值:{new_val})")
+        return ("updated", f"{field_name}(Old value:{old_val}->New value:{new_val})")
 
 
 def build_comparison_judgment(new_build_date: str, new_gross_tonnage: str,
                                old_build_date: str, old_gross_tonnage: str) -> str:
     """Build comprehensive comparison judgment text."""
-    bd_status, bd_msg = compare_and_judge(new_build_date, old_build_date, "建造年份")
-    gt_status, gt_msg = compare_and_judge(new_gross_tonnage, old_gross_tonnage, "总吨")
+    bd_status, bd_msg = compare_and_judge(new_build_date, old_build_date, "year built")
+    gt_status, gt_msg = compare_and_judge(new_gross_tonnage, old_gross_tonnage, "gross tonnage")
 
     all_statuses = [bd_status, gt_status]
 
     if all(s in ("match", "both_empty") for s in all_statuses) and "match" in all_statuses:
-        return "完全一致"
+        return "identical"
 
     if all(s == "both_empty" for s in all_statuses):
-        return "原数据为空，爬取数据亦为空"
+        return "original value missing, Crawling data is empty"
 
     changes = []
     if bd_msg:
@@ -119,20 +119,20 @@ def build_comparison_judgment(new_build_date: str, new_gross_tonnage: str,
         changes.append(gt_msg)
 
     if not changes:
-        return "完全一致"
+        return "identical"
 
     has_filled = "filled" in all_statuses
     has_updated = "updated" in all_statuses
     has_new_empty = "new_empty" in all_statuses
 
     if has_updated and has_filled:
-        prefix = "数据有更新+补充: "
+        prefix = "data updated+Supplementary: "
     elif has_updated:
-        prefix = "数据有更新: "
+        prefix = "data updated: "
     elif has_filled and not has_updated:
-        prefix = "原数据为空，已补充: "
+        prefix = "original value missing, filled: "
     elif has_new_empty:
-        prefix = "注意-爬取数据缺失: "
+        prefix = "attention-Crawling data missing: "
     else:
         prefix = ""
 
@@ -142,16 +142,16 @@ def build_comparison_judgment(new_build_date: str, new_gross_tonnage: str,
 def apply_judgment_style(cell, judgment_text: str):
     """Apply color-coded style to judgment cell."""
     cell.alignment = Alignment(wrap_text=True, vertical="center")
-    if "完全一致" in judgment_text:
+    if "identical" in judgment_text:
         cell.font = Font(color="006100")
         cell.fill = PatternFill(start_color="C6EFCE", end_color="C6EFCE", fill_type="solid")
-    elif "数据有更新" in judgment_text:
+    elif "data updated" in judgment_text:
         cell.font = Font(color="9C5700", bold=True)
         cell.fill = PatternFill(start_color="FFEB9C", end_color="FFEB9C", fill_type="solid")
-    elif "原数据为空，已补充" in judgment_text:
+    elif "original value missing, filled" in judgment_text:
         cell.font = Font(color="0066CC")
         cell.fill = PatternFill(start_color="DAEEF3", end_color="DAEEF3", fill_type="solid")
-    elif "注意" in judgment_text:
+    elif "attention" in judgment_text:
         cell.font = Font(color="9C0006")
         cell.fill = PatternFill(start_color="FFC7CE", end_color="FFC7CE", fill_type="solid")
 

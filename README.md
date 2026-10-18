@@ -9,6 +9,16 @@ comparisons and the nine additional matched-catch experiments. Historical
 associations and exploratory stock trajectories do not establish causal effects
 or substitute for RFMO stock assessments.
 
+## Language and compatibility
+
+The public source files, parameter descriptions, figure filenames and release
+path indices use English. Numerical parameter values and saved simulation
+results are unchanged by this language revision. The display-name column in
+the compiled prior tables is `Param_Name_EN`; parameter codes remain unchanged.
+English source-input filenames are listed in `data/external_inputs.csv`.
+Unicode escapes used by legacy workbook parsers preserve original input-field
+compatibility; these aliases are not published parameter descriptions.
+
 ## Get the data
 
 The code and smaller compiled-parameter/panel tables are in this Git tree.

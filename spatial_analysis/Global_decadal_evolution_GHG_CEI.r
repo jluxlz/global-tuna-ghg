@@ -1,5 +1,5 @@
 # ==============================================================================
-# 1. 加载必要的包
+# 1. Load the necessary packages
 # ==============================================================================
 library(tidyverse)
 library(sf)
@@ -12,9 +12,9 @@ library(svglite)
 library(RColorBrewer) 
 
 # ==============================================================================
-# 2. 获取底图、数据清洗与【时代(Era)划分】
+# 2. Get a bottom chart, Data cleansing with[Times(Era)Division]
 # ==============================================================================
-cat("正在加载底图和清洗数据...\n")
+cat("Loading base maps and cleaning data...\n")
 world <- ne_countries(scale = "medium", returnclass = "sf")
 
 df <- read_csv("Table1_Catch_with_Grid_GHG_CEI.csv", show_col_types = FALSE)
@@ -38,10 +38,10 @@ df_clean <- df %>%
   ))
 
 # ==============================================================================
-# 3. 构建全排列框架并计算均值
+# 3. Builds a full-arranged frame and calculates the average
 # ==============================================================================
-cat("正在计算各历史时期的平均空间分布...\n")
-# 这里不需要全排列了，我们在插值函数里生成
+cat("Calculating average spatial distribution over historical periods...\n")
+# We dont need all the arrangements here, generated within the interpolation function
 df_era_agg <- df_clean %>%
   group_by(Era, Lon, Lat, Gear, Species) %>%
   summarise(
@@ -54,7 +54,7 @@ max_ghg <- quantile(df_era_agg$Mean_GHG, probs = 0.98, na.rm = TRUE)
 max_cei <- quantile(df_era_agg$Mean_CEI, probs = 0.98, na.rm = TRUE)
 
 # ==============================================================================
-# 4. 空间插值 (IDW) 与【彻底兜底修复】
+# 4. spatial interpolation (IDW) and[Its a complete fix]
 # ==============================================================================
 grid_res <- 1 
 base_grid_df <- expand.grid(Lon = seq(-180, 180, by = grid_res), Lat = seq(-80, 80, by = grid_res))
@@ -63,8 +63,8 @@ coordinates(pred_grid) <- ~Lon+Lat
 gridded(pred_grid) <- TRUE
 
 run_idw_smoothing <- function(data, metric_col) {
-  # 【关键修改】：不再只使用有数据的 combos，而是强制生成所有可能的组合
-  # 确保即使是 0 数据面板，也会被分配一个透明图层
+  # [Key Changes]: No longer only use available data combos, Its about forcing all possible combinations
+  # Make sure even 0 Data Panel, Theyll be assigned a transparent layer
   all_eras <- c("Pre-2000", "2001-2010", "2011-2024")
   all_gears <- c("LL", "PS")
   all_species <- c("ALB", "BET", "SBT", "SKJ", "YFT")
@@ -75,7 +75,7 @@ run_idw_smoothing <- function(data, metric_col) {
   for(i in 1:nrow(full_combos)) {
     sub_df <- data %>% filter(Era == full_combos$Era[i], Gear == full_combos$Gear[i], Species == full_combos$Species[i])
     
-    # 场景1：数据点 >= 4 个，执行正常 IDW
+    # Scene 1: Data Point >= 4 One, Execute normal IDW
     if(nrow(sub_df) >= 4) {
       sp_pts <- sub_df %>% rename(Val = all_of(metric_col))
       coordinates(sp_pts) <- ~Lon+Lat
@@ -92,7 +92,7 @@ run_idw_smoothing <- function(data, metric_col) {
         idw_list[[length(idw_list) + 1]] <- res_df
       }, error = function(e) {})
       
-    # 场景2：极端孤立点（如 1-3 个点），视觉放大镜
+    # Scene 2: Extremely isolated (Like 1-3 A point) , Visual Magnifier
     } else if (nrow(sub_df) > 0) {
       res_df <- base_grid_df
       res_df$var1.pred <- 0 
@@ -108,10 +108,10 @@ run_idw_smoothing <- function(data, metric_col) {
       res_df$Species <- full_combos$Species[i]
       idw_list[[length(idw_list) + 1]] <- res_df
       
-    # 场景3：【全新兜底】完全没有任何数据（如 2001-2010 SBT PS），输出纯净 0 网格
+    # Scene 3: [Its all new]Theres no data at all (Like 2001-2010 SBT PS) , Output Pure 0 Grid
     } else {
       res_df <- base_grid_df
-      res_df$var1.pred <- 0 # 全部置为 0，让其融入 #d6eaf8 海洋背景色
+      res_df$var1.pred <- 0 # Make All 0, Im going to put it in #d6eaf8 Ocean background colour
       res_df$Era <- full_combos$Era[i]
       res_df$Gear <- full_combos$Gear[i]
       res_df$Species <- full_combos$Species[i]
@@ -121,12 +121,12 @@ run_idw_smoothing <- function(data, metric_col) {
   return(bind_rows(idw_list))
 }
 
-cat("正在执行空间插值 (包含全局空白填补)...\n")
+cat("performing spatial interpolation (Include global blanks)...\n")
 df_ghg_smooth <- run_idw_smoothing(df_era_agg, "Mean_GHG")
 df_cei_smooth <- run_idw_smoothing(df_era_agg, "Mean_CEI")
 
 # ==============================================================================
-# 5. 核心大图生成工厂
+# 5. Core Large Chart Generating Plant
 # ==============================================================================
 custom_palette <- rev(brewer.pal(11, "Spectral"))
 
@@ -174,9 +174,9 @@ create_master_plot <- function(data, max_limit, title, legend_title) {
 }
 
 # ==============================================================================
-# 6. 绘图并输出
+# 6. Drawing and Output
 # ==============================================================================
-cat("正在绘制图表并输出文件...\n")
+cat("Drawing charts and output files...\n")
 
 p_ghg <- create_master_plot(df_ghg_smooth, max_ghg, "Global Decadal Evolution of GHG Emissions by Gear and Species", "GHG Emissions (Tonnes/Year)")
 ggsave("Master_Map_GHG_Evolution.pdf", plot = p_ghg, width = 18, height = 12, dpi = 600)
@@ -188,4 +188,4 @@ ggsave("Master_Map_CEI_Evolution.pdf", plot = p_cei, width = 18, height = 12, dp
 ggsave("Master_Map_CEI_Evolution.svg", plot = p_cei, device = "svg", width = 18, height = 12)
 ggsave("Master_Map_CEI_Evolution.png", plot = p_cei, width = 18, height = 12, dpi = 900)
 
-cat("\n任务完美收官！所有的空白断层已被海洋蓝填补完毕。\n")
+cat("\n The missions a perfect one！All blank faults have been filled by the blue ocean. \n")

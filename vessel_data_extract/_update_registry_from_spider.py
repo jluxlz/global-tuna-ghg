@@ -1,32 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-=============================================================================
-_update_registry_from_spider.py
-=============================================================================
-用 spider 爬取数据更新 Unified_Vessel_Registry.csv 的物理参数。
+Update vessel characteristics using supplementary registry queries.
 
-匹配策略（两级信任体系）：
-  IMO 锚点（绝对信任）：
-    - 只要 spider 通过 IMO 查到了数据，直接更新 Builtdate、Tonnage、MMSI。
-    - IMO 是全球唯一且终身绑定船壳的编号，不存在误匹配风险。
-
-  Callsign 线索（交叉验证）：
-    - 当仅通过 Callsign 匹配到 spider 数据时，需通过以下校验：
-      1. 船型/作业类型兼容性检查（排除呼号重用错配）
-      2. 总吨位容差检查（±20%）
-    - 两项均通过 → 更新；任一失败 → 丢弃。
-
-更新范围（spider 可提供的字段）：
-  - Builtdate    : 建造年份（海事数据库权威值）
-  - Tonnage      : 总吨位 GT
-  - MMSI         : 水上移动通信业务标识码
-  - VesselType   : 从 spider 的详细船型反推（Fishing Vessel→LL/PS, Cargo→TS）
-
-不更新的字段（spider 无对应数据）：
-  - Length, Enginepower（spider 无 LOA 和 kW 数据）
-  - Callsign, IMO（这些是匹配键，不从外部覆盖）
-=============================================================================
+IMO-based links and callsign-based links follow separate acceptance rules.
+Callsign links require vessel-type compatibility, a gross-tonnage tolerance
+check and the additional identity checks implemented below. Accepted updates
+retain their query provenance and validation status. Unaccepted matches are
+reported for review rather than applied to the unified registry.
 """
 
 import os
@@ -39,15 +20,15 @@ import numpy as np
 import pandas as pd
 
 # =============================================================================
-# 全局配置
+# Global Configuration
 # =============================================================================
 
 BASE_DIR = Path(__file__).resolve().parent
 SPIDER_DIR = BASE_DIR.parent / "spider" / "output"
 REGISTRY_PATH = BASE_DIR / "Unified_Vessel_Registry.csv"
-OUTPUT_PATH = BASE_DIR / "Unified_Vessel_Registry.csv"  # 直接覆盖
+OUTPUT_PATH = BASE_DIR / "Unified_Vessel_Registry.csv"  # Direct Overwrite
 
-# spider 输出文件
+# spider Output file
 SPIDER_FILES = [
     "CCSBT_extracted_new_result.xlsx",
     "IATTC_extracted_new_result.xlsx",
@@ -56,18 +37,18 @@ SPIDER_FILES = [
     "WCPFC_extracted_new_result.xlsx",
 ]
 
-# GT 容差阈值（Callsign 匹配时使用）
+# GT Portfolio threshold (Callsign Use when matching) 
 GT_TOLERANCE = 0.20  # ±20%
 
 # =============================================================================
-# 船型兼容性映射
+# Ship Compatibility Map
 # =============================================================================
 
-# spider 详细船型 → 是否兼容我们的渔船登记册
-# True  = 兼容（可能是我们的渔船/冷藏运输船）
-# False = 不兼容（明显是其他类型的船，呼号被重用了）
+# spider Detailed Type of Ship → Is it compatible with our register of fishing vessels?
+# True  = Compatibility (It could be our fishing boat/Refrigerated transport vessels) 
+# False = Incompatible (Its clearly other types of ships, The call signs been re-used) 
 SHIP_TYPE_COMPATIBLE = {
-    # --- 兼容：渔船及渔业相关 ---
+    # --- Compatibility: Fishing vessels and fisheries-related ---
     "Fishing Vessel": True,
     "Fish Carrier": True,
     "Fish Factory Ship": True,
@@ -76,13 +57,13 @@ SHIP_TYPE_COMPATIBLE = {
     "Fishery Patrol Vessel": True,
     "Fish Farm Support Vessel": True,
 
-    # --- 兼容：冷藏运输船（金枪鱼转运船） ---
+    # --- Compatibility: Refrigerated transport vessels (Tuna trans-shipment vessels)  ---
     "Refrigerated Cargo Ship": True,
 
-    # --- 兼容：通用货船（可能是小型兼业渔船） ---
-    # 不自动兼容，需进一步判断
+    # --- Compatibility: General-purpose freighter (Its probably a small, mixed fishing boat)  ---
+    # Non Autocompatibility, We need to make further judgements
 
-    # --- 不兼容：明显不是渔船 ---
+    # --- Incompatible: Apparently not a fishing boat ---
     "Tug": False,
     "Yacht": False,
     "Yacht (Sailing)": False,
@@ -169,28 +150,28 @@ SHIP_TYPE_COMPATIBLE = {
 
 def is_ship_type_compatible(spider_ship_type: str, our_gear_type: str) -> bool:
     """
-    检查 spider 爬取的船型是否与我们的网具/船舶类型兼容。
+    Inspection spider Is the boat crawling with our web set?/Compatibility of ship types. 
 
-    spider_ship_type: 海事数据库中的详细船舶类型（如 "Fishing Vessel"）
-    our_gear_type: 我们登记册中的 VesselType（LL/PS/TS/SA/OTHER）
+    spider_ship_type: Detailed types of ships in the maritime database (Like "Fishing Vessel") 
+    our_gear_type: In our register VesselType (LL/PS/TS/SA/OTHER) 
 
-    返回 True 表示兼容，可以信任 spider 数据。
+    Back True For Compatibility, You can trust it spider Data. 
     """
     if not spider_ship_type or pd.isna(spider_ship_type):
-        return True  # 无船型信息 → 不排除（保守放行，依赖 GT 容差兜底）
+        return True  # No ship-type information → Not ruled out (Conservative Release, Dependencies GT I dont think so) 
 
     st = str(spider_ship_type).strip()
 
-    # 精确匹配已知类型
+    # Accurate matching of known types
     if st in SHIP_TYPE_COMPATIBLE:
         return SHIP_TYPE_COMPATIBLE[st]
 
-    # 未知类型 → 模糊匹配（保守放行）
-    # 包含 "Fish" → 兼容
+    # Unknown type → Fuzzy Match (Conservative Release) 
+    # Organisation "Fish" → Compatibility
     if "FISH" in st.upper():
         return True
-    # 包含 "Cargo/Passenger/General" → 不确定，放行但标记
-    # 包含明显不兼容词汇 → 拒绝
+    # Organisation "Cargo/Passenger/General" → Im not sure, Free but Mark
+    # Contains apparently incompatible terms → Reject
     incompatible_keywords = [
         "TANKER", "BULK", "CONTAINER", "PASSENGER", "CRUISE",
         "YACHT", "DRILL", "FPSO", "FRIGATE", "DESTROYER",
@@ -201,15 +182,15 @@ def is_ship_type_compatible(spider_ship_type: str, our_gear_type: str) -> bool:
         if kw in st.upper():
             return False
 
-    # 默认放行（标记为需人工审查）
-    return None  # None = 不确定，需要 GT 容差兜底
+    # Default release (Mark as manual review) 
+    return None  # None = Im not sure, Yes GT I dont think so
 
 
 def map_ship_type_to_gear(spider_ship_type: str) -> str:
     """
-    从 spider 的详细船型反推我们的 VesselType。
+    From spider The details of the ship are pushing us backwards VesselType. 
 
-    Fishing Vessel → 保持原 VesselType 不变（LL 或 PS 由其他信息决定）
+    Fishing Vessel → Keep the original VesselType No change (LL or PS Depends on other information) 
     Refrigerated Cargo Ship / Fish Carrier → TS (Transshipment)
     """
     if not spider_ship_type or pd.isna(spider_ship_type):
@@ -220,12 +201,12 @@ def map_ship_type_to_gear(spider_ship_type: str) -> str:
     if "REFRIGERATED" in st or "FISH CARRIER" in st or "FISH FACTORY" in st:
         return "TS"
 
-    # Fishing Vessel → 不改变原类型
+    # Fishing Vessel → Do not change the original type
     return None
 
 
 # =============================================================================
-# 工具函数
+# Tool Functions
 # =============================================================================
 
 def safe_str(val) -> str:
@@ -263,7 +244,7 @@ def safe_cs(val) -> str:
 
 
 def safe_float(val) -> float:
-    """安全转 float，失败返回 NaN。"""
+    """Safe turn float, Failed to return NaN. """
     if pd.isna(val) or val is None:
         return np.nan
     try:
@@ -273,41 +254,41 @@ def safe_float(val) -> float:
 
 
 # =============================================================================
-# 主更新逻辑
+# Main Update Logic
 # =============================================================================
 
 def load_spider_data() -> pd.DataFrame:
-    """加载并池化所有 spider 输出，提取需要的字段。"""
+    """Load and pool all spider Output, Remove the required field. """
     print("=" * 70)
-    print("  加载 Spider 爬取数据")
+    print("  Load Spider Crawling Data")
     print("=" * 70)
 
     all_rows = []
     for fname in SPIDER_FILES:
         fpath = SPIDER_DIR / fname
         if not fpath.exists():
-            print(f"  [跳过] 文件不存在: {fname}")
+            print(f"  [Skip] File does not exist: {fname}")
             continue
 
         df = pd.read_excel(fpath)
-        # 列索引（0-based）:
-        # 0=查询标识, 1=原始行号, 2=船名(输入), 3=IMO(输入), 4=呼号(输入),
-        # 5=MMSI, 6=建造日期, 7=总吨, 8=详细船舶类型, 9=船名(抓取),
-        # 10=注册船籍, 11=原建造年份, 12=原总吨数, 13=比对判定,
-        # 14=报错信息, 15=查询说明, 16=是否人工查询
+        # Index to Columns (0-based) :
+        # 0=Query Identification, 1=Original Line Number, 2=Name of ship(Enter), 3=IMO(Enter), 4=Call sign(Enter),
+        # 5=MMSI, 6=Built_Date, 7=gross tonnage, 8=Detailed type of ship, 9=Name of ship(Fetch),
+        # 10=Registration of ships, 11=Original year of construction, 12=Original total tons, 13=Matching of determinations,
+        # 14=Wrong message, 15=Query note, 16=Manual query
 
         for _, row in df.iterrows():
-            query_notes = safe_str(row.iloc[15])  # 查询说明
-            imo_input = safe_imo(row.iloc[3])       # IMO(输入)
-            cs_input = safe_cs(row.iloc[4])         # 呼号(输入)
+            query_notes = safe_str(row.iloc[15])  # Query note
+            imo_input = safe_imo(row.iloc[3])       # IMO(Enter)
+            cs_input = safe_cs(row.iloc[4])         # Call sign(Enter)
 
-            # 判断查询方式：从 query_notes 的第一个段（" | " 之前）识别。
-            #   IMO:      *查询(IMO)成功*       → 锚点信任
-            #   Callsign: *查询(CallSign)成功*   → 交叉验证
-            #   ShipName: *查询(ShipName)成功*   → 交叉验证(最低)
-            #   均无结果   → 跳过
-            # 注：不能在全文中搜索 "(IMO)"，因为 Callsign 的 query_notes
-            #     后半段含 "查询成功(IMO:|Call:xxx)" 也会匹配到 (IMO)。
+            # Find out how to query: From query_notes First paragraph (" | " Before) Identification. 
+            #   IMO:      *Query(IMO)Success*       → An anchor trust
+            #   Callsign: *Query(CallSign)Success*   → Cross Authentication
+            #   ShipName: *Query(ShipName)Success*   → Cross Authentication(Minimum)
+            #   Its not working   → Skip
+            # Notes: Can not get folder: %s: %s "(IMO)", Because Callsign of query_notes
+            #     The second half contains "Query successful(IMO:|Call:xxx)" Itll match (IMO). 
             first_segment = query_notes.split("|")[0].strip() if "|" in query_notes else query_notes
             if "(IMO)" in first_segment:
                 match_type = "IMO"
@@ -316,7 +297,7 @@ def load_spider_data() -> pd.DataFrame:
             elif "(ShipName)" in first_segment:
                 match_type = "ShipName"
             else:
-                # 查询失败或未成功 → 跳过
+                # Query failed or failed → Skip
                 continue
 
             entry = {
@@ -338,13 +319,13 @@ def load_spider_data() -> pd.DataFrame:
             all_rows.append(entry)
 
     spider = pd.DataFrame(all_rows)
-    print(f"  总爬取记录: {len(spider)}")
-    print(f"    IMO 查询成功: {(spider['match_type']=='IMO').sum()}")
-    print(f"    Callsign 查询成功: {(spider['match_type']=='Callsign').sum()}")
-    print(f"    ShipName 查询成功: {(spider['match_type']=='ShipName').sum()}")
+    print(f"  Always crawling records: {len(spider)}")
+    print(f"    IMO Query successful: {(spider['match_type']=='IMO').sum()}")
+    print(f"    Callsign Query successful: {(spider['match_type']=='Callsign').sum()}")
+    print(f"    ShipName Query successful: {(spider['match_type']=='ShipName').sum()}")
 
-    # 按匹配方式排序: IMO > Callsign > ShipName
-    # 同一 IMO/Callsign 只保留最可靠来源的数据
+    # Sort by Match: IMO > Callsign > ShipName
+    # Same IMO/Callsign Only data from the most reliable sources are kept
     match_order = {"IMO": 0, "Callsign": 1, "ShipName": 2}
     spider["_match_rank"] = spider["match_type"].map(match_order).fillna(3)
     spider = spider.sort_values(
@@ -358,24 +339,24 @@ def load_spider_data() -> pd.DataFrame:
 
 def update_registry(registry: pd.DataFrame, spider: pd.DataFrame) -> tuple:
     """
-    用 spider 数据更新登记册。
+    Use spider Data update registry. 
 
-    返回: (更新后的 registry, 变更日志 DataFrame)
+    Back: (Updated registry, Change Log DataFrame)
     """
     print("\n" + "=" * 70)
-    print("  执行参数更新（IMO 锚点 + Callsign 交叉验证）")
+    print("  Update to Execute Parameter (IMO Dock + Callsign Cross Authentication) ")
     print("=" * 70)
 
-    # ---- 构建 Spider 查询索引 ----
-    # IMO 索引：仅保留通过 IMO 查询成功的数据（绝对信任锚点）
+    # ---- Build Spider Query Index ----
+    # IMO Index: Reservation only IMO Query for successful data (Absolute trust anchor) 
     imo_index = {}
     for _, row in spider.iterrows():
         imo = row["imo_input"]
         if imo and row["match_type"] == "IMO" and imo not in imo_index:
             imo_index[imo] = row
 
-    # Callsign 索引：包含 Callsign 和 ShipName 匹配的数据（需交叉验证）
-    # ShipName 匹配在这里通过船名输入进行索引
+    # Callsign Index: Organisation Callsign and ShipName Matching data (Cross-check required) 
+    # ShipName Match here indexed by the name of the ship
     cs_index = defaultdict(list)
     name_index = defaultdict(list)
     for _, row in spider.iterrows():
@@ -387,11 +368,11 @@ def update_registry(registry: pd.DataFrame, spider: pd.DataFrame) -> tuple:
             if name:
                 name_index[name.upper()].append(row)
 
-    print(f"  IMO 索引: {len(imo_index)} 个唯一 IMO (锚点)")
-    print(f"  Callsign 索引: {len(cs_index)} 个唯一 Callsign (交叉验证)")
-    print(f"  ShipName 索引: {len(name_index)} 个唯一船名 (交叉验证)")
+    print(f"  IMO Index: {len(imo_index)} One IMO (Dock)")
+    print(f"  Callsign Index: {len(cs_index)} One Callsign (Cross Authentication)")
+    print(f"  ShipName Index: {len(name_index)} Its the only name of the ship (Cross Authentication)")
 
-    # ---- 逐行处理登记册 ----
+    # ---- Line-by-line processing of registries ----
     change_log = []
     updated_count = {"IMO_anchor": 0, "Callsign_validated": 0, "ShipName_validated": 0,
                      "Callsign_rejected_ship_type": 0, "Callsign_rejected_gt": 0,
@@ -411,31 +392,31 @@ def update_registry(registry: pd.DataFrame, spider: pd.DataFrame) -> tuple:
         match_method = None
         validation_notes = ""
 
-        # --- 第一级：IMO 锚点匹配 ---
+        # --- First level: IMO Base point match ---
         if reg_imo and reg_imo in imo_index:
             spider_row = imo_index[reg_imo]
             match_method = "IMO_anchor"
 
-        # --- 第二级：Callsign 交叉验证匹配 ---
+        # --- Second level: Callsign Cross-check Match ---
         if spider_row is None and reg_cs and reg_cs in cs_index:
             candidates = cs_index[reg_cs]
 
-            # 对多个候选按匹配类型和质量排序，逐个尝试
+            # Sort multiple candidates by matching type and quality, Try one by one
             for cand in candidates:
                 spider_gt = safe_float(cand["tonnage_scraped"])
                 spider_type = cand["ship_type_scraped"]
 
-                # 校验 1: 船型兼容性
+                # Verify 1: Compatibility of ship types
                 type_ok = is_ship_type_compatible(spider_type, reg_vesseltype)
 
-                # 校验 2: GT 容差
+                # Verify 2: GT Portability
                 gt_ok = True
                 if (not np.isnan(reg_gt)) and (not np.isnan(spider_gt)) and reg_gt > 0:
                     ratio = spider_gt / reg_gt
                     gt_ok = (1 - GT_TOLERANCE) <= ratio <= (1 + GT_TOLERANCE)
 
                 if type_ok == False:
-                    # 船型明确不兼容
+                    # Clear incompatibility between the ships pattern
                     if not gt_ok:
                         updated_count["Callsign_rejected_both"] += 1
                         change_log.append({
@@ -445,7 +426,7 @@ def update_registry(registry: pd.DataFrame, spider: pd.DataFrame) -> tuple:
                             "field": "ALL",
                             "old_value": f"GT={reg_gt}, Builtdate={reg_bd}",
                             "new_value": f"GT={spider_gt}, Builtdate={safe_float(cand['builtdate_scraped'])}",
-                            "reason": f"船型不兼容({spider_type} vs {reg_vesseltype}) + GT超容差"
+                            "reason": f"Non-compatible ship({spider_type} vs {reg_vesseltype}) + GT Its a bad look"
                         })
                         continue
                     updated_count["Callsign_rejected_ship_type"] += 1
@@ -456,12 +437,12 @@ def update_registry(registry: pd.DataFrame, spider: pd.DataFrame) -> tuple:
                         "field": "ALL",
                         "old_value": f"GT={reg_gt}, Builtdate={reg_bd}",
                         "new_value": f"GT={spider_gt}, Builtdate={safe_float(cand['builtdate_scraped'])}",
-                        "reason": f"船型不兼容: spider={spider_type}, registry={reg_vesseltype}"
+                        "reason": f"Non-compatible ship: spider={spider_type}, registry={reg_vesseltype}"
                     })
                     continue
 
                 if not gt_ok and type_ok != True:
-                    # GT 超容差且船型不确定 → 拒绝
+                    # GT Its so bad and the ships not sure → Reject
                     updated_count["Callsign_rejected_gt"] += 1
                     change_log.append({
                         "Vesselname": reg_name, "IMO": reg_imo, "Callsign": reg_cs,
@@ -470,12 +451,12 @@ def update_registry(registry: pd.DataFrame, spider: pd.DataFrame) -> tuple:
                         "field": "ALL",
                         "old_value": f"GT={reg_gt}, Builtdate={reg_bd}",
                         "new_value": f"GT={spider_gt}, Builtdate={safe_float(cand['builtdate_scraped'])}",
-                        "reason": f"GT超容差: {reg_gt}→{spider_gt} ({(spider_gt/reg_gt-1)*100:+.0f}%)"
+                        "reason": f"GT Its a bad look: {reg_gt}→{spider_gt} ({(spider_gt/reg_gt-1)*100:+.0f}%)"
                     })
                     continue
 
                 if not gt_ok:
-                    # 船型兼容但 GT 超容差 → 拒绝
+                    # Ship type compatible, but GT Its a bad look → Reject
                     updated_count["Callsign_rejected_gt"] += 1
                     change_log.append({
                         "Vesselname": reg_name, "IMO": reg_imo, "Callsign": reg_cs,
@@ -484,28 +465,28 @@ def update_registry(registry: pd.DataFrame, spider: pd.DataFrame) -> tuple:
                         "field": "ALL",
                         "old_value": f"GT={reg_gt}, Builtdate={reg_bd}",
                         "new_value": f"GT={spider_gt}, Builtdate={safe_float(cand['builtdate_scraped'])}",
-                        "reason": f"GT超容差: {reg_gt}→{spider_gt} ({(spider_gt/reg_gt-1)*100:+.0f}%)"
+                        "reason": f"GT Its a bad look: {reg_gt}→{spider_gt} ({(spider_gt/reg_gt-1)*100:+.0f}%)"
                     })
                     continue
 
-                # 通过！使用此候选
+                # Through！Use this candidate
                 spider_row = cand
                 match_method = "Callsign_validated"
                 if type_ok is None:
-                    validation_notes = f"船型不确定(spider={spider_type}, reg={reg_vesseltype}), GT容差通过"
+                    validation_notes = f"The ships not sure(spider={spider_type}, reg={reg_vesseltype}), GT The margin passed"
                 break
 
-            # 如果所有候选都失败
+            # If all the candidates fail,
             if spider_row is None:
-                pass  # change_log 已在上面记录
+                pass  # change_log Its in the record
 
-        # --- 第三级：ShipName 交叉验证匹配（最低信任度） ---
+        # --- Level III: ShipName Cross-check Match (Minimum Trust)  ---
         if spider_row is None and reg_name:
             reg_name_upper = reg_name.upper()
-            # 先精确匹配，再尝试模糊匹配
+            # Lets get to the exact match, Try to blur the match again
             candidates = name_index.get(reg_name_upper, [])
             if not candidates:
-                # 尝试用标准化船名匹配（去非字母数字）
+                # Try matching with standardized ship names (Go to non-letter numbers) 
                 reg_name_norm = re.sub(r'[^A-Z0-9]', '', reg_name_upper)
                 for name_key, cands in name_index.items():
                     if re.sub(r'[^A-Z0-9]', '', name_key) == reg_name_norm:
@@ -516,12 +497,12 @@ def update_registry(registry: pd.DataFrame, spider: pd.DataFrame) -> tuple:
                 spider_gt = safe_float(cand["tonnage_scraped"])
                 spider_type = cand["ship_type_scraped"]
 
-                # 校验 1: 船型兼容性（必须明确兼容）
+                # Verify 1: Compatibility of ship types (It has to be clearly compatible) 
                 type_ok = is_ship_type_compatible(spider_type, reg_vesseltype)
                 if type_ok == False:
-                    continue  # 船名匹配 + 船型不兼容 → 先跳过看下一个候选
+                    continue  # The name of the ship matches + Non-compatible ship → Skip to see the next candidate
 
-                # 校验 2: GT 容差（必须通过）
+                # Verify 2: GT Portability (We have to go) 
                 gt_ok = True
                 if (not np.isnan(reg_gt)) and (not np.isnan(spider_gt)) and reg_gt > 0:
                     ratio = spider_gt / reg_gt
@@ -529,25 +510,25 @@ def update_registry(registry: pd.DataFrame, spider: pd.DataFrame) -> tuple:
                 if not gt_ok:
                     continue
 
-                # 校验 3: Flag 一致性（ShipName 匹配要求同国旗）
+                # Verify 3: Flag Coherence (ShipName Matching with the flag) 
                 spider_flag = cand.get("flag_scraped", "")
                 if spider_flag and reg_flag:
                     sf_norm = spider_flag.upper().strip()
                     rf_norm = reg_flag.upper().strip()
-                    # 简单检查：国旗代码一致或互相包含
+                    # Simple check: The flag code is consistent or contains each other
                     if sf_norm != rf_norm and sf_norm not in rf_norm and rf_norm not in sf_norm:
                         continue
 
-                # 全部通过
+                # All through
                 spider_row = cand
                 match_method = "ShipName_validated"
-                validation_notes = "ShipName交叉验证通过(船型+GT+国旗)"
+                validation_notes = "ShipName Cross-check through(Type of ship+GT+Flag)"
                 break
 
         if spider_row is None:
-            continue  # 无匹配，跳过此船
+            continue  # No match, Skip this ship
 
-        # ---- 执行更新 ----
+        # ---- Execute Update ----
         spider_bd = safe_float(spider_row["builtdate_scraped"])
         spider_gt = safe_float(spider_row["tonnage_scraped"])
         spider_mmsi = safe_float(spider_row["mmsi"])
@@ -556,14 +537,14 @@ def update_registry(registry: pd.DataFrame, spider: pd.DataFrame) -> tuple:
 
         changes_this_row = []
 
-        # --- 更新 Builtdate ---
+        # --- update Builtdate ---
         if not np.isnan(spider_bd) and spider_bd > 1900:
             old_bd = registry.at[idx, "Builtdate"]
             if np.isnan(safe_float(old_bd)) or abs(safe_float(old_bd) - spider_bd) > 0.1:
                 registry.at[idx, "Builtdate"] = spider_bd
                 changes_this_row.append(f"Builtdate: {old_bd} → {int(spider_bd)}")
 
-        # --- 更新 Tonnage (GT) ---
+        # --- update Tonnage (GT) ---
         if not np.isnan(spider_gt) and spider_gt > 0:
             old_gt = safe_float(registry.at[idx, "Tonnage"])
             if np.isnan(old_gt) or abs(old_gt - spider_gt) / max(old_gt, spider_gt) > 0.01:
@@ -571,26 +552,26 @@ def update_registry(registry: pd.DataFrame, spider: pd.DataFrame) -> tuple:
                 registry.at[idx, "TonnageType"] = "GT"
                 changes_this_row.append(f"Tonnage: {old_gt} → {spider_gt}")
 
-        # --- 更新 MMSI（仅填补缺失或明显不同） ---
+        # --- update MMSI (Filling gaps or apparent differences)  ---
         if not np.isnan(spider_mmsi) and spider_mmsi > 0:
             old_mmsi = safe_float(registry.at[idx, "MMSI"])
             if np.isnan(old_mmsi) or old_mmsi == 0:
                 registry.at[idx, "MMSI"] = spider_mmsi
-                changes_this_row.append(f"MMSI: 空 → {int(spider_mmsi)}")
+                changes_this_row.append(f"MMSI: Empty → {int(spider_mmsi)}")
 
-        # --- 更新 VesselType（仅当 spider 明确指示为 TS/运输船） ---
+        # --- update VesselType (Just think of it spider Clear instruction as TS/Transport vessels)  ---
         new_gear = map_ship_type_to_gear(spider_type)
         if new_gear and registry.at[idx, "VesselType"] != new_gear:
             old_type = registry.at[idx, "VesselType"]
             registry.at[idx, "VesselType"] = new_gear
             changes_this_row.append(f"VesselType: {old_type} → {new_gear}")
 
-        # --- 更新 Flag（仅当登记册无国旗且 spider 有） ---
+        # --- update Flag (If only the register had no flag and spider present)  ---
         if spider_flag:
             old_flag = safe_str(registry.at[idx, "Flag"])
             if not old_flag or old_flag in ("", "nan"):
                 registry.at[idx, "Flag"] = spider_flag
-                changes_this_row.append(f"Flag: 空 → {spider_flag}")
+                changes_this_row.append(f"Flag: Empty → {spider_flag}")
 
         if changes_this_row:
             updated_count[match_method] += 1
@@ -604,81 +585,81 @@ def update_registry(registry: pd.DataFrame, spider: pd.DataFrame) -> tuple:
                 "old_value": "; ".join([c.split(": ")[1].split(" → ")[0] for c in changes_this_row]),
                 "new_value": "; ".join([c.split(" → ")[1] for c in changes_this_row]),
                 "reason": validation_notes if validation_notes else (
-                    "IMO锚点直接更新" if match_method == "IMO_anchor" else "Callsign交叉验证通过"
+                    "IMO Dock Update" if match_method == "IMO_anchor" else "Callsign Cross-check through"
                 ),
             })
 
-    print(f"\n  更新统计:")
-    print(f"    IMO 锚点更新: {updated_count['IMO_anchor']} 艘")
-    print(f"    Callsign 验证通过: {updated_count['Callsign_validated']} 艘")
-    print(f"    ShipName 验证通过: {updated_count['ShipName_validated']} 艘")
-    print(f"    Callsign 拒绝(船型不兼容): {updated_count['Callsign_rejected_ship_type']} 艘")
-    print(f"    Callsign 拒绝(GT超容差): {updated_count['Callsign_rejected_gt']} 艘")
-    print(f"    Callsign 拒绝(双重失败): {updated_count['Callsign_rejected_both']} 艘")
-    print(f"    总更新: {len(change_log)} 项")
+    print(f"\n  Updated statistics:")
+    print(f"    IMO Update of anchors: {updated_count['IMO_anchor']} One")
+    print(f"    Callsign Authentication through: {updated_count['Callsign_validated']} One")
+    print(f"    ShipName Authentication through: {updated_count['ShipName_validated']} One")
+    print(f"    Callsign Reject(Non-compatible ship): {updated_count['Callsign_rejected_ship_type']} One")
+    print(f"    Callsign Reject(GT Its a bad look): {updated_count['Callsign_rejected_gt']} One")
+    print(f"    Callsign Reject(Double failure): {updated_count['Callsign_rejected_both']} One")
+    print(f"    Total update: {len(change_log)} Item")
 
     change_df = pd.DataFrame(change_log) if change_log else pd.DataFrame()
     return registry, change_df
 
 
 # =============================================================================
-# 主入口
+# Main entrance
 # =============================================================================
 
 def main():
     print("=" * 70)
-    print("  Spider 数据 → Unified_Vessel_Registry 参数更新")
-    print("  IMO 锚点（绝对信任）+ Callsign 交叉验证")
+    print("  Spider Data → Unified_Vessel_Registry Parameter Update")
+    print("  IMO Dock (Absolutely) + Callsign Cross Authentication")
     print("=" * 70)
 
-    # ---- 加载登记册 ----
-    print(f"\n加载登记册: {REGISTRY_PATH}")
+    # ---- Load Register ----
+    print(f"\n Load Register: {REGISTRY_PATH}")
     registry = pd.read_csv(REGISTRY_PATH, encoding="utf-8-sig")
-    print(f"  当前船舶数: {len(registry)}")
+    print(f"  Current number of ships: {len(registry)}")
 
-    # 记录更新前的统计
+    # Recording statistics before updating
     old_bd_count = registry["Builtdate"].notna().sum()
     old_gt_count = registry["Tonnage"].notna().sum()
     old_mmsi_count = registry["MMSI"].notna().sum()
 
-    # ---- 加载 spider 数据 ----
+    # ---- Load spider Data ----
     spider = load_spider_data()
 
-    # ---- 执行更新 ----
+    # ---- Execute Update ----
     registry, change_log = update_registry(registry, spider)
 
-    # ---- 更新后统计 ----
+    # ---- Updated statistics ----
     new_bd_count = registry["Builtdate"].notna().sum()
     new_gt_count = registry["Tonnage"].notna().sum()
     new_mmsi_count = registry["MMSI"].notna().sum()
 
-    print(f"\n  数据完整性变化:")
+    print(f"\n  Changes in data integrity:")
     print(f"    Builtdate: {old_bd_count} → {new_bd_count} (+{new_bd_count-old_bd_count})")
     print(f"    Tonnage:   {old_gt_count} → {new_gt_count} (+{new_gt_count-old_gt_count})")
     print(f"    MMSI:      {old_mmsi_count} → {new_mmsi_count} (+{new_mmsi_count-old_mmsi_count})")
 
-    # ---- 输出 ----
+    # ---- Output ----
     print("\n" + "=" * 70)
-    print("  保存结果")
+    print("  Save Results")
     print("=" * 70)
 
-    # 保存更新后的登记册
+    # Keep an updated registry
     registry.to_csv(OUTPUT_PATH, index=False, encoding="utf-8-sig")
-    print(f"  登记册已更新: {OUTPUT_PATH}")
+    print(f"  Register updated: {OUTPUT_PATH}")
 
-    # 保存变更日志
+    # Save Change Log
     log_path = BASE_DIR / "Registry_Update_Log.csv"
     if len(change_log) > 0:
         change_log.to_csv(log_path, index=False, encoding="utf-8-sig")
-        print(f"  变更日志: {log_path} ({len(change_log)} 条变更)")
+        print(f"  Change Log: {log_path} ({len(change_log)} Article change)")
 
-        # 打印变更摘要
-        print(f"\n  变更字段分布:")
+        # Print Changes Summary
+        print(f"\n  Change Field Distribution:")
         field_counts = change_log["field"].value_counts()
         for field, count in field_counts.items():
             print(f"    {field}: {count}")
 
-    print("\n  完成。")
+    print("\n  Completed. ")
     return registry, change_log
 
 

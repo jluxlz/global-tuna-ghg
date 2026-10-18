@@ -224,14 +224,14 @@ FLAG_TO_ISO3 = {
     "Maroc":                           "MAR",
     "Tunisie":                         "TUN",
     "Türkiye":                         "TUR",
-    "T篓鹿rkiye":                       "TUR",   # Garbled encoding variant
+    "T\u7bd3\u9e7frkiye":                       "TUR",   # Garbled encoding variant
     "Côte d'Ivoire":                   "CIV",
     "C?te d'Ivoire":                   "CIV",   # Garbled encoding variant
     "Cabo Verde":                      "CPV",
     "Guinea Ecuatorial":               "GNQ",
     "S Tomé e Príncipe":              "STP",
     "Guinée Rep":                      "GIN",
-    "Guin篓娄e Rep":                    "GIN",   # Garbled encoding variant
+    "Guin\u7bd3\u5a04e Rep":                    "GIN",   # Garbled encoding variant
     "Curaçao":                         "CUW",
     "Cura?ao":                         "CUW",   # Garbled encoding variant
 
