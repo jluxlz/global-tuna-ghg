@@ -1,3 +1,4 @@
+from pathlib import Path
 import pandas as pd
 import sys, os
 import time
@@ -10,7 +11,7 @@ from flag_utils import normalize_flag_to_iso3, is_allowed_iso3
 
 # --- 1. Basic Configuration ---
 # Its on you Data.csv Documentation
-t1nc_file_path = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\ICCAT\source_data\t1nc-20260129_ALL.xlsx'
+t1nc_file_path = str(Path(__file__).resolve().parents[2] / 'effort_data/ICCAT/source_data/t1nc-20260129_ALL.xlsx')
 
 target_species = ['SKJ', 'BET', 'ALB', 'YFT']
 target_gears = ['LL', 'PS']
@@ -59,6 +60,6 @@ print("\n🔍 Before final data 5 Row Preview: ")
 print(final_df.head())
 
 # Save final clean data
-output_path = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\ICCAT\ICCAT_Annual_Catch.csv'
+output_path = str(Path(__file__).resolve().parents[2] / 'effort_data/ICCAT/ICCAT_Annual_Catch.csv')
 final_df.to_csv(output_path, index=False, encoding='utf-8-sig')
 print(f"\n📁 The official annual ton of fishing is perfectly extracted and preserved to: {output_path}")

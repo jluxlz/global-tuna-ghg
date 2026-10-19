@@ -7,11 +7,12 @@ SF5 (step 2): economic-elasticity sensitivity by POST-PROCESSING.
 Outputs: SF5_PanelA_Multiplier.csv, SF5_PanelB_Abatement.csv,
          SF5_PanelC_Rebound.csv
 """
+from pathlib import Path
 import os, sys
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 import numpy as np, pandas as pd
 
-OUT = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\scenario\output\fig5'
+OUT = str(Path(__file__).resolve().parents[3] / 'scenario/output/fig5')
 BETAS = [0.0, -0.1, -0.3, -0.5, -0.7]
 B0 = -0.3
 

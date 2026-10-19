@@ -11,9 +11,10 @@ once AFTER 9 other futures that exercise the same cache keys. Assert the two
 runs are bit-identical. Run this after ANY edit to fleet_model/fig5_run or the
 price/schaefer inputs, BEFORE the production chain.
 """
+from pathlib import Path
 import sys, os
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
-sys.path.insert(0, r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\figures\Fig5')
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'figures/Fig5'))
 import fig5_run as F
 import pandas as pd
 import fleet_model

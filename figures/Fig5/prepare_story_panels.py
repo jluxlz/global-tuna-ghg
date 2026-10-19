@@ -88,8 +88,11 @@ eq=eq.merge(mapping[['Future','WEO','TechCreep']],on='Future',validate='one_to_o
 eq.to_csv(HERE/'Fig5_PanelE_Matched_Catch.csv',index=False)
 # Keep relocated figures self-contained, using immutable copies of old panels.
 def transfer(oldname,n,newname):
-    source=ARCH/oldname;target=ROOT/f'figures/supplement/Supplementary_Fig{n}'/newname
-    assert source.exists();shutil.copy2(source,target)
+    target=ROOT/f'figures/supplement/Supplementary_Fig{n}'/newname
+    if target.exists():return  # current supplied screening checkpoint
+    source=ARCH/oldname
+    if not source.exists():raise FileNotFoundError(f"Restore supplied screening input: {target}")
+    shutil.copy2(source,target)
 transfer('Fig5_PanelA_Fuel_Options.csv',9,'Supplementary_Fig9_PanelC_Fuel_Screen.csv')
 transfer('Fig5_PanelC_Fuel_Curves.csv',9,'Supplementary_Fig9_PanelD_Transition_Curves.csv')
 transfer('Fig5_PanelB_Quota_Species.csv',11,'Supplementary_Fig11_PanelC_Quota_Screen.csv')

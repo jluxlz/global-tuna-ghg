@@ -1,3 +1,4 @@
+from pathlib import Path
 import pandas as pd
 import numpy as np
 
@@ -51,8 +52,8 @@ def extract_specific_flags_catch(file_path, output_path):
     return df_flags
 
 # Run code extraction of data
-input_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\CCSBT\source_data\GlobalCatch_Flag_Gear.xlsx'
-output_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\CCSBT\CCSBT_Annual_Catch.csv'
+input_file = str(Path(__file__).resolve().parents[2] / 'effort_data/CCSBT/source_data/GlobalCatch_Flag_Gear.xlsx')
+output_file = str(Path(__file__).resolve().parents[2] / 'effort_data/CCSBT/CCSBT_Annual_Catch.csv')
 
 final_flags_df = extract_specific_flags_catch(input_file, output_file)
 

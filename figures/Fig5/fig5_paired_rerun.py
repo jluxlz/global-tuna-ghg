@@ -165,7 +165,7 @@ def promote():
                     Mitigation_Pathway=name,Mitigation_Level=level,GHG_BAU=v,
                     GHG_Mitigation=vm,Reduction_pct=round(100*(1-vm/v),3)))
     # Original BAU seed block is retained; catch hidden model/input drift here.
-    old = pd.read_csv(AUD/"before/production_fig5/BAU_81_Annual.csv").sort_values(["BAU_ID","Year"])
+    old = pd.read_csv(ROOT/"data/reference/BAU_81_Annual.csv").sort_values(["BAU_ID","Year"])
     bau = pd.DataFrame(bau_rows).sort_values(["BAU_ID","Year"])
     max_diff = float(np.max(np.abs(old.GHG_Mt.to_numpy()-bau.GHG_Mt.to_numpy())))
     if max_diff > 1e-9:
@@ -216,6 +216,8 @@ def main():
     signature=hashlib.sha256(pd.util.hash_pandas_object(fleet,index=True).values.tobytes()+
         json.dumps(pm,sort_keys=True,default=str).encode())
     paths=[ROOT/p for p in ("scenario/fleet_model.py","scenario/price_loader.py",
+        "PMM_Imputation/After_PMM_Vessels.csv","effort_data/Share5_Lookup_FlagGearYear.csv",
+        "GHG_Calculation/Base_3_Spatial_Grid_Enriched.csv","model_parameters/Prior_Matrix.csv",
         "scenario/scenario_seeds.py","GHG_Calculation/ghg_lca.py",
         "scenario/output/schaefer_biomass_annual.csv","scenario/output/schaefer_biomass_annual_F.csv",
         "model_parameters/Scenario_Fuel_Parameters.xlsx","model_parameters/Scenario_Fuel_Price_Matrix.xlsx",

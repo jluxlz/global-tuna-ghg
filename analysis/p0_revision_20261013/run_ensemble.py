@@ -5,6 +5,7 @@ Resume is keyed by all parameters and SHA256 of model/biological inputs.
 """
 from pathlib import Path
 import sys,json,contextlib,io,hashlib,time,itertools,os
+from functools import lru_cache
 from multiprocessing import Pool
 import pandas as pd
 import numpy as np
@@ -18,8 +19,23 @@ _W={}
 def init_worker(fleet,pm):
     _W.update(fleet=fleet,pm=pm)
 
+@lru_cache(maxsize=1)
+def frozen_input_signature():
+    h=hashlib.sha256()
+    for rel in ('PMM_Imputation/After_PMM_Vessels.csv',
+                'effort_data/Share5_Lookup_FlagGearYear.csv',
+                'GHG_Calculation/Base_3_Spatial_Grid_Enriched.csv',
+                'model_parameters/Prior_Matrix.csv',
+                'model_parameters/Scenario_Fuel_Parameters.xlsx',
+                'model_parameters/Scenario_Fuel_Price_Matrix.xlsx'):
+        p=ROOT/rel
+        with p.open('rb') as f:h.update(hashlib.file_digest(f,'sha256').digest())
+    return h.digest()
+
+
 def digest(params):
     h=hashlib.sha256(json.dumps(params,sort_keys=True).encode())
+    h.update(frozen_input_signature())
     for path in [ROOT/'scenario/fleet_model.py',ROOT/'scenario/fishery_coupling.py',Path(params['fishery_coupling']['stock_parameters'])]:
         h.update(path.read_bytes())
     return h.hexdigest()

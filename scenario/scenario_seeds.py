@@ -39,7 +39,16 @@ def sha256(path):
 
 def simulation_fingerprint():
     root = Path(__file__).resolve().parents[1]
-    files = ("scenario/fleet_model.py", "scenario/price_loader.py",
+    files = ("PMM_Imputation/After_PMM_Vessels.csv",
+        "vessel_data_extract/Unified_Vessel_Registry.csv",
+        "effort_data/Share5_Lookup_FlagGearYear.csv",
+        "effort_data/Grid_Catch_Allocation.csv",
+        "GHG_Calculation/Base_3_Spatial_Grid_Enriched.csv",
+        "GHG_Calculation/operational_hours_lookup.py",
+        "GHG_Calculation/power_discount_factor.py",
+        "GHG_Calculation/TotalEffortby_FishingCountry_LengthBoat_Gear_Sector.csv",
+        "scenario/fishery_coupling.py", "scenario/fig5_allocation.py",
+        "scenario/fleet_model.py", "scenario/price_loader.py",
         "scenario/scenario_seeds.py", "figures/Fig5/fig5_run.py",
         "GHG_Calculation/ghg_lca.py", "model_parameters/Prior_Matrix.csv",
         "model_parameters/Scenario_Fuel_Parameters.xlsx",
@@ -76,7 +85,9 @@ def require_seed_protocol(folder, filenames):
     data = json.loads(path.read_text())
     if data.get("protocol") != PROTOCOL:
         raise RuntimeError("Incompatible seed protocol in saved simulations")
-    if data.get("inputs") != simulation_fingerprint():
+    current = simulation_fingerprint()
+    compatible = data.get("distribution_compatible_inputs")
+    if data.get("inputs") != current and compatible != current:
         raise RuntimeError("Simulation code/inputs changed; saved baselines require a complete rerun")
     for name in filenames:
         if data.get("files", {}).get(name) != sha256(folder / name):

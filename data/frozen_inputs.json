@@ -1,0 +1,236 @@
+[
+  {
+    "Path": "PMM_Imputation/After_PMM_Vessels.csv",
+    "Bytes": 1470251,
+    "SHA256": "9e17190cd8e0f976a386e3be2bf64fb5fb6d0a0fe7871dc6bfff21dc64c30423",
+    "Role": "Accepted frozen registry/model checkpoint"
+  },
+  {
+    "Path": "effort_data/Share5_Lookup_FlagGearYear.csv",
+    "Bytes": 232632,
+    "SHA256": "dabbbc5a68af12223be3e20061f7995b0b4668615947cdf03f403fb9f1b6948a",
+    "Role": "Registry harmonization reference or saved converted extraction"
+  },
+  {
+    "Path": "vessel_data_extract/ISSCFG.txt",
+    "Bytes": 2791,
+    "SHA256": "a0ec2e75954d954c83875a3ccf53f30be21fe1d60779b8642c698b2d86066bbb",
+    "Role": "Registry harmonization reference or saved converted extraction"
+  },
+  {
+    "Path": "vessel_data_extract/ISSCFV.txt",
+    "Bytes": 2996,
+    "SHA256": "749919aa98c076c014cac992db9d1dc92e8154bb66196243c2f7bbf2c1e7ef81",
+    "Role": "Registry harmonization reference or saved converted extraction"
+  },
+  {
+    "Path": "vessel_data_extract/Unified_Vessel_Registry.csv",
+    "Bytes": 979139,
+    "SHA256": "ee2e6f8bcbd27e44be06a6f4d811c6f7903f342a8234b7422bca1b4df070f1c9",
+    "Role": "Accepted frozen registry/model checkpoint"
+  },
+  {
+    "Path": "vessel_data_extract/new_extracted_vessel_data/CCSBT_Unresolved_Power_Units.csv",
+    "Bytes": 136,
+    "SHA256": "f9e724d76453d862c59440761c233da1c8e8d42c3a086b536ae804b1a4d4b9d6",
+    "Role": "Registry harmonization reference or saved converted extraction"
+  },
+  {
+    "Path": "vessel_data_extract/new_extracted_vessel_data/CCSBT_extracted_new.csv",
+    "Bytes": 368878,
+    "SHA256": "c20c8a9c1137a810e602ce612e881fdd61c815e2cc99cf53db7fd7f7a872450e",
+    "Role": "Registry harmonization reference or saved converted extraction"
+  },
+  {
+    "Path": "vessel_data_extract/new_extracted_vessel_data/Flag_Code_Mapping.csv",
+    "Bytes": 2790,
+    "SHA256": "ce8a5f8733b4c460076a9b77ca7b7c6c154b74d439fa155768c1a46180b662c3",
+    "Role": "Registry harmonization reference or saved converted extraction"
+  },
+  {
+    "Path": "vessel_data_extract/new_extracted_vessel_data/IATTC_Unresolved_Power_Units.csv",
+    "Bytes": 136,
+    "SHA256": "f9e724d76453d862c59440761c233da1c8e8d42c3a086b536ae804b1a4d4b9d6",
+    "Role": "Registry harmonization reference or saved converted extraction"
+  },
+  {
+    "Path": "vessel_data_extract/new_extracted_vessel_data/IATTC_extracted_new.csv",
+    "Bytes": 159701,
+    "SHA256": "a0aa3004bdd0f65f86ed76948239d1ef3a609a15aac6e485e03154834deff1db",
+    "Role": "Registry harmonization reference or saved converted extraction"
+  },
+  {
+    "Path": "vessel_data_extract/new_extracted_vessel_data/ICCAT_Unresolved_Power_Units.csv",
+    "Bytes": 145,
+    "SHA256": "1b0193e3c81328e4bb2d1b0abbdc119fdba8eb96649c8d522db344ce08cbf73b",
+    "Role": "Registry harmonization reference or saved converted extraction"
+  },
+  {
+    "Path": "vessel_data_extract/new_extracted_vessel_data/ICCAT_extracted_new.csv",
+    "Bytes": 329032,
+    "SHA256": "9c0b74245dc6742ee8a432f05fb060197d82490520eb1172dd0aecb17d7127c5",
+    "Role": "Registry harmonization reference or saved converted extraction"
+  },
+  {
+    "Path": "vessel_data_extract/new_extracted_vessel_data/IOTC_Unresolved_Power_Units.csv",
+    "Bytes": 136,
+    "SHA256": "f9e724d76453d862c59440761c233da1c8e8d42c3a086b536ae804b1a4d4b9d6",
+    "Role": "Registry harmonization reference or saved converted extraction"
+  },
+  {
+    "Path": "vessel_data_extract/new_extracted_vessel_data/IOTC_extracted_new.csv",
+    "Bytes": 211647,
+    "SHA256": "8d1245ffa972b4245311ab309562d5f52c72b256fdb237831138bd710861304d",
+    "Role": "Registry harmonization reference or saved converted extraction"
+  },
+  {
+    "Path": "vessel_data_extract/new_extracted_vessel_data/WCPFC_Unresolved_Power_Units.csv",
+    "Bytes": 388,
+    "SHA256": "ab37fb774d9e439a8f52a02c683c2d2767a16a8948c286478b97613beaae3b05",
+    "Role": "Registry harmonization reference or saved converted extraction"
+  },
+  {
+    "Path": "vessel_data_extract/new_extracted_vessel_data/WCPFC_extracted_new.csv",
+    "Bytes": 230608,
+    "SHA256": "1bfa6ff3212e91a80542bbf1107bf44af9407e913f85a1bfb01fdc49a9eb07a9",
+    "Role": "Registry harmonization reference or saved converted extraction"
+  },
+  {
+    "Path": "analysis/manuscript_extended_20261012/verified_references/CCSBT_SBT_2023.pdf",
+    "Bytes": 866139,
+    "SHA256": "50b549074bb8b3466f14b0346639b3bd0e42755b8ad14492298ebebdf8ea1222",
+    "Role": "Preserved public official RFMO reference used by source-image extraction"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/BET_Catch_Allocation.csv",
+    "Bytes": 96,
+    "SHA256": "6c1bfebe7e01b13e220e706ace4da6e3e19ec99f73c170470f0c48d2328ff10f",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/BET_Fleet_Weights.json",
+    "Bytes": 98,
+    "SHA256": "a59c034bdc39d71c08c5eb6e5a8452c83f0215701199253def69c3b1e546906f",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/BET_Projection_Parameters.csv",
+    "Bytes": 232,
+    "SHA256": "f0488e330b08acc735ca8814080dce7982535a980c866de06a625cfd3ce2e4fe",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/IOTC_BET_catch.csv",
+    "Bytes": 1305,
+    "SHA256": "dfe3e47b6aef33089ca64ca99da3f7a37c19a51dda13a2b147b3f0556a33c3c5",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/IOTC_BET_catch_quarterly.csv",
+    "Bytes": 99751,
+    "SHA256": "781bc306e8173c93b0104d81e6fb825f7dfeb41707cd5db43ba70833c8af62c7",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/IOTC_BET_cpue.csv",
+    "Bytes": 6287,
+    "SHA256": "056a499796be8c92f0ba6fb46d6a2847ce8c78f09b5e7fadb90219d21e6dadc4",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/IOTC_BET_fleet_fraction.csv",
+    "Bytes": 1272,
+    "SHA256": "b48c49b7ec5d96653dbdb76927768ee2bd2a538619d861c0b3a96865bb246432",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/IOTC_BET_se.csv",
+    "Bytes": 1756,
+    "SHA256": "c77278a8eedc5e6a52fa29288f75e7d883ddec9d1723857e5f136f19b1a453a8",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/IOTC_YFT_complete_catch_update.csv",
+    "Bytes": 1950,
+    "SHA256": "973611412b84f7c499fed69a1b0567a68d998695cc3c1ef5ae4c9321df5fa422",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/IOTC_YFT_historical_catch.csv",
+    "Bytes": 1470,
+    "SHA256": "42bf502c97b29674f67227e9d6386d44d75af58479ac0350089c6e90b298ed0d",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/IOTC_YFT_historical_catch_quarterly.csv",
+    "Bytes": 166774,
+    "SHA256": "7360fa42415a384cc52e555e7d545d597605b88389000fdf7396774cf890f091",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/IOTC_YFT_historical_cpue.csv",
+    "Bytes": 4215,
+    "SHA256": "0d9cb040d6a40d8685fe0bc6163448a5c21cb7f4495d605f2bb71af9388d0ecd",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/IOTC_YFT_historical_fleet_fraction.csv",
+    "Bytes": 1913,
+    "SHA256": "5aad7e0abad182fd0629ef1f0acd6d8bd2919b57f427ad65b7d375db7fad9124",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/IOTC_YFT_historical_se.csv",
+    "Bytes": 1434,
+    "SHA256": "e4d7a1d1b57b5ec40b17ccd2af70eaf37d784d529722c7fe0a0c9a50116e3179",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/Regional_Catch_Allocation.csv",
+    "Bytes": 161,
+    "SHA256": "3d57dcea5a7f6e266da06cfe475e813b9beb8bd597ea8db828699720033d2e10",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/Regional_Fleet_Weights.json",
+    "Bytes": 96,
+    "SHA256": "c7e74f8f9bd95dfe4552668626187e55976ef2b3994f56c750dc2d95cccf8303",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/Regional_Projection_Parameters.csv",
+    "Bytes": 335,
+    "SHA256": "dbc2e4918b27ae5e641e4db84df112d8765e6e931397f127752967e93dc8ca69",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/YFT_Catch_Allocation.csv",
+    "Bytes": 96,
+    "SHA256": "ac2517e20d1dd73b1decb52b096ea71735bfb6433177e586f3671070f0222ec8",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/YFT_Fleet_Weights.json",
+    "Bytes": 98,
+    "SHA256": "0ffcdcdf43d329eb3917643312fd23d63242df6a52843d309031cc7cb5c795fa",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/YFT_Observed_Catch_Bridge_QC.csv",
+    "Bytes": 411,
+    "SHA256": "bc4da4a273abef0529a9091a36dc5eb19e26095517903f40f816e7da41eb32bb",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "analysis/p0_revision_20261013/regional_inputs/YFT_Projection_Parameters.csv",
+    "Bytes": 224,
+    "SHA256": "cb4724eab39b29ac6f016a4e5f2018a9fee915279156d150d4380c2a425486a7",
+    "Role": "Frozen regional biological and fleet inputs; no live assessment download required"
+  },
+  {
+    "Path": "data/reference/BAU_81_Annual.csv",
+    "Bytes": 121652,
+    "SHA256": "7ea3259ac44790b0bae2cb35c6f1c463528fe72e5fc3c9dc796407d538043903",
+    "Role": "Unchanged published baseline reference for paired rerun comparison"
+  }
+]

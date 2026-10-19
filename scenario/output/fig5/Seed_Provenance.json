@@ -1,0 +1,884 @@
+{
+  "protocol": "future-paired-v1",
+  "files": {
+    "SF5_Multiplier_Paths.csv": "a3ed69c9f8cdbe8b6e3c46daf4fd4d0a3b1d1990d577cfc3179438635c21ef8d",
+    "SF5_Capture_Seed_Manifest.csv": "909125e72876331210f0ba1f4acbc4ab83137d6844c2e6b95ce8c7f6a199f0c5",
+    "BAU_81_Annual.csv": "7ea3259ac44790b0bae2cb35c6f1c463528fe72e5fc3c9dc796407d538043903",
+    "Mitigation_Results_Annual.csv": "361e2880fb5b1244dd7481aecf0cda4c515cf82cf844c63644aa44d0185d7a36",
+    "Heterogeneous_Mitigation_Results.csv": "8fada506a526774daee0648491e6a31beede20c4908faae7f0c36ed434d43103",
+    "Fig5_QuotaOnly_Annual.csv": "77bc430b1c72d1591620c68bbf023cddb0feb7099474dc50dd59126430658590",
+    "Fig5_Final_Combination_Annual.csv": "43c2b57893c4fdeb9c0bfa7a904bb5d2e9a5062d876ef3cb2032dae045811f5b",
+    "SF6_Combos_2050.csv": "58ef5826c5ea28ad8293287622015f4bc9f294abe27207913c6db9e52248c9c3",
+    "Optimal_Mitigation_By_Object.csv": "98460a36c1532e015cf694238f06d78168953bf4e71a86e7f194866dd55a6a3c",
+    "SF6_Shapley_Contributions.csv": "8bafb74de9f4e87a48509d1e7660208f3cd5c182d8070f9e605a8ffa6fd612ea"
+  },
+  "inputs": {
+    "scenario/fleet_model.py": "b617db80df93455a7399e01890f7c7b54ee7528ee4cfb4830776e2ed10a351c2",
+    "scenario/price_loader.py": "f55693c1dfff1183d65cf01fb5fc32b30a64c355c10979c7e9c2cb20ba521234",
+    "scenario/scenario_seeds.py": "65cb0bad35efbe595d669df689ddd8044d339494008e735a2ce7f8f20b092982",
+    "figures/Fig5/fig5_run.py": "0816bf19b89a28dff1e22800809d84e04b780115bd47d7eb619206db9fa6d10b",
+    "GHG_Calculation/ghg_lca.py": "966e96e8c68f531887ef4f29c00695b74cbfe26f3d5e8e8a47e708c2019a6514",
+    "model_parameters/Prior_Matrix.csv": "1b76b150d0ba0adf635c7884026be02dd8e53792b88e80d53852437fb839ba2e",
+    "model_parameters/Scenario_Fuel_Parameters.xlsx": "1cef0a09da222b0c97648852f291f091f0504cb98b55a0184b966bbe88c9f234",
+    "model_parameters/Scenario_Fuel_Price_Matrix.xlsx": "f880186bf6a100a96c228d452e276e16cd664b829c6961eacefb7f24d3f19b4d",
+    "scenario/output/schaefer_biomass_annual.csv": "a5c599d6080c8ec84b08a7d0e46ab05d7f16735809ee6d52ce4d9fc56acd1f66",
+    "scenario/output/schaefer_biomass_annual_F.csv": "da986bc3b5e0265b030e5a9da35f1feabc43ac75c7a48bad77b59f8f5dd71d0a",
+    "scenario/output/fig5/Fig5_Final_Fuel.json": "98779f824e5482a125b75927a49d579a83e62741c4d12cf39c3a335cecf38a30",
+    "scenario/output/fig5/Fig5_Final_Quota.json": "5d64f539c13b9dc7d91c94e823f0ef0cbe5b82983e6067919ba1c882cb30a5d0"
+  },
+  "future_seeds": [
+    {
+      "future": "F01",
+      "configuration": [
+        "STEPS",
+        0.0021,
+        1,
+        0.019
+      ],
+      "seed": 42
+    },
+    {
+      "future": "F02",
+      "configuration": [
+        "STEPS",
+        0.0021,
+        1,
+        0.024
+      ],
+      "seed": 43
+    },
+    {
+      "future": "F03",
+      "configuration": [
+        "STEPS",
+        0.0021,
+        1,
+        0.043
+      ],
+      "seed": 44
+    },
+    {
+      "future": "F04",
+      "configuration": [
+        "STEPS",
+        0.0021,
+        2,
+        0.019
+      ],
+      "seed": 45
+    },
+    {
+      "future": "F05",
+      "configuration": [
+        "STEPS",
+        0.0021,
+        2,
+        0.024
+      ],
+      "seed": 46
+    },
+    {
+      "future": "F06",
+      "configuration": [
+        "STEPS",
+        0.0021,
+        2,
+        0.043
+      ],
+      "seed": 47
+    },
+    {
+      "future": "F07",
+      "configuration": [
+        "STEPS",
+        0.0021,
+        3,
+        0.019
+      ],
+      "seed": 48
+    },
+    {
+      "future": "F08",
+      "configuration": [
+        "STEPS",
+        0.0021,
+        3,
+        0.024
+      ],
+      "seed": 49
+    },
+    {
+      "future": "F09",
+      "configuration": [
+        "STEPS",
+        0.0021,
+        3,
+        0.043
+      ],
+      "seed": 50
+    },
+    {
+      "future": "F10",
+      "configuration": [
+        "STEPS",
+        0.0136,
+        1,
+        0.019
+      ],
+      "seed": 51
+    },
+    {
+      "future": "F11",
+      "configuration": [
+        "STEPS",
+        0.0136,
+        1,
+        0.024
+      ],
+      "seed": 52
+    },
+    {
+      "future": "F12",
+      "configuration": [
+        "STEPS",
+        0.0136,
+        1,
+        0.043
+      ],
+      "seed": 53
+    },
+    {
+      "future": "F13",
+      "configuration": [
+        "STEPS",
+        0.0136,
+        2,
+        0.019
+      ],
+      "seed": 54
+    },
+    {
+      "future": "F14",
+      "configuration": [
+        "STEPS",
+        0.0136,
+        2,
+        0.024
+      ],
+      "seed": 55
+    },
+    {
+      "future": "F15",
+      "configuration": [
+        "STEPS",
+        0.0136,
+        2,
+        0.043
+      ],
+      "seed": 56
+    },
+    {
+      "future": "F16",
+      "configuration": [
+        "STEPS",
+        0.0136,
+        3,
+        0.019
+      ],
+      "seed": 57
+    },
+    {
+      "future": "F17",
+      "configuration": [
+        "STEPS",
+        0.0136,
+        3,
+        0.024
+      ],
+      "seed": 58
+    },
+    {
+      "future": "F18",
+      "configuration": [
+        "STEPS",
+        0.0136,
+        3,
+        0.043
+      ],
+      "seed": 59
+    },
+    {
+      "future": "F19",
+      "configuration": [
+        "STEPS",
+        0.0272,
+        1,
+        0.019
+      ],
+      "seed": 60
+    },
+    {
+      "future": "F20",
+      "configuration": [
+        "STEPS",
+        0.0272,
+        1,
+        0.024
+      ],
+      "seed": 61
+    },
+    {
+      "future": "F21",
+      "configuration": [
+        "STEPS",
+        0.0272,
+        1,
+        0.043
+      ],
+      "seed": 62
+    },
+    {
+      "future": "F22",
+      "configuration": [
+        "STEPS",
+        0.0272,
+        2,
+        0.019
+      ],
+      "seed": 63
+    },
+    {
+      "future": "F23",
+      "configuration": [
+        "STEPS",
+        0.0272,
+        2,
+        0.024
+      ],
+      "seed": 64
+    },
+    {
+      "future": "F24",
+      "configuration": [
+        "STEPS",
+        0.0272,
+        2,
+        0.043
+      ],
+      "seed": 65
+    },
+    {
+      "future": "F25",
+      "configuration": [
+        "STEPS",
+        0.0272,
+        3,
+        0.019
+      ],
+      "seed": 66
+    },
+    {
+      "future": "F26",
+      "configuration": [
+        "STEPS",
+        0.0272,
+        3,
+        0.024
+      ],
+      "seed": 67
+    },
+    {
+      "future": "F27",
+      "configuration": [
+        "STEPS",
+        0.0272,
+        3,
+        0.043
+      ],
+      "seed": 68
+    },
+    {
+      "future": "F28",
+      "configuration": [
+        "APS",
+        0.0021,
+        1,
+        0.019
+      ],
+      "seed": 69
+    },
+    {
+      "future": "F29",
+      "configuration": [
+        "APS",
+        0.0021,
+        1,
+        0.024
+      ],
+      "seed": 70
+    },
+    {
+      "future": "F30",
+      "configuration": [
+        "APS",
+        0.0021,
+        1,
+        0.043
+      ],
+      "seed": 71
+    },
+    {
+      "future": "F31",
+      "configuration": [
+        "APS",
+        0.0021,
+        2,
+        0.019
+      ],
+      "seed": 72
+    },
+    {
+      "future": "F32",
+      "configuration": [
+        "APS",
+        0.0021,
+        2,
+        0.024
+      ],
+      "seed": 73
+    },
+    {
+      "future": "F33",
+      "configuration": [
+        "APS",
+        0.0021,
+        2,
+        0.043
+      ],
+      "seed": 74
+    },
+    {
+      "future": "F34",
+      "configuration": [
+        "APS",
+        0.0021,
+        3,
+        0.019
+      ],
+      "seed": 75
+    },
+    {
+      "future": "F35",
+      "configuration": [
+        "APS",
+        0.0021,
+        3,
+        0.024
+      ],
+      "seed": 76
+    },
+    {
+      "future": "F36",
+      "configuration": [
+        "APS",
+        0.0021,
+        3,
+        0.043
+      ],
+      "seed": 77
+    },
+    {
+      "future": "F37",
+      "configuration": [
+        "APS",
+        0.0136,
+        1,
+        0.019
+      ],
+      "seed": 78
+    },
+    {
+      "future": "F38",
+      "configuration": [
+        "APS",
+        0.0136,
+        1,
+        0.024
+      ],
+      "seed": 79
+    },
+    {
+      "future": "F39",
+      "configuration": [
+        "APS",
+        0.0136,
+        1,
+        0.043
+      ],
+      "seed": 80
+    },
+    {
+      "future": "F40",
+      "configuration": [
+        "APS",
+        0.0136,
+        2,
+        0.019
+      ],
+      "seed": 81
+    },
+    {
+      "future": "F41",
+      "configuration": [
+        "APS",
+        0.0136,
+        2,
+        0.024
+      ],
+      "seed": 82
+    },
+    {
+      "future": "F42",
+      "configuration": [
+        "APS",
+        0.0136,
+        2,
+        0.043
+      ],
+      "seed": 83
+    },
+    {
+      "future": "F43",
+      "configuration": [
+        "APS",
+        0.0136,
+        3,
+        0.019
+      ],
+      "seed": 84
+    },
+    {
+      "future": "F44",
+      "configuration": [
+        "APS",
+        0.0136,
+        3,
+        0.024
+      ],
+      "seed": 85
+    },
+    {
+      "future": "F45",
+      "configuration": [
+        "APS",
+        0.0136,
+        3,
+        0.043
+      ],
+      "seed": 86
+    },
+    {
+      "future": "F46",
+      "configuration": [
+        "APS",
+        0.0272,
+        1,
+        0.019
+      ],
+      "seed": 87
+    },
+    {
+      "future": "F47",
+      "configuration": [
+        "APS",
+        0.0272,
+        1,
+        0.024
+      ],
+      "seed": 88
+    },
+    {
+      "future": "F48",
+      "configuration": [
+        "APS",
+        0.0272,
+        1,
+        0.043
+      ],
+      "seed": 89
+    },
+    {
+      "future": "F49",
+      "configuration": [
+        "APS",
+        0.0272,
+        2,
+        0.019
+      ],
+      "seed": 90
+    },
+    {
+      "future": "F50",
+      "configuration": [
+        "APS",
+        0.0272,
+        2,
+        0.024
+      ],
+      "seed": 91
+    },
+    {
+      "future": "F51",
+      "configuration": [
+        "APS",
+        0.0272,
+        2,
+        0.043
+      ],
+      "seed": 92
+    },
+    {
+      "future": "F52",
+      "configuration": [
+        "APS",
+        0.0272,
+        3,
+        0.019
+      ],
+      "seed": 93
+    },
+    {
+      "future": "F53",
+      "configuration": [
+        "APS",
+        0.0272,
+        3,
+        0.024
+      ],
+      "seed": 94
+    },
+    {
+      "future": "F54",
+      "configuration": [
+        "APS",
+        0.0272,
+        3,
+        0.043
+      ],
+      "seed": 95
+    },
+    {
+      "future": "F55",
+      "configuration": [
+        "NZE",
+        0.0021,
+        1,
+        0.019
+      ],
+      "seed": 96
+    },
+    {
+      "future": "F56",
+      "configuration": [
+        "NZE",
+        0.0021,
+        1,
+        0.024
+      ],
+      "seed": 97
+    },
+    {
+      "future": "F57",
+      "configuration": [
+        "NZE",
+        0.0021,
+        1,
+        0.043
+      ],
+      "seed": 98
+    },
+    {
+      "future": "F58",
+      "configuration": [
+        "NZE",
+        0.0021,
+        2,
+        0.019
+      ],
+      "seed": 99
+    },
+    {
+      "future": "F59",
+      "configuration": [
+        "NZE",
+        0.0021,
+        2,
+        0.024
+      ],
+      "seed": 100
+    },
+    {
+      "future": "F60",
+      "configuration": [
+        "NZE",
+        0.0021,
+        2,
+        0.043
+      ],
+      "seed": 101
+    },
+    {
+      "future": "F61",
+      "configuration": [
+        "NZE",
+        0.0021,
+        3,
+        0.019
+      ],
+      "seed": 102
+    },
+    {
+      "future": "F62",
+      "configuration": [
+        "NZE",
+        0.0021,
+        3,
+        0.024
+      ],
+      "seed": 103
+    },
+    {
+      "future": "F63",
+      "configuration": [
+        "NZE",
+        0.0021,
+        3,
+        0.043
+      ],
+      "seed": 104
+    },
+    {
+      "future": "F64",
+      "configuration": [
+        "NZE",
+        0.0136,
+        1,
+        0.019
+      ],
+      "seed": 105
+    },
+    {
+      "future": "F65",
+      "configuration": [
+        "NZE",
+        0.0136,
+        1,
+        0.024
+      ],
+      "seed": 106
+    },
+    {
+      "future": "F66",
+      "configuration": [
+        "NZE",
+        0.0136,
+        1,
+        0.043
+      ],
+      "seed": 107
+    },
+    {
+      "future": "F67",
+      "configuration": [
+        "NZE",
+        0.0136,
+        2,
+        0.019
+      ],
+      "seed": 108
+    },
+    {
+      "future": "F68",
+      "configuration": [
+        "NZE",
+        0.0136,
+        2,
+        0.024
+      ],
+      "seed": 109
+    },
+    {
+      "future": "F69",
+      "configuration": [
+        "NZE",
+        0.0136,
+        2,
+        0.043
+      ],
+      "seed": 110
+    },
+    {
+      "future": "F70",
+      "configuration": [
+        "NZE",
+        0.0136,
+        3,
+        0.019
+      ],
+      "seed": 111
+    },
+    {
+      "future": "F71",
+      "configuration": [
+        "NZE",
+        0.0136,
+        3,
+        0.024
+      ],
+      "seed": 112
+    },
+    {
+      "future": "F72",
+      "configuration": [
+        "NZE",
+        0.0136,
+        3,
+        0.043
+      ],
+      "seed": 113
+    },
+    {
+      "future": "F73",
+      "configuration": [
+        "NZE",
+        0.0272,
+        1,
+        0.019
+      ],
+      "seed": 114
+    },
+    {
+      "future": "F74",
+      "configuration": [
+        "NZE",
+        0.0272,
+        1,
+        0.024
+      ],
+      "seed": 115
+    },
+    {
+      "future": "F75",
+      "configuration": [
+        "NZE",
+        0.0272,
+        1,
+        0.043
+      ],
+      "seed": 116
+    },
+    {
+      "future": "F76",
+      "configuration": [
+        "NZE",
+        0.0272,
+        2,
+        0.019
+      ],
+      "seed": 117
+    },
+    {
+      "future": "F77",
+      "configuration": [
+        "NZE",
+        0.0272,
+        2,
+        0.024
+      ],
+      "seed": 118
+    },
+    {
+      "future": "F78",
+      "configuration": [
+        "NZE",
+        0.0272,
+        2,
+        0.043
+      ],
+      "seed": 119
+    },
+    {
+      "future": "F79",
+      "configuration": [
+        "NZE",
+        0.0272,
+        3,
+        0.019
+      ],
+      "seed": 120
+    },
+    {
+      "future": "F80",
+      "configuration": [
+        "NZE",
+        0.0272,
+        3,
+        0.024
+      ],
+      "seed": 121
+    },
+    {
+      "future": "F81",
+      "configuration": [
+        "NZE",
+        0.0272,
+        3,
+        0.043
+      ],
+      "seed": 122
+    }
+  ],
+  "distribution_compatible_inputs": {
+    "PMM_Imputation/After_PMM_Vessels.csv": "9e17190cd8e0f976a386e3be2bf64fb5fb6d0a0fe7871dc6bfff21dc64c30423",
+    "vessel_data_extract/Unified_Vessel_Registry.csv": "ee2e6f8bcbd27e44be06a6f4d811c6f7903f342a8234b7422bca1b4df070f1c9",
+    "effort_data/Share5_Lookup_FlagGearYear.csv": "dabbbc5a68af12223be3e20061f7995b0b4668615947cdf03f403fb9f1b6948a",
+    "effort_data/Grid_Catch_Allocation.csv": "005b759482b95a6ed6b05797f3baf66cb4af6dfe92681651dfa5126dfd19d082",
+    "GHG_Calculation/Base_3_Spatial_Grid_Enriched.csv": "cdd250c6c3f95df5e23ed7cea5dd571d3454411408ec4b5c6cbcabab00da1cdb",
+    "GHG_Calculation/operational_hours_lookup.py": "6a45e2c6568a63a7646fe7d43da0e5f22d46b3e2ee24ab656c1518f7b4d1dedc",
+    "GHG_Calculation/power_discount_factor.py": "5168c1895e7bd42bca7aaee027b870634d40f47f95225b5b4dae871dff35b947",
+    "GHG_Calculation/TotalEffortby_FishingCountry_LengthBoat_Gear_Sector.csv": "d6925aea2fba672f9de3bff3ae25415ecf9f2670496eaf7cbd25b8f17c9e2178",
+    "scenario/fishery_coupling.py": "a5eae8a85c9ed8091931a2dd58ba4ca13a2f4b7525e24e668c24516951b7a7da",
+    "scenario/fig5_allocation.py": "873cff18004d96b1789c92c5c89809b1c56da236c3621c89462013dfb4e11d24",
+    "scenario/fleet_model.py": "aeb512185a8da01577d18c495a72c833e32eb7db20492a78ed8d5f03e6aebbcc",
+    "scenario/price_loader.py": "f55693c1dfff1183d65cf01fb5fc32b30a64c355c10979c7e9c2cb20ba521234",
+    "scenario/scenario_seeds.py": "da563965fcf4b9c48420eaec4c52cdda00ccd140d861c4f00e96ba2406d75d58",
+    "figures/Fig5/fig5_run.py": "0816bf19b89a28dff1e22800809d84e04b780115bd47d7eb619206db9fa6d10b",
+    "GHG_Calculation/ghg_lca.py": "838f6e0c1d73fa25676911e0845134d09a5fbd0b47f9ede26aa14a0d4df70883",
+    "model_parameters/Prior_Matrix.csv": "6175e08906eacb5caa4c3bb809c23e4f2b699121f0628430d232e0fb71f16a4c",
+    "model_parameters/Scenario_Fuel_Parameters.xlsx": "1cef0a09da222b0c97648852f291f091f0504cb98b55a0184b966bbe88c9f234",
+    "model_parameters/Scenario_Fuel_Price_Matrix.xlsx": "f880186bf6a100a96c228d452e276e16cd664b829c6961eacefb7f24d3f19b4d",
+    "scenario/output/schaefer_biomass_annual.csv": "a5c599d6080c8ec84b08a7d0e46ab05d7f16735809ee6d52ce4d9fc56acd1f66",
+    "scenario/output/schaefer_biomass_annual_F.csv": "da986bc3b5e0265b030e5a9da35f1feabc43ac75c7a48bad77b59f8f5dd71d0a",
+    "scenario/output/fig5/Fig5_Final_Fuel.json": "98779f824e5482a125b75927a49d579a83e62741c4d12cf39c3a335cecf38a30",
+    "scenario/output/fig5/Fig5_Final_Quota.json": "5d64f539c13b9dc7d91c94e823f0ef0cbe5b82983e6067919ba1c882cb30a5d0"
+  },
+  "distribution_compatibility_evidence": {
+    "Purpose": "Distribution-only compatibility for English descriptions and portable source metadata; not a new ensemble run.",
+    "Original_Run_Inputs_Retained": true,
+    "Prior_Parameter_Values_Exactly_Equal": [
+      "Param_Code",
+      "Flag",
+      "Gear",
+      "Sector",
+      "Length_Category",
+      "Value_Best",
+      "Value_Low",
+      "Value_High",
+      "Distribution",
+      "Unit"
+    ],
+    "Historical_Check": "500 draws, full reconstruction; Base_1/2/4/5 numeric outputs match release to stated tolerances.",
+    "Limits": "One archived extreme feasible-catch portfolio is not bit-identical even in the untouched local project; retained outputs are not relabeled as newly rerun or fully revalidated.",
+    "Additional_Guards": "Fail on missing species-share input; fingerprint all frozen baseline inputs. Original source-run hashes retained."
+  }
+}

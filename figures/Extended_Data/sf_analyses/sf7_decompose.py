@@ -7,11 +7,12 @@ mean increase is split into factor contributions + interaction residual.
 Sources: BAU_81_Annual.csv only (no new sims).
 Outputs: SF7_Increase_Decomposition.csv, SF7_WEO_dE.csv, SF7_Meco_Trajectory.csv
 """
+from pathlib import Path
 import os, sys
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 import numpy as np, pandas as pd
 
-ROOT = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission'
+ROOT = str(Path(__file__).resolve().parents[3])
 OUT = os.path.join(ROOT, 'scenario', 'output', 'fig5')
 
 bau = pd.read_csv(os.path.join(OUT, 'BAU_81_Annual.csv'))

@@ -1,6 +1,6 @@
 """Parallel independent stock refits; safe hashes; no promotion without diagnostics."""
 from pathlib import Path
-import os,sys,subprocess,json,hashlib,concurrent.futures,time
+import os,sys,subprocess,json,hashlib,concurrent.futures,time,shutil
 ROOT=Path(__file__).resolve().parents[2];HERE=Path(__file__).resolve().parent
 sys.stdout.reconfigure(encoding='utf-8',errors='replace')
 label=sys.argv[1] if len(sys.argv)>1 else 'sampling_60000'
@@ -17,9 +17,10 @@ if not worker.exists():worker.write_bytes((ROOT/'scenario/jabba_refit_stock.r').
 hash_file=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 production=[ROOT/'scenario/output'/n for n in ['schaefer_biomass_annual.csv','schaefer_biomass_annual_F.csv']]
 before={str(p):hash_file(p) for p in production}
-RENV=Path('C:/Users/11401/Desktop/r_env/R_4.5.2')
-env=os.environ.copy();env.update(R_HOME=str(RENV/'lib/R'),R_PROFILE_USER=str(ROOT/'analysis/full_chain_20261012/r_runtime_profile.R'),
- PATH=str(RENV/'lib/R/bin/x64')+os.pathsep+str(RENV/'Library/bin')+os.pathsep+env['PATH'])
+RSCRIPT=os.environ.get('RSCRIPT') or shutil.which('Rscript')
+if not RSCRIPT:raise RuntimeError('Set RSCRIPT to an installed Rscript executable.')
+env=os.environ.copy();env['R_PROFILE_USER']=str(ROOT/'analysis/full_chain_20261012/r_runtime_profile.R')
+
 def fit(stock):
     logpath=OUT/(stock+'.log');start=time.time()
     if (OUT/(stock+'_Complete.txt')).exists():
@@ -27,7 +28,7 @@ def fit(stock):
         if f'REFIT_COMPLETE {stock}' in old_log and not any(e in old_log for e in ['Error:','Error in','Execution halted']):return dict(Stock=stock,Existing=True)
         raise RuntimeError(stock+' has an interrupted prior run; use a new isolated label')
     with logpath.open('w',encoding='utf-8') as log:
-        result=subprocess.run([str(RENV/'lib/R/bin/x64/Rscript.exe'),'--no-site-file',str(worker),stock,str(OUT),str(ni),str(nb),str(nt),str(seed),prior_mode,sampler],cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT)
+        result=subprocess.run([RSCRIPT,'--no-site-file',str(worker),stock,str(OUT),str(ni),str(nb),str(nt),str(seed),prior_mode,sampler],cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT)
     text=logpath.read_text(encoding='utf-8',errors='replace')
     complete=(OUT/(stock+'_Complete.txt')).exists() and f'REFIT_COMPLETE {stock}' in text and not any(e in text for e in ['Error in','Execution halted'])
     if not complete:raise RuntimeError(stock+' incomplete: '+str(logpath))

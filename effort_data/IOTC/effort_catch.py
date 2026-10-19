@@ -1,3 +1,4 @@
+from pathlib import Path
 import pandas as pd
 import numpy as np
 import sys, os
@@ -159,8 +160,8 @@ def process_iotc_data(file_path):
 # ==========================================
 if __name__ == "__main__":
     # Please fill in your place here IOTC CE The real path to the data set
-    input_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\IOTC\source_data\IOTC-DATASETS-2026-02-23-CE-1952-2024.csv'
-    output_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\IOTC\IOTC_Grid_Catch_Effort.csv'
+    input_file = str(Path(__file__).resolve().parents[2] / 'effort_data/IOTC/source_data/IOTC-DATASETS-2026-02-23-CE-1952-2024.csv')
+    output_file = str(Path(__file__).resolve().parents[2] / 'effort_data/IOTC/IOTC_Grid_Catch_Effort.csv')
     
     try:
         final_df = process_iotc_data(input_file)

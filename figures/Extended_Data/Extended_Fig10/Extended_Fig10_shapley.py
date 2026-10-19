@@ -4,11 +4,12 @@ SF6 (step 2): exact Shapley decomposition over {quota, fuel, refrigerant,
 consolidation} from the full 16-combo x 81-future endpoint table.
 Outputs: SF6_Shapley_Contributions.csv (+ summary print)
 """
+from pathlib import Path
 import os, sys, itertools, math
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 import numpy as np, pandas as pd
 
-OUT = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\scenario\output\fig5'
+OUT = str(Path(__file__).resolve().parents[3] / 'scenario/output/fig5')
 from pathlib import Path
 sys.path.insert(0,str(Path(OUT).parents[1]))
 from scenario_seeds import require_seed_protocol, record_seed_protocol

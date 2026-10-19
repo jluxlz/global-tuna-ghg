@@ -1,9 +1,10 @@
+from pathlib import Path
 # -*- coding: utf-8 -*-
 import os, sys, warnings
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 warnings.filterwarnings('ignore')
 import numpy as np, pandas as pd
-ROOT = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission'
+ROOT = str(Path(__file__).resolve().parents[3])
 sys.path.insert(0, os.path.join(ROOT, 'GHG_Calculation'))
 sys.path.insert(0, os.path.join(ROOT, 'scenario'))
 import fleet_model

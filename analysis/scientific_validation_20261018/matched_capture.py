@@ -85,6 +85,9 @@ def task(item):
 def main():
     sys.stdout.reconfigure(encoding='utf-8',errors='replace');OUT.mkdir(exist_ok=True)
     runs=json.loads((H/'Saved_Matched_Runs.json').read_text(encoding='utf-8'))
+    for row in runs:
+        path=Path(row['Parameters']['fishery_coupling']['stock_parameters'])
+        if not path.is_absolute():row['Parameters']['fishery_coupling']['stock_parameters']=str(R/path)
     # Saved outputs are inspected before any rerun.
     records=[]
     for row in runs:

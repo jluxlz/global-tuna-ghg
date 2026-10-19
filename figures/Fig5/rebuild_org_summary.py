@@ -8,11 +8,12 @@ Fig5_PanelD_Org_Summary.csv generator (documented method, 2026-10-10):
   - Output: figures/Fig5/Fig5_PanelD_Org_Summary.csv
 Runtime < 30 s. Deterministic.
 """
+from pathlib import Path
 import os, sys, warnings
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 warnings.filterwarnings('ignore')
 import pandas as pd
-ROOT = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission'
+ROOT = str(Path(__file__).resolve().parents[2])
 sys.path.insert(0,os.path.join(ROOT,'scenario'))
 from scenario_seeds import require_seed_protocol
 require_seed_protocol(os.path.join(ROOT,'scenario','output','fig5'),['Heterogeneous_Mitigation_Results.csv'])

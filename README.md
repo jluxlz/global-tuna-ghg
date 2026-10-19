@@ -12,6 +12,10 @@ python restore_data.py --download --verify
 
 This downloads three ZIP assets, restores their content to the original relative paths and verifies every scientific file against `data/file_manifest.csv`. `--figure-data` restores only saved figure files; it is insufficient to rerun upstream models. Use `--assets /path/to/downloads --verify` with previously downloaded assets. The restorer refuses to overwrite modified files unless `--overwrite` is explicitly supplied.
 
+## Offline reproduction boundary
+
+Live vessel-query scraping is optional. Start from the supplied accepted registry, which already contains the accepted spider-derived construction dates and characteristics. See [REPRODUCING.md](REPRODUCING.md) for input checks, model stages and saved-fit choices. Run `python reproduce.py verify` after restoring data.
+
 ## Scientific workflow
 
 1. Original RFMO vessel tables are in `raw_vessel_data/`, `spider/output/` and `vessel_data_extract/new_extracted_vessel_data_raw/`; intermediate extracted tables are in `extracted_vessel_data/`. Source catch/effort tables and spatial boundaries are in `effort_data/` and `shape_file/`.

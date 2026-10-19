@@ -10,3 +10,6 @@ requests==2.32.3
 scikit-learn==1.9.0
 scipy==1.18.0
 shap==0.52.0
+
+# Optional live browser collectors; not needed for offline scientific reproduction.
+selenium==4.44.0

@@ -1385,7 +1385,7 @@ def run_monte_carlo_lca(df, pm_dict, end_year=2025,
         print(f"[share5] species-share allocation: {n_match}/{num_groups} groups matched, "
               f"{len(s5)} lookup rows")
     except FileNotFoundError:
-        print("[share5] WARNING: Share5_Lookup_FlagGearYear.csv not found -> factor = 1.0")
+        raise FileNotFoundError(f"Required five-species allocation input missing: {SHARE5_LOOKUP_PATH}. Restore the scientific data before running the model.") from None
 
     # ---- FC Lookup ----
     FC_LOOKUP = {

@@ -1,0 +1,89 @@
+=================================================
+FAO ISSCFV - 渔船类型标准分类 (Vessel Types)
+格式: 字母缩写 (数字代码) - 渔船类别描述
+=================================================
+
+--- 拖网渔船 (Trawlers) ---
+TO (1) - Trawlers (拖网渔船总称)
+OT (1.1) - Otter trawlers
+PT (1.2) - Pair trawlers
+BT (1.3) - Beam trawlers
+TS (1.4) - Side trawlers (注：此处的TS指舷拖网船，勿与转运船混淆)
+TT (1.5) - Stern trawlers
+TOX (1.9) - Trawlers nei
+
+--- 围网渔船 (Purse seiners) ---
+SP (2) - Purse seiners (围网渔船总称)
+SPA (2.1) - Purse Seiners - American type
+SPE (2.2) - Purse Seiners - European type
+SPD (2.3) - Drum seiners
+SPX (2.9) - Purse seiners nei
+
+--- 其他围网渔船 (Seiners) ---
+SO (3) - Seiners (other)
+SOX (3.9) - Seiners nei
+
+--- 挖泥船 (Dredgers) ---
+DO (4) - Dredgers
+DOX (4.9) - Dredgers nei
+
+--- 敷网渔船 (Lift netters) ---
+NO (5) - Lift netters
+NS (5.1) - Stick-held dip netters
+NOX (5.9) - Lift netters nei
+
+--- 刺网渔船 (Gillnetters) ---
+GO (6) - Gillnetters
+GD (6.1) - Drifters
+GS (6.2) - Set netters
+GOX (6.9) - Gillnetters nei
+
+--- 陷阱/笼壶渔船 (Trap setters) ---
+WO (7) - Trap setters
+WP (7.1) - Pot vessels
+WOX (7.9) - Trap setters nei
+
+--- 延绳钓渔船 (Longliners) ---
+LL (8) - Longliners (延绳钓渔船总称)
+LB (8.1) - Bottom longliners
+LM (8.2) - Midwater longliners
+LLX (8.9) - Longliners nei
+
+--- 其他钓机渔船 (Line vessels) ---
+LO (9) - Line vessels (other)
+LJ (9.1) - Jigger vessels (鱿钓船)
+LP (9.2) - Pole and Line vessels (竿钓船)
+LT (9.3) - Trollers (曳绳钓船)
+LH (9.4) - Hand liner vessels (手钓船)
+LOX (9.9) - Line vessels nei
+
+--- 多功能渔船 (Multipurpose vessels) ---
+MO (10) - Multipurpose vessels (多功能船总称)
+MTS (10.1) - Purse seine/pelagic trawlers
+MTW (10.2) - Multipurpose trawlers
+MLG (10.3) - Multipurpose non trawlers
+MOX (10.9) - Multipurpose vessels nei
+
+--- 其他及后勤船只 (Support, Carrier & Others) ---
+RO (18) - Recreational fishing vessels (游钓船)
+ROX (18.9) - Recreational fishing vessels nei
+FX (19) - Other fishing vessels
+FXX (19.9) - Other fishing vessels nei
+HO (20) - Motherships (母船)
+HOX (20.9) - Motherships nei
+FO (21) - Fish carriers and reefers (鱼类冷藏运输船)
+FR (21.1) - Refrigerated transport vessels
+FOX (21.9) - Fish carriers and reefers nei
+SA (23) - Support vessels (辅助补给船总称)
+SB (23.1) - Bunkering tanker vessels (加油船)
+ST (23.2) - Towing vessels (拖船)
+SAX (23.9) - Support and auxiliary ships nei
+RT (25) - Fishery research and survey vessels (科考船)
+RTX (25.9) - Fishery research and survey vessels nei
+PX (26) - Patrol vessels (巡逻船)
+PXX (26.9) - Patrol vessels nei
+CO (27) - Fishery training vessels (训练船)
+COX (27.9) - Fishery training vessels
+VO (29) - Vessels supporting fishing related activities
+VOM (29.1) - Multipurpose vessels supporting fishing related activities
+VOX (29.9) - Vessels supporting fishing related activities, nei

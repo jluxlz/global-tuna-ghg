@@ -11,11 +11,12 @@ SF7/SF8/SF9 derived tables (code-generated, validated 2026-10-10):
 Sources: BAU_81_Annual, Mitigation_Results_Annual, Fig5_QuotaOnly_Annual,
          Fig5_Final_Combination_Annual, Fig4 panel CSVs. No simulations.
 """
+from pathlib import Path
 import os, sys, warnings
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 warnings.filterwarnings('ignore')
 import numpy as np, pandas as pd
-ROOT = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission'
+ROOT = str(Path(__file__).resolve().parents[3])
 OUT = os.path.join(ROOT, 'scenario', 'output', 'fig5')
 F5 = os.path.join(ROOT, 'figures', 'Fig5')
 F4 = os.path.join(ROOT, 'figures', 'Fig4')

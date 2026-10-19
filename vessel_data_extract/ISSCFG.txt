@@ -1,0 +1,86 @@
+=================================================
+FAO ISSCFG - 渔具类型标准分类 (Fishing Gear)
+格式: 字母缩写 (数字代码) - 渔具类别描述
+=================================================
+
+--- 包围网 (SURROUNDING NETS) ---
+PS (01.1) - Purse seines (围网)
+LA (01.2) - Surrounding nets without purse lines
+SUX (01.9) - Surrounding nets (nei)
+
+--- 曳网 (SEINE NETS) ---
+SB (02.1) - Beach seines
+SV (02.2) - Boat seines
+SX (02.9) - Seine nets (nei)
+
+--- 拖网 (TRAWLS) ---
+TBB (03.11) - Beam trawls
+OTB (03.12) - Single boat bottom otter trawls
+OTT (03.13) - Twin bottom otter trawls
+OTP (03.14) - Multiple bottom otter trawls
+PTB (03.15) - Bottom pair trawls
+TB (03.19) - Bottom trawls (nei)
+OTM (03.21) - Single boat midwater otter trawls
+PTM (03.22) - Midwater pair trawls
+TM (03.29) - Midwater trawls (nei)
+TSP (03.3) - Semipelagic trawls
+TX (03.9) - Trawls (nei)
+
+--- 耙网/拖泥网 (DREDGES) ---
+DRB (04.1) - Towed dredges
+DRH (04.2) - Hand dredges
+DRM (04.3) - Mechanized dredges
+DRX (04.9) - Dredges (nei)
+
+--- 敷网 (LIFT NETS) ---
+LNP (05.1) - Portable lift nets
+LNB (05.2) - Boat-operated lift nets
+LNS (05.3) - Shore-operated stationary lift nets
+LN (05.9) - Lift nets (nei)
+
+--- 罩网/投网 (FALLING GEAR) ---
+FCN (06.1) - Cast nets
+FCO (06.2) - Cover pots/Lantern nets
+FG (06.9) - Falling gear (nei)
+
+--- 刺网及缠网 (GILLNETS AND ENTANGLING NETS) ---
+GNS (07.1) - Set gillnets (anchored)
+GND (07.2) - Drift gillnets
+GNC (07.3) - Encircling gillnets
+GNF (07.4) - Fixed gillnets (on stakes)
+GTR (07.5) - Trammel nets
+GTN (07.6) - Combined gillnets-trammel nets
+GEN (07.9) - Gillnets and entangling nets (nei)
+
+--- 陷阱/定置网 (TRAPS) ---
+FPN (08.1) - Stationary uncovered pound nets
+FPO (08.2) - Pots (笼壶)
+FYK (08.3) - Fyke nets
+FSN (08.4) - Stow nets
+FWR (08.5) - Barriers, fences, weirs, etc.
+FAR (08.6) - Aerial traps
+FIX (08.9) - Traps (nei)
+
+--- 钓具 (HOOKS AND LINES) ---
+LHP (09.1) - Handlines and hand-operated pole-and-lines (手钓和手持竿钓)
+LHM (09.2) - Mechanized lines and pole-and-lines (机械钓和机械竿钓)
+LLS (09.31) - Set longlines (定置延绳钓)
+LLD (09.32) - Drifting longlines (漂流延绳钓)
+LL (09.39) - Longlines (nei) (延绳钓总称)
+LVT (09.4) - Vertical lines (垂直钓)
+LTL (09.5) - Trolling lines (曳绳钓)
+LX (09.9) - Hooks and lines (nei)
+
+--- 杂项/其他渔具 (MISCELLANEOUS Gear) ---
+HAR (10.1) - Harpoons (鱼镖/叉)
+MHI (10.2) - Hand implements (Wrenching gear, Clamps, Tongs, Rakes, Spears)
+MPM (10.3) - Pumps (泵吸)
+MEL (10.4) - Electric fishing (电捕)
+MPN (10.5) - Pushnets (推网)
+MSP (10.6) - Scoopnets (抄网)
+MDR (10.7) - Drive-in nets
+MDV (10.8) - Diving (潜水捕捞)
+MIS (10.9) - Gear nei
+
+--- 未知渔具 (GEAR NOT KNOWN) ---
+NK (99.9) - Gear not known

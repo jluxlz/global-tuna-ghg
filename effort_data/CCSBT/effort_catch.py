@@ -1,3 +1,4 @@
+from pathlib import Path
 import pandas as pd
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -87,8 +88,8 @@ def process_ccsbt_data_v2(ll_file_path, ps_file_path, output_path):
     return combined_df
 
 # You can execute the process by calling the code below
-ll_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\CCSBT\source_data\CEData_Longline.xlsx'
-ps_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\CCSBT\source_data\CEData_Surface.xlsx'
-output_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\CCSBT\CCSBT_Grid_Catch_Effort.csv'
+ll_file = str(Path(__file__).resolve().parents[2] / 'effort_data/CCSBT/source_data/CEData_Longline.xlsx')
+ps_file = str(Path(__file__).resolve().parents[2] / 'effort_data/CCSBT/source_data/CEData_Surface.xlsx')
+output_file = str(Path(__file__).resolve().parents[2] / 'effort_data/CCSBT/CCSBT_Grid_Catch_Effort.csv')
 
 final_data = process_ccsbt_data_v2(ll_file, ps_file, output_file)

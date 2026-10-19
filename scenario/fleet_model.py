@@ -78,7 +78,7 @@ def _load_share5_lookup():
                 lut[(str(fl), str(gr))] = {
                     int(y): float(v) for y, v in zip(grp["Year"], grp["share5"]) if pd.notna(v)}
         except FileNotFoundError:
-            print("[share5] WARNING: Share5_Lookup_FlagGearYear.csv not found -> factor = 1.0")
+            raise FileNotFoundError(f"Required five-species allocation input missing: {SHARE5_LOOKUP_PATH}. Restore the scientific data before running the model.") from None
         _SHARE5_LUT = lut
     return _SHARE5_LUT
 

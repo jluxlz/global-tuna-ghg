@@ -1,0 +1,151 @@
+{
+  "Date": "2026-10-20",
+  "Boundary": "Offline accepted registry and saved spider/query inputs; no live crawling required.",
+  "Historical_MC_Draws": 500,
+  "GSA": "Reused the supplied process-level GSA selection; no new 2,000-draw selection fit in this verification.",
+  "Historical_Summaries_Match": true,
+  "Historical_Grid_Rows": 489561,
+  "Historical_Grid_Numerics_Match": true,
+  "Cumulative_GHG_1950_2025_Mt": {
+    "P5": 689.9613471825915,
+    "Median": 813.835940771279,
+    "P95": 943.1157262129041
+  },
+  "Fixed_Target_Reruns": [
+    {
+      "Future": "F01",
+      "Type": "Fixed-catch target BAU",
+      "Maximum_Annual_Error_Mt": 7.105427357601002e-15,
+      "Passed": true
+    },
+    {
+      "Future": "F41",
+      "Type": "Fixed-catch target BAU",
+      "Maximum_Annual_Error_Mt": 2.842170943040401e-14,
+      "Passed": true
+    },
+    {
+      "Future": "F81",
+      "Type": "Fixed-catch target BAU",
+      "Maximum_Annual_Error_Mt": 2.842170943040401e-14,
+      "Passed": true
+    }
+  ],
+  "Feasible_Catch_Reruns": [
+    {
+      "Future": "F01",
+      "Combo": "0000",
+      "Maximum_Errors": {
+        "Total_GHG_tCO2e": 3.725290298461914e-09,
+        "Realised_Fleet_Catch_Mt": 8.326672684688674e-17,
+        "N_Vessels": 0.0,
+        "Total_Power_kW": 4.656612873077393e-10
+      },
+      "Stock_Closure_Error_Mt": 0.0,
+      "Passed": true
+    },
+    {
+      "Future": "F01",
+      "Combo": "1111",
+      "Maximum_Errors": {
+        "Total_GHG_tCO2e": 1.862645149230957e-09,
+        "Realised_Fleet_Catch_Mt": 4.440892098500626e-16,
+        "N_Vessels": 0.0,
+        "Total_Power_kW": 4.656612873077393e-10
+      },
+      "Stock_Closure_Error_Mt": 0.0,
+      "Passed": true
+    },
+    {
+      "Future": "F41",
+      "Combo": "0000",
+      "Maximum_Errors": {
+        "Total_GHG_tCO2e": 3.725290298461914e-09,
+        "Realised_Fleet_Catch_Mt": 4.440892098500626e-16,
+        "N_Vessels": 0.0,
+        "Total_Power_kW": 1.862645149230957e-09
+      },
+      "Stock_Closure_Error_Mt": 0.0,
+      "Passed": true
+    },
+    {
+      "Future": "F41",
+      "Combo": "1111",
+      "Maximum_Errors": {
+        "Total_GHG_tCO2e": 9.313225746154785e-10,
+        "Realised_Fleet_Catch_Mt": 4.440892098500626e-16,
+        "N_Vessels": 0.0,
+        "Total_Power_kW": 1.862645149230957e-09
+      },
+      "Stock_Closure_Error_Mt": 0.0,
+      "Passed": true
+    },
+    {
+      "Future": "F81",
+      "Combo": "0000",
+      "Maximum_Errors": {
+        "Total_GHG_tCO2e": 7.450580596923828e-09,
+        "Realised_Fleet_Catch_Mt": 2.220446049250313e-16,
+        "N_Vessels": 0.0,
+        "Total_Power_kW": 1.862645149230957e-09
+      },
+      "Stock_Closure_Error_Mt": 0.0,
+      "Passed": true
+    },
+    {
+      "Future": "F81",
+      "Combo": "1111",
+      "Maximum_Errors": {
+        "Total_GHG_tCO2e": 122363.18343678629,
+        "Realised_Fleet_Catch_Mt": 0.5511448848189993,
+        "N_Vessels": 57.0,
+        "Total_Power_kW": 43621.61330992868
+      },
+      "Stock_Closure_Error_Mt": 0.0,
+      "Passed": false
+    }
+  ],
+  "Matched_Catch_Reruns": [
+    {
+      "Future": "F41",
+      "Rule": "C",
+      "Errors": {
+        "Total_GHG_tCO2e": 3.725290298461914e-09,
+        "Realised_Fleet_Catch_Mt": 4.440892098500626e-16,
+        "N_Vessels": 0.0,
+        "Total_Power_kW": 1.862645149230957e-09
+      },
+      "Passed": true
+    },
+    {
+      "Future": "F41",
+      "Rule": "F",
+      "Errors": {
+        "Total_GHG_tCO2e": 1.862645149230957e-09,
+        "Realised_Fleet_Catch_Mt": 4.440892098500626e-16,
+        "N_Vessels": 0.0,
+        "Total_Power_kW": 1.862645149230957e-09
+      },
+      "Passed": true
+    }
+  ],
+  "Model_Run_Order_Check": "PASS; identical baseline before/after other futures.",
+  "Archived_Exception": {
+    "Future": "F81",
+    "Combo": "1111",
+    "Setting": "Feasible catch, NZE, maximum growth/creep, forced replacement, four-measure portfolio",
+    "Maximum_Annual_GHG_Difference_tCO2e": 122363.18343678629,
+    "Original_Local_Project_And_Repaired_Public_Run": "Identical to each other, both differ from the archived trajectory.",
+    "Status": "Unresolved archived-run discrepancy; do not claim every stored scenario trajectory has been numerically reproduced. No scientific output replaced during this repair."
+  },
+  "Saved_Result_Figures_Redrawn": 33,
+  "Current_SI_Batch_Checked": [
+    5,
+    15,
+    19
+  ],
+  "Full_Ensemble_Rerun": false,
+  "Fresh_JABBA_Refit": false,
+  "Frozen_Biological_Inputs_Included": true,
+  "Full_Workflow_Entry": "python reproduce.py all --extra-experiments; add --refit-stocks for fresh configured JABBA fits."
+}

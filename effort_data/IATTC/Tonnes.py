@@ -1,3 +1,4 @@
+from pathlib import Path
 import pandas as pd
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -49,8 +50,8 @@ def extract_catch_data(file_path):
 
 if __name__ == "__main__":
     # Please use your local file path to modify it
-    input_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\IATTC\source_data\CatchByFlagGear1918-2024.csv'
-    output_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\IATTC\IATTC_Annual_Catch.csv'
+    input_file = str(Path(__file__).resolve().parents[2] / 'effort_data/IATTC/source_data/CatchByFlagGear1918-2024.csv')
+    output_file = str(Path(__file__).resolve().parents[2] / 'effort_data/IATTC/IATTC_Annual_Catch.csv')
     
     print("Processing of historical total ton data...")
     result_df = extract_catch_data(input_file)

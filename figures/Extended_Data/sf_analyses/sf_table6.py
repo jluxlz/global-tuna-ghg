@@ -5,11 +5,12 @@ Combines SF5 (elasticity), SF9 (creep), and by-dimension splits of the
 existing chain data (WEO / growth / retirement / refrigerant / quota rule).
 Output: Supplementary_Table6_Robustness_Matrix.csv (scenario/output/fig5)
 """
+from pathlib import Path
 import os, sys
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 import pandas as pd, numpy as np
 
-OUT = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\scenario\output\fig5'
+OUT = str(Path(__file__).resolve().parents[3] / 'scenario/output/fig5')
 bau = pd.read_csv(os.path.join(OUT, 'BAU_81_Annual.csv'))
 mit = pd.read_csv(os.path.join(OUT, 'Mitigation_Results_Annual.csv'))
 q = pd.read_csv(os.path.join(OUT, 'Fig5_QuotaOnly_Annual.csv'))

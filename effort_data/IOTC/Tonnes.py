@@ -1,3 +1,4 @@
+from pathlib import Path
 import pandas as pd
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -65,8 +66,8 @@ def process_iotc_nominal_catch(file_path):
 # ==========================================
 if __name__ == "__main__":
     # Please replace this place with the one you just showed IOTC Nominal Catch Actual path of the file
-    input_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\IOTC\source_data\IOTC-DATASETS-2026-02-23-RC-SCI-1950-2024.csv'
-    output_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\IOTC\IOTC_Annual_Catch.csv'
+    input_file = str(Path(__file__).resolve().parents[2] / 'effort_data/IOTC/source_data/IOTC-DATASETS-2026-02-23-RC-SCI-1950-2024.csv')
+    output_file = str(Path(__file__).resolve().parents[2] / 'effort_data/IOTC/IOTC_Annual_Catch.csv')
     
     try:
         result_df = process_iotc_nominal_catch(input_file)

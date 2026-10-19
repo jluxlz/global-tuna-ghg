@@ -1,3 +1,4 @@
+from pathlib import Path
 import pandas as pd
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -99,13 +100,13 @@ if __name__ == "__main__":
     print("Start processing and optimization IATTC Data...")
     
     # 1. Reading raw data
-    df_ll_raw = pd.read_csv(r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\IATTC\source_data\PublicLLTunaBillfish\PublicLLTunaBillfishMt.csv')
-    df_ps_raw = pd.read_csv(r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\IATTC\source_data\PublicPSTuna\PublicPSTunaFlag.csv')
+    df_ll_raw = pd.read_csv(str(Path(__file__).resolve().parents[2] / 'effort_data/IATTC/source_data/PublicLLTunaBillfish/PublicLLTunaBillfishMt.csv'))
+    df_ps_raw = pd.read_csv(str(Path(__file__).resolve().parents[2] / 'effort_data/IATTC/source_data/PublicPSTuna/PublicPSTunaFlag.csv'))
     
     # 2. Call Optimization Functions
     final_data = optimize_iattc_data(df_ll_raw, df_ps_raw)
 
     # 3. Save File
-    output_filename = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\IATTC\IATTC_Grid_Catch_Effort.csv'
+    output_filename = str(Path(__file__).resolve().parents[2] / 'effort_data/IATTC/IATTC_Grid_Catch_Effort.csv')
     final_data.to_csv(output_filename, index=False, encoding='utf-8-sig')
     print(f"\n Data successfully saved to: {output_filename}")

@@ -1,7 +1,6 @@
 """Extract the preserved official SBT plot; no invented numeric trajectory."""
 from pathlib import Path
 import sys,json,hashlib
-sys.path.append('C:/Users/11401/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/Lib/site-packages')
 from pypdf import PdfReader
 H=Path(__file__).resolve().parent;R=H.parents[1]
 p=R/'analysis/manuscript_extended_20261012/verified_references/CCSBT_SBT_2023.pdf'

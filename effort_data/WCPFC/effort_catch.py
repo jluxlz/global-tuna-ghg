@@ -1,3 +1,4 @@
+from pathlib import Path
 import pandas as pd
 import numpy as np
 import sys, os
@@ -125,11 +126,11 @@ def generate_step2_annual_catch(base_df):
 # ==========================================
 if __name__ == "__main__":
     # Replace with your local file path
-    ll_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\WCPFC\source_data\WCPFC_L_PUBLIC_BY_YY_FLAG_1\WCPFC_L_PUBLIC_BY_YY_FLAG.csv'
-    ps_file = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\WCPFC\source_data\WCPFC_S_PUBLIC_BY_YY_QTR_FLAG_0\WCPFC_S_PUBLIC_BY_YY_QTR_FLAG.csv'
+    ll_file = str(Path(__file__).resolve().parents[2] / 'effort_data/WCPFC/source_data/WCPFC_L_PUBLIC_BY_YY_FLAG_1/WCPFC_L_PUBLIC_BY_YY_FLAG.csv')
+    ps_file = str(Path(__file__).resolve().parents[2] / 'effort_data/WCPFC/source_data/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG_0/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG.csv')
     
-    output_step1 = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\WCPFC\WCPFC_Grid_Catch_Effort.csv'
-    output_step2 = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\effort_data\WCPFC\WCPFC_Annual_Catch.csv'
+    output_step1 = str(Path(__file__).resolve().parents[2] / 'effort_data/WCPFC/WCPFC_Grid_Catch_Effort.csv')
+    output_step2 = str(Path(__file__).resolve().parents[2] / 'effort_data/WCPFC/WCPFC_Annual_Catch.csv')
     
     try:
         print("Start Process WCPFC Basic data...")

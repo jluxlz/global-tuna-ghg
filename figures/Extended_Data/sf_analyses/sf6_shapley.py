@@ -4,11 +4,12 @@ SF6 (step 2): exact Shapley decomposition over {quota, fuel, refrigerant,
 consolidation} from the 16-combo x 9-future endpoint table.
 Outputs: SF6_Shapley_Contributions.csv (+ summary print)
 """
+from pathlib import Path
 import os, sys, itertools, math
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 import numpy as np, pandas as pd
 
-OUT = r'C:\Users\11401\Desktop\Global_Tuna_Fishery_GHG_Emission\scenario\output\fig5'
+OUT = str(Path(__file__).resolve().parents[3] / 'scenario/output/fig5')
 d = pd.read_csv(os.path.join(OUT, 'SF6_Combos_2050.csv'))
 d['Combo'] = d['Combo'].astype(str).str.zfill(4)
 MEAS = ['q', 'f', 'r', 'c']
