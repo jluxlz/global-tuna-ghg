@@ -40,7 +40,7 @@ right_a <- mm(sum(gt_a$widths[(span_a[2]+1):length(gt_a$widths)]))
 span_r <- panel_span(regional_grobs[[1]])
 left_r <- mm(sum(regional_widths[seq_len(span_r[1]-1)]))
 right_r <- mm(sum(regional_widths[(span_r[2]+1):length(regional_widths)]))
-ytitle_mm <- 4.5
+ytitle_mm <- 6
 left_common <- max(left_a,ytitle_mm+left_r)
 right_common <- max(right_a,right_r)
 pad_gtable <- function(g,left,right) {
@@ -60,7 +60,7 @@ make_aligned_row <- function(gear,tag,xt,yt) {
   title_row <- gtable::gtable_add_grob(title_row,grid::textGrob(xt,gp=grid::gpar(fontfamily="sans",fontsize=7,fontface="bold")),t=1,l=2)
   g <- gtable::gtable_add_grob(g,title_row,t=3,l=1,r=5)
   g <- gtable::gtable_add_cols(g,unit(ytitle_mm,"mm"),pos=0)
-  g <- gtable::gtable_add_grob(g,grid::textGrob(yt,rot=90,gp=grid::gpar(fontfamily="sans",fontsize=7,fontface="bold")),t=2,l=1)
+  g <- gtable::gtable_add_grob(g,grid::textGrob(yt,rot=90,gp=grid::gpar(fontfamily="sans",fontsize=7,fontface="bold")),t=2,l=1,clip="off")
   g <- pad_gtable(g,left_common-ytitle_mm-left_r,right_common-right_r)
   g <- gtable::gtable_add_grob(g,grid::textGrob(tag,x=unit(1,"mm"),just="left",gp=grid::gpar(fontfamily="sans",fontsize=8,fontface="bold")),t=1,l=1,r=length(g$widths),clip="off")
   g
@@ -69,7 +69,7 @@ gt_b <- make_aligned_row("LL","(b)","Standardized hooks per 100 t of catch",
   expression(atop(t~CO[2]*e~per~100,standardized~hooks)))
 gt_c <- make_aligned_row("PS","(c)","Standardized sets per metric ton of catch",
   expression(t~CO[2]*e~per~standardized~set))
-bc_guides <- pack_legend_rows(legend_objects(prepare_horizontal_guides(p_c_main,174)),174)
+bc_guides <- pack_legend_rows(legend_objects(prepare_horizontal_guides(p_c_main,174)),174,gap_mm=8)
 legend_layout_record("Fig3bc_aligned",bc_guides,174)
 fig3 <- gtable::gtable(widths=unit(1,"null"),
   heights=grid::unit.c(unit(1.8,"null"),unit(.60,"null"),unit(.85,"null"),sum(bc_guides$heights)))
