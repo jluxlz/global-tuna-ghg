@@ -8,8 +8,8 @@ import numpy as np
 import pandas as pd
 sys.stdout.reconfigure(encoding='utf-8',errors='replace')
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[1]
-OUT=ROOT/'scenario/output/fig5';P0=ROOT/'audits/p0_revision_20261013'
-AUD=ROOT/'audits/fig5_story_layout_20261013';AUD.mkdir(exist_ok=True)
+OUT=ROOT/'scenario/output/fig5';P0=ROOT/'analysis/p0_revision_20261013'
+AUD=ROOT/'analysis/fig5_story_layout_20261013';AUD.mkdir(exist_ok=True)
 ARCH=HERE/'_archive_before_story_layout_20261013';ARCH.mkdir(exist_ok=True)
 sys.path.insert(0,str(ROOT/'scenario'))
 from scenario_seeds import require_seed_protocol

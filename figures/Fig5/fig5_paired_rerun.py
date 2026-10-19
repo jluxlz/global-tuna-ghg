@@ -25,7 +25,7 @@ sys.path.insert(0, str(ROOT / "scenario"))
 import fig5_run as F
 from scenario_seeds import FUTURES, PROTOCOL, paired_seed, record_seed_protocol
 
-AUD = ROOT / "audits/paired_seed_revision_20261016"
+AUD = ROOT / "analysis/paired_seed_revision_20261016"
 OUT = AUD / "ensemble"
 W = {}
 PILOT_FUTURES = (8, 31, 40, 54, 73)

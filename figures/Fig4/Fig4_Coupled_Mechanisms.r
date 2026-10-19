@@ -34,7 +34,7 @@ fuel_lts <- c(MGO="solid",HFO="solid",FAME="dashed",HVO="dashed",LNG_Fossil="sol
               H2_Fossil="longdash",NH3_Green="dotted",H2_Green="dotted")
 fuel_lab <- c(MGO="MGO",HFO="HFO",FAME="FAME",HVO="HVO",LNG_Fossil="LNG fossil",
               H2_Fossil="H2 fossil",NH3_Green="NH3 green",H2_Green="H2 green")
-design_lab <- c(C="C: fixed catch", F="F: harvest rate")
+design_lab <- c(C="C-type quota rule", F="F-type harvest-rate rule")
 yrs <- c(2025,2030,2040,2050)
 
 read_panel <- function(letter, suffix, keys) {
@@ -65,7 +65,7 @@ p_a <- ggplot(da,aes(Year,B_K,colour=Scenario,linetype=Type)) +
                       labels=c("100% MSY","90% MSY","80% MSY","70% MSY","2024 catch")) +
   scale_linetype_manual(values=c(C="solid",F="dashed"),labels=design_lab,name="Design") +
   scale_x_continuous(breaks=yrs) +
-  labs(x="Year",y=expression(Biomass~ratio~(B[t]/K)),tag="(a)",subtitle="Non-closing pressure test") + theme_fig4() +
+  labs(x="Year",y=expression(Biomass~ratio~(B[t]/K)),tag="(a)",subtitle="Fixed-catch target simulation") + theme_fig4() +
   guides(colour=guide_legend(nrow=1),linetype=guide_legend(nrow=1))
 
 db <- read_panel("B","Yearly_M",c("WEO","Region","Year"))
@@ -95,7 +95,7 @@ p_c <- ggplot(dc,aes(Year,E_req,colour=Tech_Creep,linetype=Design)) + zones() +
                        labels=c("1.9%/yr","2.4%/yr","4.3%/yr")) +
   scale_linetype_manual(values=c(C="solid",F="dashed"),labels=design_lab,name=NULL) +
   scale_x_continuous(breaks=yrs) + scale_y_continuous(expand=expansion(mult=c(.04,.06))) +
-  labs(x="Year",y=expression(Ecological~multiplier~(M[eco])),tag="(c)",subtitle="Non-closing pressure test") + theme_fig4() +
+  labs(x="Year",y=expression(Ecological~multiplier~(M[eco])),tag="(c)",subtitle="Fixed-catch target simulation") + theme_fig4() +
   guides(colour=guide_legend(nrow=1),linetype=guide_legend(nrow=1))
 
 dd <- read_panel("D","Fuel_Cost",c("WEO","Year","Fuel"))

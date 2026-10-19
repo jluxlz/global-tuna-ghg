@@ -3,7 +3,7 @@
 args<-commandArgs(trailingOnly=TRUE);stopifnot(length(args)>=2)
 input<-normalizePath(args[1],winslash='/');output<-normalizePath(args[2],winslash='/')
 root<-normalizePath('.',winslash='/')
-.libPaths(c(file.path(root,'audits','si_rebuild_20261012','R_lib'),.libPaths()))
+.libPaths(c(file.path(root,'analysis','si_rebuild_20261012','R_lib'),.libPaths()))
 library(posterior)
 stocks<-if(length(args)>2) args[-(1:2)] else c('SKJ','YFT','BET','ALB','SBT');rows<-sums<-list()
 for(s in stocks) {

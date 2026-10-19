@@ -40,7 +40,7 @@ cat("Assembling figure...\n")
 source("Fig3_Aligned_Layout.r")
 if(!is.null(bc_caption))
   fig3<-fig3+plot_annotation(caption=bc_caption,theme=theme(plot.caption=element_text(size=6,hjust=0)))
-W_MM<-183;H_MM<-247
+W_MM<-180;H_MM<-225
 output_prefix<-"Fig3_Era_Background_Preview"
 cat(sprintf("Exporting at %.0f x %.0f mm...\n",W_MM,H_MM))
 ggsave(paste0(output_prefix,".pdf"),plot=fig3,width=W_MM,height=H_MM,units="mm",device=cairo_pdf,bg="white")

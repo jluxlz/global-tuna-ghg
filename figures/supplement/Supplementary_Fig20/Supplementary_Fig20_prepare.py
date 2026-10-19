@@ -1,7 +1,7 @@
 from pathlib import Path
 import pandas as pd
 ROOT=Path(__file__).resolve().parents[3];HERE=Path(__file__).parent
-A=ROOT/'audits/p0_revision_20261013'
+A=ROOT/'analysis/p0_revision_20261013'
 trajectories=[];qc=[]
 for label,stock in [('IOTC_BET','BET'),('IOTC_YFT_historical','YFT')]:
     folder=A/'regional_fits'/f'{label}_base'

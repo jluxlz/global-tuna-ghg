@@ -1,124 +1,34 @@
 # Global tuna-fishery greenhouse gas emissions
 
-Models, processed data, saved simulations and figure source data supporting
-*The climate advantage of tuna quota rules over fuel transition depends on achievable catches*.
+Scientific algorithms, original source inputs, figure data and saved scenario results for a two-part study of global tuna fisheries: historical vessel-level life-cycle accounting (1950–2025) and exploratory stock–fleet projections (2026–2050).
 
-This release preserves the historical inventory (1950–2025), exploratory
-stock–fleet scenarios (2025–2050), fixed-catch pressure tests, feasible-catch
-comparisons and the nine additional matched-catch experiments. Historical
-associations and exploratory stock trajectories do not establish causal effects
-or substitute for RFMO stock assessments.
+## Restore the data before running analyses
 
-## Language and compatibility
-
-The public source files, parameter descriptions, figure filenames and release
-path indices use English. Numerical parameter values and saved simulation
-results are unchanged by this language revision. The display-name column in
-the compiled prior tables is `Param_Name_EN`; parameter codes remain unchanged.
-English source-input filenames are listed in `data/external_inputs.csv`.
-Unicode escapes used by legacy workbook parsers preserve original input-field
-compatibility; these aliases are not published parameter descriptions.
-
-## Get the data
-
-The code and smaller compiled-parameter/panel tables are in this Git tree.
-Large author-generated outputs are in the [versioned data release](https://github.com/jluxlz/global-tuna-ghg/releases/tag/v2026.10.18).
-The release archives use content-addressed storage to avoid copying identical
-outputs repeatedly. File paths and SHA-256 checksums are recorded in
-`data/file_manifest.csv`; `data/release_files.json.gz` maps archived files to assets.
+The Git tree contains source code, parameter tables and small original inputs. Large inputs and saved results are in the versioned release **v2026.10.19**. A clone alone is not the complete data distribution.
 
 ```sh
-git clone https://github.com/jluxlz/global-tuna-ghg.git
-cd global-tuna-ghg
 python restore_data.py --download --verify
 ```
 
-`gh` is optional for public downloads. To fetch only large figure data, use
-`python restore_data.py --download --figure-data`. This restores the original
-directory structure, rather than requiring manual extraction of blob names.
-`data/release_assets.json` provides archive checksums.
+This downloads three ZIP assets, restores their content to the original relative paths and verifies every scientific file against `data/file_manifest.csv`. `--figure-data` restores only saved figure files; it is insufficient to rerun upstream models. Use `--assets /path/to/downloads --verify` with previously downloaded assets. The restorer refuses to overwrite modified files unless `--overwrite` is explicitly supplied.
 
-## Model and data map
+## Scientific workflow
 
-| Directory | Contents |
-| --- | --- |
-| `GHG_Calculation/` | Historical Monte Carlo LCA, operational phases, reconstructed fleet, historical inventory products |
-| `scenario/` | Stock–fleet coupling, price loading, quota rules, scenario seeds and JABBA fitting |
-| `model_parameters/` | Parameter builders and author-compiled CSV matrices with source annotations |
-| `vessel_data_extract/`, `PMM_Imputation/`, `Stratified_Hot-Deck_Imputation/` | Registry harmonisation and missing-value reconstruction |
-| `effort_data/` | RFMO catch/effort extraction, aggregation and grid allocation |
-| `figures/Fig1/`–`Fig5/` | R figure renderers, Python data bridges and panel source tables |
-| `figures/Extended_Data/`, `figures/supplement/` | Extended and supplementary figure code and data |
-| `audits/` | Selected scientific validation algorithms, saved experiments and computational diagnostics |
+1. Original RFMO vessel tables are in `raw_vessel_data/`, `spider/output/` and `vessel_data_extract/new_extracted_vessel_data_raw/`; intermediate extracted tables are in `extracted_vessel_data/`. Source catch/effort tables and spatial boundaries are in `effort_data/` and `shape_file/`.
+2. Vessel extraction, imputation and historical reconstruction feed `GHG_Calculation/ghg_lca.py`, the historical Monte Carlo life-cycle model.
+3. `scenario/jabba_fit.r`, `scenario/fleet_model.py` and `scenario/price_loader.py` implement stock fits, fleet projections and fuel prices. Figure-level simulation drivers live with the corresponding figure or in `analysis/`.
+4. Each quantitative figure retains its R renderer and saved CSV inputs. `data/figure_inputs.json` records the inputs actually opened in an isolated restoration-and-render check. Extended Data Figs. 1–2 are conceptual diagrams and do not require numeric panel data.
 
-The `audits` paths are retained because several figure/data bridges import their
-scientific results. They contain no manuscript-authoring tools in this release.
-Original RFMO downloads, vessel-registry microdata, third-party assessment
-archives, large bundled fit objects, source parameter workbooks and boundary
-shapefiles are not redistributed here. They remain in the author's private
-working project. `data/external_inputs.csv` identifies the excluded source paths
-and provider links. Re-rendering maps or recomputing models can require obtaining
-these inputs under the providers' terms. This release supports the saved-result
-analyses and provides the scientific algorithms; it does not claim that a fresh
-full-chain run works without those external inputs. Source licences and terms
-continue to apply; depositing generated files does not grant a new licence for
-third-party artwork or external code.
+Python is used for model calculations and data preparation; figures are rendered in R with ggplot2. Install Python packages from `requirements.txt` and R packages with `install_r_dependencies.R`. Existing saved inputs permit figure rendering without repeating the long model fits and scenario sweeps. Fitting stocks and rerunning the entire model requires substantially more time than redrawing the figures.
 
-## Reproduce figures from saved data
+## Source provenance and scope
 
-Use Python 3.13 and R 4.5.2 with the dependencies in `requirements.txt` and
-`install_r_dependencies.R`. R/JAGS is required for fresh stock fits. Python
-exports calculations and CSV bridges; the publication figures are drawn in R.
+`data/source_inputs.csv` lists 84 original input files, their providers, sizes and SHA-256 checksums. These include the CCSBT registry source and extracted tables. Public paths and authored code/descriptions use English. Original provider tables and workbooks retain their original bytes, including native headers, names and units; translations must not silently replace scientific source records.
 
-Run R commands from the repository root after restoring release data:
+The `analysis/` directory holds scientific robustness calculations required by the saved results. Editorial automation, manuscript drafts, SI prose and agent configuration are excluded. The earlier scientific `audits/` paths were relocated to `analysis/` with dependent paths updated; there is no `audits/` directory in this release.
 
-```sh
-Rscript figures/Fig1/Fig1_Multi_Dimensional.r
-Rscript figures/Fig2/Fig2_Spatial_Temporal_CEI.r
-Rscript figures/Fig3/Fig3_Phase_Decoupling.r
-Rscript figures/Fig4/Fig4_Coupled_Mechanisms.r
-Rscript figures/Fig5/Fig5_Mitigation_Evidence.r
-```
+The simulations are exploratory. Pooled global stock models do not replace official regional assessments. Historical operating schedules include assumptions, and the longline fuel-intensity discrepancy against an independent survey remains a limitation. Numerical convergence, internal consistency and sensitivity checks are distinct from independent empirical validation. Fixed-catch-target and feasible-catch simulations use different activity and stock feedback structures and must be compared with their own paired baselines.
 
-Fig. 4's independent feasible-catch stock panel is rendered by
-`figures/Fig4/Fig4_Coupled_Validation.r`. Fig. 3's aligned layout is sourced by
-its main renderer and is not a standalone script.
+## Provenance checks
 
-The scientific-validation release replaces supplementary figures 5, 15 and 19
-with the R renderers in `figures/supplement/validation_20261018/`; their original
-numbers are retained. All other supplementary renderers remain under
-`figures/supplement/Supplementary_FigN/`.
-
-## Recompute the models
-
-Preserve a copy of the saved results before rerunning: the original scientific
-scripts write to their documented output locations. Long model chains may take
-hours. Re-rendering the figures does not require refitting every model.
-
-1. Reconstruct vessel inputs using the registry and imputation directories.
-2. Run `GHG_Calculation/ghg_lca.py` from its directory for the historical inventory.
-3. Run `scenario/jabba_fit.r` for species-level exploratory stock projections.
-4. Run `python scenario/regression_check_order_dependence.py` before future sweeps.
-5. In `figures/Fig5/`, use `fig5_run.py proxies`, then `fig5_run.py`, then
-   `fig5_run.py final` for the fixed-catch chain. `fleet_model.py` is an imported
-   model interface, not the sweep entry point.
-6. `audits/p0_revision_20261013/run_ensemble.py` and its matched-catch drivers
-   implement the separate feasible-catch branch. Their saved runs and selection
-   records are deposited; do not interpret these as the fixed-catch branch.
-7. `audits/scientific_validation_20261018/` contains the targeted fuel,
-   technology-correction and matched-catch mechanism analyses. Its
-   `build_figure_inputs.py` refreshes the three revised supplementary panels.
-
-The deposited seed/configuration records accompany the saved runs. Numerical
-and convergence diagnostics address implementation and sampling; the global
-stock aggregation and historical operating assumptions retain the limitations
-reported with the scientific analyses.
-
-## Scope of this repository
-
-This public release contains model algorithms, scientific analysis and plotting
-code, compiled parameter CSVs, saved aggregate outputs and figure data. Manuscripts, SI documents,
-editorial automation, agent configuration, conversation material, local caches
-and historical editing archives are excluded. The complete working project is
-maintained separately by the author. No archival DOI is claimed by this GitHub
-release.
+`data/file_manifest.csv` identifies scientific files distributed through Git and release assets. `data/release_assets.json` records archive checksums. `data/figure_inputs.json` and `data/figure_inputs.csv` identify quantitative figure dependencies. Restoring saved files and redrawing figures verifies file availability and rendering; it does not constitute a fresh production model rerun.

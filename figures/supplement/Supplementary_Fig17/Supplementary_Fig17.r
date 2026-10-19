@@ -58,7 +58,7 @@ p7c <- ggplot(mec, aes(Year, E_req, colour = Gear, linetype = Design)) +
   geom_line(linewidth = 0.5) +
   scale_colour_manual(values = c(LL = "#B81D0A", PS = "#1A7A8A"), name = NULL) +
   scale_linetype_manual(values = c(C = "solid", F = "dashed"),
-                        labels = c(C = "Fixed catch (C)", F = "Harvest rate (F)"), name = NULL) +
+                        labels = c(C = "C-type quota rule", F = "F-type harvest-rate rule"), name = NULL) +
   labs(tag = "(c)", x = NULL, y = expression("Required effort multiplier " * M[eco])) +
   theme_pub
 p7d <- ggplot(fue, aes(Year, E_adj_min, colour = WEO)) +

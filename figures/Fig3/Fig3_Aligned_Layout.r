@@ -65,14 +65,14 @@ make_aligned_row <- function(gear,tag,xt,yt) {
   g <- gtable::gtable_add_grob(g,grid::textGrob(tag,x=unit(1,"mm"),just="left",gp=grid::gpar(fontfamily="sans",fontsize=8,fontface="bold")),t=1,l=1,r=length(g$widths),clip="off")
   g
 }
-gt_b <- make_aligned_row("LL","(b)","Standardised hooks per 100 t of catch",
-  expression(t~CO[2]*e~per~100~standardised~hooks))
-gt_c <- make_aligned_row("PS","(c)","Standardised sets per tonne of catch",
-  expression(t~CO[2]*e~per~standardised~set))
+gt_b <- make_aligned_row("LL","(b)","Standardized hooks per 100 t of catch",
+  expression(atop(t~CO[2]*e~per~100,standardized~hooks)))
+gt_c <- make_aligned_row("PS","(c)","Standardized sets per metric ton of catch",
+  expression(t~CO[2]*e~per~standardized~set))
 bc_guides <- pack_legend_rows(legend_objects(prepare_horizontal_guides(p_c_main,174)),174)
 legend_layout_record("Fig3bc_aligned",bc_guides,174)
 fig3 <- gtable::gtable(widths=unit(1,"null"),
-  heights=grid::unit.c(unit(1.8,"null"),unit(.85,"null"),unit(.85,"null"),sum(bc_guides$heights)))
+  heights=grid::unit.c(unit(1.8,"null"),unit(.60,"null"),unit(.85,"null"),sum(bc_guides$heights)))
 for(i in 1:4) fig3 <- gtable::gtable_add_grob(fig3,list(gt_a,gt_b,gt_c,bc_guides)[[i]],t=i,l=1,clip="off")
 aligned_bc <- gtable::gtable(widths=unit(1,"null"),
   heights=grid::unit.c(unit(1,"null"),unit(1,"null"),sum(bc_guides$heights)))

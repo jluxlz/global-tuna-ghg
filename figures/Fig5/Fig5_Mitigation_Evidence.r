@@ -13,7 +13,7 @@ theme_pub<-theme_classic(base_size=7,base_family='Arial')+theme(
  legend.key.size=unit(3,'mm'),legend.box='vertical',panel.spacing=unit(3,'mm'),plot.margin=margin(4,5,4,4,'pt'))
 baselines<-c('Fixed-catch pressure test','Resource-and-capacity rerun')
 base_cols<-setNames(c('#666666','#0072B2'),baselines)
-base_labs<-setNames(c('Fixed-catch\ntarget scenario','Feasible-catch\nsimulation'),baselines)
+base_labs<-setNames(c('Fixed-catch target\nsimulation','Feasible-catch\nsimulation'),baselines)
 measure_cols<-c(Quota='#AA4499',Fuel='#009E73',Combined='#D55E00')
 weo_cols<-c(STEPS='#D55E00',APS='#0072B2',NZE='#009E73')
 a<-read_panel('PanelA_BAU_Summary');a$Baseline<-factor(a$Baseline,levels=baselines)

@@ -15,7 +15,7 @@ Required model inputs are `GHG_Calculation/Base_2_Fleet_GHG.csv`, `Base_3_Spatia
 To redraw from the saved panel source CSV, without access to the large inventory:
 
 ```powershell
-C:/CONDA/python audits/full_chain_20261012/render_single.py figures/supplement/Supplementary_Fig14/Supplementary_Fig14.r
+C:/CONDA/python analysis/full_chain_20261012/render_single.py figures/supplement/Supplementary_Fig14/Supplementary_Fig14.r
 ```
 
 The R script also runs directly in the configured R 4.5.2 environment. It writes a data CSV for each panel plus vector PDF, 300 dpi PNG and 900 dpi TIFF at 183 mm width.

@@ -45,4 +45,4 @@ Individual R entrypoints can also be run with the configured R environment. The 
 
 Numbered table CSVs use current SI table numbers. The external benchmark is `Supplementary_Fig14/Supplementary_Table10_Benchmark.csv`; engineering conversions are `tables/Supplementary_Table3_Engineering_Conversions.csv`; engine clocks are `tables/Supplementary_Table11_Engine_Clock.csv`.
 `Current_SI_Numbering.csv` lists current captions and actual asset directories. Its Previous_number column records provenance only.
-The complete pre-alignment tree is archived at `audits/si_filename_alignment_20261016/before/supplement/`. Nested `_archive*` directories retain historical filenames and are not current SI assets.
+The complete pre-alignment tree is archived at `analysis/si_filename_alignment_20261016/before/supplement/`. Nested `_archive*` directories retain historical filenames and are not current SI assets.

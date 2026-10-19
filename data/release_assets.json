@@ -1,17 +1,17 @@
 [
   {
-    "Asset": "public-data-en-001.zip",
-    "Bytes": 206526162,
-    "SHA256": "7dd1e584cb40b966b4d7d6c770ad46d0a75211e4669ccdf4e5f5a7c1aa8b3ed2"
+    "Asset": "public-scientific-001.zip",
+    "Bytes": 283739078,
+    "SHA256": "29d8502ebbe03478742024fc98af40d8b96f616ac5b11c0affaa40c9539098f9"
   },
   {
-    "Asset": "public-data-en-002.zip",
-    "Bytes": 273319393,
-    "SHA256": "44d41c037b517ca1389b3b256873b755962a0a392b08bb9d54b71d1792b1fb2d"
+    "Asset": "public-scientific-002.zip",
+    "Bytes": 289450378,
+    "SHA256": "6410a3aaa3a994cd5a4c10365830d524dc680a477db0865623e43353ba438404"
   },
   {
-    "Asset": "public-data-en-003.zip",
-    "Bytes": 58838505,
-    "SHA256": "15af4ea234422cd8032b57a93a201d4d880b986d4d3e217b8eb7222df965c7bf"
+    "Asset": "public-scientific-003.zip",
+    "Bytes": 31675982,
+    "SHA256": "a84877b834ae3abf3c43ec59a9a8b7c76ffaecadbdc0cd760eac3bea7a1e086a"
   }
 ]

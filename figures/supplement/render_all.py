@@ -17,7 +17,7 @@ def main():
  completed=[]
  for n in selected:
   script=f'figures/supplement/Supplementary_Fig{n}/Supplementary_Fig{n}.r'
-  subprocess.run([sys.executable,str(ROOT/'audits/full_chain_20261012/render_single.py'),script],cwd=ROOT,check=True)
+  subprocess.run([sys.executable,str(ROOT/'analysis/full_chain_20261012/render_single.py'),script],cwd=ROOT,check=True)
   completed.append(n)
   (HERE/'Render_Status.json').write_text(json.dumps(dict(Requested=selected,Completed=completed),indent=2),encoding='utf-8')
  print('SI render complete:',', '.join(map(str,completed)))

@@ -2,7 +2,7 @@
 from pathlib import Path
 import pandas as pd
 ROOT=Path(__file__).resolve().parents[3];HERE=Path(__file__).parent
-A=ROOT/'audits/p0_revision_20261013'
+A=ROOT/'analysis/p0_revision_20261013'
 d=pd.read_csv(A/'ensemble/All_Annual.csv')
 select=d[(d.Max_Days==365)&d.Combo.isin(['0000','1000','0100','1111'])].copy()
 names={'0000':'Constrained BAU','1000':'Quota only','0100':'Fuel only','1111':'Combined'}

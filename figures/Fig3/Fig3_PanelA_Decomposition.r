@@ -2,8 +2,8 @@
 cat("Reading decomposed annual trends...\n")
 trend_file <- "Fig3_PanelA_Factor_Trends.csv"
 if (!file.exists(trend_file)) stop("Run C:/CONDA/python preprocess_fig3.py first.")
-if (file.info(trend_file)$mtime < file.info(file.path(DATA_DIR,"Base_3_Spatial_Grid_Enriched.csv"))$mtime)
-  stop("Fig3 trends are older than Base_3. Rerun preprocess_fig3.py.")
+source("Fig3_Input_Provenance.r")
+verify_fig3_source("Fig3_Decomposition_Audit.json")
 df_c<-read.csv(trend_file)
 stopifnot(all(is.finite(df_c$Effort_log_trend_pct)), all(is.finite(df_c$GHG_Effort_log_trend_pct)),
           all(df_c$Total_GHG>0), !anyDuplicated(df_c[c("Gear","lon","lat","Era")]),
@@ -56,8 +56,8 @@ p_a<-ggplot(df_c,aes(x=Effort_log_trend_pct,y=GHG_Effort_log_trend_pct))+
   scale_x_continuous(labels=comma_format(),expand=expansion(mult=c(.04,.04)))+
   scale_y_continuous(labels=comma_format(),expand=expansion(mult=c(.04,.04)))+
   coord_cartesian(xlim=c(-lim,lim),ylim=c(-lim,lim))+
-  labs(tag="(a)",x=expression("Trend in standardised effort per tonne of catch ("*"%"~yr^{-1}*"; log trend)"),
-       y=expression(atop("Trend in GHG per unit of standardised effort","("*"%"~yr^{-1}*"; log trend)")))+
+  labs(tag="(a)",x=expression("Trend in standardized effort per metric ton of catch ("*"%"~yr^{-1}*"; log trend)"),
+       y=expression(atop("Trend in GHG per unit of standardized effort","("*"%"~yr^{-1}*"; log trend)")))+
   theme_pub+theme(panel.spacing=unit(1,"lines"),legend.box="vertical",legend.box.spacing=unit(3,"pt"),
                   plot.caption=element_text(size=6,hjust=0),legend.justification="centre")
 write.csv(df_c,"Fig3_PanelA_Phase_Space.csv",row.names=FALSE)

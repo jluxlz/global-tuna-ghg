@@ -11,7 +11,7 @@ import pandas as pd
 import openpyxl
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 H=Path(__file__).resolve().parent; ROOT=H.parents[2]
-AUD=ROOT/'audits/targeted_revision_20261015'
+AUD=ROOT/'analysis/targeted_revision_20261015'
 KEY=['Year','Flag','Gear']
 PROC=['Fuel_CO2','Fuel_CH4','Fuel_N2O','Fuel_WTT']
 def digest(p):

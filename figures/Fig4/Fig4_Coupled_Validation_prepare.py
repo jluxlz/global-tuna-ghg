@@ -2,7 +2,7 @@
 from pathlib import Path
 import pandas as pd
 ROOT=Path(__file__).resolve().parents[2];HERE=Path(__file__).parent
-E=ROOT/'audits/p0_revision_20261013/ensemble'
+E=ROOT/'analysis/p0_revision_20261013/ensemble'
 rows=[]
 for f in range(1,82):
     for combo,label in [('0000','Constrained BAU'),('C_type','C-type quota'),('1000','F-type quota')]:
