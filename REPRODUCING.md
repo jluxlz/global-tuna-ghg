@@ -11,12 +11,12 @@ Reproduction starts from the supplied **accepted vessel registry**. It includes 
 Install Python dependencies in `requirements.txt`, R and `install_r_dependencies.R`. JAGS and JABBA are needed only for fresh stock fits. Set `RSCRIPT` if Rscript is not on PATH. The scripts use their own locations to resolve project paths; the author's desktop directory is not required.
 
 ```sh
-python restore_data.py --download --verify
+python restore_data.py --verify
 python reproduce.py verify
 python reproduce.py figures
 ```
 
-Three unchanged large data assets remain under release v2026.10.19. This source repair ships missing small model inputs directly in Git. `restore_data.py --assets /path/to/downloaded/archives --verify` supports an offline data-asset cache. File and archive SHA-256 checks are mandatory; this is not permission to substitute unrelated local data.
+Download `global-tuna-ghg-complete.zip` from release v2026.10.20.2 and extract it. The expanded package already contains all supplied scientific inputs, code and current results. It needs no older release. Git-clone users instead run `python restore_data.py --download --verify` once; this retrieves the same single complete archive. `--assets /path/to/downloads --verify` supports an offline archive cache. The archive checksum is published as `SHA256SUMS.txt`; the complete ZIP cannot contain its own checksum, so its download-control file refers to that sidecar only if repair is required. Ordinary scientific files are always checked against `data/file_manifest.csv`.
 
 `figures` redraws all 33 current quantitative figures from saved numerical inputs. Extended Data Figs. 1–2 are conceptual diagrams. SI Figs. 5, 15 and 19 use `validation_20261018` versions. Rendering is a saved-result replay and does not recompute the model ensemble.
 

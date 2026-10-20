@@ -1,0 +1,9 @@
+{
+  "Type": "Complete standalone scientific package",
+  "Tag": "v2026.10.20.2",
+  "Archive": "global-tuna-ghg-complete.zip",
+  "Source_Result_Version": "v2026.10.20.1",
+  "Scientific_Results_Changed": false,
+  "Requires_Older_Releases": false,
+  "Archive_Root": "global-tuna-ghg/"
+}
