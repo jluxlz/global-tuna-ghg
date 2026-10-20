@@ -1,0 +1,11 @@
+{
+  "Python": "3.13.0 | packaged by conda-forge | (main, Nov 27 2024, 19:03:49) [MSC v.1942 64 bit (AMD64)]",
+  "Platform": "Windows-11-10.0.26200-SP0",
+  "Packages": {
+    "numpy": "2.3.1",
+    "pandas": "2.2.3",
+    "scipy": "1.18.0",
+    "openpyxl": "3.1.5",
+    "scikit-learn": "1.9.0"
+  }
+}

@@ -28,8 +28,8 @@
     "model_parameters\\Scenario_Fuel_Price_Matrix.xlsx": "f880186bf6a100a96c228d452e276e16cd664b829c6961eacefb7f24d3f19b4d",
     "scenario\\output\\schaefer_biomass_annual.csv": "a5c599d6080c8ec84b08a7d0e46ab05d7f16735809ee6d52ce4d9fc56acd1f66",
     "scenario\\output\\schaefer_biomass_annual_F.csv": "da986bc3b5e0265b030e5a9da35f1feabc43ac75c7a48bad77b59f8f5dd71d0a",
-    "scenario\\jabba_fit.r": "6d58d48f5e6714b51a284b7db05fd7ed6b7e5b9ee09f768f8d7984dcb981cc07",
-    "scenario\\fleet_model.py": "3f4ca7e9862d24fb74b82615cf14ac05b2462af6a8dbf1d14d452654484b1d9b",
-    "scenario\\price_loader.py": "f55693c1dfff1183d65cf01fb5fc32b30a64c355c10979c7e9c2cb20ba521234"
+    "scenario\\jabba_fit.r": "3a2c58ac752738e04782b91582dd42360e2f1843db6872a12e3ab87e83b7a7a2",
+    "scenario\\fleet_model.py": "750c95386ef700fb1a7daf993cf4a3879a5d6945c7adfa0ec876f8ac67c4f663",
+    "scenario\\price_loader.py": "ed1cb5344b8c7785b5fdbdb135937897c21df876551f266b0001d4c8f7cd0344"
   }
 }

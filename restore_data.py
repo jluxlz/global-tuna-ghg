@@ -29,10 +29,10 @@ def main():
   if not path.exists() and a.download:
    print('Downloading',path.name,flush=True)
    if shutil.which('gh'):
-    subprocess.run(['gh','release','download',config['Tag'],'--repo',config['Repository'],'--pattern',path.name,'--dir',str(a.assets)],check=True)
+    subprocess.run(['gh','release','download',x.get('Tag',config['Tag']),'--repo',config['Repository'],'--pattern',path.name,'--dir',str(a.assets)],check=True)
    else:
     if config.get('Private'):raise RuntimeError('Install and authenticate gh to download private release data.')
-    url=f"https://github.com/{config['Repository']}/releases/download/{config['Tag']}/{path.name}"
+    url=f"https://github.com/{config['Repository']}/releases/download/{x.get('Tag',config['Tag'])}/{path.name}"
     urllib.request.urlretrieve(url,path)
   if not path.exists():raise FileNotFoundError(f'{path}: supply this release asset or use --download')
   if digest(path)!=x['SHA256']:raise RuntimeError(f'Asset checksum mismatch: {path.name}')

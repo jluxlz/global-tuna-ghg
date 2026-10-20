@@ -9,6 +9,8 @@ from functools import lru_cache
 from multiprocessing import Pool
 import pandas as pd
 import numpy as np
+import platform
+from importlib.metadata import version
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/'figures/Fig5'));sys.path.insert(0,str(ROOT/'scenario'))
 import fleet_model as fm
@@ -22,26 +24,29 @@ def init_worker(fleet,pm):
 @lru_cache(maxsize=1)
 def frozen_input_signature():
     h=hashlib.sha256()
-    for rel in ('PMM_Imputation/After_PMM_Vessels.csv',
-                'effort_data/Share5_Lookup_FlagGearYear.csv',
-                'GHG_Calculation/Base_3_Spatial_Grid_Enriched.csv',
-                'model_parameters/Prior_Matrix.csv',
-                'model_parameters/Scenario_Fuel_Parameters.xlsx',
-                'model_parameters/Scenario_Fuel_Price_Matrix.xlsx'):
-        p=ROOT/rel
-        with p.open('rb') as f:h.update(hashlib.file_digest(f,'sha256').digest())
+    from scenario_seeds import simulation_fingerprint
+    h.update(json.dumps(simulation_fingerprint(),sort_keys=True).encode())
+    runtime=dict(Python=platform.python_version(),Platform=platform.platform(),
+                 Packages={k:version(k) for k in ('numpy','pandas','scipy','openpyxl')})
+    h.update(json.dumps(runtime,sort_keys=True).encode())
+    h.update(Path(__file__).read_bytes())
     return h.digest()
 
 
-def digest(params):
-    h=hashlib.sha256(json.dumps(params,sort_keys=True).encode())
+def digest(params,seed):
+    h=hashlib.sha256(json.dumps(dict(params=params,seed=int(seed)),sort_keys=True).encode())
     h.update(frozen_input_signature())
-    for path in [ROOT/'scenario/fleet_model.py',ROOT/'scenario/fishery_coupling.py',Path(params['fishery_coupling']['stock_parameters'])]:
+    h.update(pd.util.hash_pandas_object(_W['fleet'],index=True).values.tobytes())
+    h.update(json.dumps(_W['pm']['by_code'],sort_keys=True,default=str).encode())
+    paths=[Path(params['fishery_coupling']['stock_parameters'])]
+    if params['fishery_coupling'].get('allocation_file'):
+        paths.append(Path(params['fishery_coupling']['allocation_file']))
+    for path in paths:
         h.update(path.read_bytes())
     return h.hexdigest()
 
 def task(item):
-    key,p,seed,meta=item;signature=digest(p)
+    key,p,seed,meta=item;signature=digest(p,seed)
     folder=OUT/key;folder.mkdir(exist_ok=True)
     marker=folder/'Complete.json'
     if marker.exists() and json.loads(marker.read_text())['signature']==signature:

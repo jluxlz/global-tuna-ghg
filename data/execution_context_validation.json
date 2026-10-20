@@ -1,0 +1,51 @@
+{
+  "Original_Parent_NH3_LHV_MJ_kg": 18.599999999999998,
+  "Spawn_Import_NH3_LHV_MJ_kg": 18.6,
+  "Only_Intervention": "Set NH3_Green LHV to 18.6 in the preserved pre-fix model; keep seeds, fleet, workbook and formulas unchanged.",
+  "Reproduces_Previously_Observed_Serial_Discrepancy": true,
+  "Single_Property_Intervention_Reproduces_Archive": true,
+  "Annual_State_Comparisons": [
+    {
+      "Year": 2025,
+      "Same_IDs": true,
+      "Same_Order": true,
+      "Maximum_Vessel_GHG_Error_t": 0.0,
+      "Maximum_GHG_Power_Intensity_Error": 0.0
+    },
+    {
+      "Year": 2026,
+      "Same_IDs": true,
+      "Same_Order": true,
+      "Maximum_Vessel_GHG_Error_t": 7.275957614183426e-12,
+      "Maximum_GHG_Power_Intensity_Error": 3.552713678800501e-15
+    },
+    {
+      "Year": 2027,
+      "Same_IDs": true,
+      "Same_Order": false,
+      "Maximum_Vessel_GHG_Error_t": 1.0913936421275139e-11,
+      "Maximum_GHG_Power_Intensity_Error": 2.6645352591003757e-15
+    },
+    {
+      "Year": 2028,
+      "Same_IDs": true,
+      "Same_Order": false,
+      "Maximum_Vessel_GHG_Error_t": 7.275957614183426e-12,
+      "Maximum_GHG_Power_Intensity_Error": 2.6645352591003757e-15
+    },
+    {
+      "Year": 2029,
+      "Same_IDs": false,
+      "Same_Order": false
+    },
+    {
+      "Year": 2030,
+      "Same_IDs": false,
+      "Same_Order": false
+    }
+  ],
+  "Preserved_Code_SHA256": {
+    "fleet_model.py": "aeb512185a8da01577d18c495a72c833e32eb7db20492a78ed8d5f03e6aebbcc",
+    "price_loader.py": "f55693c1dfff1183d65cf01fb5fc32b30a64c355c10979c7e9c2cb20ba521234"
+  }
+}

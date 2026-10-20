@@ -15,6 +15,8 @@ import json
 import os
 import sys
 import time
+import platform
+from importlib.metadata import version
 from multiprocessing import Pool
 
 import numpy as np
@@ -215,6 +217,9 @@ def main():
         fleet,pm=F.fleet_model.load_baseline_fleet()
     signature=hashlib.sha256(pd.util.hash_pandas_object(fleet,index=True).values.tobytes()+
         json.dumps(pm,sort_keys=True,default=str).encode())
+    signature.update(json.dumps(dict(Python=platform.python_version(),Platform=platform.platform(),
+        Packages={k:version(k) for k in ('numpy','pandas','scipy','openpyxl')}),sort_keys=True).encode())
+    signature.update(Path(__file__).read_bytes())
     paths=[ROOT/p for p in ("scenario/fleet_model.py","scenario/price_loader.py",
         "PMM_Imputation/After_PMM_Vessels.csv","effort_data/Share5_Lookup_FlagGearYear.csv",
         "GHG_Calculation/Base_3_Spatial_Grid_Enriched.csv","model_parameters/Prior_Matrix.csv",

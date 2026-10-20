@@ -1,23 +1,31 @@
 {
   "protocol": "future-paired-v1",
   "files": {
-    "SF5_Multiplier_Paths.csv": "a3ed69c9f8cdbe8b6e3c46daf4fd4d0a3b1d1990d577cfc3179438635c21ef8d",
-    "SF5_Capture_Seed_Manifest.csv": "909125e72876331210f0ba1f4acbc4ab83137d6844c2e6b95ce8c7f6a199f0c5",
     "BAU_81_Annual.csv": "7ea3259ac44790b0bae2cb35c6f1c463528fe72e5fc3c9dc796407d538043903",
-    "Mitigation_Results_Annual.csv": "361e2880fb5b1244dd7481aecf0cda4c515cf82cf844c63644aa44d0185d7a36",
-    "Heterogeneous_Mitigation_Results.csv": "8fada506a526774daee0648491e6a31beede20c4908faae7f0c36ed434d43103",
+    "Mitigation_Results_Annual.csv": "ea065fc37237090d73fada625ffa1d4d20a4ab70ecabc9d6686720b7f4e09c69",
+    "Heterogeneous_Mitigation_Results.csv": "4c37cb6636ce49aa7872f6ab5fab3b11b073c2193125e63d873c52aad8ef6f2c",
     "Fig5_QuotaOnly_Annual.csv": "77bc430b1c72d1591620c68bbf023cddb0feb7099474dc50dd59126430658590",
-    "Fig5_Final_Combination_Annual.csv": "43c2b57893c4fdeb9c0bfa7a904bb5d2e9a5062d876ef3cb2032dae045811f5b",
-    "SF6_Combos_2050.csv": "58ef5826c5ea28ad8293287622015f4bc9f294abe27207913c6db9e52248c9c3",
-    "Optimal_Mitigation_By_Object.csv": "98460a36c1532e015cf694238f06d78168953bf4e71a86e7f194866dd55a6a3c",
-    "SF6_Shapley_Contributions.csv": "8bafb74de9f4e87a48509d1e7660208f3cd5c182d8070f9e605a8ffa6fd612ea"
+    "Fig5_Final_Combination_Annual.csv": "a45a7cb9570b5d48fe2bdb75c881d36f9b604391e037305d73e49c73b0f25c84",
+    "SF6_Combos_2050.csv": "0b1ba4d569821b26587140ab0fa55784f2da332b27668b5657cfb8f167aa2820",
+    "Optimal_Mitigation_By_Object.csv": "5417457255048efbbe61fbf09c1f8aa167ac4118104be487351f5433e3de4b59",
+    "SF6_Shapley_Contributions.csv": "d280fa6cdc820e2e856b666d20389c96208e793ea3292b98cceecaa13cb0eb34"
   },
   "inputs": {
-    "scenario/fleet_model.py": "b617db80df93455a7399e01890f7c7b54ee7528ee4cfb4830776e2ed10a351c2",
-    "scenario/price_loader.py": "f55693c1dfff1183d65cf01fb5fc32b30a64c355c10979c7e9c2cb20ba521234",
-    "scenario/scenario_seeds.py": "65cb0bad35efbe595d669df689ddd8044d339494008e735a2ce7f8f20b092982",
+    "PMM_Imputation/After_PMM_Vessels.csv": "9e17190cd8e0f976a386e3be2bf64fb5fb6d0a0fe7871dc6bfff21dc64c30423",
+    "vessel_data_extract/Unified_Vessel_Registry.csv": "ee2e6f8bcbd27e44be06a6f4d811c6f7903f342a8234b7422bca1b4df070f1c9",
+    "effort_data/Share5_Lookup_FlagGearYear.csv": "dabbbc5a68af12223be3e20061f7995b0b4668615947cdf03f403fb9f1b6948a",
+    "effort_data/Grid_Catch_Allocation.csv": "005b759482b95a6ed6b05797f3baf66cb4af6dfe92681651dfa5126dfd19d082",
+    "GHG_Calculation/Base_3_Spatial_Grid_Enriched.csv": "cdd250c6c3f95df5e23ed7cea5dd571d3454411408ec4b5c6cbcabab00da1cdb",
+    "GHG_Calculation/operational_hours_lookup.py": "8300b1a089a696ef249b77733fe9d27fa9c9f68bb91ddbf83fd5ba4174399e75",
+    "GHG_Calculation/power_discount_factor.py": "d7ee32e3971ce8c2a38ab3603c00f6c3c7a7200285e8628dcefdc7d36b894ef6",
+    "GHG_Calculation/TotalEffortby_FishingCountry_LengthBoat_Gear_Sector.csv": "d6925aea2fba672f9de3bff3ae25415ecf9f2670496eaf7cbd25b8f17c9e2178",
+    "scenario/fishery_coupling.py": "a5eae8a85c9ed8091931a2dd58ba4ca13a2f4b7525e24e668c24516951b7a7da",
+    "scenario/fig5_allocation.py": "873cff18004d96b1789c92c5c89809b1c56da236c3621c89462013dfb4e11d24",
+    "scenario/fleet_model.py": "750c95386ef700fb1a7daf993cf4a3879a5d6945c7adfa0ec876f8ac67c4f663",
+    "scenario/price_loader.py": "ed1cb5344b8c7785b5fdbdb135937897c21df876551f266b0001d4c8f7cd0344",
+    "scenario/scenario_seeds.py": "da563965fcf4b9c48420eaec4c52cdda00ccd140d861c4f00e96ba2406d75d58",
     "figures/Fig5/fig5_run.py": "0816bf19b89a28dff1e22800809d84e04b780115bd47d7eb619206db9fa6d10b",
-    "GHG_Calculation/ghg_lca.py": "966e96e8c68f531887ef4f29c00695b74cbfe26f3d5e8e8a47e708c2019a6514",
+    "GHG_Calculation/ghg_lca.py": "d4287a8fe612cc82ee093b0534922f9d633c5c7836da18ca2b7b1289d69d9dbf",
     "model_parameters/Prior_Matrix.csv": "1b76b150d0ba0adf635c7884026be02dd8e53792b88e80d53852437fb839ba2e",
     "model_parameters/Scenario_Fuel_Parameters.xlsx": "1cef0a09da222b0c97648852f291f091f0504cb98b55a0184b966bbe88c9f234",
     "model_parameters/Scenario_Fuel_Price_Matrix.xlsx": "f880186bf6a100a96c228d452e276e16cd664b829c6961eacefb7f24d3f19b4d",
@@ -849,8 +857,8 @@
     "GHG_Calculation/TotalEffortby_FishingCountry_LengthBoat_Gear_Sector.csv": "d6925aea2fba672f9de3bff3ae25415ecf9f2670496eaf7cbd25b8f17c9e2178",
     "scenario/fishery_coupling.py": "a5eae8a85c9ed8091931a2dd58ba4ca13a2f4b7525e24e668c24516951b7a7da",
     "scenario/fig5_allocation.py": "873cff18004d96b1789c92c5c89809b1c56da236c3621c89462013dfb4e11d24",
-    "scenario/fleet_model.py": "aeb512185a8da01577d18c495a72c833e32eb7db20492a78ed8d5f03e6aebbcc",
-    "scenario/price_loader.py": "f55693c1dfff1183d65cf01fb5fc32b30a64c355c10979c7e9c2cb20ba521234",
+    "scenario/fleet_model.py": "750c95386ef700fb1a7daf993cf4a3879a5d6945c7adfa0ec876f8ac67c4f663",
+    "scenario/price_loader.py": "ed1cb5344b8c7785b5fdbdb135937897c21df876551f266b0001d4c8f7cd0344",
     "scenario/scenario_seeds.py": "da563965fcf4b9c48420eaec4c52cdda00ccd140d861c4f00e96ba2406d75d58",
     "figures/Fig5/fig5_run.py": "0816bf19b89a28dff1e22800809d84e04b780115bd47d7eb619206db9fa6d10b",
     "GHG_Calculation/ghg_lca.py": "838f6e0c1d73fa25676911e0845134d09a5fbd0b47f9ede26aa14a0d4df70883",
@@ -863,22 +871,11 @@
     "scenario/output/fig5/Fig5_Final_Quota.json": "5d64f539c13b9dc7d91c94e823f0ef0cbe5b82983e6067919ba1c882cb30a5d0"
   },
   "distribution_compatibility_evidence": {
-    "Purpose": "Distribution-only compatibility for English descriptions and portable source metadata; not a new ensemble run.",
-    "Original_Run_Inputs_Retained": true,
-    "Prior_Parameter_Values_Exactly_Equal": [
-      "Param_Code",
-      "Flag",
-      "Gear",
-      "Sector",
-      "Length_Category",
-      "Value_Best",
-      "Value_Low",
-      "Value_High",
-      "Distribution",
-      "Unit"
-    ],
-    "Historical_Check": "500 draws, full reconstruction; Base_1/2/4/5 numeric outputs match release to stated tolerances.",
-    "Limits": "One archived extreme feasible-catch portfolio is not bit-identical even in the untouched local project; retained outputs are not relabeled as newly rerun or fully revalidated.",
-    "Additional_Guards": "Fail on missing species-share input; fingerprint all frozen baseline inputs. Original source-run hashes retained."
+    "Purpose": "English descriptions/comments and portable source distribution; actual calculation-run inputs are retained separately.",
+    "Scenario_Source_AST_Equivalent": true,
+    "Public_Representative_Reruns_Passed": true,
+    "Full_Working_Model_Configurations_Recomputed": 4288,
+    "Additional_Matched_Process_Captures": 18,
+    "Verification": "data/reproduction_verification.json"
   }
 }

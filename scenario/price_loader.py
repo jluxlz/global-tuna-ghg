@@ -11,6 +11,7 @@ Provides per-vessel fuel price & carbon tax lookup by (Flag, fuel, scenario, yea
 """
 
 import os
+from decimal import Decimal
 import numpy as np
 import pandas as pd
 
@@ -67,7 +68,10 @@ def load_fuel_props():
                                  else 0.0402 if name.startswith("HFO") else 0.12 if name.startswith("Hydrogen")
                                  else 0.0186 if name.startswith("Ammonia") else 0.0427)
             lhv_raw = float(row.iloc[3]) if pd.notna(row.iloc[3]) else physical_fallback
-            lhv_mj_kg = lhv_raw * 1000 if lhv_raw < 1 else lhv_raw  # MJ/g → MJ/kg
+            # Convert the decimal value supplied by the workbook before casting
+            # to binary float. This makes 0.0186 MJ/g exactly the same float as
+            # 18.6 MJ/kg, independent of baseline loading in a parent process.
+            lhv_mj_kg = float(Decimal(str(lhv_raw)) * 1000) if lhv_raw < 1 else lhv_raw
 
             def _f(idx, default=0.0):
                 try:

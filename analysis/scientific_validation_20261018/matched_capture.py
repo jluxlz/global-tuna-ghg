@@ -4,7 +4,7 @@ Production source files and outputs are never edited. In-memory instrumentation
 adds diagnostic columns after original calculations, then checks saved histories.
 """
 from pathlib import Path
-import sys,json,contextlib,io,inspect,hashlib,time
+import sys,json,contextlib,io,inspect,hashlib,time,copy
 from multiprocessing import Pool
 import numpy as np
 import pandas as pd
@@ -62,10 +62,23 @@ def init_worker(fleet,pm):
 def task(item):
     future=item['Future'];rule=item['Rule'];folder=OUT/(future+'_'+rule);folder.mkdir(parents=True,exist_ok=True)
     marker=folder/'Complete.json'
-    if marker.exists():return future,rule,'reused'
+    # Saved parameter records retain the author's original paths. Always bind
+    # this global-stock diagnostic to the provided local frozen stock table.
+    params=copy.deepcopy(item['Parameters'])
+    params['fishery_coupling']['stock_parameters']=str(R/'scenario/output/schaefer_projection_parameters.csv')
+    from scenario_seeds import simulation_fingerprint
+    fingerprint=dict(inputs=simulation_fingerprint(),params=params,seed=item['Seed'],
+                     capture_source=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                     stocks=hashlib.sha256(Path(params['fishery_coupling']['stock_parameters']).read_bytes()).hexdigest())
+    signature=hashlib.sha256(json.dumps(fingerprint,sort_keys=True).encode()).hexdigest()
+    if marker.exists():
+        saved=json.loads(marker.read_text())
+        if saved.get('signature')==signature and saved.get('outputs') and all(
+            (folder/name).is_file() and hashlib.sha256((folder/name).read_bytes()).hexdigest()==value
+            for name,value in saved['outputs'].items()):return future,rule,'reused'
     STATE.update(capture=True,future=future,groups=[],cells=[],vessels=[])
     with contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):
-        hist,last=fm.run_scenario_simulation(STATE['fleet'],STATE['pm'],item['Parameters'],start_year=2025,end_year=2050,random_seed=item['Seed'])
+        hist,last=fm.run_scenario_simulation(STATE['fleet'],STATE['pm'],params,start_year=2025,end_year=2050,random_seed=item['Seed'])
     STATE['capture']=False
     original=R/item['Folder'];old=pd.read_csv(original/'Annual.csv');errors={}
     for c in ['Total_GHG_tCO2e','Realised_Fleet_Catch_Mt','N_Vessels','Total_Power_kW']:
@@ -78,16 +91,16 @@ def task(item):
     for name,data in [('Annual',hist),('Stocks',hist.attrs['stock_ledger']),('Effort',hist.attrs['effort_ledger']),('Groups',groups),('Cells',cells)]:
         data.to_csv(folder/(name+'.csv'),index=False)
     if STATE['vessels']:pd.concat(STATE['vessels'],ignore_index=True).to_csv(folder/'Central_Vessel_States.csv',index=False)
-    marker.write_text(json.dumps(dict(original=str(original.relative_to(R)),seed=item['Seed'],params=item['Parameters'],reproduction_max_errors=errors,
+    names=['Annual.csv','Stocks.csv','Effort.csv','Groups.csv','Cells.csv']
+    if STATE['vessels']:names.append('Central_Vessel_States.csv')
+    hashes={name:hashlib.sha256((folder/name).read_bytes()).hexdigest() for name in names}
+    marker.write_text(json.dumps(dict(original=str(original.relative_to(R)),seed=item['Seed'],params=params,signature=signature,outputs=hashes,reproduction_max_errors=errors,
         boundary='Species allocation applies only to LL/PS activity-scalable fuel and bait, by actual effort partitions. Vessel materials, gear and leakage stay unallocated; support vessels separately reported.'),indent=2),encoding='utf-8')
     return future,rule,errors['Total_GHG_tCO2e']
 
 def main():
     sys.stdout.reconfigure(encoding='utf-8',errors='replace');OUT.mkdir(exist_ok=True)
     runs=json.loads((H/'Saved_Matched_Runs.json').read_text(encoding='utf-8'))
-    for row in runs:
-        path=Path(row['Parameters']['fishery_coupling']['stock_parameters'])
-        if not path.is_absolute():row['Parameters']['fishery_coupling']['stock_parameters']=str(R/path)
     # Saved outputs are inspected before any rerun.
     records=[]
     for row in runs:

@@ -4,13 +4,13 @@ Scientific algorithms, original source inputs, figure data and saved scenario re
 
 ## Restore the data before running analyses
 
-The Git tree contains source code, parameter tables and small original inputs. Large inputs and saved results are in the versioned release **v2026.10.19**. A clone alone is not the complete data distribution.
+The Git tree contains source code, parameter tables and small original inputs. Large inputs and saved results are in the versioned release **v2026.10.20.1**. A clone alone is not the complete data distribution.
 
 ```sh
 python restore_data.py --download --verify
 ```
 
-This downloads three ZIP assets, restores their content to the original relative paths and verifies every scientific file against `data/file_manifest.csv`. `--figure-data` restores only saved figure files; it is insufficient to rerun upstream models. Use `--assets /path/to/downloads --verify` with previously downloaded assets. The restorer refuses to overwrite modified files unless `--overwrite` is explicitly supplied.
+This downloads the three unchanged base ZIP assets and the current result delta, restores their content to the original relative paths and verifies every scientific file against `data/file_manifest.csv`. `--figure-data` restores only saved figure files; it is insufficient to rerun upstream models. Use `--assets /path/to/downloads --verify` with previously downloaded assets. The restorer refuses to overwrite modified files unless `--overwrite` is explicitly supplied.
 
 ## Offline reproduction boundary
 
@@ -36,3 +36,11 @@ The simulations are exploratory. Pooled global stock models do not replace offic
 ## Provenance checks
 
 `data/file_manifest.csv` identifies scientific files distributed through Git and release assets. `data/release_assets.json` records archive checksums. `data/figure_inputs.json` and `data/figure_inputs.csv` identify quantitative figure dependencies. Restoring saved files and redrawing figures verifies file availability and rendering; it does not constitute a fresh production model rerun.
+
+## Execution-context reconciliation
+
+Release v2026.10.20.1 corrects inconsistent fuel-property initialization in serial and Windows-spawn execution. Decimal unit conversion is performed before binary floating-point evaluation. Both execution modes now use the same workbook properties. The original parameter workbook and paired seeds were retained.
+
+The current scientific result set was rebuilt with 4,288 frozen-input simulations, with 18 additional matched-rule process captures. This is a coherent replacement of the affected results, not a claim that all new trajectories equal older archives. Central manuscript reductions remain unchanged, while some trajectories and scenario ranges change. See `data/reproduction_verification.json` and `data/execution_context_validation.json`. The earlier 500-draw historical reconstruction remains valid; frozen stock fits were not refitted in this correction.
+
+For an existing restored checkout, `python restore_data.py --download --verify --overwrite` installs this release's saved results. Asset tags are recorded individually; the base archives remain under v2026.10.19 and the result delta under v2026.10.20.1.

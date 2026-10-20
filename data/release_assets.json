@@ -2,16 +2,25 @@
   {
     "Asset": "public-scientific-001.zip",
     "Bytes": 283739078,
-    "SHA256": "29d8502ebbe03478742024fc98af40d8b96f616ac5b11c0affaa40c9539098f9"
+    "SHA256": "29d8502ebbe03478742024fc98af40d8b96f616ac5b11c0affaa40c9539098f9",
+    "Tag": "v2026.10.19"
   },
   {
     "Asset": "public-scientific-002.zip",
     "Bytes": 289450378,
-    "SHA256": "6410a3aaa3a994cd5a4c10365830d524dc680a477db0865623e43353ba438404"
+    "SHA256": "6410a3aaa3a994cd5a4c10365830d524dc680a477db0865623e43353ba438404",
+    "Tag": "v2026.10.19"
   },
   {
     "Asset": "public-scientific-003.zip",
     "Bytes": 31675982,
-    "SHA256": "a84877b834ae3abf3c43ec59a9a8b7c76ffaecadbdc0cd760eac3bea7a1e086a"
+    "SHA256": "a84877b834ae3abf3c43ec59a9a8b7c76ffaecadbdc0cd760eac3bea7a1e086a",
+    "Tag": "v2026.10.19"
+  },
+  {
+    "Asset": "scientific-results-20261020.1.zip",
+    "Tag": "v2026.10.20.1",
+    "Bytes": 41542720,
+    "SHA256": "4e954f62dfae4a2f41b964ec966f304e49b06a901cf42191143f56b60c329ccb"
   }
 ]

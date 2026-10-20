@@ -34,6 +34,13 @@ def run(label,cmd,cwd=ROOT):
     if result.returncode:raise RuntimeError(label+' failed; inspect '+str(OUT/(label+'.log')))
 
 def rscript():
+    config_path=ROOT/'reproduction_config.json'
+    config=json.loads(config_path.read_text(encoding='utf-8')) if config_path.exists() else {}
+    env=config.get('environment',{})
+    for key in ('R_HOME','RSCRIPT'):
+        if env.get(key):os.environ.setdefault(key,env[key])
+    if config.get('path_prefixes'):
+        os.environ['PATH']=os.pathsep.join(config['path_prefixes'])+os.pathsep+os.environ['PATH']
     exe=os.environ.get('RSCRIPT') or shutil.which('Rscript')
     if not exe:raise RuntimeError('Install R dependencies and put Rscript on PATH, or set RSCRIPT.')
     return exe
@@ -56,12 +63,17 @@ def scenarios(extras):
     guard.parent.mkdir(exist_ok=True)
     run('order_regression',[sys.executable,str(ROOT/'scenario/regression_check_order_dependence.py')])
     shutil.copy2(OUT/'order_regression.log',guard)
+    run('execution_context',[sys.executable,str(ROOT/'scenario/regression_check_execution_context.py')])
     # Both four-measure factorial drivers use common within-future seeds.
     run('fixed_target',[sys.executable,str(ROOT/'figures/Fig5/fig5_paired_rerun.py'),'full'])
     run('feasible_catch',[sys.executable,str(ROOT/'analysis/p0_revision_20261013/run_ensemble.py'),'full'])
     if extras:
         run('fixed_quota_matching',[sys.executable,str(ROOT/'analysis/p0_revision_20261013/run_matched_catch.py')])
         run('adjusted_rate_matching',[sys.executable,str(ROOT/'analysis/p0_revision_20261013/run_equal_catch.py')])
+        run('matched_selection',[sys.executable,str(ROOT/'analysis/scientific_validation_20261018/select_matched_runs.py')])
+        run('matched_process_capture',[sys.executable,str(ROOT/'analysis/scientific_validation_20261018/matched_capture.py')])
+        run('matched_accounting',[sys.executable,str(ROOT/'analysis/scientific_validation_20261018/analyse_matched.py')])
+        run('matched_figure_inputs',[sys.executable,str(ROOT/'analysis/scientific_validation_20261018/build_figure_inputs.py')])
         for stock in ('BET','YFT'):run('regional_'+stock,[sys.executable,str(ROOT/'analysis/p0_revision_20261013/run_regional_ensemble.py'),stock])
     run('feasible_summary',[sys.executable,str(ROOT/'analysis/p0_revision_20261013/analyse_ensemble.py')])
     run('fixed_shapley',[sys.executable,str(ROOT/'figures/Extended_Data/Extended_Fig10/Extended_Fig10_shapley.py')])

@@ -424,6 +424,24 @@ _WTT_PM_KEY_MAP = {
 }
 
 
+def initialize_fuel_properties():
+    """Use the same workbook properties in serial and spawned execution.
+
+    Module globals are not inherited by Windows spawn workers. Initializing
+    only while loading the parent's baseline left workers using literals.
+    """
+    import price_loader as pl
+    props = pl.load_fuel_props()
+    values = {alias: (props[name]['LHV_MJ_kg'], props[name]['CfCO2'],
+                      props[name]['CfCH4'], props[name]['CfN2O'])
+              for alias, name in pl._FUEL_ALIASES.items()
+              if alias in FUEL_DATABASE and name in props}
+    if any(FUEL_DATABASE[k] != v for k, v in values.items()):
+        FUEL_DATABASE.update(values)
+        _BASELINE_COST_CACHE.clear()
+    return props
+
+
 def inject_wtt_from_excel(pm_dict):
     """
     Override Prior_Matrix WtT values with Scenario_Fuel_Parameters.xlsx data.
@@ -436,11 +454,7 @@ def inject_wtt_from_excel(pm_dict):
     """
     try:
         import price_loader as _pl
-        fuel_props = _pl.load_fuel_props()
-        for alias, name in _pl._FUEL_ALIASES.items():
-            if alias in FUEL_DATABASE and name in fuel_props:
-                prop = fuel_props[name]
-                FUEL_DATABASE[alias] = (prop["LHV_MJ_kg"], prop["CfCO2"], prop["CfCH4"], prop["CfN2O"])
+        fuel_props = initialize_fuel_properties()
     except Exception:
         print("  [WtT] Cannot load Excel fuel props; keeping ecoinvent values.")
         return pm_dict
@@ -960,6 +974,7 @@ def compute_fleet_ghg(df, pm_dict, ref_year=2025, gear_effort=None,
         gear_effort: per-vessel E_final / fuel share / new-fuel flag enter
         T_eff and the two-path SFC/EF/WtT chain.
     """
+    initialize_fuel_properties()
     n = len(df)
 
     # ---- parameter resolution (new two-path names; old names as fallback) ----
@@ -1853,6 +1868,7 @@ def run_scenario_simulation(fleet_df, pm_dict, scenario_params,
     """
     # Local state only: no mutable biological trajectories are shared between
     # futures, pool tasks, or the legacy fixed-catch stress-test path.
+    initialize_fuel_properties()
     coupling = None
     if scenario_params.get('fishery_coupling') is not None:
         from fishery_coupling import FisheryCoupling

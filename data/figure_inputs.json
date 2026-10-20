@@ -1,5 +1,5 @@
 {
-  "Scope": "33 quantitative figures redrawn from restored saved data; two conceptual diagrams exempt. Native-library spatial/artwork dependencies are supplemented explicitly. QA renders use low-resolution PNG; no production model refit or rerun.",
+  "Scope": "33 quantitative figures retain verified input paths; affected figures were regenerated after the coherent 2026-10-20 model replay. Two conceptual diagrams are exempt. Frozen stock fits were reused.",
   "Figures": [
     {
       "Figure": "Extended Data Fig. 1",
@@ -391,14 +391,14 @@
         },
         {
           "Path": "figures/Fig4/Fig4_PanelD_Fuel_Cost.csv",
-          "Bytes": 12777,
-          "SHA256": "6887e5c417be261ba617445c73ec25d1d72afbf4ec08588a472f8fb37758dd2b",
+          "Bytes": 12561,
+          "SHA256": "52e658dff6537c44f5966410a982c4b1a850338fed6b7da2eab7549293c77ad4",
           "Storage": "git"
         },
         {
           "Path": "figures/Fig4/Fig4_PanelE_Intensity.csv",
-          "Bytes": 173974,
-          "SHA256": "9719af60c16602e9b95d609ee7d2f9154879928ff7cc8f1d20683efa0b57d88b",
+          "Bytes": 169808,
+          "SHA256": "e652f2297f093370af8540c4e6d75895ec5fe16b63c4ecdfc9692b9ccb876af2",
           "Storage": "git"
         },
         {
@@ -423,14 +423,14 @@
         },
         {
           "Path": "figures/Fig5/Fig5_PanelB_Paired_Reductions.csv",
-          "Bytes": 45337,
-          "SHA256": "14010cb029ba3484fb7d546ee8a55e09376a33b553cb14e5ad3b984da5c5d284",
+          "Bytes": 45335,
+          "SHA256": "38c72bde1910d1290113fbabdb15d63465328ca4c606c99e6d1b2cb8cd3530a5",
           "Storage": "git"
         },
         {
           "Path": "figures/Fig5/Fig5_PanelB_Reduction_Summary.csv",
-          "Bytes": 549,
-          "SHA256": "f2702039800f94bd7ec4f02e57f4cdfe82fe46ec9ba25cd349f303135eb254df",
+          "Bytes": 550,
+          "SHA256": "5a2fe9925d99a4b4f9fc9e1a7008c7902d149fc92c2e042476fc8f2ee7a2b8cb",
           "Storage": "git"
         },
         {
@@ -453,8 +453,8 @@
         },
         {
           "Path": "figures/Fig5/Fig5_PanelE_Matched_Catch.csv",
-          "Bytes": 1656,
-          "SHA256": "36f1627c77584d57fb4aa2750161bbffd70182cca29c8ca77e72567f9018c966",
+          "Bytes": 1655,
+          "SHA256": "928b6932ff30b6548ac02f5098f375052afd3cb2382717189fd4796d2ead6c28",
           "Storage": "git"
         }
       ],
@@ -595,8 +595,8 @@
         },
         {
           "Path": "scenario/output/fig5/Fig5_Final_Combination_Annual.csv",
-          "Bytes": 174646,
-          "SHA256": "43c2b57893c4fdeb9c0bfa7a904bb5d2e9a5062d876ef3cb2032dae045811f5b",
+          "Bytes": 174656,
+          "SHA256": "a45a7cb9570b5d48fe2bdb75c881d36f9b604391e037305d73e49c73b0f25c84",
           "Storage": "release"
         },
         {
@@ -607,14 +607,14 @@
         },
         {
           "Path": "scenario/output/fig5/Mitigation_Results_Annual.csv",
-          "Bytes": 1532607,
-          "SHA256": "361e2880fb5b1244dd7481aecf0cda4c515cf82cf844c63644aa44d0185d7a36",
+          "Bytes": 1532612,
+          "SHA256": "ea065fc37237090d73fada625ffa1d4d20a4ab70ecabc9d6686720b7f4e09c69",
           "Storage": "release"
         },
         {
           "Path": "scenario/output/fig5/SF9_Creep_Robustness.csv",
           "Bytes": 314,
-          "SHA256": "c9ce74c85c6121e8ccfd047270c7c62c6805433e18b7c21a1dfe6836395cbaa5",
+          "SHA256": "a37b373fddc035a77ba70e090215ab6f66c88d5b8c1cdea72536bbba12e18e93",
           "Storage": "release"
         }
       ],
@@ -661,14 +661,14 @@
       "Inputs": [
         {
           "Path": "scenario/output/fig5/SF6_Combos_2050.csv",
-          "Bytes": 69678,
-          "SHA256": "58ef5826c5ea28ad8293287622015f4bc9f294abe27207913c6db9e52248c9c3",
+          "Bytes": 69674,
+          "SHA256": "0b1ba4d569821b26587140ab0fa55784f2da332b27668b5657cfb8f167aa2820",
           "Storage": "release"
         },
         {
           "Path": "scenario/output/fig5/SF6_Shapley_Contributions.csv",
-          "Bytes": 36183,
-          "SHA256": "8bafb74de9f4e87a48509d1e7660208f3cd5c182d8070f9e605a8ffa6fd612ea",
+          "Bytes": 36201,
+          "SHA256": "d280fa6cdc820e2e856b666d20389c96208e793ea3292b98cceecaa13cb0eb34",
           "Storage": "release"
         }
       ],
@@ -847,8 +847,8 @@
       "Inputs": [
         {
           "Path": "figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelA_Fuel_Intensity.csv",
-          "Bytes": 166667,
-          "SHA256": "a05a4fccbc1a23ec74ddff6cfa42307799a1a36b6db70732e6714b6a7013433a",
+          "Bytes": 165096,
+          "SHA256": "6773f4e521fb2937aac0f395f6176a65d8747c8876120379865f9da4579f80c6",
           "Storage": "git"
         },
         {
@@ -859,14 +859,14 @@
         },
         {
           "Path": "figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelC_Fuel_Screen.csv",
-          "Bytes": 8309,
-          "SHA256": "e449528ca0f6e3b7ca928cf8b1ba35273bb32cd5f9030b500477bfcd8ae212dd",
+          "Bytes": 8507,
+          "SHA256": "11ef22ec9f173edb47faa1c44e27f14609d56c23fa9ae9cfeef35e70d39c57a2",
           "Storage": "git"
         },
         {
           "Path": "figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelD_Transition_Curves.csv",
-          "Bytes": 109037,
-          "SHA256": "2dd1c848c7e3da4022c818a9576924c21c93ab5db5caca72bde3114c8df76942",
+          "Bytes": 94324,
+          "SHA256": "c4434919dbdbcf53e60d0367ac8a9595b41deda78b99b8a46cca604b483433c6",
           "Storage": "git"
         }
       ],
@@ -1006,7 +1006,7 @@
         {
           "Path": "figures/supplement/Supplementary_Fig16/Supplementary_Fig16_PanelA_Organizations.csv",
           "Bytes": 293,
-          "SHA256": "fafea5f6e24a273b43160249c3148b1bad06083307451858515d98c9d7224246",
+          "SHA256": "0ec37aa0ce4530ebd3bf4790256aca02b811d7f3b1073a9f8b41f0dd7a67e348",
           "Storage": "git"
         },
         {
@@ -1025,8 +1025,8 @@
       "Inputs": [
         {
           "Path": "figures/supplement/Supplementary_Fig17/SF7_Fuel_Intensity.csv",
-          "Bytes": 3992,
-          "SHA256": "59fbd0a0665c147e316e09061d140eeb0893cd02cf912ae3161ec17943c033d0",
+          "Bytes": 3995,
+          "SHA256": "830f83b1f3adee05eadc33b7398814a9afe649036f84cf96c46475455e857e7f",
           "Storage": "git"
         },
         {
@@ -1044,7 +1044,7 @@
         {
           "Path": "figures/supplement/Supplementary_Fig17/SF7_WEO_dE.csv",
           "Bytes": 411,
-          "SHA256": "a13141e922d7df60b0cf47a8af640f699c6f0dccd6c5b9fc75066ca5662a3ffc",
+          "SHA256": "2c22df89c464777215d170accb7030ca5e074b99836c77bf3bd3d8cd524536e1",
           "Storage": "git"
         }
       ],
@@ -1057,26 +1057,26 @@
       "Inputs": [
         {
           "Path": "figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelA_Annual.csv",
-          "Bytes": 404276,
-          "SHA256": "6489a2d43dc816156d068eddb2188515feb2d7577a29a4905e2110126061b973",
+          "Bytes": 404241,
+          "SHA256": "36298fa877dfaf9e2785dcd5cd4af8e29df9bf9fcb6d38b9583506a17eac6a7f",
           "Storage": "git"
         },
         {
           "Path": "figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelB_Reductions.csv",
-          "Bytes": 54788,
-          "SHA256": "ffaf350d6a5a5ebcb11f06ee0bf8909e77e30d7c360c0f033e0ff487ead072f6",
+          "Bytes": 54790,
+          "SHA256": "5793b28cd6f1aff77f3989899d5d04d2f8d7d04e74e1dad3cf566c7bb8f39e39",
           "Storage": "git"
         },
         {
           "Path": "figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelC_Catch_GHG.csv",
-          "Bytes": 77803,
-          "SHA256": "795d7896198141f26bb4019bf3b87c463bbff210d5147271544f55f123d03496",
+          "Bytes": 77800,
+          "SHA256": "76bb7764904b45b7335b12409119fc27f62bd6a9dcc4d1b94a1f3e7b09020d41",
           "Storage": "git"
         },
         {
           "Path": "figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelD_Shapley.csv",
-          "Bytes": 55740,
-          "SHA256": "271ad85be73a3d55e6c5592e597725aa86f203c95341da364306dcdbe5dc88e0",
+          "Bytes": 55762,
+          "SHA256": "087e3185224d14f0e5553eee94c804d2dcd027fc8e1ea9f5001caccfea75b444",
           "Storage": "git"
         }
       ],
@@ -1139,8 +1139,8 @@
         },
         {
           "Path": "figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelC_Policies.csv",
-          "Bytes": 165102,
-          "SHA256": "be14263f3b7e43a711b2a89a17d23f043f6ff868ba0572fb8f24ee1f733181b6",
+          "Bytes": 165078,
+          "SHA256": "780438d58c847f79ef16c7d891a93ec0ea8c78d290e54e97dd7f1a33fad2c294",
           "Storage": "git"
         },
         {
