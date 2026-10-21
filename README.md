@@ -1,34 +1,24 @@
 # Global tuna-fishery greenhouse gas emissions
 
-## Download the complete package
+**Current complete version: v2026.10.21.** [Download the complete code and data package](https://github.com/jluxlz/global-tuna-ghg/releases/download/v2026.10.21/global-tuna-ghg-complete.zip). Download this one ZIP; no earlier release is needed. GitHub's automatic source-code archives do not include all large inputs.
 
-**[Download global-tuna-ghg-complete.zip](https://github.com/jluxlz/global-tuna-ghg/releases/download/v2026.10.20.2/global-tuna-ghg-complete.zip)**
+The primary future comparison uses constant-catch (C), constant-harvest-rate (F) and biomass-threshold (T) rules under common stock, realized-catch, economic and fleet-capacity feedback. It contains 1,944 primary simulations and 1,620 sensitivity simulations. Nine additional matched-output triples provide 27 paired comparisons; all 384 matching candidates are retained. The original C/F comparator remains separate for Supplementary Fig. 19. Fixed 2024 catch is not the primary current-management baseline.
 
-Download this one ZIP and extract it. It contains the scientific code, supplied original and frozen inputs, current model results, figure inputs and figure renderers in their working folders. No older release or update archive is needed. The two source-code archives automatically added by GitHub are not the full data package.
+Historical accounting covers 1950-2025. Future models retain 81 exogenous configurations per rule and evaluate all subsets of fuel transition, refrigeration transition and fleet consolidation. Current figure scripts, panel inputs and saved results match the final scientific version, including Fig. 5e and Supplementary Figs. 10, 14 and 21.
 
-Open a terminal in the extracted `global-tuna-ghg` folder:
+Extract the complete ZIP and run:
 
 ```sh
 python restore_data.py --verify
 python reproduce.py verify
 ```
 
-Install Python dependencies from `requirements.txt` and R packages with `install_r_dependencies.R` before running analyses. See [START_HERE.md](START_HERE.md) for the short workflow and [REPRODUCING.md](REPRODUCING.md) for model stages and assumptions.
+Install Python requirements and R packages before computation. Use `python reproduce.py figures` to redraw supplied results or follow [REPRODUCING.md](REPRODUCING.md) to recalculate model stages. Git-clone users can run `python restore_data.py --download --verify` to retrieve the same complete package. Live scraping is optional: accepted vessel data, original provider inputs and saved vessel-query results are supplied. Sources retain their original identities, native field names and bytes; authored code, documentation and public paths are English.
 
-If you prefer a Git clone, run `python restore_data.py --download --verify`. It downloads the same complete archive from this release and restores the data. Existing modified files are protected unless `--overwrite` is supplied. `--assets /path/to/downloads --verify` uses a local archive.
+The two core algorithms are `GHG_Calculation/ghg_lca.py` and `scenario/fleet_model.py`. Scientific robustness and HCR drivers are in `analysis/`. Python handles model/data calculations; figures use R/ggplot2. The package includes saved stock inputs, so stock refitting is optional. Model stages can take hours.
 
-## Scientific workflow
+## Evidence and scope
 
-The study combines vessel-level historical life-cycle accounting (1950–2025) with exploratory stock–fleet projections (2026–2050). Original RFMO vessel records, accepted supplementary query results, engineering parameters, catch–effort inputs and spatial boundaries are supplied. Reproduction starts from the accepted vessel registry; live website scraping is optional.
+The longline absolute-fuel discrepancy remains unresolved. Nonfishing time is approximated as transit, refrigeration service equivalence is exploratory, some fuel factors retain source-specific boundary qualifications, and pooled stock models do not replace official RFMO assessments. Saved scenario and accounting checks verify implementation and pairing, not universal management superiority or empirical biological validation. See `analysis/hcr_revision_20261020/RESULTS_README.md` and the source tables.
 
-`GHG_Calculation/ghg_lca.py` calculates the historical inventory. `scenario/fleet_model.py`, `price_loader.py` and `jabba_fit.r` implement fleet projections, fuel prices and stock fits. Figure drivers are in `figures/` and scientific robustness calculations in `analysis/`. Python handles calculation and data preparation; scientific figures use R and ggplot2. Saved stock fits and figure inputs permit work without repeating every fit and simulation.
-
-The complete package includes the coherent 2026-10-20 result set: 4,288 recalculated configurations and 18 additional matched-rule process captures. The earlier 500-draw historical reconstruction remains verified; frozen stock fits were reused. This packaging update changes no scientific result. Detailed verification is in `data/reproduction_verification.json` and `data/execution_context_validation.json`.
-
-## Data provenance and limits
-
-`data/source_inputs.csv` documents 84 original source inputs. `data/file_manifest.csv` records file checksums, and `data/figure_inputs.json` identifies inputs for the 33 quantitative figures. Extended Data Figs. 1–2 are conceptual diagrams. Public paths and authored code use English; original provider tables retain their original bytes, headers and units.
-
-Historical operating schedules include assumptions, the longline fuel-intensity benchmark discrepancy remains unresolved, and pooled global stock models do not replace official regional assessments. Numerical consistency is distinct from independent empirical validation. Fixed-target and feasible-catch simulations retain their own matched baselines.
-
-Manuscript drafts, SI prose, editorial automation and agent configuration are excluded. Previous releases are marked as historical archives. Use this complete package for the current scientific version.
+Manuscripts, SI prose, editorial automation, agent configuration, old code copies and the former local audit workspace are excluded. `data/source_inputs.csv`, `data/file_manifest.csv` and `data/figure_inputs.json` document supplied inputs and figure data. Historical releases are archives; use this version for the current scientific code and results.

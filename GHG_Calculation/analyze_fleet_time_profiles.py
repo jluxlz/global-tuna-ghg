@@ -1,11 +1,24 @@
 """
-Derive power-weighted operating-time profiles from historical effort data.
+analyze_fleet_time_profiles.py
+================================
+Based PNAS Macro Data Set (TotalEffortby_FishingCountry_LengthBoat_Gear_Sector.csv), 
+The three core ocean fleets around the globe (purse seine, longline, transshipment vessel/support vessel) , By total power P Weighted calculations
+Days of sailing (DAS), Operational hours (T_work) ♪ And pure sailing time ♪ (T_move). 
 
-The input table provides NomActive (kW-days), NomActiveHours (kW-hours) and
-P (kW). Weighted days at sea equal sum(NomActive)/sum(P); weighted fishing
-hours equal sum(NomActiveHours)/sum(P). Remaining time is derived from the
-corresponding days-at-sea estimate and fishing hours. Results are grouped by
-fleet and vessel-length class for the operating-time lookup modules.
+Description of programme (Details GHG_Calculation/readme.txt):
+  NomActive      Units: kW × days at sea   (Nominal fishing effort, power×Days)
+  NomActiveHours Units: kW × fishing hours  (Nominal fishing effort, power×hours)
+  P              Units: kW                  (Total engine power)
+
+  DAS_Weighted    = Σ(kW·days) / Σ(kW) = days (days)
+  T_work_Weighted = Σ(kW·hours) / Σ(kW) = hours (hours)
+  T_move_Weighted = 24×days - hours = hours (hours)
+
+Core principles: Elimination"Simpsons paradox", All aggregate indicators with P (kW) Weighted for weights, 
+Not just a simple arithmetic. 
+
+Author: Claude
+Date: 2026-06-04
 """
 
 import pandas as pd

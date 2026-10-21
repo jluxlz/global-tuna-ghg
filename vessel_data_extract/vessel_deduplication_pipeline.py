@@ -1,17 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Harmonise and deduplicate vessel records from five RFMO registries.
+=============================================================================
+vessel_deduplication_pipeline.py
+=============================================================================
+Global distant-water tuna ship asset register (Vessel Records) Deep Purge & Reconstruct Script
 
-The pipeline links records using IMO identifiers, callsigns, then vessel name
-and flag. It fills missing physical parameters across linked records and
-records changes in identity, vessel characteristics and annual registration.
-The output contains one selected record per vessel cluster, together with a
-duplicate-diagnosis report. Conflicting characteristics are resolved by the
-selection rules implemented below; these are reconstruction assumptions.
+Functions: 
+  1. Poolization 5 One RFMO RESOURCES FOR THE RESOURCE OF THE RESOURCES OF THE RESOURCES OF THE
+  2. Matching through the three levels (IMO → Callsign → Name+Flag) Identification of the same physical ship
+  3. Fill missing parameters across records (GT, kW, Length, Builtdate) 
+  4. Keep the most informative and up-to-date records as the only files
+  5. Disaggregate the causes of repetition (Change your skin/Upgrade/Fuse your face) 
 
-Inputs: standardised outputs of extract_and_validate_rfmos.py.
-Outputs: Unified_Vessel_Registry.csv and Duplicate_Diagnosis_Report.csv.
+Pipe position: 
+  extract_and_validate_rfmos.py → vessel_deduplication_pipeline.py → Downstream Analysis
+
+Output: 
+  - Unified_Vessel_Registry.csv  : The only ship register in the world
+  - Duplicate_Diagnosis_Report.csv : Repeated cause diagnosis report for each ship
+
+=============================================================================
 """
 
 import os
@@ -596,16 +605,35 @@ def build_vessel_graph(df: pd.DataFrame) -> pd.DataFrame:
 # =============================================================================
 
 def impute_and_deduplicate(df: pd.DataFrame, diagnosis: pd.DataFrame = None) -> pd.DataFrame:
-    """Resolve duplicate records within each Vessel_Cluster_ID.
+    """
+    For every one of them Vessel_Cluster_ID The cluster is intelligent and heavy, Separated according to type of repetition: 
 
-    Type C denotes repeated annual registration: retain the most informative
-    record when physical characteristics agree. Type B denotes conflicting or
-    updated characteristics: use the cluster maxima for GT, kW and length, as
-    specified by the reconstruction rule. These maxima are assumed proxies
-    for installed capacity, not independently verified vessel measurements.
-    Type A denotes identity changes: retain vessel-name history, keep the flag
-    of the selected base record, and store previous flags in Flag_History.
-    Combined A+B clusters apply both identity and characteristic rules.
+      Type C (Fuse your face — Pure annual renewal) : 
+        The parameters are exactly the same, Delete duplicate records directly, Keep the one with the most full information. 
+
+      Type B (Upgrade — power/Tonne change) : 
+        Conservative principles: GT, kW, Length Maximum value in a cluster (Max) . 
+
+        Conservative principles (Conservative Principle) Background and rationale: 
+        In distant-water fisheries, The owner tried to avoid some of the CMSs heavy tonnage tax, Or maybe its for
+        To escape the strictest"Malik!/Try to double-control it"Policy, Its always there"Understatement (Under-
+        reporting) "Phenomenon. But they wont be free to go"overreporting". And so, A few conflicts
+        Maximum value in data, Its often the closest to the actual physical capacity of the ship. 
+
+        Out of the way LCA Accounting for carbon emissions"Conservative principles (Id rather overestimate it than underestimate it) ", The maximum value is
+        The most impeccable of all. Overestimated carbon emissions wont lead to"Fake negative" (Wrongly thinking of a fishery
+        Its low-carbon) , And underestimating it may hide the true high-emissions. 
+
+        Physical logic: Increased power or tonnage represents a power upgrade or structural modification of the ship, 
+        The updated value is the current actual state of the ship. Even if theres no physical modification, Understatement of data
+        The highest is also the estimate closest to the real one. 
+
+      Type A (Change your skin — Change of name/Re-flagging) : 
+        Merger ship name "Name A; Name B" Format, Keep a name change history. 
+        Flag A single flag State to keep the underlying records selected; Flag_History Keep Reflagging Record. 
+
+      Type A+B (Change your skin+Upgrade coexistence) : 
+        Apply them simultaneously A and B The logic of how to deal with it. 
     """
     print("\n" + "=" * 70)
     print("  Phase V: Cross-filling and braining")

@@ -1,20 +1,30 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Compile parameter matrices from the source parameter workbook.
+=============================================================================
+Data cleansing and matrix re-engineering the pipeline (Data Preprocessing Pipeline)
+=============================================================================
+Will Model_parameters.xlsx Medium 4 Destructured Sheet Convert to 4 Standardized, 
+Machine-readable Relationship Matrix (DataFrame), For downstream LCA Model is called directly. 
 
-Inputs: model_parameters/Model_parameters.xlsx (four worksheets).
-Outputs: Prior_Matrix.csv, Species_CF_Matrix.csv,
-Scenario_Multiplier_Matrix.csv, MonteCarlo_Config_Matrix.csv and the combined
-Cleaned_Parameter_Matrices.xlsx workbook.
+Enter:  model_parameters/Model_parameters.xlsx (4 sheets)
+Output:  4 One CSV + 1 Merge Excel:
+       - model_parameters/Prior_Matrix.csv
+       - model_parameters/Species_CF_Matrix.csv
+       - model_parameters/Scenario_Multiplier_Matrix.csv
+       - model_parameters/MonteCarlo_Config_Matrix.csv
+       - model_parameters/Cleaned_Parameter_Matrices.xlsx (4 sheets)
 
-The first worksheet contains literature notes and requires explicitly traced
-parameter entries. The other worksheets are parsed using their structured
-columns and text patterns. Missing entries are represented by NaN. Published
-parameter names, descriptions and notes are in English. Unicode escapes in
-legacy input aliases preserve compatibility with the original workbook.
+Design principles:
+  1. Original Sheet 1 (Dynamic life-cycle models) is"Bibliography", Data embedded in Chinese narrative, 
+     Unable to automate the analysis safely → Introduction"Hard Coding + Retroactivity comments"Policy. 
+  2. Sheet 2/3/4 Reverse structure → Directly parsing + Text Retrieval. 
+  3. Use missing values in all output matrices NaN Tag, Do not use empty string in the calculation core. 
+  4. each matrix includes column-level descriptions (via DataFrame.attrs). 
 
-Original implementation assisted by Claude Code; dated 2026-06-18.
+Author: Claude Code Auxiliary Build
+Date: 2026-06-18
+=============================================================================
 """
 
 import os

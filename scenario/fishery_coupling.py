@@ -13,6 +13,7 @@ import pandas as pd
 class FisheryCoupling:
     def __init__(self, fleet, config, params):
         self.params = params
+        self.hcr = params.get('hcr')
         self.max_days = float(config.get('max_operating_days', 365.0))
         if not 0 < self.max_days <= 365:
             raise ValueError('Operating-day bound must be in (0,365]')
@@ -85,6 +86,7 @@ class FisheryCoupling:
         cs = {0:0,1:.5,2:1}[int(self.params.get('consolidation_type',0))]
         self.eta = 1-float(self.params.get('upsize_beta',.243))*cs*np.clip((year-2025)/25,0,1)
         self.target, self.growth, self.demand_s, self.harvest_rate = {}, {}, {}, {}
+        self.hcr_diagnostics = {}
         for s,row in self.stocks.iterrows():
             b = self.b[s]
             self.growth[s] = row.r*b*(1-b/row.K_Mt)
@@ -94,7 +96,12 @@ class FisheryCoupling:
             value = sch.get(s,1) if isinstance(sch,dict) else sch
             f = (float(str(value).split('_')[-1])/100 if str(value).startswith('MSY_')
                  else (1. if value == 'C2024' else float(value)))
-            if qt == 'F':
+            if self.hcr is not None:
+                from harvest_control_rules import target_from_rule
+                rule = self.hcr.get(s) if 'type' not in self.hcr else self.hcr
+                if rule is None:raise ValueError(f'Missing explicit HCR for stock {s}')
+                target, self.hcr_diagnostics[s] = target_from_rule(b,row.r,row.K_Mt,rule)
+            elif qt == 'F':
                 target = f*row.r/2*b
             elif sch == 'C2024':
                 target = row.Catch2024_Mt*float(self.params.get('catch_target_scale',1))
@@ -126,6 +133,8 @@ class FisheryCoupling:
 
     def resolve(self, fleet, econ):
         """Resolve activity before GHG computation; exact annual mass balance."""
+        if not np.isfinite(econ.M_econ_raw).all() or (econ.M_econ_raw<0).any():
+            raise ValueError('Nonfinite or negative raw cost response cannot drive fleet activity')
         weight = fleet.get('Accounting_Weight',pd.Series(1.,index=fleet.index))
         power = fleet.Power_kW*weight
         catch_sg = {}
@@ -155,6 +164,8 @@ class FisheryCoupling:
         support = ~fleet.VesselType.isin(['LL','PS'])
         support_ratio = tot_used/base_used if base_used else 0.
         activity.loc[support] = np.minimum(self.max_days,fleet.loc[support,'T_map']*support_ratio*econ.loc[support,'M_econ_raw'])
+        if not np.isfinite(activity).all() or (activity<0).any():
+            raise ValueError('Nonfinite or negative realized operating days')
         econ['Operating_Days'] = activity
         # compute_fleet_ghg multiplies E_final by eta exactly once.
         econ['E_final'] = activity/(fleet.T_map*self.eta)
@@ -175,6 +186,9 @@ class FisheryCoupling:
                 Realised_Fleet_Catch_Mt=fleet_catch,B_End_Mt=max(next_b,0.),K_Mt=row.K_Mt,
                 B_Bmsy_Start=2*self.b[s]/row.K_Mt,Tech_Catchability=(1+float(self.params.get('tech_creep',0)))**(self.year-2025),
                 Fleet_Catch_Fraction=self.fraction(s)))
+            if self.hcr is not None:
+                self.ledger[-1].update(self.hcr_diagnostics[s])
+                self.ledger[-1]['Target_Harvest_Pulse'] = self.harvest_rate[s]
             self.b[s] = max(next_b,0.)
         self.catch_sg = catch_sg
         return econ
@@ -183,7 +197,8 @@ class FisheryCoupling:
         catch = pd.DataFrame(self.ledger)
         totals = catch.groupby('Year')[['Realised_Stock_Catch_Mt','Realised_Fleet_Catch_Mt','Target_Catch_Mt']].sum()
         history = history.merge(totals,left_on='Year',right_index=True,validate='one_to_one')
-        history['CEI_tCO2e_per_t'] = history.Total_GHG_tCO2e/(history.Realised_Fleet_Catch_Mt*1e6)
+        denominator=(history.Realised_Fleet_Catch_Mt*1e6).where(history.Realised_Fleet_Catch_Mt>0)
+        history['CEI_tCO2e_per_t'] = history.Total_GHG_tCO2e/denominator
         history.attrs['stock_ledger'] = catch
         history.attrs['effort_ledger'] = pd.DataFrame(self.effort_ledger)
         return history

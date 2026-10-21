@@ -16,9 +16,9 @@ read_panel<-function(n,label){d<-read.csv(file.path(HERE,paste0('Supplementary_F
 a<-read_panel(13,'PanelA_MC');b<-read_panel(13,'PanelB_Scenarios')
 p_a<-ggplot(a,aes(Year,Total_median/1e6))+geom_ribbon(aes(ymin=Total_p5/1e6,ymax=Total_p95/1e6),fill='#0072B2',alpha=.2)+
  geom_line(colour='#0072B2',linewidth=.5)+labs(tag='(a)',x='Year',y='Historical emissions (Mt CO2e)',title='Central 90% Monte Carlo range')+theme_pub
-p_b<-ggplot(b,aes(Year,Median))+geom_ribbon(aes(ymin=p5,ymax=p95),fill='grey85')+
- geom_ribbon(aes(ymin=p25,ymax=p75),fill='grey60')+geom_line(linewidth=.5)+
- labs(tag='(b)',x='Year',y='Baseline emissions (Mt CO2e)',title='81 future configurations')+theme_pub
+p_b<-ggplot(b,aes(Year,Median))+geom_ribbon(aes(ymin=p5,ymax=p95),fill='#DAE6EB')+
+ geom_ribbon(aes(ymin=p25,ymax=p75),fill='#98B6C4')+geom_line(linewidth=.5,colour='#355E72')+
+ facet_wrap(~Rule,nrow=1)+labs(tag='(b)',x='Year',y='No-transition emissions (Mt CO2e)',title='81 specified futures within each HCR')+theme_pub
 fig<-p_a/p_b
 
 for(ext in c('pdf','png','tiff')) {

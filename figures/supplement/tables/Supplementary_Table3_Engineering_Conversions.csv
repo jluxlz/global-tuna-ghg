@@ -1,9 +1,0 @@
-Quantity and symbol,Rule and adopted value,Application / units,Source and selection basis
-"Gross tonnage to light-ship mass, k",LSW = k GT; k = 0.859,"LL, PS and support vessels; t LSW per GT","Recycled fishing-vessel totals; ref. 32. Empirical mass proxy, not a unit identity. Prior code LDT_GT_RATIO_FISHING."
-"Carrier light-ship mass, k",LSW = k GT; k = 0.287,Transport vessels; t LSW per GT,"Recycled bulk-carrier totals in ref. 32, transferred to TP. Prior code LDT_GT_RATIO_CARGO_REF lists Mikelis (2008); that generic label is not evidence for the exact adopted tuna-carrier ratio."
-"Auxiliary power, raux",Paux = raux Pmain; 0.39,Industrial LL / PS; kW per kW,"EMEP/EEA fishing-vessel category, ref. 25. AUX_POWER_RATIO_FISHING."
-"Auxiliary power, raux",0.23 / 0.35,Transport / support vessels,"General-cargo / other-ship proxies, ref. 25. AUX_POWER_RATIO_TP / _SA."
-Small gasoline engines,No separate auxiliary power,Coastal LL below 12 m,Prescribed model architecture; not a measured equipment census. HAS_AUX_ENGINE = 0.
-"Daily engine clock, H",Industrial 24; coastal 12,h per effective operating day,Author-selected high-activity assumption. Main and auxiliary clocks share the sector schedule; no auxiliary engine in small gasoline LL. resolve_hours().
-"Fishing share, α",Observed lookup; fallback 0.3125,Fraction of main-engine hours,Country/gear/sector activity lookup; fallback is prescribed. Transit and fishing shares sum to one.
-"Gear mass per length, g",PS small ≈0.0135; PS large 0.1525; LL ≈0.0847,t gear per m LOA,Retained gear-mass inputs. Large-PS coefficient is the mean of 54 and 251 kg m⁻¹; not a fitted length–mass regression. Exact inputs in Prior_Matrix / assign_operational_params().

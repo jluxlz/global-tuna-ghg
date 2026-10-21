@@ -25,3 +25,7 @@ Interpretation: percentage differences are descriptive, not statistical bias est
 The recoverable formula for model fuel litres is the sum, over sectors, of allocated combustion CO₂ divided by its fixed carbon factor and fuel density. Never recover fuel by dividing complete CEI by a diesel emission factor. Sector-specific fuel and the same matched catch records are essential.
 
 Species matching allocates both emissions and catch: ALB only for the 2009 LL survey; SKJ plus YFT for Spanish PS in 2003; SKJ/YFT/BET/ALB for the other comparisons. It does not identify the operating behaviour of separate target fleets. Survey fuel may include scouting craft/helicopters, while model service-vessel processes are excluded; this residual boundary difference is explicit.
+
+## Visualization update 21 October 2026
+
+Panels a and b retain absolute fuel comparisons; c adds the six descriptive relative gaps. Panel d separates modeled combustion, upstream fuel supply and other LCA components, alongside survey combustion only. Panel e retains the boundary-mismatched full-LCA context. The new components are exact differences between preserved matched process totals. No parameter fitting, new model simulation or confidence intervals are introduced. Panel CSVs document the plotted quantities.

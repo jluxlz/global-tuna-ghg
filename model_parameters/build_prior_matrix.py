@@ -1,15 +1,28 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Build the compiled prior-parameter matrix for the historical LCA.
+=============================================================================
+build_prior_matrix.py — reconstruction Prior_Matrix.csv (v3.0 Fuel methodology update)
+=============================================================================
+Core changes:
+  1. >=12m fishing vessel: Diesel medium speed machine(MSD/MDO), SFCbase + SFOC Load Formula → Actual SFC
+  2. <12m fishing vessel: Gasoline offboard, no auxiliary engine, Direct SFR Check Value(EPA)
+  3. transshipment vessel(TP): The oil low speed machine(SSD/HFO)
+  4. support vessel(SA): Diesel medium speed machine(MSD/MDO)
+  5. Uniform source of load: R22 (Cruise=80%=T_move, Manoeuvring=20%=T_work)
+  6. auxiliary engine load: Uniform(0.30, 0.50), independent of phase
+  7. CH4/N2O EF: IMO Fourth GHG Study (By engine type)
+  8. CO2 EF: By fuel type (HFO=3.114, MDO=3.206, Gasoline=3.158)
+  9. Delete Old SFR/LF Data, retain EPA Gasoline-related data
 
-The matrix records vessel and engine classes, fuel-specific emission factors,
-operating loads, fuel consumption, construction and maintenance, fishing gear,
-bait, refrigeration and physical conversions. Parameter codes, numerical
-values, distributions and source citations are preserved in the public copy.
-The Param_Name_EN field provides English parameter descriptions.
+References (Model_parameters.xlsx):
+  R22 — Run Load (Cruise 80/30, Manoeuvring 20/50)
+  R33 — Engine Class (>=12m→MSD, TP→SSD, SA→MSD, <12m→Gasoline)
+  R43 — IMO SFCbase table (by engine type, fuel type, era)
+  R45-R49 — IMO GHG EF (CH4, N2O by engine type; CO2 by fuel type)
 
-Output: model_parameters/Prior_Matrix.csv.
+Output: model_parameters/Prior_Matrix.csv
+=============================================================================
 """
 
 import os

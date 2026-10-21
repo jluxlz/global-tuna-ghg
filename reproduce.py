@@ -59,30 +59,38 @@ def figures():
     run('si_figures',[sys.executable,str(ROOT/'figures/supplement/render_all.py')])
 
 def scenarios(extras):
-    guard=ROOT/'analysis/paired_seed_revision_20261016/order_regression_final.log'
-    guard.parent.mkdir(exist_ok=True)
+    hcr=ROOT/'analysis/hcr_revision_20261020'
     run('order_regression',[sys.executable,str(ROOT/'scenario/regression_check_order_dependence.py')])
-    shutil.copy2(OUT/'order_regression.log',guard)
+    shutil.copy2(OUT/'order_regression.log',hcr/'order_guard.log')
     run('execution_context',[sys.executable,str(ROOT/'scenario/regression_check_execution_context.py')])
-    # Both four-measure factorial drivers use common within-future seeds.
-    run('fixed_target',[sys.executable,str(ROOT/'figures/Fig5/fig5_paired_rerun.py'),'full'])
-    run('feasible_catch',[sys.executable,str(ROOT/'analysis/p0_revision_20261013/run_ensemble.py'),'full'])
+    os.environ.setdefault('HCR_WORKERS','4')
+    run('hcr_pilot',[sys.executable,str(hcr/'run_hcr.py'),'pilot'])
+    run('hcr_validation',[sys.executable,str(hcr/'validate.py')])
+    run('hcr_primary',[sys.executable,str(hcr/'run_hcr.py'),'main'])
+    run('hcr_sensitivities',[sys.executable,str(hcr/'run_hcr.py'),'sensitivity'])
+    run('original_cf_comparator',[sys.executable,str(hcr/'run_hcr.py'),'legacy'])
     if extras:
-        run('fixed_quota_matching',[sys.executable,str(ROOT/'analysis/p0_revision_20261013/run_matched_catch.py')])
-        run('adjusted_rate_matching',[sys.executable,str(ROOT/'analysis/p0_revision_20261013/run_equal_catch.py')])
-        run('matched_selection',[sys.executable,str(ROOT/'analysis/scientific_validation_20261018/select_matched_runs.py')])
-        run('matched_process_capture',[sys.executable,str(ROOT/'analysis/scientific_validation_20261018/matched_capture.py')])
-        run('matched_accounting',[sys.executable,str(ROOT/'analysis/scientific_validation_20261018/analyse_matched.py')])
-        run('matched_figure_inputs',[sys.executable,str(ROOT/'analysis/scientific_validation_20261018/build_figure_inputs.py')])
-        for stock in ('BET','YFT'):run('regional_'+stock,[sys.executable,str(ROOT/'analysis/p0_revision_20261013/run_regional_ensemble.py'),stock])
-    run('feasible_summary',[sys.executable,str(ROOT/'analysis/p0_revision_20261013/analyse_ensemble.py')])
-    run('fixed_shapley',[sys.executable,str(ROOT/'figures/Extended_Data/Extended_Fig10/Extended_Fig10_shapley.py')])
+        run('hcr_catch_matching',[sys.executable,str(hcr/'match_hcr.py')])
+        for stock in ('BET','YFT'):
+            run('regional_'+stock,[sys.executable,str(ROOT/'analysis/p0_revision_20261013/run_regional_ensemble.py'),stock])
+        run('regional_summaries',[sys.executable,str(ROOT/'analysis/p0_revision_20261013/analyse_regional.py')])
+    run('hcr_summaries',[sys.executable,str(hcr/'analyse_hcr.py')])
+
 
 def refresh():
-    run('fig2_bridge',[sys.executable,str(ROOT/'figures/Fig2/preprocess_fig2.py')])
-    run('fig3_bridge',[sys.executable,str(ROOT/'figures/Fig3/preprocess_fig3.py')])
-    run('fig4_bridge',[sys.executable,str(ROOT/'figures/Fig4/preprocess_fig4.py')])
-    run('fig5_bridge',[sys.executable,str(ROOT/'figures/Fig5/prepare_story_panels.py')])
+    scripts=[
+      'figures/Fig2/preprocess_fig2.py','figures/Fig3/preprocess_fig3.py',
+      'figures/Fig4/preprocess_fig4.py','figures/Fig5/prepare_hcr_panels.py',
+      'figures/Extended_Data/Extended_Fig7/prepare_hcr.py',
+      'figures/Extended_Data/Extended_Fig9/prepare_hcr.py',
+      'figures/Extended_Data/Extended_Fig10/prepare_hcr.py',
+      'figures/supplement/Supplementary_Fig8/prepare_hcr.py',
+      'figures/supplement/Supplementary_Fig13/prepare_hcr.py',
+      'figures/supplement/Supplementary_Fig16/prepare_hcr.py',
+      'figures/supplement/Supplementary_Fig18/prepare_hcr.py',
+      'figures/supplement/Supplementary_Fig21/prepare_hcr.py']
+    for i,script in enumerate(scripts):run('refresh_'+str(i+1),[sys.executable,str(ROOT/script)])
+
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)

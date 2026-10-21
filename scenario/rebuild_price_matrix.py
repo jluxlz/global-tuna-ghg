@@ -3,6 +3,7 @@
 """Rebuild Price_Long following user's methodology v2.0 — per-region support."""
 
 import pandas as pd, numpy as np, os, shutil
+from fuel_price_paths import inverse_carbon_multiplier
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PARAMS_PATH = os.path.join(ROOT, 'model_parameters', 'Scenario_Fuel_Parameters.xlsx')
@@ -163,7 +164,11 @@ def _period_rates_from_carbon(c):
     else:
         r3_c = 0.0
 
-    return -r1_c, -r2_c, -r3_c
+    # Negating a carbon-price percentage increase produced negative fuel prices
+    # whenever carbon prices more than doubled. The prescribed inverse path
+    # preserves positive prices and is paired with a fixed-price sensitivity.
+    return tuple(inverse_carbon_multiplier(c[a],c[b])-1.
+                 for a,b in [(2023,2030),(2030,2040),(2040,2050)])
 
 
 def compute_b_target(seq, scenario, c_dict):
@@ -257,7 +262,7 @@ for seq in sorted(fuels.keys()):
                 elif seq in B_TARGET:
                     method = 'IRENA_CAGR'
                 else:
-                    method = 'CarbonTrajectory'
+                    method = 'CarbonInverse'
 
                 seq_ctr += 1
                 rows.append(dict(

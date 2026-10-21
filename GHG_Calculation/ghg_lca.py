@@ -1,22 +1,34 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Historical vessel-level life-cycle GHG inventory.
+================================================================================
+main_v3.py — Life-cycle LCA GHG Emission models (Based Prior_Matrix Parametric) 
+================================================================================
 
-The inventory combines reconstructed vessel characteristics, operating time,
-main and auxiliary engine fuel use, fuel supply, vessel construction and
-maintenance, fishing gear, longline bait and refrigerant leakage. Parameters
-and their source annotations are loaded from model_parameters/Prior_Matrix.csv.
+Will Unified_Vessel_Registry.csv (GT) Convert to full life-cycle estimates of greenhouse gas emissions: 
+  1. GT→LSW Convert (Prior_Matrix Section K)
+  2. imputation pipeline: mean(Length) → PMM(Tonnage, Enginepower) → stratified hot-deck imputation(Builtdate)
+  3. Double-phased fuel model: main engine(move/work) + auxiliary engine(Constant) → CO2/CH4/N2O Track
+  4. hull construction+maintenance (Section E)
+  5. gear construction+maintenance (Section F)
+  6. The bait discharges (Section G, Only LL)
+  7. Refrigerant leak (Section H)
+  8. Monte Carlo Uncertainty Quantification (GSA + RF + SHAP, per-process Top-2 Unions)
+  9. Grid distribution (Continue with existing Effort Standard logic)
 
-The Monte Carlo engine writes global process totals (Base_1), fleet totals
-(Base_2), effort-allocated grid outputs (Base_3), organisation summaries
-(Base_4) and fractionally allocated fleet-authorisation totals (Base_5).
-Grid-based and vessel-authorisation allocations have different coverage.
+All parameters from model_parameters/Prior_Matrix.csv, Its marked in the code Param_Code and Sheet Row. 
 
-Run from GHG_Calculation with: python ghg_lca.py
-Operational phases and historical power corrections are resolved by the local
-operational_hours_lookup and power_discount_factor modules. Uncertainty and
-sensitivity outputs retain the assumptions documented with the analyses.
+Usage:
+  cd GHG_Calculation && python main_v3.py
+
+Output:
+  Base_1_LCA_Global_Process.csv    — Global process release time series
+  Base_2_Fleet_GHG.csv             — fleet (Flag×Gear×Year)
+  Base_3_Spatial_Grid_Enriched.csv — Space Grid Fuzzy Data
+  Base_4_Organization_GHG.csv      — RFMO Organizational level (First Authorization) 
+  Base_5_Org_Fleet_GHG.csv         — RFMO × The fishing gear sector (Multi-organizations with weights) 
+  GSA_*.csv / GSA_SHAP_*.png       — Results of sensitivity analysis
+================================================================================
 """
 
 import os
@@ -503,12 +515,17 @@ def run_imputation_pipeline(vessel_path=VESSEL_REGISTRY_PATH,
 
 
 def impute_builtdate_deterministic(df, pool_dict):
-    """Fill missing construction years deterministically within donor strata.
+    """
+    A definitive insertion of missing construction dates (Builtdate). 
 
-    Donors are stratified by flag, vessel type and length category. Use the
-    observed mode, with a median fallback when a mode cannot be distinguished.
-    Filled construction years remain fixed during subsequent Monte Carlo
-    sampling. Return a copy of the vessel table with the filled values.
+    Policy (Press Flag × VesselType × LengthCategory Layer) :
+      1. Ill take care of it mode(mode)
+      2. If theres not a lot of people, (All values only) , Remove Median
+
+    imputed data no longer enter MC Sampling — Builtdate Yes, master GHG Uncertainty
+    Contribution <0.02% (vs SFCbase 12%) , Ignored. 
+
+    Returns: df with Builtdate filled (no NaN)
     """
     from scipy import stats as sp_stats
 

@@ -1,13 +1,32 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Update vessel characteristics using supplementary registry queries.
+=============================================================================
+_update_registry_from_spider.py
+=============================================================================
+Use spider Crawling Data Update Unified_Vessel_Registry.csv Physical parameters of the. 
 
-IMO-based links and callsign-based links follow separate acceptance rules.
-Callsign links require vessel-type compatibility, a gross-tonnage tolerance
-check and the additional identity checks implemented below. Accepted updates
-retain their query provenance and validation status. Unaccepted matches are
-reported for review rather than applied to the unified registry.
+Match Policy (Two-tier system of trust) : 
+  IMO Dock (Absolutely) : 
+    - Just spider Through IMO Got the data, Update Directly Builtdate, Tonnage, MMSI. 
+    - IMO Its the only number that binds the hull for life, There is no risk of mismatching. 
+
+  Callsign Threads (Cross Authentication) : 
+    - ♪ When only through ♪ Callsign Match spider Data while, The following verification is required: 
+      1. Type of ship/Compatibility check for type of operation (Exclude call signs from the wrong match) 
+      2. Total tonnage tolerance check (±20%) 
+    - Both of them → update; Any Failed → Discard. 
+
+Update Scope (spider Available Fields) : 
+  - Builtdate    : year built (Maritime database authoritative values) 
+  - Tonnage      : gross tonnage GT
+  - MMSI         : Water mobile communications operations identification code
+  - VesselType   : From spider The details of the ships reverse thrust (Fishing Vessel→LL/PS, Cargo→TS) 
+
+Do not update field (spider No corresponding data) : 
+  - Length, Enginepower (spider none LOA and kW Data) 
+  - Callsign, IMO (These are the matching keys, Do Not Cover From External) 
+=============================================================================
 """
 
 import os

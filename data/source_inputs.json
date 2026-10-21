@@ -1,588 +1,588 @@
 [
   {
     "Path": "effort_data/CCSBT/source_data/CEData_Longline.xlsx",
-    "Bytes": 2100013,
+    "Bytes": "2100013",
     "SHA256": "9668689f62afa22b91be525bd33d821ba3db304aee7355d92618ca1b4978d969",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/CCSBT/source_data/CEData_Surface.xlsx",
-    "Bytes": 109452,
+    "Bytes": "109452",
     "SHA256": "cb2e91f95c7085b148d073cb9964b59ca1bb539dbe08521df09f31750fba46fc",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/CCSBT/source_data/CatchByYMGOLoLa.xlsx",
-    "Bytes": 1199875,
+    "Bytes": "1199875",
     "SHA256": "f0c5af46f44c501ff383b9365a00770a0ef8f1786713fd494ce97ff822d16721",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/CCSBT/source_data/GlobalCatch_Flag_Gear.xlsx",
-    "Bytes": 40605,
+    "Bytes": "40605",
     "SHA256": "b9811c85f18ea911acda0a1a57a27d0cd7dc30ab414c117f8c4b1dc4fa00e64e",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/IATTC/source_data/CatchByFlagGear1918-2024.csv",
-    "Bytes": 289012,
+    "Bytes": "289012",
     "SHA256": "ccf11e07811bd7a32dce2ccbae41c497b73e2aac5d9a80cea09d99ac6f533d94",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/IATTC/source_data/PublicLLTunaBillfish/LLTunaBillfish-AtunPicudo.pdf",
-    "Bytes": 297366,
+    "Bytes": "297366",
     "SHA256": "71d489a1a5f601f2f838534f722a93ee381a57d2490ddff35a353235b6854e7e",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/IATTC/source_data/PublicLLTunaBillfish/PublicLLTunaBillfishMt.csv",
-    "Bytes": 15346619,
+    "Bytes": "15346619",
     "SHA256": "efc09265928bd94c6bfc71925ead3242fcaea4f283e1258968e73cfc7f404725",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/IATTC/source_data/PublicLLTunaBillfish/PublicLLTunaBillfishNum.csv",
-    "Bytes": 15474461,
+    "Bytes": "15474461",
     "SHA256": "ab973998db4fba072ff2a707ff349086a2dc7fe922429d7f59386871746d5cca",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/IATTC/source_data/PublicPSTuna/PSTuna-Atun.pdf",
-    "Bytes": 295995,
+    "Bytes": "295995",
     "SHA256": "522f68875a72a2354d99c2d2b404612f966a454aee71fb32b85f2e63a4dc5ffd",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/IATTC/source_data/PublicPSTuna/PublicPSTunaFlag.csv",
-    "Bytes": 29097687,
+    "Bytes": "29097687",
     "SHA256": "cc8e673d5e67d0b04db24c0355f591998c4d3a1ef3206ef5084f23ac7f6cec47",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/IATTC/source_data/PublicPSTuna/PublicPSTunaSetType.csv",
-    "Bytes": 27072068,
+    "Bytes": "27072068",
     "SHA256": "66fe720bc6aa99a66ca7689c744aac3702fb0f6bd59a9e205fadee7368be0aea",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/ICCAT/source_data/t1nc-20260129_ALL.xlsx",
-    "Bytes": 10652621,
+    "Bytes": "10652621",
     "SHA256": "6b2d840030ad08533f54cf9bd353dd6702f1d3cf7eb51a91c4fec4cf56c5c2f5",
     "Provider": "https://www.iccat.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/ICCAT/source_data/t2ce_20260130web.mdb",
-    "Bytes": 480649216,
+    "Bytes": "480649216",
     "SHA256": "0dc46b6ceb98ec525081e946a032553ecb2b9d53ca11688b74c31acb988d9f17",
     "Provider": "https://www.iccat.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/IOTC/source_data/IOTC-DATASETS-2026-02-23-CA-1952-2024.csv",
-    "Bytes": 476291800,
+    "Bytes": "476291800",
     "SHA256": "3e71bac768df9058b31d523876315c071b9fb3dfb63ed6e5c0a709994d73074f",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/IOTC/source_data/IOTC-DATASETS-2026-02-23-CE-1952-2024.csv",
-    "Bytes": 834991634,
+    "Bytes": "834991634",
     "SHA256": "44ae86595e946c0963be148ce04ba5caa1ef5914841b3e5eb2831cae5725b858",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/IOTC/source_data/IOTC-DATASETS-2026-02-23-EF-1952-2024.csv",
-    "Bytes": 110895241,
+    "Bytes": "110895241",
     "SHA256": "7101bfc5a9248d604a4bea777b83785c0ca2af180e85a1ab0bc22b14146caeca",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/IOTC/source_data/IOTC-DATASETS-2026-02-23-RC-SCI-1950-2024.csv",
-    "Bytes": 16551237,
+    "Bytes": "16551237",
     "SHA256": "bfe30ac7a9d4f6970b1886ac1c96bbb3460cdfa234be90e87721c822897f9277",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/WCPFC/source_data/WCPFC_L_PUBLIC_BY_YY_FLAG_1/Longline.pdf",
-    "Bytes": 137948,
+    "Bytes": "137948",
     "SHA256": "f2d76b98f13e7b2c12230ddcb26d84dba325d9dcc0cb4cf81aa8d702f648e75b",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/WCPFC/source_data/WCPFC_L_PUBLIC_BY_YY_FLAG_1/WCPFC_L_PUBLIC_BY_YY_FLAG.csv",
-    "Bytes": 3362830,
+    "Bytes": "3362830",
     "SHA256": "482d2b5b746708a00083f3c65e09ab6966db8dbd66804b9c0befc2f175418f73",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/WCPFC/source_data/WCPFC_L_PUBLIC_BY_YY_FLAG_1/WCPFC_L_PUBLIC_BY_YY_FLAG_Coverage.csv",
-    "Bytes": 5714,
+    "Bytes": "5714",
     "SHA256": "6b5f6094899dd2f57e5c0d95a695987e5fc4661684efc9b43a493642acbe6090",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/WCPFC/source_data/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG_0/Purse_seine.pdf",
-    "Bytes": 139675,
+    "Bytes": "139675",
     "SHA256": "e5d38a034bd1cfba1c630bea54b8c29f3cd565e9f859d5752617507ac276d72c",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/WCPFC/source_data/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG_0/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG.csv",
-    "Bytes": 6314485,
+    "Bytes": "6314485",
     "SHA256": "b74056cd3abd038dc3801337bf32da6ac2d0471340772511cda828eb7639cf99",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "effort_data/WCPFC/source_data/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG_0/WCPFC_S_PUBLIC_BY_YY_QTR_FLAG_coverage.csv",
-    "Bytes": 4012,
+    "Bytes": "4012",
     "SHA256": "3e9601afe96830c8f8eded5325ba7f9f04506f48aa26bfdbcc2d1f7cb30f2dd4",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "extracted_vessel_data/CCSBT.xlsx",
-    "Bytes": 80950,
+    "Bytes": "80950",
     "SHA256": "b31959dd3183d3a39c9bfdf18a0cb8606eb48e263ab8aa4066e154da31d10fcf",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "extracted_vessel_data/IATTC.xlsx",
-    "Bytes": 140425,
+    "Bytes": "140425",
     "SHA256": "7745a9dd36b3246e1deb85793f44419a647c0ecebd96439b98f833e491f49bd3",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "extracted_vessel_data/ICCAT.xlsx",
-    "Bytes": 257815,
+    "Bytes": "257815",
     "SHA256": "b361b801314a9e96073581b2f55ecf8856c17f6ed0b5a888316d38c4ec536349",
     "Provider": "https://www.iccat.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "extracted_vessel_data/IOTC.xlsx",
-    "Bytes": 204951,
+    "Bytes": "204951",
     "SHA256": "ced0961fe602c5cca35ce2c3eb09bf0af28fe0098ceb415f5ac4ea81f2550970",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "extracted_vessel_data/WCPFC.xlsx",
-    "Bytes": 68894,
+    "Bytes": "68894",
     "SHA256": "43d70e6cd39b0b4d151628b8b078b6ca544e1cb5a13245ee20af45428faf9b39",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "model_parameters/Model_parameters.xlsx",
-    "Bytes": 71666,
+    "Bytes": "71666",
     "SHA256": "e63beb217980f04e43492aaf966f061db410581d7c0b7819b361c29106f442f9",
     "Provider": "See source annotations in the model and parameter builders",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "model_parameters/Scenario_Fuel_Parameters.xlsx",
-    "Bytes": 16388,
+    "Bytes": "16388",
     "SHA256": "1cef0a09da222b0c97648852f291f091f0504cb98b55a0184b966bbe88c9f234",
     "Provider": "See source annotations in the model and parameter builders",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "model_parameters/Scenario_Fuel_Price_Matrix.xlsx",
-    "Bytes": 220368,
-    "SHA256": "f880186bf6a100a96c228d452e276e16cd664b829c6961eacefb7f24d3f19b4d",
+    "Bytes": "220297",
+    "SHA256": "5693837dd65dd1ed2f848bf4cb0056fb14e26d95ba092ed81bcea0c55731ab79",
     "Provider": "See source annotations in the model and parameter builders",
-    "Content": "Original provider/workbook bytes; native source headers retained"
+    "Content": "Current compiled project fuel-price workbook; source annotations retained; positive-price paths are implemented in scenario/fuel_price_paths.py"
   },
   {
     "Path": "model_parameters/Scenario_Fuel_Price_Matrix_backup_v4.xlsx",
-    "Bytes": 220033,
+    "Bytes": "220033",
     "SHA256": "f9b365510a82747520b9c6fe32571781ff148d37104c291c689593b8554462f3",
     "Provider": "See source annotations in the model and parameter builders",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "model_parameters/Quantified_Parameters.xlsx",
-    "Bytes": 249232,
+    "Bytes": "249232",
     "SHA256": "14f57c282e6867ca3b0f6bc4b5467f2b9cba3946da2f7dc3f3bdc7af1fc2d75b",
     "Provider": "See source annotations in the model and parameter builders",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "raw_vessel_data/CCSBT_Vessel_Registry.csv",
-    "Bytes": 2644510,
+    "Bytes": "2644510",
     "SHA256": "bb116e1c3d07dd639dec4a841c04586c7dec24627a4bd79200c6dfca8cae7310",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "raw_vessel_data/CCSBT_Field_Definitions.xlsx",
-    "Bytes": 10297,
+    "Bytes": "10297",
     "SHA256": "1162a2ee20c4c3c2da1530c5c7785c6684a27aae772ec305f09e928059a499fa",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "raw_vessel_data/IATTC_Field_Definitions.xlsx",
-    "Bytes": 10323,
+    "Bytes": "10323",
     "SHA256": "21bcbff79f354b3a7e81ac1736594843f3a2e85b2d6e45c6bccad504e7fe0fda",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "raw_vessel_data/IATTC_Vessel_Registry.xlsx",
-    "Bytes": 720121,
+    "Bytes": "720121",
     "SHA256": "15f2667eaae5f61176aeb6d682b2f8eccaf6cc8d49d6a77993942bf80a771558",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "raw_vessel_data/ICCAT_Vessel_Registry.xlsx",
-    "Bytes": 2253194,
+    "Bytes": "2253194",
     "SHA256": "6572bf319a78c830f5d240c8066cfaadbace9bf8d2eee388587bbf4f332e4399",
     "Provider": "https://www.iccat.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "raw_vessel_data/ICCAT_Field_Definitions.xlsx",
-    "Bytes": 11843,
+    "Bytes": "11843",
     "SHA256": "603eb2a00b87deccefc540017b5e54a12e7e37f0ae5cf661a5ad3a73af6bfae8",
     "Provider": "https://www.iccat.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "raw_vessel_data/IOTC_Vessel_Registry.xlsx",
-    "Bytes": 1105493,
+    "Bytes": "1105493",
     "SHA256": "013628db2bd776fc76c684f4734aef17039f07e5b1aaf72c854164bec2116852",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "raw_vessel_data/IOTC_Field_Definitions.xlsx",
-    "Bytes": 10682,
+    "Bytes": "10682",
     "SHA256": "76177431bcb3c8291be1296382ecb41884c676001cc70c0112f73170d3364dd2",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "raw_vessel_data/WCPFC_Vessel_Registry.csv",
-    "Bytes": 1806101,
+    "Bytes": "1806101",
     "SHA256": "b012669053110d7fc7e876635eab62d64a3c36f98dd90b96707e65d9372a9cdf",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "raw_vessel_data/WCPFC_Field_Definitions.xlsx",
-    "Bytes": 11457,
+    "Bytes": "11457",
     "SHA256": "4b10b4914d28bcc518f12294f9efd693cb6f09793c6f0bc987f3d053e92c8a5d",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "raw_vessel_data/Tuna_Vessel_Counts.xlsx",
-    "Bytes": 11375,
+    "Bytes": "11375",
     "SHA256": "9defaac897ef65d51dd02cc19eea7a65d017517ab1a42c929b71654ad711b58d",
     "Provider": "See source annotations in the model and parameter builders",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/CCSBT/RFB_CCSBT.cst",
-    "Bytes": 10,
+    "Bytes": "10",
     "SHA256": "09fc313075748ce8ead962229ed89c919d5a9ff71974ee725a0b48bb87d975a2",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/CCSBT/RFB_CCSBT.dbf",
-    "Bytes": 1251,
+    "Bytes": "1251",
     "SHA256": "6ae703958587392dbb0cea31fbe4ab26d934a08c9f0586af683a2fd9ae0d14cf",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/CCSBT/RFB_CCSBT.prj",
-    "Bytes": 335,
+    "Bytes": "335",
     "SHA256": "0f8030724ab577ea5f39a40de4b262dd3e5119c2e4666d079483ec87b15b61f0",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/CCSBT/RFB_CCSBT.shp",
-    "Bytes": 33824,
+    "Bytes": "33824",
     "SHA256": "9db45d5e4c163b08b5c7eb4255b688f51b465802104309aa56a41e9393e40a2e",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/CCSBT/RFB_CCSBT.shx",
-    "Bytes": 116,
+    "Bytes": "116",
     "SHA256": "4c806f082d6f40e86bae18d44aee1b0afd47ecf98161f6157e11e084577ea24e",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/IATTC/RFB_IATTC.cst",
-    "Bytes": 10,
+    "Bytes": "10",
     "SHA256": "09fc313075748ce8ead962229ed89c919d5a9ff71974ee725a0b48bb87d975a2",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/IATTC/RFB_IATTC.dbf",
-    "Bytes": 818,
+    "Bytes": "818",
     "SHA256": "f7188c7008000ea504a39454247959d0d8da5daf9a22246f800ebb6ac493a529",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/IATTC/RFB_IATTC.prj",
-    "Bytes": 335,
+    "Bytes": "335",
     "SHA256": "0f8030724ab577ea5f39a40de4b262dd3e5119c2e4666d079483ec87b15b61f0",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/IATTC/RFB_IATTC.shp",
-    "Bytes": 128808,
+    "Bytes": "128808",
     "SHA256": "7ffae89ff8b1aa0f07ebde2ba9af631c646e2f9229c1c2221bff555a5b880396",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/IATTC/RFB_IATTC.shx",
-    "Bytes": 108,
+    "Bytes": "108",
     "SHA256": "79e197be000cad8df39c7aa076fea62e0372a2f388620a66f87bd5285841061e",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/ICCAT/RFB_ICCAT.cst",
-    "Bytes": 10,
+    "Bytes": "10",
     "SHA256": "09fc313075748ce8ead962229ed89c919d5a9ff71974ee725a0b48bb87d975a2",
     "Provider": "https://www.iccat.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/ICCAT/RFB_ICCAT.dbf",
-    "Bytes": 818,
+    "Bytes": "818",
     "SHA256": "2e06ed9dbe3d6276b8d47b8b171bc8d180a9b80c83ebd7bf0244bc99f8507a4c",
     "Provider": "https://www.iccat.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/ICCAT/RFB_ICCAT.prj",
-    "Bytes": 335,
+    "Bytes": "335",
     "SHA256": "0f8030724ab577ea5f39a40de4b262dd3e5119c2e4666d079483ec87b15b61f0",
     "Provider": "https://www.iccat.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/ICCAT/RFB_ICCAT.shp",
-    "Bytes": 835216,
+    "Bytes": "835216",
     "SHA256": "a97a23d4bb4286b951ba716bff507aca65bfe615bec82eecede891867cfeec2e",
     "Provider": "https://www.iccat.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/ICCAT/RFB_ICCAT.shx",
-    "Bytes": 108,
+    "Bytes": "108",
     "SHA256": "5261d313f7759c716ab51d86c5f9dde53770dbc1dc2f9bccbf7577bd354bfbb2",
     "Provider": "https://www.iccat.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/IOTC/RFB_IOTC.cst",
-    "Bytes": 10,
+    "Bytes": "10",
     "SHA256": "09fc313075748ce8ead962229ed89c919d5a9ff71974ee725a0b48bb87d975a2",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/IOTC/RFB_IOTC.dbf",
-    "Bytes": 818,
+    "Bytes": "818",
     "SHA256": "2a5fe0635d40f81b4956576befdf73ab7a7566ae050cc7f697bfac151b6e14ab",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/IOTC/RFB_IOTC.prj",
-    "Bytes": 335,
+    "Bytes": "335",
     "SHA256": "0f8030724ab577ea5f39a40de4b262dd3e5119c2e4666d079483ec87b15b61f0",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/IOTC/RFB_IOTC.shp",
-    "Bytes": 206808,
+    "Bytes": "206808",
     "SHA256": "92b7c932175e63e54f05174b218dc2d703369384e94e349975676ea63d855eed",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/IOTC/RFB_IOTC.shx",
-    "Bytes": 108,
+    "Bytes": "108",
     "SHA256": "c04f2b017972f5f8527e84aefab5f2479bd8a740fd9a08050596f61c521d09d0",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/WCPFC/RFB_WCPFC.cst",
-    "Bytes": 10,
+    "Bytes": "10",
     "SHA256": "09fc313075748ce8ead962229ed89c919d5a9ff71974ee725a0b48bb87d975a2",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/WCPFC/RFB_WCPFC.dbf",
-    "Bytes": 1251,
+    "Bytes": "1251",
     "SHA256": "7c9a453482e13859d8474ecb444f0d48b20b6fa6f6afde74c6b358347f2b6c91",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/WCPFC/RFB_WCPFC.prj",
-    "Bytes": 335,
+    "Bytes": "335",
     "SHA256": "0f8030724ab577ea5f39a40de4b262dd3e5119c2e4666d079483ec87b15b61f0",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/WCPFC/RFB_WCPFC.shp",
-    "Bytes": 445548,
+    "Bytes": "445548",
     "SHA256": "c45d1d6fc703bc78583f57929f4b60b51983fadcf9a7c34a3aac8c651d6ddec9",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "shape_file/WCPFC/RFB_WCPFC.shx",
-    "Bytes": 116,
+    "Bytes": "116",
     "SHA256": "37d9eec0c77e709ede4e3f75196b663bdb517e4627d5c1b5680bcd267b238e6c",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "vessel_data_extract/new_extracted_vessel_data_raw/CCSBT_extracted_new.csv",
-    "Bytes": 378532,
+    "Bytes": "378532",
     "SHA256": "167fbe9e01950e6e81c587ef0feb1282aea8a2f35d3a378eadcbdbdec73b324c",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "vessel_data_extract/new_extracted_vessel_data_raw/IATTC_extracted_new.csv",
-    "Bytes": 156717,
+    "Bytes": "156717",
     "SHA256": "e9c351fede9fc92bdb3dab9ddc1cf6a108e60e0f40823b5f3199c69a0e09c061",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "vessel_data_extract/new_extracted_vessel_data_raw/ICCAT_extracted_new.csv",
-    "Bytes": 340422,
+    "Bytes": "340422",
     "SHA256": "9f0cc60438a1abac26aa52606f215d97eef2e0c80aaf6d3048bdc22b06a586fb",
     "Provider": "https://www.iccat.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "vessel_data_extract/new_extracted_vessel_data_raw/IOTC_extracted_new.csv",
-    "Bytes": 221229,
+    "Bytes": "221229",
     "SHA256": "c12bf51ff00b89d75cd792d7c555c3bea3851b49991fb1a99cdbbe88a461957b",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "vessel_data_extract/new_extracted_vessel_data_raw/WCPFC_extracted_new.csv",
-    "Bytes": 233069,
+    "Bytes": "233069",
     "SHA256": "ca1407d7fad181d923d9227256d55f896964ebdc527a13c2995daba427514f40",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "spider/output/CCSBT_extracted_new_breakpoint.json",
-    "Bytes": 97,
+    "Bytes": "97",
     "SHA256": "955d3fea414e0bc279c477dc9e6be84c1ff76691e3e5d4f309c5a8045dc89617",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "spider/output/CCSBT_extracted_new_result.xlsx",
-    "Bytes": 417400,
+    "Bytes": "417400",
     "SHA256": "9b1402aca1b27daddf7328b5c74bb0eeb9f35b6718c6b650b0fe7350b1f260c1",
     "Provider": "https://www.ccsbt.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "spider/output/IATTC_extracted_new_breakpoint.json",
-    "Bytes": 97,
+    "Bytes": "97",
     "SHA256": "3214c24d11d9fc3defa9be9db41af2c546f63d944e43ee83d1e3118d39a2b6b7",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "spider/output/IATTC_extracted_new_result.xlsx",
-    "Bytes": 182110,
+    "Bytes": "182110",
     "SHA256": "5c37789714d179976460b4ab1b4b57a038d06c7d88f2bf9d6983f1b56f5a36e9",
     "Provider": "https://www.iattc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "spider/output/ICCAT_extracted_new_breakpoint.json",
-    "Bytes": 97,
+    "Bytes": "97",
     "SHA256": "c1b806ef8d6a50816e4043edce8358fe711ffa619290928ba842843f15b31bb8",
     "Provider": "https://www.iccat.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "spider/output/ICCAT_extracted_new_result.xlsx",
-    "Bytes": 413617,
+    "Bytes": "413617",
     "SHA256": "46df2b4b6507f1931c35483a9a293685ab7bfd258e7817e32ed7bfc0462f37b8",
     "Provider": "https://www.iccat.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "spider/output/IOTC_extracted_new_breakpoint.json",
-    "Bytes": 97,
+    "Bytes": "97",
     "SHA256": "90a706d14ae4fff06fe34268fec4e44fc1f86c15fab315af560f331214e1f2c4",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "spider/output/IOTC_extracted_new_result.xlsx",
-    "Bytes": 290890,
+    "Bytes": "290890",
     "SHA256": "a06a82eedc483ec305c1c486b07d1d029dc08f90823fe89b03792a9d96548359",
     "Provider": "https://iotc.org/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "spider/output/WCPFC_extracted_new_breakpoint.json",
-    "Bytes": 97,
+    "Bytes": "97",
     "SHA256": "162205f46a507f81b46919728bee2f4d69db56624b0881dd1f29007b60057470",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"
   },
   {
     "Path": "spider/output/WCPFC_extracted_new_result.xlsx",
-    "Bytes": 293935,
+    "Bytes": "293935",
     "SHA256": "72631b4d01d1f5eb73958ff8846ca4e6f645010e3bb717e31c9798a3a89b4fcc",
     "Provider": "https://www.wcpfc.int/",
     "Content": "Original provider/workbook bytes; native source headers retained"

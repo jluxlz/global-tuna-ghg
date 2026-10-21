@@ -1,9 +1,15 @@
 {
-  "Type": "Complete standalone scientific package",
-  "Tag": "v2026.10.20.2",
+  "Type": "Complete standalone current scientific package",
+  "Tag": "v2026.10.21",
   "Archive": "global-tuna-ghg-complete.zip",
-  "Source_Result_Version": "v2026.10.20.1",
-  "Scientific_Results_Changed": false,
+  "Primary_HCRs": [
+    "C",
+    "F",
+    "T"
+  ],
+  "Primary_Simulations": 1944,
+  "Sensitivity_Simulations": 1620,
   "Requires_Older_Releases": false,
-  "Archive_Root": "global-tuna-ghg/"
+  "Manuscripts_Included": false,
+  "Audit_Workspace_Required": false
 }

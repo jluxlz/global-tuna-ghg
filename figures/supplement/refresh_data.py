@@ -1,7 +1,5 @@
-import sys
-"""Refresh dependent saved-data panels using current SI numbers; no model rerun."""
+"""Refresh the current scientific panel inputs through the main workflow."""
 from pathlib import Path
-import subprocess
+import subprocess,sys
 ROOT=Path(__file__).resolve().parents[2]
-if __name__=='__main__':
- subprocess.run([sys.executable,str(ROOT/'analysis/si_rebuild_20261012/refresh_supplement.py')],cwd=ROOT,check=True)
+if __name__=='__main__':subprocess.run([sys.executable,str(ROOT/'reproduce.py'),'refresh'],cwd=ROOT,check=True)

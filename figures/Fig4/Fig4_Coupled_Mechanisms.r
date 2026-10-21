@@ -34,7 +34,8 @@ fuel_lts <- c(MGO="solid",HFO="solid",FAME="dashed",HVO="dashed",LNG_Fossil="sol
               H2_Fossil="longdash",NH3_Green="dotted",H2_Green="dotted")
 fuel_lab <- c(MGO="MGO",HFO="HFO",FAME="FAME",HVO="HVO",LNG_Fossil="LNG fossil",
               H2_Fossil="H2 fossil",NH3_Green="NH3 green",H2_Green="H2 green")
-design_lab <- c(C="C-type quota rule", F="F-type harvest-rate rule")
+design_lab <- c(C="C: constant catch", F="F: harvest rate", T="T: biomass threshold")
+hcr_cols <- c(C="#666F77",F="#0072B2",T="#009E73")
 yrs <- c(2025,2030,2040,2050)
 
 read_panel <- function(letter, suffix, keys) {
@@ -54,19 +55,19 @@ zones <- function() {
        geom_hline(yintercept=1,linetype="dashed",colour="grey40",linewidth=.3))
 }
 
-da <- read_panel("A","Biomass",c("Year","Stock","Scenario","Type"))
-da$Scenario <- checked_factor(da$Scenario,names(regime_cols))
+da <- read_panel("A","HCR_Summary",c("Year","Stock","Rule"))
 da$Stock <- checked_factor(da$Stock,c("SKJ","YFT","BET","ALB","SBT"))
-da$Type <- checked_factor(da$Type,c("C","F"))
-p_a <- ggplot(da,aes(Year,B_K,colour=Scenario,linetype=Type)) +
-  geom_hline(yintercept=.5,linetype="dashed",colour="grey55",linewidth=.3) +
-  geom_line(linewidth=.45) + facet_wrap(~Stock,nrow=1) +
-  scale_colour_manual(values=regime_cols,name="Catch target",
-                      labels=c("100% MSY","90% MSY","80% MSY","70% MSY","2024 catch")) +
-  scale_linetype_manual(values=c(C="solid",F="dashed"),labels=design_lab,name="Design") +
+da$Rule <- checked_factor(da$Rule,names(hcr_cols))
+p_a <- ggplot(da,aes(Year,Median,colour=Rule,fill=Rule)) +
+  geom_hline(yintercept=1,linetype="dashed",colour="grey55",linewidth=.3) +
+  geom_hline(yintercept=c(.2,.8),linetype="dotted",colour="grey75",linewidth=.22) +
+  geom_ribbon(aes(ymin=P5,ymax=P95),alpha=.12,colour=NA) +
+  geom_line(linewidth=.5) + facet_wrap(~Stock,nrow=1) +
+  scale_colour_manual(values=hcr_cols,labels=design_lab,name=NULL) +
+  scale_fill_manual(values=hcr_cols,labels=design_lab,name=NULL) +
   scale_x_continuous(breaks=yrs) +
-  labs(x="Year",y=expression(Biomass~ratio~(B[t]/K)),tag="(a)",subtitle="Fixed-catch target simulation") + theme_fig4() +
-  guides(colour=guide_legend(nrow=1),linetype=guide_legend(nrow=1))
+  labs(x="Year",y=expression(B[t]/B[MSY]),tag="(a)",subtitle="Stock trajectories under three harvest control rules") + theme_fig4() +
+  guides(colour=guide_legend(nrow=1),fill=guide_legend(nrow=1))
 
 db <- read_panel("B","Yearly_M",c("WEO","Region","Year"))
 region_cols <- c("European Union"="#08519C","Canada"="#2171B5","Korea"="#6BAED6",
@@ -85,18 +86,23 @@ p_b <- ggplot(db,aes(Year,M_econ,colour=Region)) + zones() + geom_line(linewidth
   scale_x_continuous(breaks=c(2023,2030,2040,2050)) +
   labs(x="Year",y=expression(M[econ]~"(relative to 2023)"),tag="(b)") + theme_fig4()
 
-dc <- read_panel("C","Effort_Required",c("Year","Gear","Design","Tech_Creep"))
-dc$Gear <- checked_factor(dc$Gear,c("PS","LL"))
-dc$Design <- checked_factor(dc$Design,c("C","F"))
-dc$Tech_Creep <- checked_factor(dc$Tech_Creep,names(tc_cols))
-p_c <- ggplot(dc,aes(Year,E_req,colour=Tech_Creep,linetype=Design)) + zones() +
-  geom_line(linewidth=.5) + facet_wrap(~Gear,nrow=1,scales="free_y") +
-  scale_colour_manual(values=tc_cols,name="Tech creep",
-                       labels=c("1.9%/yr","2.4%/yr","4.3%/yr")) +
-  scale_linetype_manual(values=c(C="solid",F="dashed"),labels=design_lab,name=NULL) +
-  scale_x_continuous(breaks=yrs) + scale_y_continuous(expand=expansion(mult=c(.04,.06))) +
-  labs(x="Year",y=expression(Ecological~multiplier~(M[eco])),tag="(c)",subtitle="Fixed-catch target simulation") + theme_fig4() +
-  guides(colour=guide_legend(nrow=1),linetype=guide_legend(nrow=1))
+dc <- read_panel("C","HCR_Summary",c("Year","Gear","Rule","Metric"))
+dc <- dc[dc$Metric %in% c("Realised_kW_days","Effort_per_t"),]
+dc$Gear <- checked_factor(dc$Gear,c("LL","PS"))
+dc$Rule <- checked_factor(dc$Rule,names(hcr_cols))
+dc$Metric <- factor(dc$Metric,levels=c("Realised_kW_days","Effort_per_t"),
+                    labels=c("Effort (billion kW-days)","Effort/catch (kW-days/t)"))
+ix <- dc$Metric=="Effort (billion kW-days)"
+dc[ix,c("Median","P5","P95")] <- dc[ix,c("Median","P5","P95")]/1e9
+p_c <- ggplot(dc,aes(Year,Median,colour=Rule,fill=Rule)) +
+  geom_ribbon(aes(ymin=P5,ymax=P95),alpha=.12,colour=NA) +
+  geom_line(linewidth=.5) + facet_wrap(vars(Metric,Gear),ncol=2,scales="free_y") +
+  scale_colour_manual(values=hcr_cols,labels=design_lab,name=NULL) +
+  scale_fill_manual(values=hcr_cols,labels=design_lab,name=NULL) +
+  scale_x_continuous(breaks=yrs) + scale_y_log10(breaks=scales::breaks_log(n=3),expand=expansion(mult=c(.04,.06))) +
+  labs(x="Year",y=NULL,tag="(c)",subtitle="Actual effort and catch acquisition (log scales)") + theme_fig4() +
+  theme(strip.text=element_text(size=5.8)) +
+  guides(colour=guide_legend(nrow=1),fill=guide_legend(nrow=1))
 
 dd <- read_panel("D","Fuel_Cost",c("WEO","Year","Fuel"))
 dd$WEO <- checked_factor(dd$WEO,names(weo_cols))

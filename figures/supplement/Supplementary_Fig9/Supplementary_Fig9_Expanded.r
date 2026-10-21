@@ -16,7 +16,7 @@ pc2<-ggplot(c,aes(FuelOption,M_econ_2050,colour=Intensity))+geom_hline(yintercep
 pc<-pc1/pc2+plot_layout(heights=c(1,1.2))
 d<-read_panel('PanelD_Transition_Curves');d$WEO<-factor(d$WEO,levels=names(weo_cols));d$Family<-factor(d$Family,levels=c('FAME','HVO','LNG_Fossil','NH3_Green','H2_Fossil','H2_Green'))
 d$Path<-ifelse(d$Type=='Dual','HVO + device','Single fuel')
-pd<-ggplot(d,aes(Year,GHG_Mt,colour=WEO,linetype=Path,group=interaction(WEO,Path,Family)))+geom_line(linewidth=.5)+facet_wrap(~Family,ncol=3,labeller=as_labeller(c(FAME='FAME',HVO='HVO',LNG_Fossil='LNG',NH3_Green='Green NH3',H2_Fossil='Fossil H2',H2_Green='Green H2')))+scale_colour_manual(values=weo_cols,name='WEO')+scale_linetype_manual(values=c('Single fuel'='solid','HVO + device'='dashed'),name='Fuel path')+scale_x_continuous(breaks=c(2025,2035,2050))+labs(tag='(d)',x='Year',y=expression(Proxy~GHG~(Mt~CO[2]*e)))+theme_pub
+pd<-ggplot(d,aes(Year,Relative_Intensity_pct,colour=WEO,linetype=Path,group=interaction(WEO,Path,Family)))+geom_hline(yintercept=100,linetype='dotted',colour='grey65',linewidth=.2)+geom_line(linewidth=.5)+facet_wrap(~Family,ncol=3,labeller=as_labeller(c(FAME='FAME',HVO='HVO',LNG_Fossil='LNG',NH3_Green='Green NH3',H2_Fossil='Fossil H2',H2_Green='Green H2')))+scale_colour_manual(values=weo_cols,name='WEO')+scale_linetype_manual(values=c('Single fuel'='solid','HVO + device'='dashed'),name='Fuel path')+scale_x_continuous(breaks=c(2025,2035,2050))+labs(tag='(d)',x='Year',y='Adjusted intensity (same-year MGO = 100)')+theme_pub
 fig<-(pa|pb)/pc/pd+plot_layout(heights=c(.8,1.25,1))
 for(ext in c('pdf','png','tiff')){
  options<-list(filename=file.path(HERE,paste0('Supplementary_Fig9_Fuel_Properties_and_Adoption.',ext)),plot=fig,width=183,height=240,units='mm',bg='white')

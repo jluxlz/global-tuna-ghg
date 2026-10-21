@@ -39,8 +39,6 @@ save_png_pdf <- function(p, name, w = 183, h = 120) {
 dec <- read.csv(file.path(OUT, "SF7_Increase_Decomposition.csv"))
 weo <- read.csv(file.path(OUT, "SF7_WEO_dE.csv"))
 weo$WEO <- factor(weo$WEO,levels=c('STEPS','APS','NZE'))
-mec <- read.csv(file.path(OUT, "SF7_Meco_Trajectory.csv"))
-fue <- read.csv(file.path(OUT, "SF7_Fuel_Intensity.csv"))
 
 dec$Factor <- factor(dec$Factor, levels = dec$Factor)
 p7a <- ggplot(dec, aes(Factor, contribution_Mt, fill = contribution_Mt > 0)) +
@@ -54,22 +52,10 @@ p7b <- ggplot(weo, aes(WEO, dE_mean, fill = WEO)) +
   scale_fill_manual(values = WEO_COLS, guide = "none") +
   labs(tag = "(b)", x = NULL, y = expression("2050 minus 2025 emissions (Mt CO"[2]*"e)")) +
   theme_pub
-p7c <- ggplot(mec, aes(Year, E_req, colour = Gear, linetype = Design)) +
-  geom_line(linewidth = 0.5) +
-  scale_colour_manual(values = c(LL = "#B81D0A", PS = "#1A7A8A"), name = NULL) +
-  scale_linetype_manual(values = c(C = "solid", F = "dashed"),
-                        labels = c(C = "C-type quota rule", F = "F-type harvest-rate rule"), name = NULL) +
-  labs(tag = "(c)", x = NULL, y = expression("Required effort multiplier " * M[eco])) +
-  theme_pub
-p7d <- ggplot(fue, aes(Year, E_adj_min, colour = WEO)) +
-  geom_line(linewidth = 0.5) +
-  scale_colour_manual(values = WEO_COLS, name = NULL) +
-  labs(tag = "(d)", x = NULL, y = expression("Fuel-path intensity (g CO"[2]*"e kWh"^-1*")")) +
-  theme_pub
-save_png_pdf((p7a | p7b) / (p7c | p7d), "Supplementary_Fig17_Emission_Growth_Decomposition", h = 150)
+# Retain the fixed-2024-catch stress illustration only. Superseded quota/fuel
+# mechanism panels are replaced by the current HCR results in Figs. 4 and 5.
+save_png_pdf(p7a | p7b, "Supplementary_Fig17_Emission_Growth_Decomposition", h = 110)
 
 # Full plotted source data; no subset is silently discarded.
 if (exists("dec")) write.csv(dec, file.path(HERE, "Supplementary_Fig17_PanelA_Render_Data.csv"), row.names = FALSE)
 if (exists("weo")) write.csv(weo, file.path(HERE, "Supplementary_Fig17_PanelB_Render_Data.csv"), row.names = FALSE)
-if (exists("mec")) write.csv(mec, file.path(HERE, "Supplementary_Fig17_PanelC_Render_Data.csv"), row.names = FALSE)
-if (exists("fue")) write.csv(fue, file.path(HERE, "Supplementary_Fig17_PanelD_Render_Data.csv"), row.names = FALSE)

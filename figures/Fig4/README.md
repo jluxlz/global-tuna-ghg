@@ -1,17 +1,11 @@
-# Figure 4: coupled emission mechanisms
+# Fig4 Current Version
 
-`preprocess_fig4.py` produces the analytical panel data;
-`Fig4_Coupled_Mechanisms.r` renders the panels and composite. The audited
-composite is `Figure4_Coupled_Mechanisms_Audited`. Use `audit_fig4.py` for
-repeatable input and panel checks. `Fig4_Coupled_Validation.r` renders the
-independent feasible-catch stock comparison.
+- Drawing: `Figure4_Coupled_Mechanisms_Audited.pdf/png/tiff`; Pane Preview `Fig4_PanelA_Audited.png` to F. 
+- Current Drawing Code: `Fig4_Coupled_Mechanisms.r`; Data Code: `preprocess_fig4.py`. 
+- Audit and computational boundary: `Fig4_Audit_Report.md`; Note corresponding to chart: `Figure4_Caption_Audited.md`. 
+- Rerunable: `audit_fig4.py`; Results `Fig4_QC.json`, `Fig4_Upstream_QC.json` With QC CSV. 
+- 2026-10-12 Modify the precode/Data/Analysis Chart: `_archive_pre_audit_20261012/` (manifest.csv) . Deleting this backup does not stop current data production and QC; A comparison of historical values will automatically skip. 
 
-Panel c illustrates dynamic gear-level ratios of blends. It is distinct from
-the flag-by-organisation ecological effort multiplier in the production model.
-Panel b uses a 2023 baseline; panels d and e compare against MGO in the same
-year; the production scenarios use a 2025 baseline. Preserve these reference
-conditions when interpreting the panels or comparing saved outputs.
+none Audited Old analysis picture with the end of the story and Figure4_Caption.md Keep for comparison, Can not get folder: %s: %s CSV. `fig4.*` and `fig4_new.*` Its from the user Adobe Products, Unmodified. 
 
-Historical design archives and Adobe working products are excluded from the
-public distribution. Source inputs withheld from redistribution are listed in
-`data/external_inputs.csv` at the repository root.
+Special attention: c Its the original gear ratio-of-blends Signal, Its not a model of production flag×org of Meco. b Relative 2023, d/e Relative to the same year MGO, Production models relative 2025. Details and recalcitrable weights are provided in the audit note. 

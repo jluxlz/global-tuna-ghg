@@ -171,8 +171,16 @@ def get_fuel_price(fuel_alias: str, scenario: str, year: int, region: str,
     excel_name = _FUEL_ALIASES.get(fuel_alias, fuel_alias)
     # Normalize common region aliases
     _REGION_ALIASES = {"EU": "European Union", "US": "United States",
-                        "China": "China", "Japan": "Japan", "Korea": "Korea"}
+                        "China": "China", "Japan": "Japan", "Korea": "Korea",
+                        "ChileColombia":"Chile & Colombia",
+                        "Advanced": "European Union" if scenario=="STEPS" else "Advanced economies with net-zero pledges*",
+                        "Selected_EMDE":"Selected EMDE with net-zero pledges**",
+                        "Other_EMDE":"Other emerging market & developing economies"}
     region = _REGION_ALIASES.get(region, region)
+    # APS/NZE tables use carbon-region groups rather than an EU row. Resolve
+    # the fallback once for both anchor queries and off-anchor interpolation.
+    fallback_region=("European Union" if scenario=="STEPS"
+                     else "Advanced economies with net-zero pledges*")
     match = df[(df["Fuel"] == excel_name) &
                (df["Scenario"] == scenario) &
                (df["Year"] == year) &
@@ -183,7 +191,7 @@ def get_fuel_price(fuel_alias: str, scenario: str, year: int, region: str,
         match = df[(df["Fuel"] == excel_name) &
                    (df["Scenario"] == scenario) &
                    (df["Year"] == year) &
-                   (df["WEO_Region"] == "European Union")]
+                   (df["WEO_Region"] == fallback_region)]
     if len(match) == 0:
         # Fallback: any region
         match = df[(df["Fuel"] == excel_name) & (df["Scenario"] == scenario) & (df["Year"] == year)]
@@ -208,6 +216,8 @@ def get_fuel_price(fuel_alias: str, scenario: str, year: int, region: str,
     # Convert USD/MWh → USD/tonne:  USD/t = USD/MWh × LHV_MJ_kg / 3.6
     lhv = get_fuel_lhv(fuel_alias)
     price_usd_t = float(price_usd_mwh) * lhv / 3.6 if lhv > 0 else float(price_usd_mwh)
+    if not np.isfinite(price_usd_t) or price_usd_t<=0:
+        raise ValueError(f"Nonpositive/nonfinite fuel price: {fuel_alias}/{scenario}/{year}/{region}: {price_usd_t}")
 
     carbon = row.get("Carbon_USDtCO2", 0.0)
     if pd.isna(carbon):
@@ -222,7 +232,10 @@ def _anchor_interp(df, excel_name, scenario, year, region, bound="mid", lhv=42.7
     the old silent (700, 0) fallback for off-anchor years (2026-09-07).
     Returns (price_USD_tonne, carbon_USDtCO2) or None if <2 anchors exist."""
     import numpy as _np
-    for region_cand in (region, "European Union", None):
+    fallback=("European Union" if scenario=="STEPS" else "Advanced economies with net-zero pledges*")
+    available=df[(df["Fuel"]==excel_name)&(df["Scenario"]==scenario)]["WEO_Region"].drop_duplicates().tolist()
+    # Select one coherent region; never interpolate interleaved regional nodes.
+    for region_cand in dict.fromkeys([region,fallback]+available):
         sub = df[(df["Fuel"] == excel_name) & (df["Scenario"] == scenario)]
         if region_cand:
             sub = sub[sub["WEO_Region"] == region_cand]
@@ -236,6 +249,8 @@ def _anchor_interp(df, excel_name, scenario, year, region, bound="mid", lhv=42.7
             else:
                 mwh = ((anchors["Price_Min"] + anchors["Price_Max"]) / 2.0).astype(float).values
             price_mwh = float(_np.interp(year, yrs, mwh))
+            if len(_np.unique(yrs))!=len(yrs):raise ValueError('Duplicate price anchors within a fuel/scenario/region')
+            if not _np.isfinite(price_mwh) or price_mwh<=0:raise ValueError('Nonpositive/nonfinite interpolated fuel price')
             carbon_vals = anchors["Carbon_USDtCO2"].astype(float).values
             carbon = float(_np.interp(year, yrs, carbon_vals)) if not _np.isnan(carbon_vals).all() else 0.0
             if lhv > 0:

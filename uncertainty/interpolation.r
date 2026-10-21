@@ -10,8 +10,7 @@ library(readxl)     # Read Excel
 # 2. Batch Read and Clean Data (Its done 0 Value issues + Auto Generate a tissue field)
 # ==========================================
 # Please replace the lower path with your storage xlsx Path to the real folder of the file
-script_file <- sub("^--file=", "", grep("^--file=", commandArgs(), value=TRUE)[1])
-folder_path <- file.path(dirname(dirname(normalizePath(script_file))), "extracted_vessel_data")
+folder_path <- "C:\\Users\\11401\\Desktop\\scenario analysis\\Fishing vessel data" 
 file_list <- list.files(path = folder_path, pattern = "\\.xlsx$", full.names = TRUE)
 
 cat("Found it", length(file_list), "One Excel Documentation, Reading & & Spelling...\n")

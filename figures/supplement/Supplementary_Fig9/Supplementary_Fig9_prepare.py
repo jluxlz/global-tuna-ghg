@@ -1,7 +1,7 @@
 """Rebuild fuel-screen and transition proxy inputs from current source tables.
 
-Panel d scales a same-WEO annual BAU median by the analytical intensity ratio.
-It is an emission proxy, not a new whole-fleet simulation.
+Panel d shows an analytical intensity index relative to same-year MGO.
+It is independent of any fixed-2024-catch baseline or whole-fleet simulation.
 """
 from pathlib import Path
 import json
@@ -35,11 +35,8 @@ def main():
     d=curves[(curves.Intensity==curves.WEO.map(level))&((curves.Type!='Dual')|(curves.BioFuel=='HVO'))].copy()
     d['Family']=np.where(d.Type=='Bio',d.BioFuel,d.DevFuel)
     d['Path']=np.where(d.Type=='Dual','Dual','Single')
-    bau=pd.read_csv(SOURCE/'BAU_81_Annual.csv')
-    med=bau.groupby(['WEO','Year']).GHG_Mt.median().rename('bmid').reset_index()
-    d=d.merge(med,on=['WEO','Year'],validate='many_to_one')
-    if d.bmid.isna().any() or len(d)!=780 or d.duplicated(['WEO','Year','Family','Path']).any():
+    if len(d)!=780 or d.duplicated(['WEO','Year','Family','Path']).any():
         raise ValueError('Incomplete or duplicated transition proxy support')
-    d['GHG_Mt']=d.bmid*(1-d.Reduction_pct/100)
+    d['Relative_Intensity_pct']=100-d.Reduction_pct
     d.to_csv(HERE/'Supplementary_Fig9_PanelD_Transition_Curves.csv',index=False)
 if __name__=='__main__':main()

@@ -1,4 +1,3 @@
-import sys
 """Refresh dependent panel bridges without replacing approved R figure styles."""
 from pathlib import Path
 import pandas as pd, json, shutil, subprocess
@@ -26,5 +25,5 @@ shutil.copy2(ed/'Extended_Fig5_Diagnostic_Summary.csv',OUT/'tables/JABBA_Product
 shutil.copy2(ROOT/'scenario/jabba_sampler_config.csv',OUT/'tables/JABBA_Sampling_Configuration.csv')
 shutil.copy2(HERE/'Independent_Seed_Summary.csv',OUT/'tables/JABBA_Independent_Seed_Summary.csv')
 for n in [13,9,11,16,6,7]:
-    subprocess.run([sys.executable,str(ROOT/'analysis/full_chain_20261012/render_single.py'),f'figures/supplement/Supplementary_Fig{n}/Supplementary_Fig{n}.r'],cwd=ROOT,check=True)
+    subprocess.run([__import__('sys').executable,str(ROOT/'analysis/full_chain_20261012/render_single.py'),f'figures/supplement/Supplementary_Fig{n}/Supplementary_Fig{n}.r'],cwd=ROOT,check=True)
 print('Dependent supplemental panels refreshed')

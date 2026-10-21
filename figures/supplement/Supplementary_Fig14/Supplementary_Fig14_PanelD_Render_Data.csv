@@ -1,2 +1,0 @@
-"Benchmark_ID","Study","Publication_year","Activity_year","Region","Gear","Metric","Unit","Model","Literature","Difference_pct","Boundary","Comparison","Independent_outcome","Locator","Label"
-"PS03","Hospido & Tyedmers (2005)",2005,2003,"Spanish PS","PS","Full LCA CEI","t CO2e per t catch",1.57959147119089,1.8,-12.244918267173,"Context only: literature includes delivery to Galicia, model fishing vessels only; shared background source.","boundary mismatch; descriptive gap only","False","Section 3.1; Table 2; activity 2003","2003 | Spanish PS"

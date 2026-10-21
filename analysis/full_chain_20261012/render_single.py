@@ -5,6 +5,10 @@ from PIL import Image
 ROOT=Path(__file__).resolve().parents[2]
 HERE=Path(__file__).resolve().parent
 RENV=Path(os.environ.get("R_ENV", ""))
+config_path=ROOT/'reproduction_config.json'
+config=json.loads(config_path.read_text(encoding='utf-8')) if config_path.exists() else {}
+for key,value in config.get('environment',{}).items():os.environ.setdefault(key,value)
+if config.get('path_prefixes'):os.environ['PATH']=os.pathsep.join(config['path_prefixes'])+os.pathsep+os.environ['PATH']
 RSCRIPT=os.environ.get("RSCRIPT") or shutil.which("Rscript")
 if not RSCRIPT: raise RuntimeError("Rscript is not on PATH; set RSCRIPT to its executable.")
 

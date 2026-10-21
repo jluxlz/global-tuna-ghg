@@ -861,8 +861,15 @@ def compute_vessel_econ_effort(fleet_df, scenario, year, gear_blended, scenario_
     flags = fleet_df["Flag"].astype(str).values
     regions = np.array([pl.get_vessel_region(f, scenario)[0] for f in flags])
     def prices(fuel):
-        by_region = {r: _fuel_price_annual(fuel, scenario, year, r) for r in pd.unique(regions)}
-        return np.array([by_region[r] for r in regions])
+        price_mode=scenario_params.get('alternative_price_assumption','inverse_carbon')
+        if price_mode not in ('inverse_carbon','fixed_2023'):
+            raise ValueError('Unknown alternative-fuel price assumption: '+str(price_mode))
+        bio_trajectory=fuel in ('HVO','FAME','LNG_Bio')
+        price_regions=(np.array([pl.get_vessel_region(f,scenario)[1] for f in flags])
+                       if bio_trajectory else regions)
+        price_year=2023 if bio_trajectory and price_mode=='fixed_2023' else year
+        by_region = {r: _fuel_price_annual(fuel, scenario, price_year, r) for r in pd.unique(price_regions)}
+        return np.array([by_region[r] for r in price_regions])
     p_mgo, p_hfo, p_bio, p_new = prices("MGO"), prices("HFO"), prices(bio_type), prices(newfuel_type)
     p_base = np.where(base_fuel_v == "HFO", p_hfo, p_mgo)
     price_eff = np.where(is_newfuel, p_new,
@@ -886,6 +893,8 @@ def compute_vessel_econ_effort(fleet_df, scenario, year, gear_blended, scenario_
     # NO cap, NO floor: economic conditions amplify or suppress effort freely;
     # M_econ > 1 (cheap fuel) is a legitimate economic rebound.
     Cost_Ratio = curr_usd_mj / base_usd_mj
+    if not np.isfinite(Cost_Ratio).all() or np.any(Cost_Ratio<=0):
+        raise ValueError(f'Nonpositive/nonfinite fuel-cost ratio in {scenario}/{year}')
     M_econ_raw = Cost_Ratio ** el
     E_final = Meco * M_econ_raw
     M_econ_realized = M_econ_raw
@@ -1339,6 +1348,8 @@ def compute_fleet_ghg(df, pm_dict, ref_year=2025, gear_effort=None,
     # ---- Total ----
     df["GHG_Emissions"] = (fuel_co2 + fuel_ch4 + fuel_n2o + fuel_wtt +
                            build + maint + gear + refrig + bait)
+    if not np.isfinite(df['GHG_Emissions']).all():
+        raise ValueError(f'Nonfinite vessel GHG in {ref_year}; refusing silent missing-value aggregation')
     df["GHG_Fuel_CO2"] = fuel_co2
     df["GHG_Fuel_CH4"] = fuel_ch4
     df["GHG_Fuel_N2O"] = fuel_n2o

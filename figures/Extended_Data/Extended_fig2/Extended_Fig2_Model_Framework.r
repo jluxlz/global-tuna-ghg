@@ -19,17 +19,17 @@ nodes<-data.frame(
  title=c('Registry and capacity','Catch and effort','Engineering inputs','Data harmonisation and fleet reconstruction',
          'Vessel-year life-cycle inventory','Exploratory stock fits','Historical GHG, CEI and fleet state','Stock reference',
          '81 futures','Quota rules','Fuel transition','Refrigeration','Fleet consolidation',
-         'Fixed-catch stress test','Feasible-catch simulation','Paired GHG, catch and mitigation outcomes'),
+         'Targets and physical demand','Realized catch and emissions','Paired GHG, catch and technical effects'),
  body=c('Five RFMO registries\nPower, tonnage, age','Catch and effort grids\nRegional CPUE indices',
         'Operation and life-cycle factors\nFuel, carbon and electricity costs',
         'Vessel identity and imputation  /  historical capacity gaps  /  catch-effort units',
         'Monte Carlo emission accounting','Catch + CPUE; JABBA / Schaefer; global fits and regional checks',
         'Fleet, RFMO, species and grid; CEI factorisation','Biomass, production and catch shares',
         '3 WEO x 3 growth x 3 turnover x 3 technology',
-        'C-type / F-type','Blends + newbuilds','R22 to LN2','Power conserved',
-        'Prescribed biomass and catch; Meco x Mecon; no realised-catch feedback; 0.03K floor',
-        'Available biomass to target catch; effort bounded by demand, capacity and costs; realised catch updates stock',
-        'Own-BAU reductions; period CEI; Shapley contributions; matched-catch checks'))
+        'C-type / F-type / T-type','Blends + newbuilds','R22 to LN2','Power conserved',
+        'Beginning biomass to HCR targets; production and finite harvest pulse; physical effort demand',
+        'Activity limited by demand, capacity and costs; actual catches and GHG; removals update next stock',
+        'Own-HCR technical references; period CEI; three-technology Shapley; matched-catch rules'))
 nodes$xmin<-nodes$x-nodes$w/2;nodes$xmax<-nodes$x+nodes$w/2
 nodes$ymin<-nodes$y-nodes$h/2;nodes$ymax<-nodes$y+nodes$h/2
 edges<-data.frame(x=numeric(),y=numeric(),xend=numeric(),yend=numeric(),colour=character(),arrow=logical())
@@ -43,7 +43,8 @@ edge(58,101.8,150,101.8,arrow=FALSE);edge(110,101.8,110,95.5)
 for(x in c(22.5,67.5,112.5,157.5)){edge(x,82.5,x,79.4);edge(x,61.6,x,60.7,arrow=FALSE)}
 edge(22.5,60.7,157.5,60.7,arrow=FALSE)
 for(x in c(44,136)){edge(x,60.7,x,59.8);edge(x,27,x,23.5)}
-# Realised removals feed the following year's stock in the feasible branch only.
+edge(85.5,43.5,94.5,43.5,teal,TRUE)
+# Actual removals update the next stock state under every HCR.
 edge(174.5,32,179.6,32,teal,FALSE);edge(179.6,32,179.6,47.5,teal,FALSE)
 edge(179.6,47.5,177.3,47.5,teal,TRUE)
 
@@ -86,32 +87,30 @@ label(3,98,'Future stock-fleet comparisons',3.25,TRUE,0)
 label(177,98,'2025 reference to 2050',2.5,FALSE,1,muted)
 label(8,91,'81 futures',2.9,TRUE,0)
 label(40,91,'3 WEO \u00d7 3 growth \u00d7 3 turnover \u00d7 3 technology',2.6,FALSE,0)
-label(40,86.5,'Stock conditions / fleet capacity / fuel and carbon costs',2.35,FALSE,0,muted)
+label(40,86.5,'3 HCRs x 8 technical subsets = 1,944 primary simulations',2.35,FALSE,0,muted)
 for(i in 1:4) {
  n<-nodes[9+i,];left<-n$xmin
  framework_icon(c('quota','fuel','snow','fleet')[i],left+4.6,71.2,2.5,n$accent)
  label(left+9.3,74.5,n$title,2.5,TRUE,0)
  label(left+9.3,68,if(i==3)'R22 \u2192 LN\u2082' else n$body,2.25,FALSE,0,muted)
 }
-label(9,55.5,'Fixed-catch stress test',2.9,TRUE,0,rust)
-label(101,55.5,'Feasible-catch simulation',2.9,TRUE,0,teal)
+label(9,55.5,'Targets and physical demand',2.9,TRUE,0,rust)
+label(101,55.5,'Realized catch and emissions',2.9,TRUE,0,teal)
 for(i in 1:3){
  yy<-c(47.4,39.7,32)[i]
  framework_icon(c('chart','sliders','chart')[i],10,yy,2.2,rust)
  framework_icon(c('fish','boat','chart')[i],102,yy,2.2,teal)
 }
-label(18,47.4,'Prescribed biomass + catch targets',2.4,FALSE,0)
-p<-p+annotate('text',x=18,y=39.7,label='M[eco] %*% M[econ]',parse=TRUE,
-              hjust=0,size=2.6,colour=ink,family='Arial')
-label(41,39.7,'\u2192 requested activity',2.4,FALSE,0)
-label(18,32,'No catch feedback; floor 0.03K',2.4,FALSE,0)
-label(110,47.4,'Available stock \u2192 catch target',2.4,FALSE,0)
+label(18,47.4,'Beginning stock \u2192 C / F / T target',2.4,FALSE,0)
+label(18,39.7,'Production \u2192 finite harvest pulse',2.4,FALSE,0)
+label(18,32,'Catchability \u2192 requested kW-days',2.4,FALSE,0)
+label(110,47.4,'Actual activity \u2192 catch and GHG',2.4,FALSE,0)
 label(110,39.7,'Effort limited by demand,\ncapacity and fuel-cost response',2.4,FALSE,0,ink,1.15)
-label(110,32,'Realised catch \u2192 next-year stock',2.4,FALSE,0)
+label(110,32,'Actual catch \u2192 next-year stock',2.4,FALSE,0)
 label(172,39.7,'Annual\nfeedback',2.05,FALSE,.5,teal)
 framework_icon('chart',12,13.5,3.6,blue)
-label(23,18,'Paired GHG, catch and mitigation outcomes',2.9,TRUE,0)
-label(23,10.3,'Own-BAU reductions / period CEI / Shapley contributions / matched-catch checks',2.4,FALSE,0,muted)
+label(23,18,'Paired GHG, catch and technical effects',2.9,TRUE,0)
+label(23,10.3,'Own-HCR references / period CEI / three-technology Shapley / matched-catch rules',2.4,FALSE,0,muted)
 
 paths<-do.call(rbind,icon_paths);dots<-do.call(rbind,icon_dots)
 p<-p+geom_path(data=paths,aes(x,y,group=group,colour=colour),linewidth=.32,lineend='round',linejoin='round')+

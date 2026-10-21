@@ -1,7 +1,6 @@
 __pycache__/
-*.py[cod]
+*.pyc
+reproduction_logs/
 release_downloads/
-*.restoring
-.Rhistory
-.RData
+.render_*
 ~$*
