@@ -24,7 +24,7 @@ def main():
     for f in ['Creep_Fixed_Grid_Fits.csv','Creep_RFMO_Weighted_Trends.csv','Creep_Trends_Fractions.csv','SBT_Official_TRO_Digitised.csv','SBT_Associations.csv','YFT_Associations.csv']:
         shutil.copy2(A/f,p/f)
     p=folder(15)
-    save(pd.read_csv(R/'figures/supplement/Supplementary_Fig15/Supplementary_Table11_Engine_Clock.csv'),p,15,'A','Global_Clocks')
+    save(pd.read_csv(R/'figures/supplement/Supplementary_Fig19/Supplementary_Table11_Engine_Clock.csv'),p,15,'A','Global_Clocks')
     draw=pd.read_csv(R/'analysis/si_order_fuel_diagnosis_20261016/LL23_Diagnostic_Draws.csv')
     sh=[]
     for name,label in [('Main_transit','Main-engine transit'),('Main_fishing','Main-engine fishing'),('Auxiliary','Auxiliary engines')]:

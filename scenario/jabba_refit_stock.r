@@ -8,7 +8,7 @@ ni<-as.integer(args[3]);nb<-as.integer(args[4]);nt<-as.integer(args[5]);seed<-as
 stopifnot(ni>nb,ni>=20000,nb>=5000,nt>=1)
 library(JABBA)
 root<-normalizePath('.',winslash='/')
-src<-file.path(root,'figures','Extended_Data','Extended_Fig5','jabba_diagnostics',paste0(stock,'_fit.rds'))
+src<-file.path(root,'figures','supplement','Supplementary_Fig6','jabba_diagnostics',paste0(stock,'_fit.rds'))
 x<-readRDS(src)
 prior_mode<-if(length(args)>=7) args[7] else 'lnorm'
 sampler<-if(length(args)>=8) args[8] else 'centred'

@@ -23,5 +23,5 @@ for keys,s in d.groupby(['Gear','Era'],observed=True):
             Effort_trend=np.average(s[a],weights=s.Total_GHG),GHG_effort_trend=np.average(s[b],weights=s.Total_GHG),
             CEI_trend=np.average(s.CEI_log_trend_pct,weights=s.Total_GHG),N=len(s)))
 o=pd.DataFrame(out);o.to_csv(H/'Nominal_Corrected_Weighted_Trends.csv',index=False)
-o.to_csv(R/'figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelB_Creep_Comparison.csv',index=False)
+o.to_csv(R/'figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelB_Creep_Comparison.csv',index=False)
 print(o.to_string(index=False))

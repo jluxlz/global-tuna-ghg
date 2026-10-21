@@ -50,11 +50,7 @@ def figures():
     scripts=['figures/Fig1/Fig1_Multi_Dimensional.r','figures/Fig2/Fig2_Spatial_Temporal_CEI.r',
       'figures/Fig3/Fig3_Phase_Decoupling.r','figures/Fig4/Fig4_Coupled_Mechanisms.r',
       'figures/Fig5/plot_fig5.r']
-    scripts += [f"figures/Extended_Data/Extended_Fig{n}/{name}" for n,name in {
-      3:'Extended_Fig3.r',4:'Extended_Fig4_Decomposition.r',5:'Extended_Fig5_Stock_Structure_Robustness.r',
-      6:'Extended_Fig6_Economic_Elasticity_Sensitivity.r',7:'Extended_Fig7_Technology_Creep_Robustness.r',
-      8:'Extended_Fig8_Subsidy_Buffer.r',9:'Extended_Fig9_BreakEven_Cutoff.r',
-      10:'Extended_Fig10_Shapley_Abatement_Decomposition.r'}.items()]
+    scripts += [f"figures/Extended_Data/Extended_Fig{n}/Extended_Fig{n}.r" for n in range(3,10)]
     for i,script in enumerate(scripts):run('figure_'+str(i+1),[sys.executable,str(ROOT/'analysis/full_chain_20261012/render_single.py'),script])
     run('si_figures',[sys.executable,str(ROOT/'figures/supplement/render_all.py')])
 
@@ -71,9 +67,10 @@ def scenarios(extras):
     run('original_cf_comparator',[sys.executable,str(hcr/'run_hcr.py'),'legacy'])
     if extras:
         run('hcr_catch_matching',[sys.executable,str(hcr/'match_hcr.py')])
-        for stock in ('BET','YFT'):
-            run('regional_'+stock,[sys.executable,str(ROOT/'analysis/p0_revision_20261013/run_regional_ensemble.py'),stock])
-        run('regional_summaries',[sys.executable,str(ROOT/'analysis/p0_revision_20261013/analyse_regional.py')])
+        regional=ROOT/'analysis/regional_hcr_20261021'
+        shutil.copy2(OUT/'order_regression.log',regional/'order_guard.log')
+        run('regional_hcr',[sys.executable,str(regional/'run_regional_hcr.py'),'full'])
+        run('regional_hcr_summaries',[sys.executable,str(regional/'analyse_regional_hcr.py')])
     run('hcr_summaries',[sys.executable,str(hcr/'analyse_hcr.py')])
 
 
@@ -81,14 +78,16 @@ def refresh():
     scripts=[
       'figures/Fig2/preprocess_fig2.py','figures/Fig3/preprocess_fig3.py',
       'figures/Fig4/preprocess_fig4.py','figures/Fig5/prepare_hcr_panels.py',
-      'figures/Extended_Data/Extended_Fig7/prepare_hcr.py',
-      'figures/Extended_Data/Extended_Fig9/prepare_hcr.py',
-      'figures/Extended_Data/Extended_Fig10/prepare_hcr.py',
-      'figures/supplement/Supplementary_Fig8/prepare_hcr.py',
-      'figures/supplement/Supplementary_Fig13/prepare_hcr.py',
       'figures/supplement/Supplementary_Fig16/prepare_hcr.py',
-      'figures/supplement/Supplementary_Fig18/prepare_hcr.py',
-      'figures/supplement/Supplementary_Fig21/prepare_hcr.py']
+      'figures/Extended_Data/Extended_Fig5/prepare_hcr.py',
+      'figures/Extended_Data/Extended_Fig8/prepare_hcr.py',
+      'figures/supplement/Supplementary_Fig9/prepare_hcr.py',
+      'figures/supplement/Supplementary_Fig14/prepare_hcr.py',
+      'figures/Extended_Data/Extended_Fig7/prepare_hcr.py',
+      'figures/supplement/Supplementary_Fig21/prepare_hcr.py',
+      'figures/Extended_Data/Extended_Fig6/prepare_hcr.py',
+      'figures/Extended_Data/Extended_Fig6/prepare_mechanisms.py',
+      'figures/Extended_Data/Extended_Fig9/prepare_regional.py']
     for i,script in enumerate(scripts):run('refresh_'+str(i+1),[sys.executable,str(ROOT/script)])
 
 

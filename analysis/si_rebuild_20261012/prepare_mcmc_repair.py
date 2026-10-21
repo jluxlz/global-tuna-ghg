@@ -1,7 +1,7 @@
 from pathlib import Path
 import shutil,json
 ROOT=Path(__file__).resolve().parents[2];HERE=Path(__file__).resolve().parent
-files=['scenario/jabba_fit.r','figures/Extended_Data/Extended_Fig5/Extended_Fig5_build_diagnostics.r','figures/Extended_Data/Extended_Fig5/Extended_Fig5_JABBA_Diagnostics.r']
+files=['scenario/jabba_fit.r','figures/supplement/Supplementary_Fig6/Supplementary_Fig6_build_diagnostics.r','figures/supplement/Supplementary_Fig6/Supplementary_Fig6_JABBA_Diagnostics.r']
 for rel in files:
     source=ROOT/rel;dest=HERE/'_archive_before_edit'/rel;dest.parent.mkdir(parents=True,exist_ok=True)
     if not dest.exists():shutil.copy2(source,dest)

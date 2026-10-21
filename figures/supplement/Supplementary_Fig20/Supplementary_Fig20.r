@@ -1,17 +1,61 @@
-suppressPackageStartupMessages({library(ggplot2);library(dplyr);library(tidyr);library(patchwork)})
-arg<-grep('^--file=',commandArgs(FALSE),value=TRUE);HERE<-dirname(normalizePath(sub('^--file=','',arg[1]),winslash='/'))
-rp<-function(x){d<-read.csv(file.path(HERE,paste0('Supplementary_Fig20_Panel',x,'.csv')),colClasses=c(Combo='character'));write.csv(d,file.path(HERE,paste0('Supplementary_Fig20_Panel',x,'_Render_Data.csv')),row.names=FALSE);d}
-tp<-theme_classic(base_size=7,base_family='Arial')+theme(axis.title=element_text(size=7,face='bold'),axis.text=element_text(size=6,colour='black'),strip.background=element_blank(),strip.text=element_text(size=7,face='bold'),plot.tag=element_text(size=8,face='bold'),legend.position='bottom',legend.text=element_text(size=6),legend.key.size=unit(3,'mm'),panel.spacing=unit(4,'mm'),plot.margin=margin(5,5,5,5,'pt'))
-sp<-c(BET='#0072B2',YFT='#E69F00')
-a<-rp('A_Regional_Fits');a$Stock<-factor(a$Stock,levels=c('BET','YFT'),labels=c('Indian Ocean BET, 1975-2024','Indian Ocean YFT, 1950-2020'))
-pa<-ggplot(a,aes(Year,B_Mt,group=Stock))+geom_ribbon(aes(ymin=B_Lower,ymax=B_Upper),alpha=.15,fill='#0072B2')+geom_line(linewidth=.45,colour='#0072B2')+facet_wrap(~Stock,scales='free')+labs(tag='(a)',x=NULL,y='Fitted total biomass (Mt)')+tp
-b<-rp('B_Regional_QC')%>%group_by(Stock)%>%summarise(Max_Rhat=max(Rhat),Bulk=min(ESS_Bulk),Tail=min(ESS_Tail),.groups='drop')
-pb<-ggplot(b,aes(Max_Rhat,Stock,colour=Stock))+geom_vline(xintercept=1.01,linetype='dotted',linewidth=.25,colour='grey45')+geom_point(size=2)+geom_text(aes(label=sprintf('Bulk ESS %.0f; tail ESS %.0f',Bulk,Tail)),nudge_y=.2,size=2,colour='black')+scale_colour_manual(values=sp,guide='none')+scale_x_continuous(limits=c(1,1.011),breaks=c(1,1.005,1.01))+labs(tag='(b)',x='Maximum rank-normalised Rhat',y=NULL)+tp
-c<-rp('C_Policies')%>%filter(Combo%in%c('1000','F80','0100','1111'))%>%mutate(Policy=recode(Combo,'1000'='100% FMSY','F80'='80% FMSY','0100'='Fuel only','1111'='Combined'))%>%pivot_longer(c(Endpoint_Reduction_pct,Cumulative_Reduction_pct),names_to='Metric',values_to='Reduction')
-c$Policy<-factor(c$Policy,levels=c('100% FMSY','80% FMSY','Fuel only','Combined'));c$Metric<-factor(c$Metric,levels=c('Endpoint_Reduction_pct','Cumulative_Reduction_pct'),labels=c('Annual endpoint','Cumulative period'))
-c$Scope<-ifelse(c$Stock=='BET','BET: 2024 reference state','YFT: 2020 historical-state experiment')
-pc<-ggplot(c,aes(Policy,Reduction,fill=Policy))+geom_hline(yintercept=0,colour='grey60',linewidth=.2)+geom_boxplot(width=.6,outlier.size=.3,linewidth=.25)+facet_grid(Metric~Scope)+scale_fill_manual(values=c('100% FMSY'='#0072B2','80% FMSY'='#56B4E9','Fuel only'='#D55E00','Combined'='#009E73'),guide='none')+labs(tag='(c)',x=NULL,y='Paired reduction (%)')+tp
-d<-rp('D_Bridge')%>%select(Year,B_Start_Mt,B_End_Mt)%>%pivot_longer(-Year,names_to='State',values_to='Biomass')
-pd<-ggplot(d,aes(Year,Biomass,colour=State))+geom_hline(yintercept=0,linetype='dotted',colour='grey45',linewidth=.25)+geom_line(linewidth=.4)+geom_point(size=1.3)+scale_colour_manual(values=c(B_Start_Mt='#0072B2',B_End_Mt='#D55E00'),labels=c(B_Start_Mt='Start of year',B_End_Mt='After reported removals'))+scale_x_continuous(breaks=2020:2024)+labs(tag='(d)',x=NULL,y='Biomass in catch bridge (Mt)',colour=NULL)+tp
-fig<-pa/pb/pc/pd+plot_layout(heights=c(1,.5,1.5,.7),guides='collect')&theme(legend.position='bottom')
-for(ext in c('pdf','png','tiff')){opt<-list(filename=file.path(HERE,paste0('Supplementary_Fig20_Regional_Stock_Validation.',ext)),plot=fig,width=183,height=235,units='mm',bg='white');if(ext=='pdf')opt$device<-cairo_pdf;if(ext=='png')opt$dpi<-300;if(ext=='tiff'){opt$dpi<-900;opt$compression<-'lzw'};do.call(ggsave,opt)}
+# =============================================================================
+# Supplementary Fig. 20 | Decomposition of the projected baseline emission
+# increase, 2025-2050 (SF7)
+# Data: local SF7_*.csv snapshots of the plotted production inputs.
+# Output: Supplementary_Fig20_Emission_Growth_Decomposition.{pdf,png}
+# =============================================================================
+suppressMessages({
+library(ggplot2); library(dplyr); library(tidyr); library(patchwork); library(scales)
+})
+args <- commandArgs(trailingOnly = FALSE)
+file_arg <- grep("^--file=", args, value = TRUE)
+HERE <- normalizePath(dirname(sub("^--file=", "", file_arg)))
+OUT <- HERE
+
+theme_pub <- theme_classic(base_size = 7, base_family = "Arial") + theme(
+  plot.tag = element_text(face = "bold", size = 8),
+  plot.tag.position = c(0, 1), plot.title = element_text(size = 7, face = "bold"),
+  axis.title = element_text(size = 7, face = "bold"),
+  axis.text = element_text(size = 6, colour = "black"),
+  axis.line = element_line(linewidth = 0.18, colour = "black"),
+  axis.ticks = element_line(linewidth = 0.18), axis.ticks.length = unit(1.3, "mm"),
+  strip.background = element_blank(), strip.text = element_text(size = 7, face = "bold"),
+  legend.title = element_text(size = 7, face = "bold"), legend.text = element_text(size = 6),
+  legend.position = "bottom", legend.box = "vertical", legend.key.size = unit(3, "mm"),
+  legend.spacing = unit(2, "pt"), legend.margin = margin(2, 0, 0, 0),
+  panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+  panel.spacing = unit(3, "mm"), plot.margin = margin(4, 5, 3, 4, "pt"))
+WEO_COLS <- c(STEPS = "#D55E00", APS = "#0072B2", NZE = "#009E73")
+
+save_png_pdf <- function(p, name, w = 183, h = 120) {
+  ggsave(file.path(HERE, paste0(name, ".pdf")), p, width = w, height = h, units = "mm", device = cairo_pdf, bg = "white")
+  ggsave(file.path(HERE, paste0(name, ".png")), p, width = w, height = h, units = "mm", dpi = 300, bg = "white")
+  ggsave(file.path(HERE, paste0(name, ".tiff")), p, width = w, height = h,
+         units = "mm", dpi = 900, compression = "lzw", bg = "white")
+  cat("saved", name, "\n")
+}
+
+# ---- SF7 panels ----
+dec <- read.csv(file.path(OUT, "SF7_Increase_Decomposition.csv"))
+weo <- read.csv(file.path(OUT, "SF7_WEO_dE.csv"))
+weo$WEO <- factor(weo$WEO,levels=c('STEPS','APS','NZE'))
+
+dec$Factor <- factor(dec$Factor, levels = dec$Factor)
+p7a <- ggplot(dec, aes(Factor, contribution_Mt, fill = contribution_Mt > 0)) +
+  geom_col(width = 0.6) + coord_flip() +
+  scale_fill_manual(values = c("TRUE" = "#B81D0A", "FALSE" = "#4D4D4D"), guide = "none") +
+  labs(tag = "(a)", x = NULL, y = expression("Contribution to 2025-2050 increase (Mt CO"[2]*"e)")) +
+  theme_pub
+p7b <- ggplot(weo, aes(WEO, dE_mean, fill = WEO)) +
+  geom_col(width = 0.6) +
+  geom_errorbar(aes(ymin = dE_p5, ymax = dE_p95), width = 0.25, linewidth = 0.3) +
+  scale_fill_manual(values = WEO_COLS, guide = "none") +
+  labs(tag = "(b)", x = NULL, y = expression("2050 minus 2025 emissions (Mt CO"[2]*"e)")) +
+  theme_pub
+# Retain the fixed-2024-catch stress illustration only. Superseded quota/fuel
+# mechanism panels are replaced by the current HCR results in Figs. 4 and 5.
+save_png_pdf(p7a | p7b, "Supplementary_Fig20_Emission_Growth_Decomposition", h = 110)
+
+# Full plotted source data; no subset is silently discarded.
+if (exists("dec")) write.csv(dec, file.path(HERE, "Supplementary_Fig20_PanelA_Render_Data.csv"), row.names = FALSE)
+if (exists("weo")) write.csv(weo, file.path(HERE, "Supplementary_Fig20_PanelB_Render_Data.csv"), row.names = FALSE)

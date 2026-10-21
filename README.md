@@ -1,10 +1,10 @@
 # Global tuna-fishery greenhouse gas emissions
 
-**Current complete version: v2026.10.21.** [Download the complete code and data package](https://github.com/jluxlz/global-tuna-ghg/releases/download/v2026.10.21/global-tuna-ghg-complete.zip). Download this one ZIP; no earlier release is needed. GitHub's automatic source-code archives do not include all large inputs.
+**Current complete version: v2026.10.21.1.** [Download the complete code and data package](https://github.com/jluxlz/global-tuna-ghg/releases/download/v2026.10.21.1/global-tuna-ghg-complete.zip). Download this one ZIP; no earlier release is needed. GitHub's automatic source-code archives do not include all large inputs.
 
-The primary future comparison uses constant-catch (C), constant-harvest-rate (F) and biomass-threshold (T) rules under common stock, realized-catch, economic and fleet-capacity feedback. It contains 1,944 primary simulations and 1,620 sensitivity simulations. Nine additional matched-output triples provide 27 paired comparisons; all 384 matching candidates are retained. The original C/F comparator remains separate for Supplementary Fig. 19. Fixed 2024 catch is not the primary current-management baseline.
+The primary future comparison uses constant-catch (C), constant-harvest-rate (F) and biomass-threshold (T) rules under common stock, realized-catch, economic and fleet-capacity feedback. It contains 1,944 primary simulations and 1,620 sensitivity simulations. Nine additional matched-output triples provide 27 paired comparisons; all 384 matching candidates are retained. The original C/F comparator remains separate for Supplementary Fig. 22. Fixed 2024 catch is not the primary current-management baseline.
 
-Historical accounting covers 1950-2025. Future models retain 81 exogenous configurations per rule and evaluate all subsets of fuel transition, refrigeration transition and fleet consolidation. Current figure scripts, panel inputs and saved results match the final scientific version, including Fig. 5e and Supplementary Figs. 10, 14 and 21.
+Historical accounting covers 1950-2025. Future models retain 81 exogenous configurations per rule and evaluate all subsets of fuel transition, refrigeration transition and fleet consolidation. The additional regional extension contains 486 full BET C/F/T and fuel/no-fuel runs. Current figure scripts, panel inputs and saved results match the revised scientific version, including matched mechanisms, regional technical differences and the new regional BET C/F/T experiments in Extended Data Figs. 6, 7 and 9.
 
 Extract the complete ZIP and run:
 

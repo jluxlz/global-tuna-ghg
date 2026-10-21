@@ -13,15 +13,14 @@ cols<-c(LL='#B81D0A',PS='#1A7A8A',TP='#7570B3',SA='#E6AB02')
 weo_cols<-c(STEPS='#D55E00',APS='#0072B2',NZE='#009E73')
 read_panel<-function(n,label){d<-read.csv(file.path(HERE,paste0('Supplementary_Fig',n,'_',label,'.csv')));write.csv(d,file.path(HERE,paste0('Supplementary_Fig',n,'_',label,'_Render_Data.csv')),row.names=FALSE);d}
 
-b<-read_panel(7,'PanelA_Traces')%>%filter(Parameter%in%c('r','K','psi'))
-b$Stock<-factor(b$Stock,levels=c('SKJ','YFT','BET','ALB','SBT'))
-b$Parameter<-factor(b$Parameter,levels=c('r','K','psi'),labels=c('r','K (scaled JAGS units)','Initial depletion'))
-fig<-ggplot(b,aes(Draw,Value,colour=factor(Chain)))+geom_line(linewidth=.15,alpha=.5)+
- facet_wrap(~Stock+Parameter,ncol=3,scales='free_y')+scale_colour_manual(values=c('1'='#0072B2','2'='#D55E00','3'='#009E73','4'='#CC79A7'),name='Chain')+
- labs(x='Retained draw within chain',y='Parameter value')+theme_pub
+b<-read_panel(6,'PanelA_Fits');b$Stock<-factor(b$Stock,levels=c('SKJ','YFT','BET','ALB','SBT'))
+fig<-ggplot(b,aes(year,obs))+geom_ribbon(aes(ymin=hat.lci,ymax=hat.uci),fill='#0072B2',alpha=.15)+
+ geom_line(aes(y=hat),colour='#0072B2',linewidth=.4)+geom_point(size=.5,alpha=.65)+
+ facet_wrap(~Stock+name,ncol=5,scales='free_y')+scale_x_continuous(breaks=c(1970,2000,2024))+
+ labs(x='Year',y='Technology-corrected CPUE index')+theme_pub
 
 for(ext in c('pdf','png','tiff')) {
- options<-list(filename=file.path(HERE,paste0('Supplementary_Fig7_JABBA_Chain_Traces.',ext)),plot=fig,width=183,height=220,units='mm',bg='white')
+ options<-list(filename=file.path(HERE,paste0('Supplementary_Fig7_JABBA_CPUE_Fits.',ext)),plot=fig,width=183,height=220,units='mm',bg='white')
  if(ext=='pdf') options$device<-cairo_pdf
  if(ext=='png') options$dpi<-300
  if(ext=='tiff') {options$dpi<-900;options$compression<-'lzw'}

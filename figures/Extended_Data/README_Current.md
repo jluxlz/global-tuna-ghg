@@ -15,7 +15,7 @@ The 2026-10-12 manuscript audit retains ten Extended Data figures, matching the 
 | ED9 | Implied effort caps | Retain; analytical post-processing, not profitability optimisation |
 | ED10 | Four-measure Shapley decomposition | Essential to the relative-contribution claim; formerly ED11 |
 
-Former ED10 is now `figures/supplement/Supplementary_Fig17`, preserving baseline factor contrasts. `figures/supplement/Supplementary_Fig4` documents historical coverage and reconstruction balance. Directory, script and output numbers follow the current SI. Previous code and figure files are preserved under the dated audit archives.
+Former ED10 is now `figures/supplement/Supplementary_Fig20`, preserving baseline factor contrasts. `figures/supplement/Supplementary_Fig4` documents historical coverage and reconstruction balance. Directory, script and output numbers follow the current SI. Previous code and figure files are preserved under the dated audit archives.
 
 ED5 uses current `jabba_diagnostics/*_fit.rds` and actual JAGS chain arrays. The isolated audit run reproduces the production C/F projection CSVs byte for byte. It does **not** resolve limited MCMC mixing. Its official-reference table preserves region, year, native metric and uncertainty, without conversion to global total-biomass B/K.
 

@@ -1,86 +1,30 @@
-# External descriptive benchmarks; preserve partial matches and boundary context.
+# One figure per script; CSV inputs and rendered panel data stay in this folder.
 suppressPackageStartupMessages({library(ggplot2);library(dplyr);library(tidyr);library(patchwork);library(scales)})
 arg<-grep('^--file=',commandArgs(FALSE),value=TRUE)
 HERE<-dirname(normalizePath(sub('^--file=','',arg[1]),winslash='/'))
-d<-read.csv(file.path(HERE,'Supplementary_Table10_Benchmark.csv'))
-m<-read.csv(file.path(HERE,'Model_Matched_Summaries.csv'))
-theme_pub<-theme_classic(base_size=7.5,base_family='Arial')+theme(
- axis.title=element_text(size=7.5),axis.text=element_text(size=6.5,colour='#263940'),
+theme_pub<-theme_classic(base_size=7,base_family='Arial')+theme(
+ axis.title=element_text(size=7,face='bold'),axis.text=element_text(size=6,colour='black'),
+ axis.line=element_line(linewidth=.2),axis.ticks=element_line(linewidth=.2),
  strip.background=element_blank(),strip.text=element_text(size=7,face='bold'),
- plot.title=element_text(size=8,face='bold'),plot.subtitle=element_text(size=6.5,colour='#52616A'),
- plot.tag=element_text(size=9,face='bold'),legend.position='bottom',legend.title=element_blank(),
- legend.text=element_text(size=6.5),plot.margin=margin(5,9,6,5,'pt'),axis.line=element_line(linewidth=.22))
-col<-c(Model='#0072B2',Literature='#D55E00')
-fuel<-filter(d,Metric=='Fuel use')%>%mutate(Label=paste(Activity_year,Region,sep=' | '))
-plot_pair<-function(s,tag,title){
- s$Label<-factor(s$Label,levels=rev(unique(s$Label)))
- write.csv(s,file.path(HERE,paste0('Supplementary_Fig14_Panel',toupper(tag),'_Render_Data.csv')),row.names=FALSE)
- l<-s%>%pivot_longer(c(Model,Literature),names_to='Estimate',values_to='Value')
- l$Number<-format(round(l$Value),big.mark=',',trim=TRUE)
- ggplot(s,aes(y=Label))+
-  geom_segment(aes(x=Literature,xend=Model,yend=Label),colour='#CAD4D9',linewidth=1)+
-  geom_point(data=l,aes(x=Value,colour=Estimate,shape=Estimate),size=2.1,stroke=.65)+
-  geom_text(data=l,aes(x=Value,label=Number,colour=Estimate,vjust=ifelse(Estimate=='Model',-1,1.7)),size=2.2,show.legend=FALSE)+
-  scale_colour_manual(values=col)+scale_shape_manual(values=c(Model=16,Literature=1))+
-  scale_x_continuous(expand=expansion(mult=c(0,.18)),limits=c(0,NA),labels=label_number(big.mark=','),n.breaks=4)+
-  scale_y_discrete(expand=expansion(add=.7))+
-  labs(tag=paste0('(',tag,')'),title=title,x='Fuel (L per t catch)',y=NULL)+theme_pub
-}
-pa<-plot_pair(filter(fuel,Gear=='PS'),'a','Purse-seine fuel comparisons')
-pb<-plot_pair(filter(fuel,Gear=='LL'),'b','Longline fuel comparisons')
-# All six fuel gaps, with exact benchmark populations retained.
-gaps<-fuel%>%mutate(Label=paste(Gear,Label,sep=' | '),
- Evidence=ifelse(Independent_outcome,'External fuel outcome','Calibration-linked survey'),
- Gap_Label=sprintf('%+.1f%%',Difference_pct))
-gaps$Label<-factor(gaps$Label,levels=rev(gaps$Label))
-write.csv(gaps,file.path(HERE,'Supplementary_Fig14_PanelC_Render_Data.csv'),row.names=FALSE)
-pc<-ggplot(gaps,aes(y=Label,x=Difference_pct))+
- geom_vline(xintercept=0,linetype='dashed',colour='#75858D',linewidth=.3)+
- geom_segment(aes(x=0,xend=Difference_pct,yend=Label,colour=Gear),linewidth=1.05,alpha=.55)+
- geom_point(aes(colour=Gear,shape=Evidence),size=2.2,stroke=.7)+
- geom_text(aes(label=Gap_Label,hjust=ifelse(Difference_pct<0,1.2,-.2)),size=2.6,colour='#263940')+
- scale_colour_manual(values=c(PS='#35968A',LL='#A25B54'))+
- scale_shape_manual(values=c('External fuel outcome'=16,'Calibration-linked survey'=1))+
- scale_x_continuous(limits=c(-55,275),breaks=c(0,100,200),labels=function(x)paste0(x,'%'))+
- labs(tag='(c)',title='Fuel gaps are larger for longline in the retained comparisons',
- subtitle='Descriptive difference = 100 \u00d7 (model / literature - 1); exact fleet coverage remains unmatched',x='Difference from literature',y=NULL)+
- theme_pub+guides(colour='none',shape=guide_legend(nrow=1))
-# Derived components share the same matched model numerator/denominator.
-parts<-filter(m,Benchmark_ID%in%c('PS23','LL23'))%>%
- transmute(Benchmark_ID,Gear,Combustion=Model_combustion_tCO2e_t,
- 'Fuel supply'=Model_fuel_lifecycle_tCO2e_t-Model_combustion_tCO2e_t,
- 'Other LCA'=Model_full_CEI_tCO2e_t-Model_fuel_lifecycle_tCO2e_t)%>%
- pivot_longer(c('Combustion','Fuel supply','Other LCA'),names_to='Component',values_to='Value')
-parts$Component<-factor(parts$Component,levels=c('Combustion','Fuel supply','Other LCA'))
-bench<-filter(d,Metric=='Fuel combustion GHG')
-write.csv(parts,file.path(HERE,'Supplementary_Fig14_PanelD_Render_Data.csv'),row.names=FALSE)
-write.csv(bench,file.path(HERE,'Supplementary_Fig14_PanelD_Survey_Render_Data.csv'),row.names=FALSE)
-pd<-ggplot(parts,aes(y='Model',x=Value,fill=Component))+
- geom_col(width=.4,position=position_stack(reverse=TRUE))+
- geom_point(data=bench,aes(x=Literature,y='Survey combustion'),inherit.aes=FALSE,shape=23,fill='#D55E00',colour='white',size=2.4)+
- facet_wrap(~Gear,nrow=1,scales='free_x')+
- scale_fill_manual(values=c(Combustion='#4F8DAE','Fuel supply'='#9EC1D0','Other LCA'='#DBE4E9'))+
- scale_x_continuous(limits=c(0,NA),n.breaks=3,expand=expansion(mult=c(0,.08)))+
- labs(tag='(d)',title='GHG boundaries are kept separate',subtitle='2023 scopes; separate facet scales',x=expression(t~CO[2]*e~per~t~catch),y=NULL)+theme_pub+
- theme(legend.key.width=unit(4,'mm'))+guides(fill=guide_legend(nrow=1))
-# Retain the full-LCA context row, explicitly not an independent validation.
-context<-filter(d,Metric=='Full LCA CEI')
-write.csv(context,file.path(HERE,'Supplementary_Fig14_PanelE_Render_Data.csv'),row.names=FALSE)
-pe<-ggplot(context,aes(y=1))+
- geom_segment(aes(x=Literature,xend=Model,yend=1),colour='#CAD4D9',linewidth=1)+
- geom_point(aes(x=Model),colour=col['Model'],size=2.4)+geom_point(aes(x=Literature),colour=col['Literature'],shape=1,size=2.4,stroke=.7)+
- annotate('text',x=context$Model,y=1.27,label=sprintf('Model %.2f',context$Model),size=2.4,colour=col['Model'])+
- annotate('text',x=context$Literature,y=.73,label=sprintf('Literature %.2f',context$Literature),size=2.4,colour=col['Literature'])+
- scale_x_continuous(limits=c(1.2,2),breaks=c(1.2,1.6,2))+
- scale_y_continuous(limits=c(.5,1.5),breaks=NULL)+
- labs(tag='(e)',title='Full-LCA context: Spanish PS, 2003',subtitle='Delivery boundary and shared sources differ',x=expression(t~CO[2]*e~per~t~catch),y=NULL)+theme_pub+
- theme(axis.line.y=element_blank(),legend.position='none')
-top<-((pa|pb)+plot_layout(guides='collect')) & theme(legend.position='bottom')
-fig<-(top/pc/(pd|pe))+plot_layout(heights=c(1.1,1.2,1.05))
-for(ext in c('pdf','png','tiff')){
- opts<-list(filename=file.path(HERE,paste0('Supplementary_Fig14_External_Benchmark.',ext)),plot=fig,width=183,height=202,units='mm',bg='white')
- if(ext=='pdf')opts$device<-cairo_pdf
- if(ext=='png')opts$dpi<-300
- if(ext=='tiff'){opts$dpi<-900;opts$compression<-'lzw'}
- do.call(ggsave,opts)
+ plot.tag=element_text(size=8,face='bold'),legend.position='bottom',
+ legend.text=element_text(size=6),legend.title=element_text(size=7,face='bold'),
+ legend.key.size=unit(3,'mm'),panel.spacing=unit(3,'mm'),plot.margin=margin(4,5,4,4,'pt'))
+cols<-c(LL='#B81D0A',PS='#1A7A8A',TP='#7570B3',SA='#E6AB02')
+weo_cols<-c(STEPS='#D55E00',APS='#0072B2',NZE='#009E73')
+read_panel<-function(n,label){d<-read.csv(file.path(HERE,paste0('Supplementary_Fig',n,'_',label,'.csv')));write.csv(d,file.path(HERE,paste0('Supplementary_Fig',n,'_',label,'_Render_Data.csv')),row.names=FALSE);d}
+
+a<-read_panel(13,'PanelA_MC');b<-read_panel(13,'PanelB_Scenarios')
+p_a<-ggplot(a,aes(Year,Total_median/1e6))+geom_ribbon(aes(ymin=Total_p5/1e6,ymax=Total_p95/1e6),fill='#0072B2',alpha=.2)+
+ geom_line(colour='#0072B2',linewidth=.5)+labs(tag='(a)',x='Year',y='Historical emissions (Mt CO2e)',title='Central 90% Monte Carlo range')+theme_pub
+p_b<-ggplot(b,aes(Year,Median))+geom_ribbon(aes(ymin=p5,ymax=p95),fill='#DAE6EB')+
+ geom_ribbon(aes(ymin=p25,ymax=p75),fill='#98B6C4')+geom_line(linewidth=.5,colour='#355E72')+
+ facet_wrap(~Rule,nrow=1)+labs(tag='(b)',x='Year',y='No-transition emissions (Mt CO2e)',title='81 specified futures within each HCR')+theme_pub
+fig<-p_a/p_b
+
+for(ext in c('pdf','png','tiff')) {
+ options<-list(filename=file.path(HERE,paste0('Supplementary_Fig14_Uncertainty_Ranges.',ext)),plot=fig,width=183,height=150,units='mm',bg='white')
+ if(ext=='pdf') options$device<-cairo_pdf
+ if(ext=='png') options$dpi<-300
+ if(ext=='tiff') {options$dpi<-900;options$compression<-'lzw'}
+ do.call(ggsave,options)
 }

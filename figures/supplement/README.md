@@ -11,21 +11,21 @@ For example, `Supplementary_Fig3/Supplementary_Fig3.r` draws SI Fig. 3, historic
 | 3 | Historical missing-capacity reconstruction | `Supplementary_Fig3/Supplementary_Fig3.r` |
 | 4 | Historical data coverage and reconstruction balance | `Supplementary_Fig4/Supplementary_Fig4.r` |
 | 5 | Accounting identity and technology-correction sensitivity | `Supplementary_Fig5/Supplementary_Fig5.r` |
-| 6 | All retained JABBA CPUE series | `Supplementary_Fig6/Supplementary_Fig6.r` |
-| 7 | Production JABBA chain trajectories | `Supplementary_Fig7/Supplementary_Fig7.r` |
-| 8 | Future configurations and simulation stages | `Supplementary_Fig8/Supplementary_Fig8.r` |
-| 9 | Fuel properties, screening and transition depth | `Supplementary_Fig9/Supplementary_Fig9.r` |
-| 10 | Consolidation schedule and accounting | `Supplementary_Fig10/Supplementary_Fig10.r` |
-| 11 | Species quota assignments and effort screening | `Supplementary_Fig11/Supplementary_Fig11.r` |
-| 12 | Global sensitivity and SHAP attribution | `Supplementary_Fig12/Supplementary_Fig12.r` |
-| 13 | Historical parameter ranges and future configuration ranges | `Supplementary_Fig13/Supplementary_Fig13.r` |
-| 14 | External benchmarking of fuel use and GHG emission estimates | `Supplementary_Fig14/Supplementary_Fig14.r` |
-| 15 | Engine-clock sensitivity at fixed vessel states | `Supplementary_Fig15/Supplementary_Fig15.r` |
-| 16 | Regional and fleet-object technology-based mitigation | `Supplementary_Fig16/Supplementary_Fig16.r` |
-| 17 | Baseline factor contrasts | `Supplementary_Fig17/Supplementary_Fig17.r` |
-| 18 | Whole-chain capacity and resource sensitivity | `Supplementary_Fig18/Supplementary_Fig18.r` |
-| 19 | Catch scale and period-intensity decomposition | `Supplementary_Fig19/Supplementary_Fig19.r` |
-| 20 | Regional conditional refits and historical-state feasibility checks | `Supplementary_Fig20/Supplementary_Fig20.r` |
+| 6 | All retained JABBA CPUE series | `Supplementary_Fig7/Supplementary_Fig7.r` |
+| 7 | Production JABBA chain trajectories | `Supplementary_Fig8/Supplementary_Fig8.r` |
+| 8 | Future configurations and simulation stages | `Supplementary_Fig9/Supplementary_Fig9.r` |
+| 9 | Fuel properties, screening and transition depth | `Supplementary_Fig10/Supplementary_Fig10.r` |
+| 10 | Consolidation schedule and accounting | `Supplementary_Fig11/Supplementary_Fig11.r` |
+| 11 | Species quota assignments and effort screening | `Supplementary_Fig12/Supplementary_Fig12.r` |
+| 12 | Global sensitivity and SHAP attribution | `Supplementary_Fig13/Supplementary_Fig13.r` |
+| 13 | Historical parameter ranges and future configuration ranges | `Supplementary_Fig14/Supplementary_Fig14.r` |
+| 14 | External benchmarking of fuel use and GHG emission estimates | `Supplementary_Fig18/Supplementary_Fig18.r` |
+| 15 | Engine-clock sensitivity at fixed vessel states | `Supplementary_Fig19/Supplementary_Fig19.r` |
+| 16 | Regional and fleet-object technology-based mitigation | `Extended_Fig7/Extended_Fig7.r` |
+| 17 | Baseline factor contrasts | `Supplementary_Fig20/Supplementary_Fig20.r` |
+| 18 | Whole-chain capacity and resource sensitivity | `Supplementary_Fig21/Supplementary_Fig21.r` |
+| 19 | Catch scale and period-intensity decomposition | `Supplementary_Fig22/Supplementary_Fig22.r` |
+| 20 | Regional conditional refits and historical-state feasibility checks | `Supplementary_Fig23/Supplementary_Fig23.r` |
 
 ## Rendering and data refresh
 
@@ -43,6 +43,6 @@ Individual R entrypoints can also be run with the configured R environment. The 
 
 ## Tables and provenance
 
-Numbered table CSVs use current SI table numbers. The external benchmark is `Supplementary_Fig14/Supplementary_Table10_Benchmark.csv`; engineering conversions are `tables/Supplementary_Table3_Engineering_Conversions.csv`; engine clocks are `tables/Supplementary_Table11_Engine_Clock.csv`.
+Numbered table CSVs use current SI table numbers. The external benchmark is `Supplementary_Fig18/Supplementary_Table10_Benchmark.csv`; engineering conversions are `tables/Supplementary_Table3_Engineering_Conversions.csv`; engine clocks are `tables/Supplementary_Table11_Engine_Clock.csv`.
 `Current_SI_Numbering.csv` lists current captions and actual asset directories. Its Previous_number column records provenance only.
 The complete pre-alignment tree is archived at `analysis/si_filename_alignment_20261016/before/supplement/`. Nested `_archive*` directories retain historical filenames and are not current SI assets.

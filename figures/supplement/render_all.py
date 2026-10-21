@@ -1,6 +1,6 @@
 """Render the current SI figures in manuscript order, without running models.
 
-python figures/supplement/render_all.py         # figures 1-21
+python figures/supplement/render_all.py         # figures 1-23
 python figures/supplement/render_all.py 3 14 15  # selected figures
 """
 from pathlib import Path
@@ -12,11 +12,11 @@ def main():
  sys.stdout.reconfigure(encoding='utf-8',errors='replace')
  parser=argparse.ArgumentParser(description=__doc__)
  parser.add_argument('figures',nargs='*',type=int)
- selected=parser.parse_args().figures or list(range(1,22))
- if any(n not in range(1,22) for n in selected):parser.error('Figure numbers must be between 1 and 21.')
+ selected=parser.parse_args().figures or list(range(1,24))
+ if any(n not in range(1,24) for n in selected):parser.error('Figure numbers must be between 1 and 23.')
  completed=[]
  for n in selected:
-  prefix='validation_20261018/' if n in (5,15,19) else ''
+  prefix='validation_20261018/' if n in (5,19,22) else ''
   script=f'figures/supplement/{prefix}Supplementary_Fig{n}/Supplementary_Fig{n}.r'
   subprocess.run([sys.executable,str(ROOT/'analysis/full_chain_20261012/render_single.py'),script],cwd=ROOT,check=True)
   completed.append(n)

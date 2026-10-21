@@ -1,7 +1,7 @@
 library(JABBA)
 root<-normalizePath('.',winslash='/')
 out<-file.path(root,'analysis','si_rebuild_20261012','sampling_geometry');dir.create(out,showWarnings=FALSE)
-x<-readRDS(file.path(root,'figures','Extended_Data','Extended_Fig5','jabba_diagnostics','SBT_fit.rds'))
+x<-readRDS(file.path(root,'figures','supplement','Supplementary_Fig6','jabba_diagnostics','SBT_fit.rds'))
 JABBA::jabba2jags(x$input,out)
 rows<-list()
 for(s in c('SKJ','ALB')) {

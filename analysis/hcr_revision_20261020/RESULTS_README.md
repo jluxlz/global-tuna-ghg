@@ -40,7 +40,7 @@ Effort per catch is the largest absolute C/F and C/T accounting term. F/T has a 
 - `analysis/HCR_Matched_Mechanism_Summary.csv`: whole-fleet and common-weight intensity contrasts and coverage.
 - `analysis/HCR_Sensitivity_Period.csv`: complete sensitivity periods.
 
-Each updated figure folder also contains its panel inputs and R-rendered CSVs. Supplementary Fig. 19 retains the original C/F family; Supplementary Fig. 21 contains the new three-rule mechanism analysis. Superseded document and figure backups are archived privately; only the current scientific files are retained locally.
+Each updated figure folder also contains its panel inputs and R-rendered CSVs. Supplementary Fig. 22 retains the original C/F family; Extended Data Fig. 6 contains the new three-rule mechanism analysis. Superseded document and figure backups are archived privately; only the current scientific files are retained locally.
 
 ## Price correction
 

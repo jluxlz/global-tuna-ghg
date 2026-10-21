@@ -46,12 +46,12 @@ def main():
         x=c[c.Combo==combo].set_index('Future').GHG_2050_Mt.sort_index()
         y=table[table.Year==2050].set_index('BAU_ID')[col].sort_index()
         assert np.array_equal(x.to_numpy(),y.to_numpy())
-    panel=ROOT/'figures/supplement/Supplementary_Fig16'
+    panel=ROOT/'figures/Extended_Data/Extended_Fig7'
     he=pd.read_csv(P/'Heterogeneous_Mitigation_Results.csv')
     err=(he.Reduction_pct-100*(1-he.GHG_Mitigation/he.GHG_BAU)).abs().max()
     assert err<=.0005000001
-    org=pd.read_csv(panel/'Supplementary_Fig16_PanelA_Organizations.csv').set_index('Organization')
-    b=pd.read_csv(panel/'Supplementary_Fig16_PanelB_Object_Effects.csv')
+    org=pd.read_csv(panel/'Extended_Fig7_PanelA_Organizations.csv').set_index('Organization')
+    b=pd.read_csv(panel/'Extended_Fig7_PanelB_Object_Effects.csv')
     new['Object_Organization_Medians']=org.to_dict(orient='index')
     new['Displayed_Objects']={name:dict(Minimum=float(g.red.min()),Maximum=float(g.red.max()),Negative_N=int((g.red<0).sum())) for name,g in b.groupby('Mitigation_Pathway')}
     new['Object_Selected_Rows']=b.to_dict(orient='records')

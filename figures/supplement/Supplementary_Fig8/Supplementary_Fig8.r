@@ -13,17 +13,15 @@ cols<-c(LL='#B81D0A',PS='#1A7A8A',TP='#7570B3',SA='#E6AB02')
 weo_cols<-c(STEPS='#D55E00',APS='#0072B2',NZE='#009E73')
 read_panel<-function(n,label){d<-read.csv(file.path(HERE,paste0('Supplementary_Fig',n,'_',label,'.csv')));write.csv(d,file.path(HERE,paste0('Supplementary_Fig',n,'_',label,'_Render_Data.csv')),row.names=FALSE);d}
 
-a<-read_panel(8,'PanelA_Configurations');b<-read_panel(8,'PanelB_Run_Counts');a$WEO<-factor(a$WEO,levels=c('STEPS','APS','NZE'))
-p_a<-ggplot(a,aes(100*Growth,100*TechCreep,colour=WEO,shape=Retirement))+geom_point(size=2.2,position=position_dodge(width=.14))+
- facet_wrap(~WEO,nrow=1)+scale_colour_manual(values=weo_cols,guide='none')+
- labs(tag='(a)',x='Capacity growth (% yr-1)',y='Scenario technology creep (% yr-1)')+theme_pub
-b$Stage<-factor(b$Stage,levels=rev(b$Stage))
-p_b<-ggplot(b,aes(Runs,Stage))+geom_col(fill='#0072B2',width=.55)+geom_text(aes(label=comma(Runs)),hjust=-.2,size=2.3)+
- scale_x_continuous(expand=expansion(mult=c(0,.18)))+labs(tag='(b)',x='Fleet simulations',y=NULL)+theme_pub
-fig<-p_a/p_b
+b<-read_panel(7,'PanelA_Traces')%>%filter(Parameter%in%c('r','K','psi'))
+b$Stock<-factor(b$Stock,levels=c('SKJ','YFT','BET','ALB','SBT'))
+b$Parameter<-factor(b$Parameter,levels=c('r','K','psi'),labels=c('r','K (scaled JAGS units)','Initial depletion'))
+fig<-ggplot(b,aes(Draw,Value,colour=factor(Chain)))+geom_line(linewidth=.15,alpha=.5)+
+ facet_wrap(~Stock+Parameter,ncol=3,scales='free_y')+scale_colour_manual(values=c('1'='#0072B2','2'='#D55E00','3'='#009E73','4'='#CC79A7'),name='Chain')+
+ labs(x='Retained draw within chain',y='Parameter value')+theme_pub
 
 for(ext in c('pdf','png','tiff')) {
- options<-list(filename=file.path(HERE,paste0('Supplementary_Fig8_Scenario_Architecture.',ext)),plot=fig,width=183,height=155,units='mm',bg='white')
+ options<-list(filename=file.path(HERE,paste0('Supplementary_Fig8_JABBA_Chain_Traces.',ext)),plot=fig,width=183,height=220,units='mm',bg='white')
  if(ext=='pdf') options$device<-cairo_pdf
  if(ext=='png') options$dpi<-300
  if(ext=='tiff') {options$dpi<-900;options$compression<-'lzw'}

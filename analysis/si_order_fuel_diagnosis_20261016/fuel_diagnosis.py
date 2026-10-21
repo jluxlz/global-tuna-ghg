@@ -28,7 +28,7 @@ def main():
  alpha_lookup=h.init_time_profile_lookup(h.PNAS_POWER_PATH,verbose=False)
  alpha23=h.query_alpha_work_vectorized(df.Flag.to_numpy(),df.VesselType.to_numpy(),df.Length.to_numpy(),np.full(len(df),2023),alpha_lookup,sectors=df.Sector.to_numpy())
  alpha_first=h.query_alpha_work_vectorized(df.Flag.to_numpy(),df.VesselType.to_numpy(),df.Length.to_numpy(),np.full(len(df),int(df.Builtdate.min())),alpha_lookup)
- scope=pd.read_csv(R/'figures/supplement/Supplementary_Fig14/Matched_Flag_Gear_Sector_Audit.csv')
+ scope=pd.read_csv(R/'figures/supplement/Supplementary_Fig18/Matched_Flag_Gear_Sector_Audit.csv')
  scope=scope[scope.Benchmark_ID=='LL23'].copy()
  cf={'I':3.206,'APW':3.158};rho={'I':.830565,'APW':.746269}
  scope['Production_Fuel_L']=scope.Fuel_CO2_scope/scope.Sector.map(cf)*1000/scope.Sector.map(rho)

@@ -1,8 +1,1 @@
-[
-  {
-    "Path": "model_parameters/Scenario_Fuel_Price_Matrix.xlsx",
-    "Previous_SHA256": "f880186bf6a100a96c228d452e276e16cd664b829c6961eacefb7f24d3f19b4d",
-    "Current_SHA256": "5693837dd65dd1ed2f848bf4cb0056fb14e26d95ba092ed81bcea0c55731ab79",
-    "Reason": "Approved current price-input correction; compiled project input, not an unchanged provider original"
-  }
-]
+[]

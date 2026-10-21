@@ -1,12 +1,13 @@
-"""Raw economic-response sensitivity, independent of any fixed-catch BAU."""
 from pathlib import Path
+import sys,shutil
 import pandas as pd
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[2]
-d=pd.read_csv(ROOT/'figures/Fig4/Fig4_PanelE_Intensity.csv');d=d[d.Year==2050]
-rows=[]
-for x in d.itertuples():
- for e in [0,-.1,-.3,-.5,-.7]:
-  m=x.Cost_Ratio_vs_MGO**e
-  rows.append(dict(WEO=x.WEO,Fuel=x.Fuel,Elasticity=e,Cost_Ratio=x.Cost_Ratio_vs_MGO,
-   Raw_Response=m,Physical_Intensity=x.Physical_Intensity_gCO2e_kWh,Adjusted_Intensity=x.Physical_Intensity_gCO2e_kWh*m))
-pd.DataFrame(rows).to_csv(HERE/'Extended_Fig6_Current_Price_Sensitivity.csv',index=False)
+A=Path(sys.argv[1]) if len(sys.argv)>1 else ROOT/'analysis/hcr_revision_20261020/analysis'
+names={'A_Matching':'HCR_Matched_Mechanism_Summary','B_Emissions':'HCR_Matched_Mechanism_Summary',
+ 'C_Decomposition':'HCR_Matched_LMDI_Terms','D_Weights':'HCR_Matched_Mechanism_Summary',
+ 'E_Stock_Effort':'HCR_Matched_Stock_Effort','F_Annual':'HCR_Matched_Annual',
+ 'Closure':'HCR_Matched_Closure'}
+for panel,src in names.items():shutil.copy2(A/(src+'.csv'),HERE/('Extended_Fig6_Panel'+panel+'.csv'))
+for src in ['HCR_Matched_Pairs','Common_Catch_Triples','Catch_Attainable_Ranges','Catch_Matching_All_Candidates']:
+ shutil.copy2(A.parent/(src+'.csv'),HERE/(src+'.csv'))
+shutil.copy2(A.parent/'Catch_Matching_Protocol.json',HERE/'Catch_Matching_Protocol.json')

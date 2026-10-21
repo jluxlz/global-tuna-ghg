@@ -113,61 +113,65 @@ Extended Data Fig. 4,figures/Extended_Data/Extended_Fig4/Extended_Fig4_PanelA_Re
 Extended Data Fig. 4,figures/Extended_Data/Extended_Fig4/Extended_Fig4_PanelB_Render_Data.csv
 Extended Data Fig. 4,figures/Extended_Data/Extended_Fig4/Extended_Fig4_PanelC_Render_Data.csv
 Extended Data Fig. 4,figures/Extended_Data/Extended_Fig4/Extended_Fig4_PanelD_Render_Data.csv
-Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_Diagnostic_Summary.csv
-Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_MCMC_All_Parameters.csv
-Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_MCMC_Traces.csv
-Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_Official_Context.csv
-Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_PanelA_Biomass.csv
+Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/ED11_BreakEven_Cutoff.csv
+Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_HCR_PanelA_Effort.csv
+Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_HCR_PanelA_Effort_Render_Data.csv
+Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_HCR_PanelA_Summary.csv
+Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_HCR_PanelB_Catches.csv
+Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_HCR_PanelB_Catches_Render_Data.csv
+Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_HCR_PanelB_Summary.csv
 Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_PanelA_Render_Data.csv
-Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_PanelB_CPUE_Fits.csv
 Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_PanelB_Render_Data.csv
-Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_PanelCD_Core_MCMC.csv
 Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_PanelC_Render_Data.csv
-Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_PanelD_Render_Data.csv
-Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Extended_Fig5_Posterior_Predictive_Checks.csv
-Extended Data Fig. 5,figures/Extended_Data/Extended_Fig5/Verified_Assessment_References.csv
-Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_Current_Price_Sensitivity.csv
-Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelA_Render_Data.csv
-Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelB_Render_Data.csv
-Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelC_Render_Data.csv
-Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/SF5_Capture_Seed_Manifest.csv
-Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/SF5_Multiplier_Paths.csv
-Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/SF5_PanelA_Multiplier.csv
-Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/SF5_PanelB_Abatement.csv
-Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/SF5_PanelC_Rebound.csv
-Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_HCR_PanelA_Baselines.csv
-Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_HCR_PanelA_Baselines_Render_Data.csv
-Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_HCR_PanelB_Fuel.csv
-Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_HCR_PanelB_Fuel_Render_Data.csv
-Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_PanelA_Render_Data.csv
-Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_PanelB_Render_Data.csv
-Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/SF9_Creep_Robustness.csv
-Extended Data Fig. 8,figures/Extended_Data/Extended_Fig8/ED10_Mecon_Series.csv
-Extended Data Fig. 8,figures/Extended_Data/Extended_Fig8/ED10_Subsidy_Buffer.csv
-Extended Data Fig. 8,figures/Extended_Data/Extended_Fig8/Extended_Fig8_Current_Cost_Buffer.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Catch_Attainable_Ranges.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Catch_Matching_All_Candidates.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Common_Catch_Triples.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelA_Contributions.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelA_Contributions_Render_Data.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelA_Matching.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelA_Matching_Render_Data.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelB_Biomass.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelB_Biomass_Render_Data.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelB_Emissions.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelB_Emissions_Render_Data.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelC_Decomposition.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelC_Decomposition_Render_Data.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelC_Effort.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelC_Effort_Render_Data.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelC_Mean_Contributions.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelClosure.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelD_Weights.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelD_Weights_Render_Data.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelE_Stock_Effort.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelE_Stock_Effort_Render_Data.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/Extended_Fig6_PanelF_Annual.csv
+Extended Data Fig. 6,figures/Extended_Data/Extended_Fig6/HCR_Matched_Pairs.csv
+Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_HCR_PanelA_Organizations.csv
+Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_HCR_PanelA_Organizations_Render_Data.csv
+Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_HCR_PanelA_Summary.csv
+Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_HCR_PanelB_Gears.csv
+Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_HCR_PanelB_Gears_Render_Data.csv
+Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_PanelA_Organizations.csv
+Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_PanelA_Organizations_Render_Data.csv
+Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_PanelB_Object_Effects.csv
+Extended Data Fig. 7,figures/Extended_Data/Extended_Fig7/Extended_Fig7_PanelB_Object_Effects_Render_Data.csv
+Extended Data Fig. 8,figures/Extended_Data/Extended_Fig8/Extended_Fig8_HCR_PanelA_Render_Data.csv
+Extended Data Fig. 8,figures/Extended_Data/Extended_Fig8/Extended_Fig8_HCR_PanelB_Render_Data.csv
+Extended Data Fig. 8,figures/Extended_Data/Extended_Fig8/Extended_Fig8_HCR_PanelC_Render_Data.csv
+Extended Data Fig. 8,figures/Extended_Data/Extended_Fig8/Extended_Fig8_HCR_Period.csv
+Extended Data Fig. 8,figures/Extended_Data/Extended_Fig8/Extended_Fig8_HCR_Shapley.csv
 Extended Data Fig. 8,figures/Extended_Data/Extended_Fig8/Extended_Fig8_PanelA_Render_Data.csv
 Extended Data Fig. 8,figures/Extended_Data/Extended_Fig8/Extended_Fig8_PanelB_Render_Data.csv
 Extended Data Fig. 8,figures/Extended_Data/Extended_Fig8/Extended_Fig8_PanelC_Render_Data.csv
-Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/ED11_BreakEven_Cutoff.csv
-Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_HCR_PanelA_Effort.csv
-Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_HCR_PanelA_Effort_Render_Data.csv
-Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_HCR_PanelA_Summary.csv
-Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_HCR_PanelB_Catches.csv
-Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_HCR_PanelB_Catches_Render_Data.csv
-Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_HCR_PanelB_Summary.csv
-Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_PanelA_Render_Data.csv
-Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_PanelB_Render_Data.csv
-Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_PanelC_Render_Data.csv
-Extended Data Fig. 10,figures/Extended_Data/Extended_Fig10/Extended_Fig10_HCR_PanelA_Render_Data.csv
-Extended Data Fig. 10,figures/Extended_Data/Extended_Fig10/Extended_Fig10_HCR_PanelB_Render_Data.csv
-Extended Data Fig. 10,figures/Extended_Data/Extended_Fig10/Extended_Fig10_HCR_PanelC_Render_Data.csv
-Extended Data Fig. 10,figures/Extended_Data/Extended_Fig10/Extended_Fig10_HCR_Period.csv
-Extended Data Fig. 10,figures/Extended_Data/Extended_Fig10/Extended_Fig10_HCR_Shapley.csv
-Extended Data Fig. 10,figures/Extended_Data/Extended_Fig10/Extended_Fig10_PanelA_Render_Data.csv
-Extended Data Fig. 10,figures/Extended_Data/Extended_Fig10/Extended_Fig10_PanelB_Render_Data.csv
-Extended Data Fig. 10,figures/Extended_Data/Extended_Fig10/Extended_Fig10_PanelC_Render_Data.csv
-Extended Data Fig. 10,figures/Extended_Data/Extended_Fig10/SF6_Combos_2050.csv
-Extended Data Fig. 10,figures/Extended_Data/Extended_Fig10/SF6_Shapley_Contributions.csv
+Extended Data Fig. 8,figures/Extended_Data/Extended_Fig8/SF6_Combos_2050.csv
+Extended Data Fig. 8,figures/Extended_Data/Extended_Fig8/SF6_Shapley_Contributions.csv
+Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_PanelA_Stocks.csv
+Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_PanelA_Stocks_Render_Data.csv
+Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_PanelB_Quota.csv
+Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_PanelB_Quota_Render_Data.csv
+Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_PanelC_Fuel.csv
+Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_PanelC_Fuel_Render_Data.csv
+Extended Data Fig. 9,figures/Extended_Data/Extended_Fig9/Extended_Fig9_Threshold_Activation.csv
 Supplementary Fig. 1,figures/supplement/Supplementary_Fig1/Supplementary_Fig1_PanelA_Registry.csv
 Supplementary Fig. 1,figures/supplement/Supplementary_Fig1/Supplementary_Fig1_PanelA_Registry_Render_Data.csv
 Supplementary Fig. 1,figures/supplement/Supplementary_Fig1/Supplementary_Fig1_PanelB_Annual.csv
@@ -194,142 +198,151 @@ Supplementary Fig. 5,figures/supplement/validation_20261018/Supplementary_Fig5/S
 Supplementary Fig. 5,figures/supplement/validation_20261018/Supplementary_Fig5/Supplementary_Fig5_PanelC_Thresholds.csv
 Supplementary Fig. 5,figures/supplement/validation_20261018/Supplementary_Fig5/Supplementary_Fig5_PanelD_Stock_Context.csv
 Supplementary Fig. 5,figures/supplement/validation_20261018/Supplementary_Fig5/YFT_Associations.csv
-Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Supplementary_Fig6_PanelA_Fits.csv
-Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Supplementary_Fig6_PanelA_Fits_Render_Data.csv
-Supplementary Fig. 7,figures/supplement/Supplementary_Fig7/Supplementary_Fig7_PanelA_Traces.csv
-Supplementary Fig. 7,figures/supplement/Supplementary_Fig7/Supplementary_Fig7_PanelA_Traces_Render_Data.csv
-Supplementary Fig. 8,figures/supplement/Supplementary_Fig8/Supplementary_Fig8_PanelA_Configurations.csv
-Supplementary Fig. 8,figures/supplement/Supplementary_Fig8/Supplementary_Fig8_PanelA_Configurations_Render_Data.csv
-Supplementary Fig. 8,figures/supplement/Supplementary_Fig8/Supplementary_Fig8_PanelB_Run_Counts.csv
-Supplementary Fig. 8,figures/supplement/Supplementary_Fig8/Supplementary_Fig8_PanelB_Run_Counts_Render_Data.csv
-Supplementary Fig. 9,figures/supplement/Supplementary_Fig9/Fuel_Parameters_Source.csv
-Supplementary Fig. 9,figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelA_Fuel_Intensity.csv
-Supplementary Fig. 9,figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelA_Fuel_Intensity_Render_Data.csv
-Supplementary Fig. 9,figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelB_Adoption.csv
-Supplementary Fig. 9,figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelB_Adoption_Render_Data.csv
-Supplementary Fig. 9,figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelC_Fuel_Screen.csv
-Supplementary Fig. 9,figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelC_Fuel_Screen_Render_Data.csv
-Supplementary Fig. 9,figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelD_Transition_Curves.csv
-Supplementary Fig. 9,figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelD_Transition_Curves_Render_Data.csv
-Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_Milestones_Render_Data.csv
-Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_PanelA_Composition_Render_Data.csv
-Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_PanelA_Schedule.csv
-Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_PanelA_Schedule_Render_Data.csv
-Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_PanelB_Illustration.csv
-Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_PanelB_Illustration_Render_Data.csv
-Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_PanelC_Power_Flow_Render_Data.csv
-Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Quota_Screen_Source.csv
-Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelA_Choices.csv
-Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelA_Choices_Render_Data.csv
-Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelA_HCR_Shapes.csv
-Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelA_HCR_Shapes_Render_Data.csv
-Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelB_Activation.csv
-Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelB_Activation_Render_Data.csv
-Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelC_Quota_Screen.csv
-Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelC_Quota_Screen_Render_Data.csv
-Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelC_Stock_Endpoints.csv
-Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelC_Stock_Endpoints_Render_Data.csv
-Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_Threshold_States.csv
-Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelA_Importance.csv
-Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelA_Importance_Render_Data.csv
-Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelB_SHAP.csv
-Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelB_SHAP_Render_Data.csv
-Supplementary Fig. 13,figures/supplement/Supplementary_Fig13/Supplementary_Fig13_PanelA_MC.csv
-Supplementary Fig. 13,figures/supplement/Supplementary_Fig13/Supplementary_Fig13_PanelA_MC_Render_Data.csv
-Supplementary Fig. 13,figures/supplement/Supplementary_Fig13/Supplementary_Fig13_PanelB_Scenarios.csv
-Supplementary Fig. 13,figures/supplement/Supplementary_Fig13/Supplementary_Fig13_PanelB_Scenarios_Render_Data.csv
-Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Annual_Fuel_Totals_Context.csv
-Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Fleet_Characteristics_Context.csv
-Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Matched_Flag_Gear_Sector_Audit.csv
-Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Model_Matched_Summaries.csv
-Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Sources.csv
-Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Supplementary_Fig14_PanelA_Render_Data.csv
-Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Supplementary_Fig14_PanelB_Render_Data.csv
-Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Supplementary_Fig14_PanelC_Render_Data.csv
-Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Supplementary_Fig14_PanelD_Render_Data.csv
-Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Supplementary_Fig14_PanelD_Survey_Render_Data.csv
-Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Supplementary_Fig14_PanelE_Render_Data.csv
-Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Supplementary_Table10_Benchmark.csv
-Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Workbook_Row_Adjudication.csv
-Supplementary Fig. 15,figures/supplement/validation_20261018/Supplementary_Fig15/Fuel_Annual_Grid_Catch_Coverage.csv
-Supplementary Fig. 15,figures/supplement/validation_20261018/Supplementary_Fig15/Fuel_Catch_Denominator.csv
-Supplementary Fig. 15,figures/supplement/validation_20261018/Supplementary_Fig15/Fuel_Cohort_Composition.csv
-Supplementary Fig. 15,figures/supplement/validation_20261018/Supplementary_Fig15/Fuel_Identifier_QC.csv
-Supplementary Fig. 15,figures/supplement/validation_20261018/Supplementary_Fig15/Fuel_LOA_Class.csv
-Supplementary Fig. 15,figures/supplement/validation_20261018/Supplementary_Fig15/Fuel_Phase_Sensitivity.csv
-Supplementary Fig. 15,figures/supplement/validation_20261018/Supplementary_Fig15/Fuel_Phase_Sensitivity_Draws.csv
-Supplementary Fig. 15,figures/supplement/validation_20261018/Supplementary_Fig15/Fuel_Species_Composition.csv
-Supplementary Fig. 15,figures/supplement/validation_20261018/Supplementary_Fig15/Supplementary_Fig15_PanelA_Global_Clocks.csv
-Supplementary Fig. 15,figures/supplement/validation_20261018/Supplementary_Fig15/Supplementary_Fig15_PanelB_Fuel_Phases.csv
-Supplementary Fig. 15,figures/supplement/validation_20261018/Supplementary_Fig15/Supplementary_Fig15_PanelC_FI_Diagnostics.csv
-Supplementary Fig. 15,figures/supplement/validation_20261018/Supplementary_Fig15/Supplementary_Fig15_PanelD_Flag_Coverage.csv
-Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_HCR_PanelA_Organizations.csv
-Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_HCR_PanelA_Organizations_Render_Data.csv
-Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_HCR_PanelA_Summary.csv
-Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_HCR_PanelB_Gears.csv
-Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_HCR_PanelB_Gears_Render_Data.csv
-Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_PanelA_Organizations.csv
-Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_PanelA_Organizations_Render_Data.csv
-Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_PanelB_Object_Effects.csv
-Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_PanelB_Object_Effects_Render_Data.csv
-Supplementary Fig. 17,figures/supplement/Supplementary_Fig17/SF7_Fuel_Intensity.csv
-Supplementary Fig. 17,figures/supplement/Supplementary_Fig17/SF7_Increase_Decomposition.csv
-Supplementary Fig. 17,figures/supplement/Supplementary_Fig17/SF7_Meco_Trajectory.csv
-Supplementary Fig. 17,figures/supplement/Supplementary_Fig17/SF7_WEO_dE.csv
+Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Supplementary_Fig6_Diagnostic_Summary.csv
+Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Supplementary_Fig6_MCMC_All_Parameters.csv
+Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Supplementary_Fig6_MCMC_Traces.csv
+Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Supplementary_Fig6_Official_Context.csv
+Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Supplementary_Fig6_PanelA_Biomass.csv
+Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Supplementary_Fig6_PanelA_Render_Data.csv
+Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Supplementary_Fig6_PanelB_CPUE_Fits.csv
+Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Supplementary_Fig6_PanelB_Render_Data.csv
+Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Supplementary_Fig6_PanelCD_Core_MCMC.csv
+Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Supplementary_Fig6_PanelC_Render_Data.csv
+Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Supplementary_Fig6_PanelD_Render_Data.csv
+Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Supplementary_Fig6_Posterior_Predictive_Checks.csv
+Supplementary Fig. 6,figures/supplement/Supplementary_Fig6/Verified_Assessment_References.csv
+Supplementary Fig. 7,figures/supplement/Supplementary_Fig7/Supplementary_Fig7_PanelA_Fits.csv
+Supplementary Fig. 7,figures/supplement/Supplementary_Fig7/Supplementary_Fig7_PanelA_Fits_Render_Data.csv
+Supplementary Fig. 8,figures/supplement/Supplementary_Fig8/Supplementary_Fig8_PanelA_Traces.csv
+Supplementary Fig. 8,figures/supplement/Supplementary_Fig8/Supplementary_Fig8_PanelA_Traces_Render_Data.csv
+Supplementary Fig. 9,figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelA_Configurations.csv
+Supplementary Fig. 9,figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelA_Configurations_Render_Data.csv
+Supplementary Fig. 9,figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelB_Run_Counts.csv
+Supplementary Fig. 9,figures/supplement/Supplementary_Fig9/Supplementary_Fig9_PanelB_Run_Counts_Render_Data.csv
+Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Fuel_Parameters_Source.csv
+Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_PanelA_Fuel_Intensity.csv
+Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_PanelA_Fuel_Intensity_Render_Data.csv
+Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_PanelB_Adoption.csv
+Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_PanelB_Adoption_Render_Data.csv
+Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_PanelC_Fuel_Screen.csv
+Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_PanelC_Fuel_Screen_Render_Data.csv
+Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_PanelD_Transition_Curves.csv
+Supplementary Fig. 10,figures/supplement/Supplementary_Fig10/Supplementary_Fig10_PanelD_Transition_Curves_Render_Data.csv
+Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_Milestones_Render_Data.csv
+Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelA_Composition_Render_Data.csv
+Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelA_Schedule.csv
+Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelA_Schedule_Render_Data.csv
+Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelB_Illustration.csv
+Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelB_Illustration_Render_Data.csv
+Supplementary Fig. 11,figures/supplement/Supplementary_Fig11/Supplementary_Fig11_PanelC_Power_Flow_Render_Data.csv
+Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Quota_Screen_Source.csv
+Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelA_Choices.csv
+Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelA_Choices_Render_Data.csv
+Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelA_HCR_Shapes.csv
+Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelA_HCR_Shapes_Render_Data.csv
+Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelB_Activation.csv
+Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelB_Activation_Render_Data.csv
+Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelC_Quota_Screen.csv
+Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelC_Quota_Screen_Render_Data.csv
+Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelC_Stock_Endpoints.csv
+Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_PanelC_Stock_Endpoints_Render_Data.csv
+Supplementary Fig. 12,figures/supplement/Supplementary_Fig12/Supplementary_Fig12_Threshold_States.csv
+Supplementary Fig. 13,figures/supplement/Supplementary_Fig13/Supplementary_Fig13_PanelA_Importance.csv
+Supplementary Fig. 13,figures/supplement/Supplementary_Fig13/Supplementary_Fig13_PanelA_Importance_Render_Data.csv
+Supplementary Fig. 13,figures/supplement/Supplementary_Fig13/Supplementary_Fig13_PanelB_SHAP.csv
+Supplementary Fig. 13,figures/supplement/Supplementary_Fig13/Supplementary_Fig13_PanelB_SHAP_Render_Data.csv
+Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Supplementary_Fig14_PanelA_MC.csv
+Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Supplementary_Fig14_PanelA_MC_Render_Data.csv
+Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Supplementary_Fig14_PanelB_Scenarios.csv
+Supplementary Fig. 14,figures/supplement/Supplementary_Fig14/Supplementary_Fig14_PanelB_Scenarios_Render_Data.csv
+Supplementary Fig. 15,figures/supplement/Supplementary_Fig15/SF5_Capture_Seed_Manifest.csv
+Supplementary Fig. 15,figures/supplement/Supplementary_Fig15/SF5_Multiplier_Paths.csv
+Supplementary Fig. 15,figures/supplement/Supplementary_Fig15/SF5_PanelA_Multiplier.csv
+Supplementary Fig. 15,figures/supplement/Supplementary_Fig15/SF5_PanelB_Abatement.csv
+Supplementary Fig. 15,figures/supplement/Supplementary_Fig15/SF5_PanelC_Rebound.csv
+Supplementary Fig. 15,figures/supplement/Supplementary_Fig15/Supplementary_Fig15_Current_Price_Sensitivity.csv
+Supplementary Fig. 15,figures/supplement/Supplementary_Fig15/Supplementary_Fig15_PanelA_Render_Data.csv
+Supplementary Fig. 15,figures/supplement/Supplementary_Fig15/Supplementary_Fig15_PanelB_Render_Data.csv
+Supplementary Fig. 15,figures/supplement/Supplementary_Fig15/Supplementary_Fig15_PanelC_Render_Data.csv
+Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/SF9_Creep_Robustness.csv
+Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_HCR_PanelA_Baselines.csv
+Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_HCR_PanelA_Baselines_Render_Data.csv
+Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_HCR_PanelB_Fuel.csv
+Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_HCR_PanelB_Fuel_Render_Data.csv
+Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_PanelA_Render_Data.csv
+Supplementary Fig. 16,figures/supplement/Supplementary_Fig16/Supplementary_Fig16_PanelB_Render_Data.csv
+Supplementary Fig. 17,figures/supplement/Supplementary_Fig17/ED10_Mecon_Series.csv
+Supplementary Fig. 17,figures/supplement/Supplementary_Fig17/ED10_Subsidy_Buffer.csv
+Supplementary Fig. 17,figures/supplement/Supplementary_Fig17/Supplementary_Fig17_Current_Cost_Buffer.csv
 Supplementary Fig. 17,figures/supplement/Supplementary_Fig17/Supplementary_Fig17_PanelA_Render_Data.csv
 Supplementary Fig. 17,figures/supplement/Supplementary_Fig17/Supplementary_Fig17_PanelB_Render_Data.csv
 Supplementary Fig. 17,figures/supplement/Supplementary_Fig17/Supplementary_Fig17_PanelC_Render_Data.csv
-Supplementary Fig. 17,figures/supplement/Supplementary_Fig17/Supplementary_Fig17_PanelD_Render_Data.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_HCR_PanelA_Catch_GHG.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_HCR_PanelA_Catch_GHG_Render_Data.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_HCR_PanelB_Day_Effects.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_HCR_PanelB_Day_Effects_Render_Data.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_HCR_PanelC_Fraction_Effects.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_HCR_PanelC_Fraction_Effects_Render_Data.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_HCR_PanelD_Thresholds.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_HCR_PanelD_Thresholds_Render_Data.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelA_Annual.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelA_Annual_Render_Data.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelA_Summary.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelB_Reductions.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelB_Reductions_Render_Data.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelC_Catch_GHG.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelC_Catch_GHG_Render_Data.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelD_Shapley.csv
-Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelD_Shapley_Render_Data.csv
-Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Matched_Closure.csv
-Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Matched_Gear_Period.csv
-Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Matched_Processes.csv
-Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Matched_Savings_Period.csv
-Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Matched_Species.csv
-Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Matched_Stock_Mechanism.csv
-Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Supplementary_Fig19_PanelA_Central_Annual.csv
-Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Supplementary_Fig19_PanelB_Matched_Pairs.csv
-Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Supplementary_Fig19_PanelC_Decomposition.csv
-Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Supplementary_Fig19_PanelD_Standardisation.csv
-Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Supplementary_Fig19_PanelE_Stock_Effort.csv
-Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelA_Regional_Fits.csv
-Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelA_Regional_Fits_Render_Data.csv
-Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelB_Regional_QC.csv
-Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelB_Regional_QC_Render_Data.csv
-Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelC_Policies.csv
-Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelC_Policies_Render_Data.csv
-Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelD_Bridge.csv
-Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelD_Bridge_Render_Data.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Catch_Attainable_Ranges.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Catch_Matching_All_Candidates.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Common_Catch_Triples.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/HCR_Matched_Pairs.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelA_Matching.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelA_Matching_Render_Data.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelB_Emissions.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelB_Emissions_Render_Data.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelC_Decomposition.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelC_Decomposition_Render_Data.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelC_Mean_Contributions.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelClosure.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelD_Weights.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelD_Weights_Render_Data.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelE_Stock_Effort.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelE_Stock_Effort_Render_Data.csv
-Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelF_Annual.csv
+Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Annual_Fuel_Totals_Context.csv
+Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Fleet_Characteristics_Context.csv
+Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Matched_Flag_Gear_Sector_Audit.csv
+Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Model_Matched_Summaries.csv
+Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Sources.csv
+Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelA_Render_Data.csv
+Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelB_Render_Data.csv
+Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelC_Render_Data.csv
+Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelD_Render_Data.csv
+Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelD_Survey_Render_Data.csv
+Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Fig18_PanelE_Render_Data.csv
+Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Supplementary_Table10_Benchmark.csv
+Supplementary Fig. 18,figures/supplement/Supplementary_Fig18/Workbook_Row_Adjudication.csv
+Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_Annual_Grid_Catch_Coverage.csv
+Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_Catch_Denominator.csv
+Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_Cohort_Composition.csv
+Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_Identifier_QC.csv
+Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_LOA_Class.csv
+Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_Phase_Sensitivity.csv
+Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_Phase_Sensitivity_Draws.csv
+Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_Species_Composition.csv
+Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Supplementary_Fig19_PanelA_Global_Clocks.csv
+Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Supplementary_Fig19_PanelB_Fuel_Phases.csv
+Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Supplementary_Fig19_PanelC_FI_Diagnostics.csv
+Supplementary Fig. 19,figures/supplement/validation_20261018/Supplementary_Fig19/Supplementary_Fig19_PanelD_Flag_Coverage.csv
+Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/SF7_Fuel_Intensity.csv
+Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/SF7_Increase_Decomposition.csv
+Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/SF7_Meco_Trajectory.csv
+Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/SF7_WEO_dE.csv
+Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelA_Render_Data.csv
+Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelB_Render_Data.csv
+Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelC_Render_Data.csv
+Supplementary Fig. 20,figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelD_Render_Data.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelA_Catch_GHG.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelA_Catch_GHG_Render_Data.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelB_Day_Effects.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelB_Day_Effects_Render_Data.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelC_Fraction_Effects.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelC_Fraction_Effects_Render_Data.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelD_Thresholds.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelD_Thresholds_Render_Data.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelA_Annual.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelA_Annual_Render_Data.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelA_Summary.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelB_Reductions.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelB_Reductions_Render_Data.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelC_Catch_GHG.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelC_Catch_GHG_Render_Data.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelD_Shapley.csv
+Supplementary Fig. 21,figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelD_Shapley_Render_Data.csv
+Supplementary Fig. 22,figures/supplement/validation_20261018/Supplementary_Fig22/Matched_Closure.csv
+Supplementary Fig. 22,figures/supplement/validation_20261018/Supplementary_Fig22/Matched_Gear_Period.csv
+Supplementary Fig. 22,figures/supplement/validation_20261018/Supplementary_Fig22/Matched_Processes.csv
+Supplementary Fig. 22,figures/supplement/validation_20261018/Supplementary_Fig22/Matched_Savings_Period.csv
+Supplementary Fig. 22,figures/supplement/validation_20261018/Supplementary_Fig22/Matched_Species.csv
+Supplementary Fig. 22,figures/supplement/validation_20261018/Supplementary_Fig22/Matched_Stock_Mechanism.csv
+Supplementary Fig. 22,figures/supplement/validation_20261018/Supplementary_Fig22/Supplementary_Fig22_PanelA_Central_Annual.csv
+Supplementary Fig. 22,figures/supplement/validation_20261018/Supplementary_Fig22/Supplementary_Fig22_PanelB_Matched_Pairs.csv
+Supplementary Fig. 22,figures/supplement/validation_20261018/Supplementary_Fig22/Supplementary_Fig22_PanelC_Decomposition.csv
+Supplementary Fig. 22,figures/supplement/validation_20261018/Supplementary_Fig22/Supplementary_Fig22_PanelD_Standardisation.csv
+Supplementary Fig. 22,figures/supplement/validation_20261018/Supplementary_Fig22/Supplementary_Fig22_PanelE_Stock_Effort.csv
+Supplementary Fig. 23,figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelA_Regional_Fits.csv
+Supplementary Fig. 23,figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelA_Regional_Fits_Render_Data.csv
+Supplementary Fig. 23,figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelB_Regional_QC.csv
+Supplementary Fig. 23,figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelB_Regional_QC_Render_Data.csv
+Supplementary Fig. 23,figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelC_Policies.csv
+Supplementary Fig. 23,figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelC_Policies_Render_Data.csv
+Supplementary Fig. 23,figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelD_Bridge.csv
+Supplementary Fig. 23,figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelD_Bridge_Render_Data.csv

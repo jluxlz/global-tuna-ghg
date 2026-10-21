@@ -15,7 +15,7 @@ sys.stdout.reconfigure(encoding='utf-8',errors='replace')
 def main():
     old=R/'analysis/si_order_fuel_diagnosis_20261016'
     base=json.loads((old/'Fuel_Diagnosis_QC.json').read_text());reference=base['Production_FUI_L_t']
-    scope=pd.read_csv(R/'figures/supplement/Supplementary_Fig14/Matched_Flag_Gear_Sector_Audit.csv').query('Benchmark_ID=="LL23"')
+    scope=pd.read_csv(R/'figures/supplement/Supplementary_Fig18/Matched_Flag_Gear_Sector_Audit.csv').query('Benchmark_ID=="LL23"')
     with contextlib.redirect_stdout(io.StringIO()):
         pm=h.load_prior_matrix(h.PRIOR_MATRIX_PATH);df,pools=h.run_imputation_pipeline(h.VESSEL_REGISTRY_PATH,pm,write_output=False)
         df=h.impute_builtdate_deterministic(h.convert_gt_to_lsw(df,pm),pools);df['Retire_Year']=9999;df['Is_Ghost']=0
