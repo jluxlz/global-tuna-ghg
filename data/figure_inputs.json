@@ -1,5 +1,5 @@
 {
-  "Scope": "35 quantitative figures and 2 conceptual diagrams; current C/F/T design",
+  "Scope": "35 quantitative figures; current C/F/T design. Conceptual Extended Data Figs. 1 and 2 are excluded.",
   "Figures": [
     {
       "Figure": "Fig. 1",
@@ -592,18 +592,6 @@
         "figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelD_Bridge_Render_Data.csv"
       ],
       "Numeric_Data_Required": true
-    },
-    {
-      "Figure": "Extended Data Fig. 1",
-      "Conceptual_Diagram": true,
-      "Inputs": [],
-      "Numeric_Data_Required": false
-    },
-    {
-      "Figure": "Extended Data Fig. 2",
-      "Conceptual_Diagram": true,
-      "Inputs": [],
-      "Numeric_Data_Required": false
     }
   ]
 }

@@ -1,6 +1,6 @@
 # Global tuna-fishery greenhouse gas emissions
 
-**Current complete version: v2026.10.21.1.** [Download the complete code and data package](https://github.com/jluxlz/global-tuna-ghg/releases/download/v2026.10.21.1/global-tuna-ghg-complete.zip). Download this one ZIP; no earlier release is needed. GitHub's automatic source-code archives do not include all large inputs.
+**Current complete version: v2026.10.23.** [Download the complete code and data package](https://github.com/jluxlz/global-tuna-ghg/releases/download/v2026.10.23/global-tuna-ghg-complete.zip). Download this one ZIP; no earlier release is needed. GitHub's automatic source-code archives do not include all large inputs.
 
 The primary future comparison uses constant-catch (C), constant-harvest-rate (F) and biomass-threshold (T) rules under common stock, realized-catch, economic and fleet-capacity feedback. It contains 1,944 primary simulations and 1,620 sensitivity simulations. Nine additional matched-output triples provide 27 paired comparisons; all 384 matching candidates are retained. The original C/F comparator remains separate for Supplementary Fig. 22. Fixed 2024 catch is not the primary current-management baseline.
 
@@ -21,4 +21,8 @@ The two core algorithms are `GHG_Calculation/ghg_lca.py` and `scenario/fleet_mod
 
 The longline absolute-fuel discrepancy remains unresolved. Nonfishing time is approximated as transit, refrigeration service equivalence is exploratory, some fuel factors retain source-specific boundary qualifications, and pooled stock models do not replace official RFMO assessments. Saved scenario and accounting checks verify implementation and pairing, not universal management superiority or empirical biological validation. See `analysis/hcr_revision_20261020/RESULTS_README.md` and the source tables.
 
-Manuscripts, SI prose, editorial automation, agent configuration, old code copies and the former local audit workspace are excluded. `data/source_inputs.csv`, `data/file_manifest.csv` and `data/figure_inputs.json` document supplied inputs and figure data. Historical releases are archives; use this version for the current scientific code and results.
+Manuscripts, SI prose, editorial automation, agent configuration, old code copies and the former local audit workspace are excluded. `data/source_inputs.csv`, `data/file_manifest.csv` and `data/figure_inputs.json` document supplied inputs and figure data. This is the single current complete release; no earlier release is needed.
+
+## Conceptual figures
+
+Extended Data Figs. 1 and 2 are explanatory diagrams, not quantitative model outputs. Their artwork, draft renderers and schematic layout tables are excluded. The 35 quantitative figures retain their original numbering, algorithms and source data.
