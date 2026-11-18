@@ -232,5 +232,15 @@
     "Bytes": 121652,
     "SHA256": "7ea3259ac44790b0bae2cb35c6f1c463528fe72e5fc3c9dc796407d538043903",
     "Role": "Unchanged published baseline reference for paired rerun comparison"
+  },
+  {
+    "Path": "GHG_Calculation/fuel_operation.py",
+    "Bytes": 2790,
+    "SHA256": "b53f9f03e0c8c30f11bb00dcc9983a9bea840badfa5056a5e82e2469a1d7f08f"
+  },
+  {
+    "Path": "model_parameters/Fuel_Operating_Priors.csv",
+    "Bytes": 4466,
+    "SHA256": "d0141163bcd8035c364874b688ac5e8789e062dbce43944b4d5204e9d299f24e"
   }
 ]

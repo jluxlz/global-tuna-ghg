@@ -2,13 +2,14 @@
 from pathlib import Path
 import json
 import hashlib
+import os
 import sys
 import numpy as np
 import pandas as pd
 
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[1]
-DATA=ROOT/"GHG_Calculation"
+DATA=Path(os.environ.get("TUNA_INVENTORY_DIR", ROOT/"GHG_Calculation"))
 
 
 def quantiles(x):
@@ -26,13 +27,24 @@ def main():
     groups=[str(g).rsplit("_",2) for g in raw["groups"]]
     assert cube.shape[0]==len(groups) and np.isfinite(cube).all()
     rows=[]
+    no_leakage = cube - raw["refrigerant_by_group"][:, :, keep]
+    assert (no_leakage >= -1e-6).all()
     for gear in ["LL","PS","TP","SA"]:
         ids=[i for i,g in enumerate(groups) if g[1]==gear]
-        samples=cube[ids].sum(axis=0)
+        samples=no_leakage[ids].sum(axis=0)
         med,lo,hi=quantiles(samples)
         rows.extend(dict(Gear=gear,Year=int(y),GHG_Mt=m/1e6,GHG_Mt_lo=l/1e6,
                          GHG_Mt_hi=h/1e6) for y,m,l,h in zip(years,med,lo,hi))
     pd.DataFrame(rows).to_csv(HERE/"Fig1_Gear_Annual_MC.csv",index=False)
+    flags = {}
+    for i, (flag, gear, _) in enumerate(groups):
+        flags.setdefault((flag, gear), []).append(i)
+    rows = []
+    for (flag, gear), ids in flags.items():
+        # Keep the spatial allocation's existing sum of sector medians.
+        excl = np.median(no_leakage[ids], axis=1).sum(axis=0)
+        rows.extend(dict(Flag=flag, Gear=gear, Year=int(y), No_Leakage_GHG_t=ghg) for y, ghg in zip(years, excl))
+    pd.DataFrame(rows).to_csv(HERE/"Fig1_Flag_Gear_Annual_No_Leakage.csv",index=False)
     total=raw["global_Total"][:,keep]
     assert np.allclose(cube.sum(axis=0),total)
     med,lo,hi=quantiles(total.sum(axis=1))

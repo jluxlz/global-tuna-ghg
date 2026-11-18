@@ -1,9 +1,10 @@
 """Summarize paired regional experiments without pooling accounting scopes."""
 from pathlib import Path
-import json,hashlib,copy
+import json,hashlib,copy,os
 import numpy as np
 import pandas as pd
-H=Path(__file__).resolve().parent;R=H.parents[1];A=H/'analysis';A.mkdir(exist_ok=True)
+SOURCE=Path(__file__).resolve().parent;R=SOURCE.parents[1]
+H=Path(os.environ.get('REGIONAL_HCR_RESULTS_ROOT',SOURCE)).resolve();A=H/'analysis';A.mkdir(exist_ok=True)
 assert json.loads((H/'full_Complete.json').read_text())['Runs']==486
 annual=[];stocks=[];effort=[];files=0;pairchecks=0
 for i in range(1,82):
@@ -41,7 +42,7 @@ fuel['Abatement_Mt']=fuel.GHG_Mt_Base-fuel.GHG_Mt_Fuel
 fuel['Catch_Change_pct']=100*(fuel.Catch_Mt_Fuel/fuel.Catch_Mt_Base-1)
 fuel.groupby('Rule').Catch_Change_pct.agg(['min','median','max']).to_csv(A/'Fuel_Catch_Response.csv')
 trigger=s.groupby(['Future','Rule','Fuel_Transition'],as_index=False).agg(Triggered_Years=('HCR_Triggered','sum'),Closed_Years=('HCR_Closed','sum'),Min_B_Bmsy=('B_Bmsy_Start','min'))
-global_stocks=pd.read_csv(R/'analysis/hcr_revision_20261020/analysis/HCR_Baseline_Stocks.csv')
+global_stocks=pd.read_csv(Path(os.environ.get('HCR_RESULTS_ROOT',R/'analysis/hcr_revision_20261020'))/'analysis/HCR_Baseline_Stocks.csv')
 global_stocks=global_stocks[global_stocks.Stock=='BET'].copy();global_stocks['Stock_Source']='Pooled global BET'
 regional=s[~s.Fuel_Transition].copy();regional['Stock_Source']='Indian Ocean BET'
 context=pd.concat([global_stocks,regional],ignore_index=True)

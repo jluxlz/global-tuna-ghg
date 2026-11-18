@@ -1,5 +1,6 @@
 Figure,Path
 Fig. 1,figures/Fig1/Fig1_Attribution_Coverage.csv
+Fig. 1,figures/Fig1/Fig1_Flag_Gear_Annual_No_Leakage.csv
 Fig. 1,figures/Fig1/Fig1_Gear_Annual_MC.csv
 Fig. 1,figures/Fig1/Fig1_Global_Cumulative_MC.csv
 Fig. 1,figures/Fig1/Fig1_Org_Annual_MC.csv
@@ -12,6 +13,8 @@ Fig. 1,figures/Fig1/Fig1_PanelC_Bubble.csv
 Fig. 1,figures/Fig1/Fig1_PanelC_Icon_Placements.csv
 Fig. 1,figures/Fig1/Fig1_PanelD_Org_Gear.csv
 Fig. 1,figures/Fig1/Fig1_PanelD_Org_Total.csv
+Fig. 2,figures/Fig2/Fig2_Allocation_Paired_Grid_Trends.csv
+Fig. 2,figures/Fig2/Fig2_Allocation_Summary.csv
 Fig. 2,figures/Fig2/Fig2_Display_Coverage.csv
 Fig. 2,figures/Fig2/Fig2_Layout_Alignment.csv
 Fig. 2,figures/Fig2/Fig2_Layout_Size.csv

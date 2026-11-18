@@ -1,5 +1,5 @@
 {
-  "Scope": "35 quantitative figures; current C/F/T design. Conceptual Extended Data Figs. 1 and 2 are excluded.",
+  "Scope": "35 scientific figures; current November fuel inventory and HCR simulations. Conceptual Extended Data Figs. 1 and 2 are excluded.",
   "Figures": [
     {
       "Figure": "Fig. 1",
@@ -17,7 +17,8 @@
         "figures/Fig1/Fig1_PanelC_Bubble.csv",
         "figures/Fig1/Fig1_PanelC_Icon_Placements.csv",
         "figures/Fig1/Fig1_PanelD_Org_Gear.csv",
-        "figures/Fig1/Fig1_PanelD_Org_Total.csv"
+        "figures/Fig1/Fig1_PanelD_Org_Total.csv",
+        "figures/Fig1/Fig1_Flag_Gear_Annual_No_Leakage.csv"
       ],
       "Numeric_Data_Required": true
     },
@@ -33,7 +34,9 @@
         "figures/Fig2/Fig2_PanelBC_Grid_Slopes.csv",
         "figures/Fig2/Fig2_PanelB_Slope_Map.csv",
         "figures/Fig2/Fig3_PanelA_Era_Slopes.csv",
-        "figures/Fig2/Fig3_PanelA_Grid_Slopes.csv"
+        "figures/Fig2/Fig3_PanelA_Grid_Slopes.csv",
+        "figures/Fig2/Fig2_Allocation_Paired_Grid_Trends.csv",
+        "figures/Fig2/Fig2_Allocation_Summary.csv"
       ],
       "Numeric_Data_Required": true
     },

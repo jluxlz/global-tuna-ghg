@@ -48,9 +48,10 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 sys.path.insert(0, GHG_DIR)
 import ghg_lca  # historical-LCA engine (GHG_Calculation/ghg_lca.py)
+from fuel_operation import central_operating_days, operation_classes
 
 # Grid catch data path (for gear-specific species composition)
-GRID_PATH = os.path.join(ROOT_DIR, "GHG_Calculation", "Base_3_Spatial_Grid_Enriched.csv")
+GRID_PATH = os.environ.get("TUNA_HISTORICAL_GRID", os.path.join(ROOT_DIR, "GHG_Calculation", "Base_3_Spatial_Grid_Enriched.csv"))
 
 # =============================================================================
 # 0. Gear-Specific Catch Composition Weights
@@ -1218,39 +1219,36 @@ def compute_fleet_ghg(df, pm_dict, ref_year=2025, gear_effort=None,
     hm_work = alpha * T_eff * H_main
     haux    = T_eff * H_aux
 
-    # ---- Fuel CO2 ----
-    co2_move = power * LF_move * SFR_m_move * hm_move * ef_co2 * fc
-    co2_work = power * LF_work * SFR_m_work * hm_work * ef_co2 * fc
-    co2_aux  = power * has_aux * LF_aux * aux_ratio * SFR_a * haux * ef_co2 * fc
-    fuel_co2 = co2_move + co2_work + co2_aux
-
-    # ---- Fuel CH4 (diesel: g/kWh → tCO2e; gasoline: g/kgFuel, ghg_lca-consistent) ----
-    hm_tot  = hm_move + hm_work
-    lf_main_avg = np.where(hm_tot > 0,
-                           (LF_move * hm_move + LF_work * hm_work) / hm_tot, 0)
     is_gas = (fuel_type == "GASOLINE")
-    ch4_m = np.where(~is_gas, power * lf_main_avg * hm_tot * ch4_main / 1e6 * GWP_CH4 * fc, 0.0)
-    ch4_a = np.where(~is_gas, power * has_aux * LF_aux * aux_ratio * haux * ch4_aux / 1e6 * GWP_CH4 * fc, 0.0)
-    # gasoline path: CH4 = fuel_t × 1000 × EF(g/kgFuel) / 1e6 × GWP  (EPA)
+    aux_power = power * has_aux * aux_ratio
+    main_energy = power * (LF_move * hm_move + LF_work * hm_work) * fc
+    aux_energy = aux_power * LF_aux * haux * fc
+    main_fuel = power * (LF_move * SFR_m_move * hm_move + LF_work * SFR_m_work * hm_work) * fc
+    aux_fuel = aux_energy * SFR_a
+    sfoc = lambda load: ghg_lca.apply_sfoc_formula(1.0, load, pm_dict)
+    groups = operation_classes(v_type, is_gas)
+    # Replace only the fuel calculation's days. T_eff and T_map still govern
+    # the existing catch, vessel capacity, bait and refrigeration equations.
+    utilization = np.divide(T_eff, T_map, out=np.zeros_like(T_eff), where=T_map > 0)
+    base_main_sfc = SFR_m_move / np.where(is_gas, 1., sfoc(LF_move))
+    base_aux_sfc = SFR_a / sfoc(LF_aux)
+    for group, (days, main_ld, main_sfr, aux_ld, aux_sfr) in central_operating_days(sfoc).items():
+        i = groups == group
+        scale = days * utilization[i] * fc[i]
+        main_energy[i] = power[i] * main_ld * scale
+        aux_energy[i] = aux_power[i] * aux_ld * scale
+        main_fuel[i] = power[i] * main_sfr * base_main_sfc[i] * scale
+        aux_fuel[i] = aux_power[i] * aux_sfr * base_aux_sfc[i] * scale
+
+    fuel_total_t = main_fuel + aux_fuel
+    fuel_co2 = fuel_total_t * ef_co2
+    # Diesel factors are energy-based; the existing gasoline factors are fuel-based.
     ch4_gas_ef = ghg_lca.get_best(pm_dict, "EF_CH4_GASOLINE_4STROKE", 1.5)
-    fuel_total_gas = (power * LF_move * SFR_m_move * hm_move
-                      + power * LF_work * SFR_m_work * hm_work) * fc
-    ch4_gas = np.where(is_gas, fuel_total_gas * 1000.0 * ch4_gas_ef / 1e6 * GWP_CH4, 0.0)
-    fuel_ch4 = ch4_m + ch4_a + ch4_gas
-
-    # ---- Fuel N2O (diesel: g/kWh → tCO2e; gasoline: g/kgFuel, ghg_lca-consistent) ----
-    n2o_m = np.where(~is_gas, power * lf_main_avg * hm_tot * n2o_main / 1e6 * GWP_N2O * fc, 0.0)
-    n2o_a = np.where(~is_gas, power * has_aux * LF_aux * aux_ratio * haux * n2o_aux / 1e6 * GWP_N2O * fc, 0.0)
     n2o_gas_ef = ghg_lca.get_best(pm_dict, "EF_N2O_GASOLINE", 0.04)
-    n2o_gas = np.where(is_gas, fuel_total_gas * 1000.0 * n2o_gas_ef / 1e6 * GWP_N2O, 0.0)
-    fuel_n2o = n2o_m + n2o_a + n2o_gas
-
-    # ---- WtT (Well-to-Tank) upstream — TWO-PATH (2026-09-04) ----
-    # Compute total fuel consumption from existing SFR × hours × power
-    fuel_t_move = power * LF_move * SFR_m_move * hm_move * fc   # tonnes fuel
-    fuel_t_work = power * LF_work * SFR_m_work * hm_work * fc
-    fuel_t_aux  = power * has_aux * LF_aux * aux_ratio * SFR_a * haux * fc
-    fuel_total_t = fuel_t_move + fuel_t_work + fuel_t_aux        # tonnes fuel
+    fuel_ch4 = np.where(is_gas, main_fuel * ch4_gas_ef / 1000,
+                        (main_energy * ch4_main + aux_energy * ch4_aux) / 1e6) * GWP_CH4
+    fuel_n2o = np.where(is_gas, main_fuel * n2o_gas_ef / 1000,
+                        (main_energy * n2o_main + aux_energy * n2o_aux) / 1e6) * GWP_N2O
 
     # Fuel-specific CfCH4/CfN2O are kg gas per kg fuel. Preserve the historical
     # engine-based factors for fossil vessels and the fossil fraction of a blend.

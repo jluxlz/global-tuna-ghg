@@ -13,7 +13,7 @@ cols<-c(LL='#B81D0A',PS='#1A7A8A',TP='#7570B3',SA='#E6AB02')
 weo_cols<-c(STEPS='#D55E00',APS='#0072B2',NZE='#009E73')
 read_panel<-function(n,label){d<-read.csv(file.path(HERE,paste0('Supplementary_Fig',n,'_',label,'.csv')));write.csv(d,file.path(HERE,paste0('Supplementary_Fig',n,'_',label,'_Render_Data.csv')),row.names=FALSE);d}
 
-a<-read_panel(12,'PanelA_Importance');b<-read_panel(12,'PanelB_SHAP');order<-rev(a$Parameter)
+a<-read_panel(13,'PanelA_Importance');b<-read_panel(13,'PanelB_SHAP');order<-rev(a$Parameter)
 a$Parameter<-factor(a$Parameter,levels=order);b$Parameter<-factor(b$Parameter,levels=order)
 p_a<-ggplot(a,aes(Mean_SHAP/1e6,Parameter))+geom_col(fill='#0072B2',width=.6)+labs(tag='(a)',x='Mean absolute SHAP (Mt CO2e)',y=NULL)+theme_pub
 p_b<-ggplot(b,aes(SHAP_Mt,Parameter,colour=Feature_Rank))+geom_point(position=position_jitter(height=.15,width=0,seed=42),size=.45,alpha=.35)+

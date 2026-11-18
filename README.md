@@ -1,28 +1,15 @@
 # Global tuna-fishery greenhouse gas emissions
 
-**Current complete version: v2026.10.23.** [Download the complete code and data package](https://github.com/jluxlz/global-tuna-ghg/releases/download/v2026.10.23/global-tuna-ghg-complete.zip). Download this one ZIP; no earlier release is needed. GitHub's automatic source-code archives do not include all large inputs.
+Scientific models, frozen inputs and outputs for **Harvest control rules shape the emission benefits of fuel transition in global tuna fisheries**.
 
-The primary future comparison uses constant-catch (C), constant-harvest-rate (F) and biomass-threshold (T) rules under common stock, realized-catch, economic and fleet-capacity feedback. It contains 1,944 primary simulations and 1,620 sensitivity simulations. Nine additional matched-output triples provide 27 paired comparisons; all 384 matching candidates are retained. The original C/F comparator remains separate for Supplementary Fig. 22. Fixed 2024 catch is not the primary current-management baseline.
-
-Historical accounting covers 1950-2025. Future models retain 81 exogenous configurations per rule and evaluate all subsets of fuel transition, refrigeration transition and fleet consolidation. The additional regional extension contains 486 full BET C/F/T and fuel/no-fuel runs. Current figure scripts, panel inputs and saved results match the revised scientific version, including matched mechanisms, regional technical differences and the new regional BET C/F/T experiments in Extended Data Figs. 6, 7 and 9.
-
-Extract the complete ZIP and run:
+**[Download the complete code and data package](https://github.com/jluxlz/global-tuna-ghg/releases/latest).** Extract the single ZIP, install the dependencies, then run:
 
 ```sh
 python restore_data.py --verify
 python reproduce.py verify
+python reproduce.py figures
 ```
 
-Install Python requirements and R packages before computation. Use `python reproduce.py figures` to redraw supplied results or follow [REPRODUCING.md](REPRODUCING.md) to recalculate model stages. Git-clone users can run `python restore_data.py --download --verify` to retrieve the same complete package. Live scraping is optional: accepted vessel data, original provider inputs and saved vessel-query results are supplied. Sources retain their original identities, native field names and bytes; authored code, documentation and public paths are English.
+The November fuel revision uses vessel-class operating days, engine hours and loads. The historical inventory covers 1950–2025. Its paired sensitivity compares results with and without direct refrigerant leakage and across specified R22 GWP100 values. Saved scenarios include 1,944 primary C/F/T simulations, 1,620 full sensitivity reruns, 486 Indian Ocean bigeye runs and 27 matched-catch rule comparisons. Only the earlier comparisons explicitly used as supplementary evidence retain their original assumptions.
 
-The two core algorithms are `GHG_Calculation/ghg_lca.py` and `scenario/fleet_model.py`. Scientific robustness and HCR drivers are in `analysis/`. Python handles model/data calculations; figures use R/ggplot2. The package includes saved stock inputs, so stock refitting is optional. Model stages can take hours.
-
-## Evidence and scope
-
-The longline absolute-fuel discrepancy remains unresolved. Nonfishing time is approximated as transit, refrigeration service equivalence is exploratory, some fuel factors retain source-specific boundary qualifications, and pooled stock models do not replace official RFMO assessments. Saved scenario and accounting checks verify implementation and pairing, not universal management superiority or empirical biological validation. See `analysis/hcr_revision_20261020/RESULTS_README.md` and the source tables.
-
-Manuscripts, SI prose, editorial automation, agent configuration, old code copies and the former local audit workspace are excluded. `data/source_inputs.csv`, `data/file_manifest.csv` and `data/figure_inputs.json` document supplied inputs and figure data. This is the single current complete release; no earlier release is needed.
-
-## Conceptual figures
-
-Extended Data Figs. 1 and 2 are explanatory diagrams, not quantitative model outputs. Their artwork, draft renderers and schematic layout tables are excluded. The 35 quantitative figures retain their original numbering, algorithms and source data.
+The ZIP includes supplied vessel inputs; live scraping is optional. It includes data and R renderers for all 35 quantitative figures, excluding the two conceptual Extended Data diagrams. Manuscripts, editorial files and superseded output copies are not distributed. See [REPRODUCING.md](REPRODUCING.md) for instructions and [the source inventory](data/source_inputs.csv) for attribution. Third-party terms apply.

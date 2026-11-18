@@ -9,6 +9,7 @@ change fleet size or the number of random draws.
 import hashlib
 import itertools
 import json
+import os
 from pathlib import Path
 
 PROTOCOL = "future-paired-v1"
@@ -45,6 +46,7 @@ def simulation_fingerprint():
         "effort_data/Grid_Catch_Allocation.csv",
         "GHG_Calculation/Base_3_Spatial_Grid_Enriched.csv",
         "GHG_Calculation/operational_hours_lookup.py",
+        "GHG_Calculation/fuel_operation.py", "model_parameters/Fuel_Operating_Priors.csv",
         "GHG_Calculation/power_discount_factor.py",
         "GHG_Calculation/TotalEffortby_FishingCountry_LengthBoat_Gear_Sector.csv",
         "scenario/fishery_coupling.py", "scenario/harvest_control_rules.py", "scenario/fig5_allocation.py",
@@ -57,7 +59,9 @@ def simulation_fingerprint():
         "scenario/output/schaefer_biomass_annual_F.csv",
         "scenario/output/fig5/Fig5_Final_Fuel.json",
         "scenario/output/fig5/Fig5_Final_Quota.json")
-    return {f:sha256(root/f) for f in files}
+    grid = "GHG_Calculation/Base_3_Spatial_Grid_Enriched.csv"
+    return {f: sha256(os.environ.get("TUNA_HISTORICAL_GRID", root/f) if f == grid else root/f)
+            for f in files}
 
 
 def record_seed_protocol(folder, filenames):

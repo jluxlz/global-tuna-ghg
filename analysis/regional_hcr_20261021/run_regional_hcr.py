@@ -4,7 +4,9 @@ import sys,os,json,hashlib,contextlib,io,time
 from multiprocessing import Pool
 import numpy as np
 import pandas as pd
-R=Path(__file__).resolve().parents[2];H=Path(__file__).resolve().parent
+R=Path(__file__).resolve().parents[2]
+H=Path(os.environ.get('REGIONAL_HCR_RESULTS_ROOT',Path(__file__).resolve().parent)).resolve()
+H.mkdir(parents=True,exist_ok=True)
 sys.path[:0]=[str(R/'analysis/hcr_revision_20261020'),str(R/'scenario'),str(R/'figures/Fig5')]
 import run_hcr as E
 CONFIG=R/'analysis/p0_revision_20261013/regional_inputs'

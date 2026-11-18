@@ -33,7 +33,7 @@ if (length(file_arg) > 0) {
 }
 setwd(SCRIPT_DIR)
 
-DATA_DIR <- "../../GHG_Calculation"
+DATA_DIR <- Sys.getenv("TUNA_INVENTORY_DIR", "../../GHG_Calculation")
 OUT_DIR  <- SCRIPT_DIR
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
@@ -161,6 +161,10 @@ df_grid_all <- read.csv(file.path(DATA_DIR, "Base_3_Spatial_Grid_Enriched.csv"),
   filter(Year >= 1950, Year <= 2025,
          !is.na(GHG_emissions_median), GHG_emissions_median > 0)
 df_grid <- df_grid_all %>% filter(Total_Catch > 0)
+df_grid_no_leakage <- df_grid %>%
+  left_join(read.csv("Fig1_Flag_Gear_Annual_No_Leakage.csv"), by = c("Flag", "Gear", "Year")) %>%
+  mutate(No_Leakage_GHG_t = No_Leakage_GHG_t * Effort_Prop)
+stopifnot(!anyNA(df_grid_no_leakage$No_Leakage_GHG_t))
 
 # ===========================================================================
 # 4. PANEL A — Process Perspective: 100% Stacked Area + Total Line
@@ -276,12 +280,13 @@ df_b_ghg <- read.csv("Fig1_Gear_Annual_MC.csv") %>%
   mutate(Gear = factor(Gear, levels = names(gear_cols)))
 
 # 5b. CEI by Gear x Year - only cells that received GHG allocation
-df_b_cei <- df_grid %>%
+df_b_cei <- df_grid_no_leakage %>%
   filter(Gear %in% c("LL", "PS", "TP", "SA"),
          GHG_emissions_median > 0) %>%
   group_by(Gear, Year) %>%
   summarise(
-    Total_GHG   = sum(GHG_emissions_median, na.rm = TRUE),
+    Total_GHG   = sum(No_Leakage_GHG_t, na.rm = TRUE),
+    GHG_With_Leakage = sum(GHG_emissions_median, na.rm = TRUE),
     Total_Catch = sum(Total_Catch, na.rm = TRUE),
     .groups     = "drop"
   ) %>%
@@ -406,7 +411,7 @@ write.csv(df_b_cei, "Fig1_PanelB_CEI_Line.csv", row.names = FALSE)
 cat("Building Panel C: Species perspective...\n")
 
 # 6a. Aggregate species-level catch and attributed GHG (cumulative 1950-2025)
-df_c <- df_grid %>%
+df_c <- df_grid_no_leakage %>%
   filter(Gear %in% c("LL", "PS")) %>%
   pivot_longer(
     cols = c(SBT_Tonnes, SKJ_Tonnes, BET_Tonnes, YFT_Tonnes, ALB_Tonnes),
@@ -415,13 +420,15 @@ df_c <- df_grid %>%
   ) %>%
   mutate(
     Species     = gsub("_Tonnes", "", Species),
-    Species_GHG = GHG_emissions_median * (Catch / Total_Catch)
+    Species_GHG = No_Leakage_GHG_t * (Catch / Total_Catch),
+    Species_GHG_With_Leakage = GHG_emissions_median * (Catch / Total_Catch)
   ) %>%
   filter(Catch > 0) %>%
   group_by(Species) %>%
   summarise(
     Total_Catch_Mt = sum(Catch, na.rm = TRUE) / 1e6,
     Total_GHG_Mt   = sum(Species_GHG, na.rm = TRUE) / 1e6,
+    GHG_With_Leakage_Mt = sum(Species_GHG_With_Leakage, na.rm = TRUE) / 1e6,
     .groups        = "drop"
   ) %>%
   mutate(
@@ -450,7 +457,7 @@ p_c <- ggplot(df_c, aes(x = Total_Catch_Mt, y = Total_GHG_Mt)) +
     guide   = guide_legend(override.aes = list(fill = "grey50"))
   ) +
   scale_x_continuous(labels = comma_format(), expand = expansion(mult = c(0.12, 0.15))) +
-  scale_y_continuous(labels = comma_format(), expand = expansion(mult = c(0.12, 0.32))) +
+  scale_y_continuous(labels = comma_format(), expand = expansion(mult = c(0.20, 0.32))) +
   coord_cartesian(clip = "off") +
   labs(
     tag = "(c)",
@@ -468,10 +475,14 @@ fish_files <- c(ALB='Albacore', BET='Bigeye', SBT='Bluefin', SKJ='Skipjack', YFT
 placements <- df_c
 placements$Bubble_diameter_mm <- 12*sqrt(placements$CEI/max(placements$CEI))
 placements$Icon_x <- placements$Total_Catch_Mt
+placements$Icon_y <- placements$Total_GHG_Mt
 # SBT and ALB are too close for stacked artwork; keep the data point fixed and
 # use a short labelled callout in the empty lower-middle part of the panel.
 placements$Icon_x[placements$Species == 'SBT'] <- 20
-p_c <- p_c + annotate('segment', x=4.5,y=38,xend=20,yend=52,
+placements$Icon_y[placements$Species == 'SBT'] <- placements$Total_GHG_Mt[placements$Species == 'SBT'] + 8
+sbt_icon <- placements[placements$Species == 'SBT', ]
+p_c <- p_c + annotate('segment', x=sbt_icon$Total_Catch_Mt,y=sbt_icon$Total_GHG_Mt,
+  xend=sbt_icon$Icon_x,yend=sbt_icon$Icon_y,
   colour='grey55',linewidth=.25)
 for (i in seq_len(nrow(placements))) {
   item <- placements[i,]
@@ -488,7 +499,7 @@ for (i in seq_len(nrow(placements))) {
     gp=grid::gpar(fontsize=7,fontface='bold',fontfamily='Arial'))
   p_c <- p_c + annotation_custom(grid::grobTree(fish,label),
     xmin=item$Icon_x,xmax=item$Icon_x,
-    ymin=item$Total_GHG_Mt,ymax=item$Total_GHG_Mt)
+    ymin=item$Icon_y,ymax=item$Icon_y)
 }
 write.csv(placements,'Fig1_PanelC_Icon_Placements.csv',row.names=FALSE)
 

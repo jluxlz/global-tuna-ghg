@@ -1,17 +1,9 @@
-# Reproducing the current scientific version
+# Reproducing the scientific version
 
-The input boundary is the supplied accepted registry, original provider tables, saved vessel-query results and frozen stock fits. Live scraping is optional. All scientific analysis dependencies now live in `analysis/`. No editorial backup workspace is required.
+Use Python 3.13 and R 4.5.2 with the dependencies in requirements.txt and install_r_dependencies.R. Use the frozen vessel, spatial and stock inputs supplied in the complete release. An R/JAGS installation is required only when refitting stocks.
 
-Run `python reproduce.py verify` first. Stages are `historical`, `stocks`, `scenarios`, `refresh`, `figures` and `all`. `all` reuses frozen stock fits unless `--refit-stocks` is supplied. Install Python requirements and R packages before computation. Put Rscript on PATH or set RSCRIPT; the optional local reproduction_config.json provides this computer's R paths.
+Run python reproduce.py verify before other stages. Run python reproduce.py figures to render the saved source tables. Extended Data Figs. 1 and 2 are conceptual and have no quantitative inputs. The 35 other figures retain their paper numbering. See data/figure_inputs.csv for source-data locations and data/file_manifest.csv for file checksums.
 
-## Current scenario chain
+Historical recalculation uses the 500-draw multimode inventory and tests spatial catch and effort conservation using the supplied tables. The scenarios stage runs the order and worker-context regressions before the primary and sensitivity ensembles. The optional --extra-experiments flag adds iterative matched-catch search and regional runs. A full recalculation can take hours. Retain the original ZIP before recomputing: model and plotting commands update outputs in the extracted tree. Stocks are reused by default; use --refit-stocks only if the fitted biological inputs are to be regenerated.
 
-The primary comparison is C/F/T under common realized-catch, biomass, effort and fleet-capacity feedback: 81 exogenous futures times three quota rules times eight technical subsets, or 1,944 simulations. The 1,620 sensitivity simulations rerun operating bounds, harvest fractions, thresholds and alternative-fuel prices. The original 18 matched C/F runs remain a distinct comparator for Supplementary Fig. 22. They are not the primary baseline. Observed 2024 catch initializes reference quantities and is not a current-management BAU.
-
-`scenarios` performs order/execution-context guards, pilots and validation before production runs. Use HCR_WORKERS to control memory use. `--extra-experiments` reruns iterative comparable-catch matching and regional experiments. All supplied matched candidates and outputs are retained, so saved results can be analyzed or redrawn without repeating the search. Model stages may take hours; rendering saved data does not rerun the models.
-
-`refresh` rebuilds the current panel bridges. `figures` renders Fig. 1-5, Extended Data Figs. 3-9 and Supplementary Figs. 1-23 using R/ggplot2. Conceptual Extended Data Figs. 1 and 2 are intentionally excluded from this code/data distribution; they require no quantitative source data. Old fixed-target outputs are retained only where a supplementary archival comparison explicitly uses them.
-
-Historical operating assumptions, the unresolved longline absolute-fuel discrepancy, exploratory refrigeration service equivalence, adopted fuel-factor boundaries and pooled-stock biological limitations remain applicable. Numerical and reproducibility checks do not establish empirical validation or an optimal RFMO policy.
-
-The current regional extension adds 486 paired Indian Ocean BET C/F/T and fuel/no-fuel runs. Global stock diagnostics and analytical sensitivity figures are now supplemental; Extended Data prioritizes capacity, matched mechanisms, regional technology differences and regional stock conditions. `--extra-experiments` reruns the current regional extension. Historical YFT evidence remains a historical-state diagnostic.
+Current source outputs use constant catch (C), constant harvest rate (F) and a biomass threshold (T) under common stock and fleet feedback. Supplementary Figs. 19, 20, 22 and archival regional contrasts in Fig. 23 are labeled historical comparators. They do not define the current baseline.

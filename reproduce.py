@@ -4,6 +4,7 @@ Live registry/query websites are not called. Full model stages may take hours.
 Use --refit-stocks to regenerate JABBA fits instead of the frozen fitted inputs.
 """
 from pathlib import Path
+from datetime import datetime
 import argparse,hashlib,json,os,shutil,subprocess,sys
 ROOT=Path(__file__).resolve().parent
 OUT=ROOT/'reproduction_logs'
@@ -64,19 +65,20 @@ def scenarios(extras):
     run('hcr_validation',[sys.executable,str(hcr/'validate.py')])
     run('hcr_primary',[sys.executable,str(hcr/'run_hcr.py'),'main'])
     run('hcr_sensitivities',[sys.executable,str(hcr/'run_hcr.py'),'sensitivity'])
-    run('original_cf_comparator',[sys.executable,str(hcr/'run_hcr.py'),'legacy'])
     if extras:
         run('hcr_catch_matching',[sys.executable,str(hcr/'match_hcr.py')])
         regional=ROOT/'analysis/regional_hcr_20261021'
         shutil.copy2(OUT/'order_regression.log',regional/'order_guard.log')
         run('regional_hcr',[sys.executable,str(regional/'run_regional_hcr.py'),'full'])
         run('regional_hcr_summaries',[sys.executable,str(regional/'analyse_regional_hcr.py')])
-    run('hcr_summaries',[sys.executable,str(hcr/'analyse_hcr.py')])
+    for group in ('primary','sensitivity','matched'):
+        run('hcr_summary_'+group,[sys.executable,str(hcr/'analyse_hcr.py'),group])
 
 
 def refresh():
     scripts=[
-      'figures/Fig2/preprocess_fig2.py','figures/Fig3/preprocess_fig3.py',
+      'figures/Fig1/preprocess_fig1.py','figures/Fig2/preprocess_fig2.py',
+      'figures/Fig2/check_allocation.py','figures/Fig3/preprocess_fig3.py',
       'figures/Fig4/preprocess_fig4.py','figures/Fig5/prepare_hcr_panels.py',
       'figures/supplement/Supplementary_Fig16/prepare_hcr.py',
       'figures/Extended_Data/Extended_Fig5/prepare_hcr.py',
@@ -97,7 +99,12 @@ def main():
     p.add_argument('--refit-stocks',action='store_true',help='Run the full configured JABBA chains; default all reuses frozen stock fits.')
     p.add_argument('--extra-experiments',action='store_true',help='Also rerun regional and iterative matched-catch experiments.')
     a=p.parse_args();verify()
-    if a.stage in ('historical','all'):run('historical_lca',[sys.executable,'-u',str(ROOT/'GHG_Calculation/ghg_lca.py')],ROOT/'GHG_Calculation')
+    if a.stage in ('historical','all'):
+        target=OUT/('inventory_'+datetime.now().strftime('%Y%m%d_%H%M%S_%f'))
+        run('historical_lca',[sys.executable,'-u',str(ROOT/'GHG_Calculation/run_fuel_inventory_revision.py'),str(target)],ROOT/'GHG_Calculation')
+        for item in target.iterdir():
+            if item.name.startswith('Base_') or item.name=='GHG_LCA_Total_Draws.npz':
+                os.replace(item,ROOT/'GHG_Calculation'/item.name)
     if a.stage=='stocks' or (a.stage=='all' and a.refit_stocks):run('jabba_fits',[rscript(),str(ROOT/'scenario/jabba_fit.r')])
     if a.stage in ('scenarios','all'):scenarios(a.extra_experiments)
     if a.stage in ('refresh','all'):refresh()

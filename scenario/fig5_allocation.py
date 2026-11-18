@@ -24,7 +24,7 @@ import pandas as pd
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(BASE_DIR)
-GRID_PATH = os.path.join(ROOT_DIR, "GHG_Calculation", "Base_3_Spatial_Grid_Enriched.csv")
+GRID_PATH = os.environ.get("TUNA_HISTORICAL_GRID", os.path.join(ROOT_DIR, "GHG_Calculation", "Base_3_Spatial_Grid_Enriched.csv"))
 SCHAEFER_PATH   = os.path.join(BASE_DIR, "output", "schaefer_biomass_annual.csv")
 SCHAEFER_PATH_F = os.path.join(BASE_DIR, "output", "schaefer_biomass_annual_F.csv")
 

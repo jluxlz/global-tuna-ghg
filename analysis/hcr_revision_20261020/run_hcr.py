@@ -10,7 +10,9 @@ from functools import lru_cache
 import numpy as np
 import pandas as pd
 from importlib.metadata import version
-H=Path(__file__).resolve().parent;R=H.parents[1]
+SOURCE=Path(__file__).resolve().parent;R=SOURCE.parents[1]
+H=Path(os.environ.get('HCR_RESULTS_ROOT',SOURCE)).resolve()
+H.mkdir(parents=True,exist_ok=True)
 sys.path[:0]=[str(R/'scenario'),str(R/'figures/Fig5'),str(R/'analysis/scientific_validation_20261018')]
 import fleet_model as fm
 import fig5_run as F
@@ -28,7 +30,7 @@ def fingerprint():
 
 def load_inputs():
     with contextlib.redirect_stdout(io.StringIO()):fleet,pm=fm.load_baseline_fleet()
-    grid=pd.read_csv(R/'GHG_Calculation/Base_3_Spatial_Grid_Enriched.csv',usecols=GRID_COLUMNS)
+    grid=pd.read_csv(os.environ.get('TUNA_HISTORICAL_GRID',R/'GHG_Calculation/Base_3_Spatial_Grid_Enriched.csv'),usecols=GRID_COLUMNS)
     return fleet,pm,grid
 
 def configure_spawn_threads():

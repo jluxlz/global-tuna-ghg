@@ -1,7 +1,9 @@
 """Retain matched whole-fleet contributions and period species mechanisms."""
 from pathlib import Path
+import sys
 import pandas as pd
-H=Path(__file__).resolve().parent;R=H.parents[2];A=R/'analysis/hcr_revision_20261020/analysis'
+H=Path(__file__).resolve().parent;R=H.parents[2]
+A=Path(sys.argv[1]) if len(sys.argv)>1 else R/'analysis/hcr_revision_20261020/analysis'
 pd.read_csv(A/'HCR_Matched_LMDI_Terms.csv').to_csv(H/'Extended_Fig6_PanelA_Contributions.csv',index=False)
 d=pd.read_csv(A/'HCR_Matched_Stock_Effort.csv')
 g=d.groupby(['Future','Comparison','Pair_Member','Stock']).agg(Catch_t=('Catch_t','sum'),Effort=('Realised_kW_days','sum'),Biomass=('B_Start_Mt','mean')).reset_index()

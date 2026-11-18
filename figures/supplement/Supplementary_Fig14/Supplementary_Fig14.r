@@ -13,7 +13,7 @@ cols<-c(LL='#B81D0A',PS='#1A7A8A',TP='#7570B3',SA='#E6AB02')
 weo_cols<-c(STEPS='#D55E00',APS='#0072B2',NZE='#009E73')
 read_panel<-function(n,label){d<-read.csv(file.path(HERE,paste0('Supplementary_Fig',n,'_',label,'.csv')));write.csv(d,file.path(HERE,paste0('Supplementary_Fig',n,'_',label,'_Render_Data.csv')),row.names=FALSE);d}
 
-a<-read_panel(13,'PanelA_MC');b<-read_panel(13,'PanelB_Scenarios')
+a<-read_panel(14,'PanelA_MC');b<-read_panel(14,'PanelB_Scenarios')
 p_a<-ggplot(a,aes(Year,Total_median/1e6))+geom_ribbon(aes(ymin=Total_p5/1e6,ymax=Total_p95/1e6),fill='#0072B2',alpha=.2)+
  geom_line(colour='#0072B2',linewidth=.5)+labs(tag='(a)',x='Year',y='Historical emissions (Mt CO2e)',title='Central 90% Monte Carlo range')+theme_pub
 p_b<-ggplot(b,aes(Year,Median))+geom_ribbon(aes(ymin=p5,ymax=p95),fill='#DAE6EB')+
