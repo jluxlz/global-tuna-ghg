@@ -86,7 +86,7 @@ def refresh():
       'figures/supplement/Supplementary_Fig9/prepare_hcr.py',
       'figures/supplement/Supplementary_Fig14/prepare_hcr.py',
       'figures/Extended_Data/Extended_Fig7/prepare_hcr.py',
-      'figures/supplement/Supplementary_Fig21/prepare_hcr.py',
+      'figures/supplement/Supplementary_Fig19/prepare_hcr.py',
       'figures/Extended_Data/Extended_Fig6/prepare_hcr.py',
       'figures/Extended_Data/Extended_Fig6/prepare_mechanisms.py',
       'figures/Extended_Data/Extended_Fig9/prepare_regional.py']

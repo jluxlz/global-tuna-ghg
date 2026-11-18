@@ -8,4 +8,4 @@ The regional result qualifies the pooled model: higher cumulative catch can offs
 
 Run the scenario order guard, save its PASS log as `order_guard.log`, then run `run_regional_hcr.py pilot`, `run_regional_hcr.py full` and `analyse_regional_hcr.py`. The root reproduction driver includes the full regional extension with `--extra-experiments`. Source inputs are in `analysis/p0_revision_20261013/regional_inputs/`. Each run retains Annual, Stocks, Effort and Complete records; all figure bridges are in Extended Data Fig. 9.
 
-The historical YFT archive remains a historical-state diagnostic and is not advanced as a current regional fit in this extension. No historical inventory, pooled fit or global scenario value is recalibrated here.
+

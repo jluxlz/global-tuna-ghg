@@ -1,8 +1,4 @@
-"""Reproduce only 18 selected runs to expose previously unsaved process states.
-
-Production source files and outputs are never edited. In-memory instrumentation
-adds diagnostic columns after original calculations, then checks saved histories.
-"""
+"""Capture process and stock-allocation diagnostics for the current HCR simulations."""
 from pathlib import Path
 import sys,json,contextlib,io,inspect,hashlib,time,copy
 from multiprocessing import Pool
@@ -58,60 +54,3 @@ def init_worker(fleet,pm):
 '''
     exec(compile(source.replace(needle,insert+needle),'<isolated_process_capture>','exec'),fm.__dict__)
     fm.process_fleet_dynamics_pipeline=capture_pipeline
-
-def task(item):
-    future=item['Future'];rule=item['Rule'];folder=OUT/(future+'_'+rule);folder.mkdir(parents=True,exist_ok=True)
-    marker=folder/'Complete.json'
-    # Saved parameter records retain the author's original paths. Always bind
-    # this global-stock diagnostic to the provided local frozen stock table.
-    params=copy.deepcopy(item['Parameters'])
-    params['fishery_coupling']['stock_parameters']=str(R/'scenario/output/schaefer_projection_parameters.csv')
-    from scenario_seeds import simulation_fingerprint
-    fingerprint=dict(inputs=simulation_fingerprint(),params=params,seed=item['Seed'],
-                     capture_source=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-                     stocks=hashlib.sha256(Path(params['fishery_coupling']['stock_parameters']).read_bytes()).hexdigest())
-    signature=hashlib.sha256(json.dumps(fingerprint,sort_keys=True).encode()).hexdigest()
-    if marker.exists():
-        saved=json.loads(marker.read_text())
-        if saved.get('signature')==signature and saved.get('outputs') and all(
-            (folder/name).is_file() and hashlib.sha256((folder/name).read_bytes()).hexdigest()==value
-            for name,value in saved['outputs'].items()):return future,rule,'reused'
-    STATE.update(capture=True,future=future,groups=[],cells=[],vessels=[])
-    with contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):
-        hist,last=fm.run_scenario_simulation(STATE['fleet'],STATE['pm'],params,start_year=2025,end_year=2050,random_seed=item['Seed'])
-    STATE['capture']=False
-    original=R/item['Folder'];old=pd.read_csv(original/'Annual.csv');errors={}
-    for c in ['Total_GHG_tCO2e','Realised_Fleet_Catch_Mt','N_Vessels','Total_Power_kW']:
-        assert np.allclose(hist[c],old[c],rtol=1e-12,atol=1e-7),(future,rule,c,float(np.max(np.abs(hist[c]-old[c]))))
-        errors[c]=float(np.max(np.abs(hist[c]-old[c])))
-    groups=pd.DataFrame(STATE['groups']);cells=pd.DataFrame(STATE['cells'])
-    annual=groups.groupby('Year').GHG_t.sum()
-    assert np.allclose(annual,hist.set_index('Year').Total_GHG_tCO2e,rtol=1e-12)
-    assert np.allclose(cells.groupby('Year').Catch_t.sum(),hist.set_index('Year').Realised_Fleet_Catch_Mt*1e6,rtol=1e-11)
-    for name,data in [('Annual',hist),('Stocks',hist.attrs['stock_ledger']),('Effort',hist.attrs['effort_ledger']),('Groups',groups),('Cells',cells)]:
-        data.to_csv(folder/(name+'.csv'),index=False)
-    if STATE['vessels']:pd.concat(STATE['vessels'],ignore_index=True).to_csv(folder/'Central_Vessel_States.csv',index=False)
-    names=['Annual.csv','Stocks.csv','Effort.csv','Groups.csv','Cells.csv']
-    if STATE['vessels']:names.append('Central_Vessel_States.csv')
-    hashes={name:hashlib.sha256((folder/name).read_bytes()).hexdigest() for name in names}
-    marker.write_text(json.dumps(dict(original=str(original.relative_to(R)),seed=item['Seed'],params=params,signature=signature,outputs=hashes,reproduction_max_errors=errors,
-        boundary='Species allocation applies only to LL/PS activity-scalable fuel and bait, by actual effort partitions. Vessel materials, gear and leakage stay unallocated; support vessels separately reported.'),indent=2),encoding='utf-8')
-    return future,rule,errors['Total_GHG_tCO2e']
-
-def main():
-    sys.stdout.reconfigure(encoding='utf-8',errors='replace');OUT.mkdir(exist_ok=True)
-    runs=json.loads((H/'Saved_Matched_Runs.json').read_text(encoding='utf-8'))
-    # Saved outputs are inspected before any rerun.
-    records=[]
-    for row in runs:
-        a=pd.read_csv(R/row['Folder']/'Annual.csv');a['Rule']=row['Rule'];a['Future']=row['Future'];records.append(a)
-    old=pd.concat(records,ignore_index=True);old.to_csv(H/'analysis/Matched_Saved_Annual.csv',index=False)
-    if len(sys.argv)>1 and sys.argv[1]=='saved':
-        print(old.groupby(['Future','Rule'])[['Total_GHG_tCO2e','Realised_Fleet_Catch_Mt']].sum().to_string());return
-    if len(sys.argv)>1 and sys.argv[1]=='pilot':runs=[x for x in runs if x['Future']=='F41']
-    with contextlib.redirect_stdout(io.StringIO()):fleet,pm=fm.load_baseline_fleet()
-    t=time.time()
-    with Pool(4,initializer=init_worker,initargs=(fleet,pm)) as pool:
-        for result in pool.imap_unordered(task,runs):print(result,'seconds',round(time.time()-t),flush=True)
-    print('MATCHED_CAPTURE_COMPLETE',len(runs),flush=True)
-if __name__=='__main__':main()

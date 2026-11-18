@@ -1,5 +1,5 @@
 {
-  "Scope": "35 scientific figures; current November fuel inventory and HCR simulations. Conceptual Extended Data Figs. 1 and 2 are excluded.",
+  "Scope": "32 quantitative figures: main Figs. 1-5, Extended Data Figs. 3-9, and Supplementary Figs. 1-20.",
   "Figures": [
     {
       "Figure": "Fig. 1",
@@ -65,8 +65,6 @@
       "Figure": "Fig. 4",
       "Conceptual_Diagram": false,
       "Inputs": [
-        "figures/Fig4/Fig4_Coupled_Validation_PanelA_Render_Data.csv",
-        "figures/Fig4/Fig4_Coupled_Validation_PanelA_Stocks.csv",
         "figures/Fig4/Fig4_Fleet_Coverage_QC.csv",
         "figures/Fig4/Fig4_Fuel_Parameters_QC.csv",
         "figures/Fig4/Fig4_Model_Species_Shares_QC.csv",
@@ -306,23 +304,6 @@
       "Numeric_Data_Required": true
     },
     {
-      "Figure": "Supplementary Fig. 5",
-      "Conceptual_Diagram": false,
-      "Inputs": [
-        "figures/supplement/validation_20261018/Supplementary_Fig5/Creep_Fixed_Grid_Fits.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig5/Creep_RFMO_Weighted_Trends.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig5/Creep_Trends_Fractions.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig5/SBT_Associations.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig5/SBT_Official_TRO_Digitised.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig5/Supplementary_Fig5_PanelA_Rates.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig5/Supplementary_Fig5_PanelB_Fractions.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig5/Supplementary_Fig5_PanelC_Thresholds.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig5/Supplementary_Fig5_PanelD_Stock_Context.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig5/YFT_Associations.csv"
-      ],
-      "Numeric_Data_Required": true
-    },
-    {
       "Figure": "Supplementary Fig. 6",
       "Conceptual_Diagram": false,
       "Inputs": [
@@ -506,21 +487,33 @@
       "Numeric_Data_Required": true
     },
     {
+      "Figure": "Supplementary Fig. 5",
+      "Conceptual_Diagram": false,
+      "Inputs": [
+        "figures/supplement/Supplementary_Fig5/Creep_Fixed_Grid_Fits.csv",
+        "figures/supplement/Supplementary_Fig5/Creep_RFMO_Weighted_Trends.csv",
+        "figures/supplement/Supplementary_Fig5/Creep_Trends_Fractions.csv",
+        "figures/supplement/Supplementary_Fig5/SBT_Associations.csv",
+        "figures/supplement/Supplementary_Fig5/SBT_Official_TRO_Digitised.csv",
+        "figures/supplement/Supplementary_Fig5/Supplementary_Fig5_PanelA_Rates.csv",
+        "figures/supplement/Supplementary_Fig5/Supplementary_Fig5_PanelB_Fractions.csv",
+        "figures/supplement/Supplementary_Fig5/Supplementary_Fig5_PanelC_Thresholds.csv",
+        "figures/supplement/Supplementary_Fig5/Supplementary_Fig5_PanelD_Stock_Context.csv"
+      ],
+      "Numeric_Data_Required": true
+    },
+    {
       "Figure": "Supplementary Fig. 19",
       "Conceptual_Diagram": false,
       "Inputs": [
-        "figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_Annual_Grid_Catch_Coverage.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_Catch_Denominator.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_Cohort_Composition.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_Identifier_QC.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_LOA_Class.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_Phase_Sensitivity.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_Phase_Sensitivity_Draws.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig19/Fuel_Species_Composition.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig19/Supplementary_Fig19_PanelA_Global_Clocks.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig19/Supplementary_Fig19_PanelB_Fuel_Phases.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig19/Supplementary_Fig19_PanelC_FI_Diagnostics.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig19/Supplementary_Fig19_PanelD_Flag_Coverage.csv"
+        "figures/supplement/Supplementary_Fig19/Supplementary_Fig19_HCR_PanelA_Catch_GHG.csv",
+        "figures/supplement/Supplementary_Fig19/Supplementary_Fig19_HCR_PanelA_Catch_GHG_Render_Data.csv",
+        "figures/supplement/Supplementary_Fig19/Supplementary_Fig19_HCR_PanelB_Day_Effects.csv",
+        "figures/supplement/Supplementary_Fig19/Supplementary_Fig19_HCR_PanelB_Day_Effects_Render_Data.csv",
+        "figures/supplement/Supplementary_Fig19/Supplementary_Fig19_HCR_PanelC_Fraction_Effects.csv",
+        "figures/supplement/Supplementary_Fig19/Supplementary_Fig19_HCR_PanelC_Fraction_Effects_Render_Data.csv",
+        "figures/supplement/Supplementary_Fig19/Supplementary_Fig19_HCR_PanelD_Thresholds.csv",
+        "figures/supplement/Supplementary_Fig19/Supplementary_Fig19_HCR_PanelD_Thresholds_Render_Data.csv"
       ],
       "Numeric_Data_Required": true
     },
@@ -528,71 +521,10 @@
       "Figure": "Supplementary Fig. 20",
       "Conceptual_Diagram": false,
       "Inputs": [
-        "figures/supplement/Supplementary_Fig20/SF7_Fuel_Intensity.csv",
-        "figures/supplement/Supplementary_Fig20/SF7_Increase_Decomposition.csv",
-        "figures/supplement/Supplementary_Fig20/SF7_Meco_Trajectory.csv",
-        "figures/supplement/Supplementary_Fig20/SF7_WEO_dE.csv",
-        "figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelA_Render_Data.csv",
-        "figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelB_Render_Data.csv",
-        "figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelC_Render_Data.csv",
-        "figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelD_Render_Data.csv"
-      ],
-      "Numeric_Data_Required": true
-    },
-    {
-      "Figure": "Supplementary Fig. 21",
-      "Conceptual_Diagram": false,
-      "Inputs": [
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelA_Catch_GHG.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelA_Catch_GHG_Render_Data.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelB_Day_Effects.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelB_Day_Effects_Render_Data.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelC_Fraction_Effects.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelC_Fraction_Effects_Render_Data.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelD_Thresholds.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_HCR_PanelD_Thresholds_Render_Data.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelA_Annual.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelA_Annual_Render_Data.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelA_Summary.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelB_Reductions.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelB_Reductions_Render_Data.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelC_Catch_GHG.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelC_Catch_GHG_Render_Data.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelD_Shapley.csv",
-        "figures/supplement/Supplementary_Fig21/Supplementary_Fig21_PanelD_Shapley_Render_Data.csv"
-      ],
-      "Numeric_Data_Required": true
-    },
-    {
-      "Figure": "Supplementary Fig. 22",
-      "Conceptual_Diagram": false,
-      "Inputs": [
-        "figures/supplement/validation_20261018/Supplementary_Fig22/Matched_Closure.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig22/Matched_Gear_Period.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig22/Matched_Processes.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig22/Matched_Savings_Period.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig22/Matched_Species.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig22/Matched_Stock_Mechanism.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig22/Supplementary_Fig22_PanelA_Central_Annual.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig22/Supplementary_Fig22_PanelB_Matched_Pairs.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig22/Supplementary_Fig22_PanelC_Decomposition.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig22/Supplementary_Fig22_PanelD_Standardisation.csv",
-        "figures/supplement/validation_20261018/Supplementary_Fig22/Supplementary_Fig22_PanelE_Stock_Effort.csv"
-      ],
-      "Numeric_Data_Required": true
-    },
-    {
-      "Figure": "Supplementary Fig. 23",
-      "Conceptual_Diagram": false,
-      "Inputs": [
-        "figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelA_Regional_Fits.csv",
-        "figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelA_Regional_Fits_Render_Data.csv",
-        "figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelB_Regional_QC.csv",
-        "figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelB_Regional_QC_Render_Data.csv",
-        "figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelC_Policies.csv",
-        "figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelC_Policies_Render_Data.csv",
-        "figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelD_Bridge.csv",
-        "figures/supplement/Supplementary_Fig23/Supplementary_Fig23_PanelD_Bridge_Render_Data.csv"
+        "figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelA_Regional_Fits.csv",
+        "figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelA_Regional_Fits_Render_Data.csv",
+        "figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelB_Regional_QC.csv",
+        "figures/supplement/Supplementary_Fig20/Supplementary_Fig20_PanelB_Regional_QC_Render_Data.csv"
       ],
       "Numeric_Data_Required": true
     }

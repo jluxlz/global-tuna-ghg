@@ -173,15 +173,6 @@ def sensitivity():
     save('HCR_Sensitivity_Summary',d.groupby(['Scope','Rule','Technical'])[['GHG_Mt','Catch_Mt','Period_CEI','Minimum_Stock_Bmsy2050']].median().reset_index())
     print('SENSITIVITY ANALYSIS COMPLETE',len(d),flush=True)
 
-def original_cf():
-    assert (H/'Original_CF_Reproduction.json').exists();rows=[]
-    for future in ['F13','F14','F15','F40','F41','F42','F67','F68','F69']:
-        runs={k:read('OriginalCF_'+future+'_'+k,'Annual') for k in ['C','F']}
-        g={k:v.Total_GHG_tCO2e.sum()/1e6 for k,v in runs.items()};c={k:v.Realised_Fleet_Catch_Mt.sum() for k,v in runs.items()}
-        rows.append(dict(Future=future,Reduction_pct=100*(1-g['F']/g['C']),Catch_Gap_pct=100*(c['F']/c['C']-1),C_GHG_Mt=g['C'],F_GHG_Mt=g['F'],C_Catch_Mt=c['C'],F_Catch_Mt=c['F']))
-    save('Original_CF_Reverified',rows)
-    d=pd.DataFrame(rows);assert round(d.Reduction_pct.median(),1)==19.4
-    print('ORIGINAL CF REVERIFIED',d.Reduction_pct.median(),flush=True)
 
 if __name__=='__main__':
     sys.stdout.reconfigure(encoding='utf-8',errors='replace')
@@ -189,4 +180,3 @@ if __name__=='__main__':
     if mode in ['all','primary']:primary()
     if mode in ['all','matched']:matched()
     if mode in ['all','sensitivity']:sensitivity()
-    if mode in ['all','original']:original_cf()

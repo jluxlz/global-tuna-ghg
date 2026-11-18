@@ -114,17 +114,11 @@ def sensitivity_jobs():
                 jobs.append(make_job(i,rule,combo,scope='FixedPrices',price_assumption='fixed_2023'))
     return jobs
 
-def legacy_jobs():
-    rows=json.loads((R/'analysis/scientific_validation_20261018/Saved_Matched_Runs.json').read_text());jobs=[]
-    for row in rows:
-        p=copy.deepcopy(row['Parameters']);p['fishery_coupling']['stock_parameters']=str(R/'scenario/output/schaefer_projection_parameters.csv')
-        m=dict(Future=row['Future'],Rule=row['Rule'],Scope='Original_CF',Original_Folder=row['Folder'])
-        jobs.append((f'OriginalCF_{row["Future"]}_{row["Rule"]}',p,row['Seed'],m))
-    return jobs
 
 def main():
     sys.stdout.reconfigure(encoding='utf-8',errors='replace');mode=sys.argv[1] if len(sys.argv)>1 else 'main'
-    jobs=main_jobs() if mode=='main' else sensitivity_jobs() if mode=='sensitivity' else legacy_jobs() if mode=='legacy' else [make_job(i,r) for i in (0,40,80) for r in ('C','F','T')]
+    if mode not in ('main','sensitivity','pilot'):raise SystemExit('Use main, sensitivity or pilot.')
+    jobs=main_jobs() if mode=='main' else sensitivity_jobs() if mode=='sensitivity' else [make_job(i,r) for i in (0,40,80) for r in ('C','F','T')]
     if mode!='pilot':
         assert 'PASS: deterministic' in (H/'order_guard.log').read_text(encoding='utf-8',errors='replace')
         validation=json.loads((H/'Pilot_QC.json').read_text())

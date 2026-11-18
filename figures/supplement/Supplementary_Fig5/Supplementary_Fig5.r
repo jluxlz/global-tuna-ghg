@@ -1,52 +1,22 @@
-# One figure per script; CSV inputs and rendered panel data stay in this folder.
-suppressPackageStartupMessages({library(ggplot2);library(dplyr);library(tidyr);library(patchwork);library(scales)})
-arg<-grep('^--file=',commandArgs(FALSE),value=TRUE)
-HERE<-dirname(normalizePath(sub('^--file=','',arg[1]),winslash='/'))
-theme_pub<-theme_classic(base_size=7,base_family='Arial')+theme(
- axis.title=element_text(size=7,face='bold'),axis.text=element_text(size=6,colour='black'),
- axis.line=element_line(linewidth=.2),axis.ticks=element_line(linewidth=.2),
- strip.background=element_blank(),strip.text=element_text(size=7,face='bold'),
- plot.tag=element_text(size=8,face='bold'),legend.position='bottom',
- legend.text=element_text(size=6),legend.title=element_text(size=7,face='bold'),
- legend.key.size=unit(3,'mm'),panel.spacing=unit(3,'mm'),plot.margin=margin(4,5,4,4,'pt'))
-cols<-c(LL='#B81D0A',PS='#1A7A8A',TP='#7570B3',SA='#E6AB02')
-weo_cols<-c(STEPS='#D55E00',APS='#0072B2',NZE='#009E73')
-read_panel<-function(n,label){d<-read.csv(file.path(HERE,paste0('Supplementary_Fig',n,'_',label,'.csv')));write.csv(d,file.path(HERE,paste0('Supplementary_Fig',n,'_',label,'_Render_Data.csv')),row.names=FALSE);d}
-
-a<-read_panel(5,'PanelA_Identity');b<-read_panel(5,'PanelB_Regional')
-p_a<-ggplot(a,aes(Effort_log_trend_pct+GHG_Effort_log_trend_pct,CEI_log_trend_pct,colour=Gear))+
- geom_abline(slope=1,intercept=0,colour='grey55',linewidth=.25)+geom_point(size=.55,alpha=.4)+
- scale_colour_manual(values=cols,name=NULL)+labs(tag='(a)',x='Sum of factor log trends (% yr-1)',y='CEI log trend (% yr-1)')+theme_pub
-p_b<-ggplot(b,aes(Nominal_Xm*Nominal_Ym/10000,Xm*Ym/10000,colour=Gear))+
- geom_abline(slope=1,intercept=0,colour='grey55',linewidth=.25)+geom_point(size=1.5)+scale_x_log10()+scale_y_log10()+
- scale_colour_manual(values=cols,name=NULL)+labs(tag='(b)',x='Nominal factor product / 10,000',y='Corrected factor product / 10,000')+theme_pub
-# LL and PS scaling differ; panel B therefore plots dimensionless corrected/nominal identity below.
-b$Nominal_CEI<-ifelse(b$Gear=='LL',b$Nominal_Xm*b$Nominal_Ym/10000,b$Nominal_Xm*b$Nominal_Ym)
-b$Corrected_CEI<-ifelse(b$Gear=='LL',b$Xm*b$Ym/10000,b$Xm*b$Ym)
-p_b<-ggplot(b,aes(Nominal_CEI,Corrected_CEI,colour=Gear))+geom_abline(slope=1,intercept=0,colour='grey55',linewidth=.25)+
- geom_point(size=1.5)+scale_x_log10()+scale_y_log10()+scale_colour_manual(values=cols,name=NULL)+
- labs(tag='(b)',x='Nominal regional CEI (t CO2e t-1)',y='Corrected regional CEI (t CO2e t-1)')+theme_pub
-write.csv(b,file.path(HERE,'Supplementary_Fig5_PanelB_Render_Data.csv'),row.names=FALSE)
-# Analytical correction comparison on identical cells and fixed saved weights.
-# These slopes are derived from existing fits, not newly refitted stock models.
-q<-read.csv(file.path(HERE,'Supplementary_Fig5_PanelB_Creep_Comparison.csv'))
-q$Era<-factor(q$Era,levels=c('1970-1990','1991-2005','2006-2024'))
-nom<-filter(q,Basis=='Nominal');adj<-filter(q,Basis=='Technology-adjusted')
-ar<-inner_join(nom,adj,by=c('Gear','Era'),suffix=c('_nom','_adj'))
-p_b<-ggplot(q,aes(Effort_trend,GHG_effort_trend,colour=Era,shape=Basis))+
- geom_hline(yintercept=0,colour='grey75',linewidth=.25)+geom_vline(xintercept=0,colour='grey75',linewidth=.25)+
- geom_segment(data=ar,aes(x=Effort_trend_nom,y=GHG_effort_trend_nom,xend=Effort_trend_adj,yend=GHG_effort_trend_adj,colour=Era),inherit.aes=FALSE,
-  arrow=arrow(length=unit(1.4,'mm')),linewidth=.4)+
- geom_point(size=2,stroke=.6)+facet_wrap(~Gear)+
- scale_colour_manual(values=c('#56B4E9','#009E73','#D55E00'))+scale_shape_manual(values=c('Nominal'=1,'Technology-adjusted'=16))+
- labs(tag='(b)',x='Effort / catch log trend (% yr-1)',y='GHG / effort log trend (% yr-1)')+theme_pub
-write.csv(q,file.path(HERE,'Supplementary_Fig5_PanelB_Creep_Render_Data.csv'),row.names=FALSE)
-fig<-p_a+p_b+plot_layout(widths=c(1,1.6),guides='collect') & theme(legend.position='bottom')
-
-for(ext in c('pdf','png','tiff')) {
- options<-list(filename=file.path(HERE,paste0('Supplementary_Fig5_Factor_Identity.',ext)),plot=fig,width=183,height=110,units='mm',bg='white')
- if(ext=='pdf') options$device<-cairo_pdf
- if(ext=='png') options$dpi<-300
- if(ext=='tiff') {options$dpi<-900;options$compression<-'lzw'}
- do.call(ggsave,options)
-}
+library(ggplot2);library(dplyr);library(tidyr);library(patchwork)
+args<-commandArgs(FALSE);self<-sub('--file=','',args[grepl('^--file=',args)])[1];setwd(dirname(normalizePath(self)))
+read_panel<-function(letter,name)read.csv(paste0('Supplementary_Fig5_Panel',letter,'_',name,'.csv'))
+th<-theme_classic(base_size=7,base_family='sans')+theme(axis.title=element_text(size=7,face='bold'),axis.text=element_text(size=6,colour='black'),strip.text=element_text(size=7,face='bold'),legend.position='bottom',legend.title=element_blank(),legend.text=element_text(size=6),plot.title=element_text(size=8,face='bold'),plot.tag=element_text(size=8,face='bold'),plot.margin=margin(5,7,5,5))
+cols<-c('Effort / catch'='#C17C43','GHG / effort'='#367D99','CEI'='#494949')
+a<-read_panel('A','Rates')%>%pivot_longer(c(X,Y,CEI),names_to='Factor',values_to='Trend')%>%mutate(Factor=recode(Factor,X='Effort / catch',Y='GHG / effort'))
+pa<-ggplot(a,aes(d_pct,Trend,colour=Factor))+geom_hline(yintercept=0,linewidth=.25,colour='grey70')+geom_line(linewidth=.4)+geom_point(aes(shape=Rate_Label=='Adopted'),size=1.3)+facet_grid(Gear~Era)+scale_colour_manual(values=cols)+scale_shape_manual(values=c(16,8),guide='none')+labs(x='Effort-correction parameter d (% per year)',y='GHG-weighted log trend (% per year)',title='Factor trends depend on the effort correction')+th
+b<-read_panel('B','Fractions')%>%select(Gear,d_pct,Effort_up_count_pct,Offset_count_pct)%>%pivot_longer(ends_with('_pct'),names_to='Measure',values_to='Percent')
+# d_pct was kept as the x coordinate, not a response.
+b<-read_panel('B','Fractions')%>%pivot_longer(c(Effort_up_count_pct,Offset_count_pct),names_to='Measure',values_to='Percent')%>%mutate(Measure=recode(Measure,Effort_up_count_pct='Effort / catch increases',Offset_count_pct='Effort rises, GHG / effort falls'))
+pb<-ggplot(b,aes(d_pct,Percent,colour=Measure))+geom_line(linewidth=.45)+geom_point(size=1.1)+facet_wrap(~Gear)+scale_colour_manual(values=c('#C17C43','#367D99'))+scale_y_continuous(limits=c(0,100),breaks=c(0,50,100))+labs(x='Correction parameter d (% per year)',y='Grid proportion (%)',title='Recent-period signs change across assumptions')+th
+c<-read_panel('C','Thresholds')%>%mutate(Era=factor(Era,levels=c('1970-1990','1991-2005','2006-2024')))
+pc<-ggplot(c,aes(Era,Critical_d_pct,fill=Gear))+geom_col(position=position_dodge(width=.7),width=.6)+geom_text(aes(label=sprintf('%.2f',Critical_d_pct)),position=position_dodge(width=.7),vjust=-.5,size=2)+scale_fill_manual(values=c(LL='#367D99',PS='#4C9B8C'))+scale_y_continuous(expand=expansion(mult=c(0,.22)))+labs(x=NULL,y='Critical correction d (%)',title='Minimum rate for a positive mean effort trend')+th+theme(axis.text.x=element_text(size=5.8))
+d<-read_panel('D','Stock_Context');stock<-d%>%select(Stock,Year,Stock_index)%>%distinct()%>%mutate(Metric='Assessment index',Value=Stock_index)
+eff<-d%>%mutate(Metric=ifelse(Rate_Label=='Adopted','Adjusted effort / catch','Nominal effort / catch'),Value=Effort_index)
+dd<-bind_rows(stock,eff)
+pd<-ggplot(dd,aes(Year,Value,colour=Metric,linetype=Metric))+geom_hline(yintercept=1,colour='grey85',linewidth=.25)+geom_line(linewidth=.5)+scale_colour_manual(values=c('Assessment index'='#367D99','Adjusted effort / catch'='#C17C43','Nominal effort / catch'='#868686'))+scale_linetype_manual(values=c('Assessment index'='solid','Adjusted effort / catch'='solid','Nominal effort / catch'='dashed'))+labs(x='Year',y='Index (first year = 1)',title='Southern bluefin recovery and longline effort')+th
+fig<-pa/(pb|pc)/pd+plot_layout(heights=c(1.28,1,1.05),guides='keep')+plot_annotation(tag_levels='a',tag_prefix='(',tag_suffix=')')
+for(letter in c('A','B','C','D')){f<-list.files(pattern=paste0('Panel',letter,'_.*csv$'));z<-read.csv(f);write.csv(z,f,row.names=FALSE)}
+ggsave('Supplementary_Fig5_Validation.pdf',fig,width=183,height=239,units='mm',device=cairo_pdf,bg='white')
+ggsave('Supplementary_Fig5_Validation.png',fig,width=183,height=239,units='mm',dpi=300,bg='white')
+ggsave('Supplementary_Fig5_Validation.tiff',fig,width=183,height=239,units='mm',dpi=900,compression='lzw',bg='white')
