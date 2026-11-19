@@ -231,11 +231,12 @@ p_a <- ggplot() +
     values = process_cols,
     labels = process_labels,
     name   = "Emission process",
-    guide  = guide_legend(nrow = 2, byrow = TRUE)
+    guide  = guide_legend(nrow = 2, byrow = TRUE, order = 1)
   ) +
   scale_linetype_manual(
     values = c("Total GHG" = "solid"),
-    name   = NULL
+    name   = NULL,
+    guide  = guide_legend(order = 2)
   ) +
   scale_x_continuous(breaks = seq(1950, 2025, by = 15), expand = c(0, 0)) +
   scale_y_continuous(
@@ -477,7 +478,7 @@ placements$Bubble_diameter_mm <- 12*sqrt(placements$CEI/max(placements$CEI))
 placements$Icon_x <- placements$Total_Catch_Mt
 placements$Icon_y <- placements$Total_GHG_Mt
 # SBT and ALB are too close for stacked artwork; keep the data point fixed and
-# use a short labelled callout in the empty lower-middle part of the panel.
+# use a callout whose artwork is centered on the leader endpoint.
 placements$Icon_x[placements$Species == 'SBT'] <- 20
 placements$Icon_y[placements$Species == 'SBT'] <- placements$Total_GHG_Mt[placements$Species == 'SBT'] + 8
 sbt_icon <- placements[placements$Species == 'SBT', ]
@@ -491,11 +492,13 @@ for (i in seq_len(nrow(placements))) {
     paste0('640x427-Tuna-',fish_files[name],'-NOAAFisheries.png'))
   a <- read_icon(path)
   fish_h <- 12*dim(a)[1]/dim(a)[2]
+  fish_offset_mm <- if (name == 'SBT') 0 else item$Bubble_diameter_mm/2+5.6
+  label_offset_mm <- if (name == 'SBT') -(fish_h/2+1.8) else item$Bubble_diameter_mm/2+1.3
   fish <- grid::rasterGrob(a,y=grid::unit(.5,'npc')+
-    grid::unit(item$Bubble_diameter_mm/2+5.6,'mm'),
+    grid::unit(fish_offset_mm,'mm'),
     width=grid::unit(12,'mm'),height=grid::unit(fish_h,'mm'),interpolate=TRUE)
   label <- grid::textGrob(name,y=grid::unit(.5,'npc')+
-    grid::unit(item$Bubble_diameter_mm/2+1.3,'mm'),
+    grid::unit(label_offset_mm,'mm'),
     gp=grid::gpar(fontsize=7,fontface='bold',fontfamily='Arial'))
   p_c <- p_c + annotation_custom(grid::grobTree(fish,label),
     xmin=item$Icon_x,xmax=item$Icon_x,
