@@ -1,0 +1,1235 @@
+{
+  "Verification_Date": "2026-11-27",
+  "Python": "3.13.0",
+  "OS": "Windows-11-10.0.26200-SP0",
+  "Machine": "",
+  "Logical_CPUs": 24,
+  "Python_Packages": {
+    "anaconda-anon-usage": "0.7.1",
+    "annotated-types": "0.6.0",
+    "archspec": "0.2.3",
+    "attrs": "26.1.0",
+    "beautifulsoup4": "4.15.0",
+    "boltons": "24.1.0",
+    "Bottleneck": "1.4.2",
+    "Brotli": "1.0.9",
+    "certifi": "2026.5.20",
+    "cffi": "1.17.1",
+    "charset-normalizer": "3.3.2",
+    "cloudpickle": "3.1.2",
+    "colorama": "0.4.6",
+    "conda": "25.5.1",
+    "conda-anaconda-telemetry": "0.1.2",
+    "conda-anaconda-tos": "0.2.0",
+    "conda-content-trust": "0.2.0",
+    "conda-libmamba-solver": "25.4.0",
+    "conda-package-handling": "2.4.0",
+    "conda_package_streaming": "0.11.0",
+    "contourpy": "1.3.3",
+    "cryptography": "45.0.3",
+    "cycler": "0.12.1",
+    "Deprecated": "1.2.18",
+    "distro": "1.9.0",
+    "et_xmlfile": "2.0.0",
+    "filelock": "3.18.0",
+    "fonttools": "4.63.0",
+    "frozendict": "2.4.2",
+    "fsspec": "2025.5.1",
+    "h11": "0.16.0",
+    "idna": "3.7",
+    "importlib_metadata": "8.7.0",
+    "Jinja2": "3.1.6",
+    "joblib": "1.5.3",
+    "jsonpatch": "1.33",
+    "jsonpointer": "2.1",
+    "kiwisolver": "1.5.0",
+    "latex2mathml": "3.81.1",
+    "libmambapy": "2.0.5",
+    "llvmlite": "0.48.0",
+    "lxml": "6.1.1",
+    "markdown-it-py": "2.2.0",
+    "MarkupSafe": "3.0.2",
+    "matplotlib": "3.11.0",
+    "mdurl": "0.1.0",
+    "menuinst": "2.2.0",
+    "mkl_fft": "1.3.11",
+    "mkl_random": "1.2.8",
+    "mkl-service": "2.4.0",
+    "mpmath": "1.3.0",
+    "narwhals": "2.23.0",
+    "networkx": "3.5",
+    "numba": "0.66.0",
+    "numexpr": "2.10.1",
+    "numpy": "2.3.1",
+    "openpyxl": "3.1.5",
+    "opentelemetry-api": "1.34.1",
+    "outcome": "1.3.0.post0",
+    "packaging": "24.2",
+    "pandas": "2.2.3",
+    "pillow": "10.4.0",
+    "pip": "25.1",
+    "platformdirs": "4.3.7",
+    "pluggy": "1.5.0",
+    "prompt_toolkit": "3.0.52",
+    "pycosat": "0.6.6",
+    "pycparser": "2.21",
+    "pydantic": "2.10.3",
+    "pydantic_core": "2.27.1",
+    "Pygments": "2.19.1",
+    "pyodbc": "5.3.0",
+    "pyparsing": "3.3.2",
+    "pypdf": "6.19.0",
+    "PySocks": "1.7.1",
+    "python-dateutil": "2.9.0.post0",
+    "python-docx": "1.2.0",
+    "pytz": "2025.2",
+    "radian": "0.6.15",
+    "rchitect": "0.4.9",
+    "requests": "2.32.3",
+    "rich": "13.9.4",
+    "ruamel.yaml": "0.18.10",
+    "ruamel.yaml.clib": "0.2.12",
+    "scikit-learn": "1.9.0",
+    "scipy": "1.18.0",
+    "selenium": "4.44.0",
+    "setuptools": "73.0.1",
+    "shap": "0.52.0",
+    "six": "1.17.0",
+    "slicer": "0.0.8",
+    "sniffio": "1.3.1",
+    "sortedcontainers": "2.4.0",
+    "soupsieve": "2.9.2",
+    "sympy": "1.14.0",
+    "threadpoolctl": "3.6.0",
+    "torch": "2.5.1",
+    "torchaudio": "2.5.1a0",
+    "torchvision": "0.20.1",
+    "tqdm": "4.67.1",
+    "trio": "0.33.0",
+    "trio-websocket": "0.12.2",
+    "truststore": "0.10.0",
+    "typing_extensions": "4.15.0",
+    "tzdata": "2025.2",
+    "urllib3": "2.7.0",
+    "wcwidth": "0.6.0",
+    "websocket-client": "1.9.0",
+    "wheel": "0.45.1",
+    "win_inet_pton": "1.1.0",
+    "wrapt": "1.17.2",
+    "wsproto": "1.3.2",
+    "zipp": "3.23.0",
+    "zstandard": "0.23.0"
+  },
+  "Original_GISIS_Selenium_Version": "not recorded",
+  "Original_GISIS_Browser_Version": "not recorded",
+  "Retained_Edge_WebDriver": "148.0.3967.96",
+  "Scientific_Source_Release": "v2026.11.18",
+  "Scientific_Source_Commit": "002d0cba0139b31fa0c08ba43ecded5608bc7bec",
+  "R_Environment": {
+    "Verification_Date": "2026-11-27",
+    "R": "R version 4.5.2 (2025-10-31 ucrt)",
+    "Platform": "x86_64-w64-mingw32",
+    "Packages": {
+      "abind": {
+        "Version": "1.4-8",
+        "Built": "R 4.5.2; ; 2025-11-01 00:31:41 UTC; windows"
+      },
+      "aplot": {
+        "Version": "0.2.9",
+        "Built": "R 4.5.3; ; 2026-03-28 20:50:00 UTC; windows"
+      },
+      "askpass": {
+        "Version": "1.2.1",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 02:44:39 UTC; windows"
+      },
+      "backports": {
+        "Version": "1.5.0",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2025-11-01 00:31:08 UTC; windows"
+      },
+      "base": {
+        "Version": "4.5.2",
+        "Built": "R 4.5.2; ; 2026-02-24 02:13:17 UTC; windows"
+      },
+      "base64enc": {
+        "Version": "0.1-6",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-06 00:51:45 UTC; windows"
+      },
+      "biscale": {
+        "Version": "1.1.0",
+        "Built": "R 4.5.3; ; 2026-04-23 19:53:26 UTC; windows"
+      },
+      "bit": {
+        "Version": "4.6.0",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:07 UTC; windows"
+      },
+      "bit64": {
+        "Version": "4.6.0-1",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 02:44:42 UTC; windows"
+      },
+      "bitops": {
+        "Version": "1.1-0",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-07-31 10:48:17 UTC; windows"
+      },
+      "blob": {
+        "Version": "1.3.0",
+        "Built": "R 4.5.2; ; 2026-02-25 03:19:12 UTC; windows"
+      },
+      "boot": {
+        "Version": "1.3-32",
+        "Built": "R 4.5.3; ; 2026-03-22 02:03:22 UTC; windows"
+      },
+      "brew": {
+        "Version": "1.0-10",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:54 UTC; windows"
+      },
+      "broom": {
+        "Version": "1.0.12",
+        "Built": "R 4.5.3; ; 2026-03-18 05:36:25 UTC; windows"
+      },
+      "bslib": {
+        "Version": "0.10.0",
+        "Built": "R 4.5.2; ; 2026-02-25 03:19:12 UTC; windows"
+      },
+      "cachem": {
+        "Version": "1.1.0",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 02:44:41 UTC; windows"
+      },
+      "callr": {
+        "Version": "3.7.6",
+        "Built": "R 4.5.2; ; 2026-02-25 02:56:18 UTC; windows"
+      },
+      "car": {
+        "Version": "3.1-5",
+        "Built": "R 4.5.3; ; 2026-05-04 20:23:28 UTC; windows"
+      },
+      "carData": {
+        "Version": "3.0-6",
+        "Built": "R 4.5.3; ; 2026-05-04 15:52:54 UTC; windows"
+      },
+      "caTools": {
+        "Version": "1.18.4",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-07-28 13:38:16 UTC; windows"
+      },
+      "cellranger": {
+        "Version": "1.1.0",
+        "Built": "R 4.5.2; ; 2026-02-25 03:55:53 UTC; windows"
+      },
+      "checkmate": {
+        "Version": "2.3.4",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-04-19 00:56:06 UTC; windows"
+      },
+      "class": {
+        "Version": "7.3-23",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 19:36:35 UTC; windows"
+      },
+      "classInt": {
+        "Version": "0.4-11",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 20:12:04 UTC; windows"
+      },
+      "cli": {
+        "Version": "3.6.6",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-07-28 13:37:16 UTC; windows"
+      },
+      "clipr": {
+        "Version": "0.8.0",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:07 UTC; windows"
+      },
+      "cluster": {
+        "Version": "2.1.8.2",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-04-19 00:55:58 UTC; windows"
+      },
+      "cocor": {
+        "Version": "1.1-4",
+        "Built": "R 4.5.3; ; 2026-04-19 00:59:00 UTC; windows"
+      },
+      "coda": {
+        "Version": "0.19-4.1",
+        "Built": "R 4.5.3; ; 2026-07-28 14:29:53 UTC; windows"
+      },
+      "codetools": {
+        "Version": "0.2-20",
+        "Built": "R 4.5.2; ; 2025-11-01 00:30:56 UTC; windows"
+      },
+      "collections": {
+        "Version": "0.3.11",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:57:33 UTC; windows"
+      },
+      "colorspace": {
+        "Version": "2.1-2",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-04-14 01:27:59 UTC; windows"
+      },
+      "commonmark": {
+        "Version": "2.0.0",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:33 UTC; windows"
+      },
+      "compiler": {
+        "Version": "4.5.2",
+        "Built": "R 4.5.2; ; 2026-02-24 02:10:16 UTC; windows"
+      },
+      "conflicted": {
+        "Version": "1.2.0",
+        "Built": "R 4.5.2; ; 2026-02-25 03:19:12 UTC; windows"
+      },
+      "corrplot": {
+        "Version": "0.95",
+        "Built": "R 4.5.3; ; 2026-05-04 15:53:24 UTC; windows"
+      },
+      "cowplot": {
+        "Version": "1.2.0",
+        "Built": "R 4.5.3; ; 2026-04-23 20:11:43 UTC; windows"
+      },
+      "cpp11": {
+        "Version": "0.5.3",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:10 UTC; windows"
+      },
+      "crayon": {
+        "Version": "1.5.3",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:09 UTC; windows"
+      },
+      "crosstalk": {
+        "Version": "1.2.2",
+        "Built": "R 4.5.3; ; 2026-06-01 03:11:51 UTC; windows"
+      },
+      "curl": {
+        "Version": "7.0.0",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:19 UTC; windows"
+      },
+      "data.table": {
+        "Version": "1.18.2.1",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 18:48:23 UTC; windows"
+      },
+      "datasets": {
+        "Version": "4.5.2",
+        "Built": "R 4.5.2; ; 2026-02-24 02:12:29 UTC; windows"
+      },
+      "DBI": {
+        "Version": "1.3.0",
+        "Built": "R 4.5.2; ; 2026-02-27 00:51:05 UTC; windows"
+      },
+      "dbplyr": {
+        "Version": "2.5.2",
+        "Built": "R 4.5.2; ; 2026-02-25 04:27:42 UTC; windows"
+      },
+      "dendextend": {
+        "Version": "1.19.1",
+        "Built": "R 4.5.3; ; 2026-06-01 04:08:52 UTC; windows"
+      },
+      "Deriv": {
+        "Version": "4.2.0",
+        "Built": "R 4.5.3; ; 2026-05-04 15:52:56 UTC; windows"
+      },
+      "desc": {
+        "Version": "1.4.3",
+        "Built": "R 4.5.2; ; 2026-02-25 02:44:52 UTC; windows"
+      },
+      "digest": {
+        "Version": "0.6.39",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:09 UTC; windows"
+      },
+      "doBy": {
+        "Version": "4.7.1",
+        "Built": "R 4.5.3; ; 2026-05-04 20:18:12 UTC; windows"
+      },
+      "dplyr": {
+        "Version": "1.2.0",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 03:55:50 UTC; windows"
+      },
+      "DT": {
+        "Version": "0.34.0",
+        "Built": "R 4.5.3; ; 2026-06-01 04:28:29 UTC; windows"
+      },
+      "dtplyr": {
+        "Version": "1.3.3",
+        "Built": "R 4.5.2; ; 2026-02-25 04:11:55 UTC; windows"
+      },
+      "e1071": {
+        "Version": "1.7-17",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 19:56:28 UTC; windows"
+      },
+      "ellipse": {
+        "Version": "0.5.0",
+        "Built": "R 4.5.3; ; 2026-06-01 01:57:57 UTC; windows"
+      },
+      "emmeans": {
+        "Version": "2.0.3",
+        "Built": "R 4.5.3; ; 2026-05-26 11:05:50 UTC; windows"
+      },
+      "estimability": {
+        "Version": "1.5.1",
+        "Built": "R 4.5.3; ; 2026-05-26 11:04:55 UTC; windows"
+      },
+      "evaluate": {
+        "Version": "1.0.5",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:07 UTC; windows"
+      },
+      "factoextra": {
+        "Version": "2.0.0",
+        "Built": "R 4.5.3; ; 2026-06-01 06:40:56 UTC; windows"
+      },
+      "FactoMineR": {
+        "Version": "2.14",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-06-01 06:32:20 UTC; windows"
+      },
+      "farver": {
+        "Version": "2.1.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:09 UTC; windows"
+      },
+      "fastmap": {
+        "Version": "1.2.0",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:09 UTC; windows"
+      },
+      "flashClust": {
+        "Version": "1.1-4",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-03-04 00:52:27 UTC; windows"
+      },
+      "FNN": {
+        "Version": "1.1.4.1",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 18:49:15 UTC; windows"
+      },
+      "fontawesome": {
+        "Version": "0.5.3",
+        "Built": "R 4.5.2; ; 2026-02-25 02:56:15 UTC; windows"
+      },
+      "forcats": {
+        "Version": "1.0.1",
+        "Built": "R 4.5.2; ; 2026-02-25 03:55:51 UTC; windows"
+      },
+      "foreach": {
+        "Version": "1.5.2",
+        "Built": "R 4.5.3; ; 2026-03-22 02:59:43 UTC; windows"
+      },
+      "forecast": {
+        "Version": "9.0.2",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-05-04 18:03:13 UTC; windows"
+      },
+      "foreign": {
+        "Version": "0.8-91",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-01 00:52:09 UTC; windows"
+      },
+      "Formula": {
+        "Version": "1.2-5",
+        "Built": "R 4.5.2; ; 2025-11-01 00:31:43 UTC; windows"
+      },
+      "fracdiff": {
+        "Version": "1.5-4",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-05-04 15:52:56 UTC; windows"
+      },
+      "fs": {
+        "Version": "1.6.6",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:10 UTC; windows"
+      },
+      "gapminder": {
+        "Version": "1.0.1",
+        "Built": "R 4.5.3; ; 2026-04-14 03:23:11 UTC; windows"
+      },
+      "gargle": {
+        "Version": "1.6.1",
+        "Built": "R 4.5.2; ; 2026-02-25 03:41:03 UTC; windows"
+      },
+      "generics": {
+        "Version": "0.1.4",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:06 UTC; windows"
+      },
+      "ggbreak": {
+        "Version": "0.1.7",
+        "Built": "R 4.5.3; ; 2026-03-28 20:51:04 UTC; windows"
+      },
+      "ggfun": {
+        "Version": "0.2.0",
+        "Built": "R 4.5.3; ; 2026-03-28 20:47:26 UTC; windows"
+      },
+      "ggplot2": {
+        "Version": "4.0.2",
+        "Built": "R 4.5.2; ; 2026-02-25 03:19:10 UTC; windows"
+      },
+      "ggplotify": {
+        "Version": "0.1.3",
+        "Built": "R 4.5.3; ; 2026-03-28 20:30:28 UTC; windows"
+      },
+      "ggpubr": {
+        "Version": "0.6.3",
+        "Built": "R 4.5.3; ; 2026-06-01 06:35:00 UTC; windows"
+      },
+      "ggrepel": {
+        "Version": "0.9.8",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 20:30:03 UTC; windows"
+      },
+      "ggsci": {
+        "Version": "4.3.0",
+        "Built": "R 4.5.3; ; 2026-04-14 03:14:14 UTC; windows"
+      },
+      "ggsignif": {
+        "Version": "0.6.4",
+        "Built": "R 4.5.3; ; 2026-06-01 04:08:43 UTC; windows"
+      },
+      "ggtext": {
+        "Version": "0.1.2",
+        "Built": "R 4.5.3; ; 2026-03-28 20:46:27 UTC; windows"
+      },
+      "glmnet": {
+        "Version": "4.1-10",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 03:19:24 UTC; windows"
+      },
+      "glue": {
+        "Version": "1.8.1",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-07-28 13:37:15 UTC; windows"
+      },
+      "googledrive": {
+        "Version": "2.1.2",
+        "Built": "R 4.5.2; ; 2026-02-25 03:55:54 UTC; windows"
+      },
+      "googlesheets4": {
+        "Version": "1.1.2",
+        "Built": "R 4.5.2; ; 2026-02-25 04:11:56 UTC; windows"
+      },
+      "gplots": {
+        "Version": "3.3.0",
+        "Built": "R 4.5.3; ; 2026-07-28 13:38:53 UTC; windows"
+      },
+      "graphics": {
+        "Version": "4.5.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-24 02:11:29 UTC; windows"
+      },
+      "grDevices": {
+        "Version": "4.5.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-24 02:11:11 UTC; windows"
+      },
+      "grid": {
+        "Version": "4.5.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-24 02:12:52 UTC; windows"
+      },
+      "gridExtra": {
+        "Version": "2.3",
+        "Built": "R 4.5.3; ; 2026-03-28 19:56:24 UTC; windows"
+      },
+      "gridGraphics": {
+        "Version": "0.5-1",
+        "Built": "R 4.5.3; ; 2026-03-28 18:49:39 UTC; windows"
+      },
+      "gridtext": {
+        "Version": "0.1.6",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 20:30:02 UTC; windows"
+      },
+      "gstat": {
+        "Version": "2.1-6",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-30 23:51:18 UTC; windows"
+      },
+      "gtable": {
+        "Version": "0.3.6",
+        "Built": "R 4.5.2; ; 2026-02-25 02:56:10 UTC; windows"
+      },
+      "gtools": {
+        "Version": "3.9.5",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-07-28 13:37:31 UTC; windows"
+      },
+      "haven": {
+        "Version": "2.5.5",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 04:27:50 UTC; windows"
+      },
+      "highr": {
+        "Version": "0.11",
+        "Built": "R 4.5.2; ; 2026-02-25 02:44:41 UTC; windows"
+      },
+      "Hmisc": {
+        "Version": "5.2-5",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-04-19 03:41:48 UTC; windows"
+      },
+      "hms": {
+        "Version": "1.1.4",
+        "Built": "R 4.5.2; ; 2026-02-25 03:19:08 UTC; windows"
+      },
+      "htmlTable": {
+        "Version": "2.5.0",
+        "Built": "R 4.5.2; ; 2026-04-23 06:35:12 UTC; windows"
+      },
+      "htmltools": {
+        "Version": "0.5.9",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 02:44:42 UTC; windows"
+      },
+      "htmlwidgets": {
+        "Version": "1.6.4",
+        "Built": "R 4.5.3; ; 2026-04-19 02:57:50 UTC; windows"
+      },
+      "httr": {
+        "Version": "1.4.8",
+        "Built": "R 4.5.2; ; 2026-02-25 03:19:09 UTC; windows"
+      },
+      "ids": {
+        "Version": "1.0.1",
+        "Built": "R 4.5.2; ; 2026-02-25 03:19:12 UTC; windows"
+      },
+      "intervals": {
+        "Version": "0.15.5",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2025-11-01 00:31:52 UTC; windows"
+      },
+      "investr": {
+        "Version": "1.4.2",
+        "Built": "R 4.5.3; ; 2026-03-18 03:57:26 UTC; windows"
+      },
+      "isoband": {
+        "Version": "0.3.0",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 02:44:38 UTC; windows"
+      },
+      "iterators": {
+        "Version": "1.0.14",
+        "Built": "R 4.5.3; ; 2026-03-22 02:03:18 UTC; windows"
+      },
+      "JABBA": {
+        "Version": "2.3.7",
+        "RemoteSha": "c62db86c99dc5b5a0e115fd53fdd40f7c882b7c9",
+        "RemoteRepo": "JABBA",
+        "RemoteUsername": "jabbamodel",
+        "Built": "R 4.5.2; ; 2026-08-03 10:47:51 UTC; windows"
+      },
+      "jomo": {
+        "Version": "2.7-6",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 03:57:43 UTC; windows"
+      },
+      "jpeg": {
+        "Version": "0.1-11",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2025-11-01 00:32:50 UTC; windows"
+      },
+      "jquerylib": {
+        "Version": "0.1.4",
+        "Built": "R 4.5.2; ; 2026-02-25 02:56:12 UTC; windows"
+      },
+      "jsonlite": {
+        "Version": "2.0.0",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:10 UTC; windows"
+      },
+      "KernSmooth": {
+        "Version": "2.23-26",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 18:48:22 UTC; windows"
+      },
+      "knitr": {
+        "Version": "1.51",
+        "Built": "R 4.5.2; ; 2026-02-25 02:56:13 UTC; windows"
+      },
+      "labeling": {
+        "Version": "0.4.3",
+        "Built": "R 4.5.2; ; 2025-11-01 00:30:56 UTC; windows"
+      },
+      "languageserver": {
+        "Version": "0.3.16",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 04:06:32 UTC; windows"
+      },
+      "later": {
+        "Version": "1.4.8",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-06-01 02:47:04 UTC; windows"
+      },
+      "lattice": {
+        "Version": "0.22-9",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-18 02:52:32 UTC; windows"
+      },
+      "lazyeval": {
+        "Version": "0.2.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:37 UTC; windows"
+      },
+      "leaps": {
+        "Version": "3.2",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-06-01 01:59:12 UTC; windows"
+      },
+      "lifecycle": {
+        "Version": "1.0.5",
+        "Built": "R 4.5.2; ; 2026-02-25 02:44:40 UTC; windows"
+      },
+      "lintr": {
+        "Version": "3.3.0-1",
+        "Built": "R 4.5.2; ; 2026-02-25 03:01:07 UTC; windows"
+      },
+      "litedown": {
+        "Version": "0.9",
+        "Built": "R 4.5.3; ; 2026-03-28 19:36:42 UTC; windows"
+      },
+      "lme4": {
+        "Version": "2.0-1",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-03-06 10:11:38 UTC; windows"
+      },
+      "lmerTest": {
+        "Version": "3.2-1",
+        "Built": "R 4.5.3; ; 2026-05-26 13:14:21 UTC; windows"
+      },
+      "lmtest": {
+        "Version": "0.9-40",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-05-04 17:08:54 UTC; windows"
+      },
+      "lubridate": {
+        "Version": "1.9.5",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 02:56:10 UTC; windows"
+      },
+      "magrittr": {
+        "Version": "2.0.5",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-07-28 13:37:14 UTC; windows"
+      },
+      "markdown": {
+        "Version": "2.0",
+        "Built": "R 4.5.3; ; 2026-03-28 19:56:32 UTC; windows"
+      },
+      "MASS": {
+        "Version": "7.3-65",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 02:03:23 UTC; windows"
+      },
+      "Matrix": {
+        "Version": "1.7-5",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 00:51:38 UTC; windows"
+      },
+      "MatrixModels": {
+        "Version": "0.5-4",
+        "Built": "R 4.5.3; ; 2026-05-04 17:08:55 UTC; windows"
+      },
+      "memoise": {
+        "Version": "2.0.1",
+        "Built": "R 4.5.2; ; 2026-02-25 02:56:13 UTC; windows"
+      },
+      "methods": {
+        "Version": "4.5.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-24 02:12:33 UTC; windows"
+      },
+      "mgcv": {
+        "Version": "1.9-4",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-04-16 01:53:14 UTC; windows"
+      },
+      "mice": {
+        "Version": "3.19.0",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 05:16:46 UTC; windows"
+      },
+      "microbenchmark": {
+        "Version": "1.5.0",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-05-04 15:52:55 UTC; windows"
+      },
+      "mime": {
+        "Version": "0.13",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2025-11-01 00:30:57 UTC; windows"
+      },
+      "minqa": {
+        "Version": "1.2.8",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 02:59:43 UTC; windows"
+      },
+      "mitml": {
+        "Version": "0.4-5",
+        "Built": "R 4.5.3; ; 2026-03-22 04:59:14 UTC; windows"
+      },
+      "modelr": {
+        "Version": "0.1.11",
+        "Built": "R 4.5.2; ; 2026-02-25 04:45:31 UTC; windows"
+      },
+      "multcomp": {
+        "Version": "1.4-30",
+        "Built": "R 4.5.3; ; 2026-05-26 13:14:24 UTC; windows"
+      },
+      "multcompView": {
+        "Version": "0.1-11",
+        "Built": "R 4.5.3; ; 2026-05-26 11:05:27 UTC; windows"
+      },
+      "mvtnorm": {
+        "Version": "1.3-7",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-05-26 11:04:56 UTC; windows"
+      },
+      "nlme": {
+        "Version": "3.1-168",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-18 03:52:54 UTC; windows"
+      },
+      "nloptr": {
+        "Version": "2.2.1",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 02:03:22 UTC; windows"
+      },
+      "nnet": {
+        "Version": "7.3-20",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 02:03:20 UTC; windows"
+      },
+      "numDeriv": {
+        "Version": "2016.8-1.1",
+        "Built": "R 4.5.2; ; 2025-11-01 00:31:10 UTC; windows"
+      },
+      "openssl": {
+        "Version": "2.3.5",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-27 00:51:15 UTC; windows"
+      },
+      "ordinal": {
+        "Version": "2025.12-29",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 03:19:33 UTC; windows"
+      },
+      "otel": {
+        "Version": "0.2.0",
+        "Built": "R 4.5.3; ; 2026-06-01 01:55:56 UTC; windows"
+      },
+      "pan": {
+        "Version": "1.9",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 02:03:55 UTC; windows"
+      },
+      "parallel": {
+        "Version": "4.5.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-24 02:13:12 UTC; windows"
+      },
+      "patchwork": {
+        "Version": "1.3.2",
+        "Built": "R 4.5.3; ; 2026-03-18 04:41:51 UTC; windows"
+      },
+      "pbkrtest": {
+        "Version": "0.5.5",
+        "Built": "R 4.5.3; ; 2026-05-04 20:22:42 UTC; windows"
+      },
+      "permute": {
+        "Version": "0.9-10",
+        "Built": "R 4.5.3; ; 2026-06-01 01:56:13 UTC; windows"
+      },
+      "pillar": {
+        "Version": "1.11.1",
+        "Built": "R 4.5.2; ; 2026-02-25 03:19:09 UTC; windows"
+      },
+      "pkgbuild": {
+        "Version": "1.4.8",
+        "Built": "R 4.5.2; ; 2026-02-25 03:19:20 UTC; windows"
+      },
+      "pkgconfig": {
+        "Version": "2.0.3",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:09 UTC; windows"
+      },
+      "pkgload": {
+        "Version": "1.5.0",
+        "Built": "R 4.5.2; ; 2026-02-25 03:41:16 UTC; windows"
+      },
+      "plyr": {
+        "Version": "1.8.9",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-07-28 14:29:54 UTC; windows"
+      },
+      "png": {
+        "Version": "0.1-9",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-18 00:52:13 UTC; windows"
+      },
+      "polynom": {
+        "Version": "1.4-1",
+        "Built": "R 4.5.3; ; 2026-06-01 01:56:39 UTC; windows"
+      },
+      "ppcor": {
+        "Version": "1.1",
+        "Built": "R 4.5.3; ; 2026-04-19 00:59:13 UTC; windows"
+      },
+      "prettyunits": {
+        "Version": "1.2.0",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:07 UTC; windows"
+      },
+      "processx": {
+        "Version": "3.8.6",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 02:44:41 UTC; windows"
+      },
+      "progress": {
+        "Version": "1.2.3",
+        "Built": "R 4.5.2; ; 2026-02-25 03:41:00 UTC; windows"
+      },
+      "promises": {
+        "Version": "1.5.0",
+        "Built": "R 4.5.3; ; 2026-06-01 03:11:49 UTC; windows"
+      },
+      "proxy": {
+        "Version": "0.4-29",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 18:48:21 UTC; windows"
+      },
+      "ps": {
+        "Version": "1.9.1",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:48 UTC; windows"
+      },
+      "purrr": {
+        "Version": "1.2.1",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 03:19:09 UTC; windows"
+      },
+      "quantreg": {
+        "Version": "6.1",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-05-04 17:39:01 UTC; windows"
+      },
+      "R.cache": {
+        "Version": "0.17.0",
+        "Built": "R 4.5.2; ; 2026-02-25 01:55:42 UTC; windows"
+      },
+      "R.methodsS3": {
+        "Version": "1.8.2",
+        "Built": "R 4.5.2; ; 2025-11-01 00:31:23 UTC; windows"
+      },
+      "R.oo": {
+        "Version": "1.27.1",
+        "Built": "R 4.5.2; ; 2025-11-01 01:45:51 UTC; windows"
+      },
+      "R.utils": {
+        "Version": "2.13.0",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:37 UTC; windows"
+      },
+      "R2jags": {
+        "Version": "0.8-9",
+        "Built": "R 4.5.3; ; 2026-07-28 15:26:42 UTC; windows"
+      },
+      "R2WinBUGS": {
+        "Version": "2.1-24",
+        "Built": "R 4.5.3; ; 2026-07-28 14:30:31 UTC; windows"
+      },
+      "R6": {
+        "Version": "2.6.1",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:07 UTC; windows"
+      },
+      "ragg": {
+        "Version": "1.5.0",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 03:41:03 UTC; windows"
+      },
+      "randtests": {
+        "Version": "1.0.2",
+        "Built": "R 4.5.2; ; 2025-11-01 00:56:42 UTC; windows"
+      },
+      "rappdirs": {
+        "Version": "0.3.4",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:08 UTC; windows"
+      },
+      "rbibutils": {
+        "Version": "2.4.1",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 02:03:23 UTC; windows"
+      },
+      "RColorBrewer": {
+        "Version": "1.1-3",
+        "Built": "R 4.5.2; ; 2025-11-01 00:30:56 UTC; windows"
+      },
+      "Rcpp": {
+        "Version": "1.1.2",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-07-28 13:37:14 UTC; windows"
+      },
+      "RcppArmadillo": {
+        "Version": "15.2.6-1",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-05-04 16:42:22 UTC; windows"
+      },
+      "RcppEigen": {
+        "Version": "0.3.4.0.2",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 02:59:47 UTC; windows"
+      },
+      "Rdpack": {
+        "Version": "2.6.6",
+        "Built": "R 4.5.3; ; 2026-03-22 02:59:45 UTC; windows"
+      },
+      "readr": {
+        "Version": "2.2.0",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 04:11:55 UTC; windows"
+      },
+      "readxl": {
+        "Version": "1.4.5",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 04:11:56 UTC; windows"
+      },
+      "reformulas": {
+        "Version": "0.4.4",
+        "Built": "R 4.5.3; ; 2026-03-22 03:19:19 UTC; windows"
+      },
+      "rematch": {
+        "Version": "2.0.0",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:36 UTC; windows"
+      },
+      "rematch2": {
+        "Version": "2.1.2",
+        "Built": "R 4.5.2; ; 2026-02-25 03:55:53 UTC; windows"
+      },
+      "remotes": {
+        "Version": "2.5.0",
+        "Built": "R 4.5.3; ; 2026-07-28 13:40:35 UTC; windows"
+      },
+      "reprex": {
+        "Version": "2.1.1",
+        "Built": "R 4.5.2; ; 2026-02-25 03:55:55 UTC; windows"
+      },
+      "reshape": {
+        "Version": "0.8.10",
+        "Built": "R 4.5.3; ; 2026-07-28 14:54:29 UTC; windows"
+      },
+      "rex": {
+        "Version": "1.2.1",
+        "Built": "R 4.5.2; ; 2026-02-25 01:57:34 UTC; windows"
+      },
+      "rjags": {
+        "Version": "4-17",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-07-28 14:54:49 UTC; windows"
+      },
+      "rlang": {
+        "Version": "1.3.0",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-07-28 13:37:14 UTC; windows"
+      },
+      "rmarkdown": {
+        "Version": "2.30",
+        "Built": "R 4.5.2; ; 2026-02-25 03:40:59 UTC; windows"
+      },
+      "rnaturalearth": {
+        "Version": "1.2.0",
+        "Built": "R 4.5.3; ; 2026-03-28 20:47:37 UTC; windows"
+      },
+      "rnaturalearthdata": {
+        "Version": "1.0.0",
+        "Built": "R 4.5.3; ; 2026-03-28 19:07:21 UTC; windows"
+      },
+      "roxygen2": {
+        "Version": "7.3.3",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 03:56:04 UTC; windows"
+      },
+      "rpart": {
+        "Version": "4.1.24",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 02:03:22 UTC; windows"
+      },
+      "rprojroot": {
+        "Version": "2.1.1",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:24 UTC; windows"
+      },
+      "rstatix": {
+        "Version": "0.7.3",
+        "Built": "R 4.5.3; ; 2026-06-01 06:32:05 UTC; windows"
+      },
+      "rstudioapi": {
+        "Version": "0.18.0",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:10 UTC; windows"
+      },
+      "rvest": {
+        "Version": "1.0.5",
+        "Built": "R 4.5.2; ; 2026-02-25 03:55:54 UTC; windows"
+      },
+      "s2": {
+        "Version": "1.1.9",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 19:37:01 UTC; windows"
+      },
+      "S7": {
+        "Version": "0.2.1",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:06 UTC; windows"
+      },
+      "sandwich": {
+        "Version": "3.1-1",
+        "Built": "R 4.5.3; ; 2026-05-26 12:20:23 UTC; windows"
+      },
+      "sass": {
+        "Version": "0.4.10",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 02:56:15 UTC; windows"
+      },
+      "scales": {
+        "Version": "1.4.0",
+        "Built": "R 4.5.2; ; 2026-02-25 02:56:10 UTC; windows"
+      },
+      "scatterplot3d": {
+        "Version": "0.3-45",
+        "Built": "R 4.5.2; ; 2026-02-25 00:51:15 UTC; windows"
+      },
+      "scico": {
+        "Version": "1.5.0",
+        "Built": "R 4.5.3; ; 2026-04-14 02:42:56 UTC; windows"
+      },
+      "selectr": {
+        "Version": "0.5-1",
+        "Built": "R 4.5.2; ; 2026-02-25 03:41:03 UTC; windows"
+      },
+      "sf": {
+        "Version": "1.1-0",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 20:30:09 UTC; windows"
+      },
+      "shape": {
+        "Version": "1.4.6.1",
+        "Built": "R 4.5.2; ; 2025-11-01 00:31:21 UTC; windows"
+      },
+      "sp": {
+        "Version": "2.2-1",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 18:49:02 UTC; windows"
+      },
+      "spacetime": {
+        "Version": "1.3-3",
+        "Built": "R 4.5.3; ; 2026-03-28 19:58:10 UTC; windows"
+      },
+      "SparseM": {
+        "Version": "1.84-2",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-05-04 15:52:58 UTC; windows"
+      },
+      "splines": {
+        "Version": "4.5.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-24 02:13:04 UTC; windows"
+      },
+      "stars": {
+        "Version": "0.7-1",
+        "Built": "R 4.5.3; ; 2026-03-28 20:46:50 UTC; windows"
+      },
+      "stats": {
+        "Version": "4.5.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-24 02:11:42 UTC; windows"
+      },
+      "stats4": {
+        "Version": "4.5.2",
+        "Built": "R 4.5.2; ; 2026-02-24 02:13:06 UTC; windows"
+      },
+      "stringi": {
+        "Version": "1.8.7",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2025-11-01 00:31:12 UTC; windows"
+      },
+      "stringr": {
+        "Version": "1.6.0",
+        "Built": "R 4.5.2; ; 2026-02-25 03:19:07 UTC; windows"
+      },
+      "styler": {
+        "Version": "1.11.0",
+        "Built": "R 4.5.2; ; 2026-02-25 03:19:36 UTC; windows"
+      },
+      "survival": {
+        "Version": "3.8-6",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 02:59:46 UTC; windows"
+      },
+      "svglite": {
+        "Version": "2.2.2",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 03:57:46 UTC; windows"
+      },
+      "sys": {
+        "Version": "3.4.3",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:19 UTC; windows"
+      },
+      "systemfonts": {
+        "Version": "1.3.1",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 02:56:18 UTC; windows"
+      },
+      "tcltk": {
+        "Version": "4.5.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-24 02:13:08 UTC; windows"
+      },
+      "textshaping": {
+        "Version": "1.0.4",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 03:19:15 UTC; windows"
+      },
+      "TH.data": {
+        "Version": "1.1-5",
+        "Built": "R 4.5.3; ; 2026-05-26 12:48:04 UTC; windows"
+      },
+      "tibble": {
+        "Version": "3.3.1",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 03:40:55 UTC; windows"
+      },
+      "tidyr": {
+        "Version": "1.3.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 04:11:54 UTC; windows"
+      },
+      "tidyselect": {
+        "Version": "1.2.1",
+        "Built": "R 4.5.2; ; 2026-02-25 03:19:08 UTC; windows"
+      },
+      "tidyverse": {
+        "Version": "2.0.0",
+        "Built": "R 4.5.2; ; 2026-02-25 05:05:00 UTC; windows"
+      },
+      "timechange": {
+        "Version": "0.4.0",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 02:44:36 UTC; windows"
+      },
+      "timeDate": {
+        "Version": "4052.112",
+        "Built": "R 4.5.3; ; 2026-03-22 02:03:19 UTC; windows"
+      },
+      "tinytex": {
+        "Version": "0.58",
+        "Built": "R 4.5.2; ; 2026-02-25 02:44:38 UTC; windows"
+      },
+      "tools": {
+        "Version": "4.5.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-24 02:10:15 UTC; windows"
+      },
+      "translations": {
+        "Version": "4.5.2"
+      },
+      "tzdb": {
+        "Version": "0.5.0",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 02:44:44 UTC; windows"
+      },
+      "ucminf": {
+        "Version": "1.2.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2025-11-01 00:32:39 UTC; windows"
+      },
+      "units": {
+        "Version": "1.0-1",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 19:36:49 UTC; windows"
+      },
+      "urca": {
+        "Version": "1.3-4",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-05-04 17:08:55 UTC; windows"
+      },
+      "utf8": {
+        "Version": "1.2.6",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:04 UTC; windows"
+      },
+      "utils": {
+        "Version": "4.5.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-24 02:10:49 UTC; windows"
+      },
+      "uuid": {
+        "Version": "1.2-2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-01-26 00:51:02 UTC; windows"
+      },
+      "vctrs": {
+        "Version": "0.7.3",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-07-28 14:54:21 UTC; windows"
+      },
+      "vegan": {
+        "Version": "2.7-5",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-06-01 03:42:50 UTC; windows"
+      },
+      "viridis": {
+        "Version": "0.6.5",
+        "Built": "R 4.5.3; ; 2026-03-28 20:30:06 UTC; windows"
+      },
+      "viridisLite": {
+        "Version": "0.4.3",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:09 UTC; windows"
+      },
+      "vroom": {
+        "Version": "1.7.0",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 03:55:52 UTC; windows"
+      },
+      "withr": {
+        "Version": "3.0.2",
+        "Built": "R 4.5.2; ; 2026-02-25 01:54:07 UTC; windows"
+      },
+      "wk": {
+        "Version": "0.9.5",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 18:49:02 UTC; windows"
+      },
+      "writexl": {
+        "Version": "1.5.4",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-22 02:06:04 UTC; windows"
+      },
+      "xfun": {
+        "Version": "0.56",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:10 UTC; windows"
+      },
+      "xml2": {
+        "Version": "1.5.2",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 02:44:51 UTC; windows"
+      },
+      "xmlparsedata": {
+        "Version": "1.0.5",
+        "Built": "R 4.5.2; ; 2026-02-25 02:00:28 UTC; windows"
+      },
+      "xts": {
+        "Version": "0.14.2",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 19:56:28 UTC; windows"
+      },
+      "yaml": {
+        "Version": "2.3.12",
+        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-02-25 01:54:09 UTC; windows"
+      },
+      "yulab.utils": {
+        "Version": "0.2.4",
+        "Built": "R 4.5.3; ; 2026-03-28 18:49:40 UTC; windows"
+      },
+      "zoo": {
+        "Version": "1.8-15",
+        "Built": "R 4.5.3; x86_64-w64-mingw32; 2026-03-28 19:36:36 UTC; windows"
+      }
+    },
+    "JAGS": "not runtime-verified in this task; not needed by demo",
+    "Note": "Current verification environment, not a claim about historical scraper versions.",
+    "Package_Inventory_Method": "Read installed library DESCRIPTION files; optional packages were not all loaded in this task.",
+    "Additional_Project_R_Library": {
+      "distributional": {
+        "Version": "0.9.0"
+      },
+      "matrixStats": {
+        "Version": "1.5.0"
+      },
+      "posterior": {
+        "Version": "1.7.0"
+      },
+      "tensorA": {
+        "Version": "0.36.2.1"
+      }
+    }
+  },
+  "Test_Machine_RAM_GiB": 31.74
+}
