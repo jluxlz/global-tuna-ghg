@@ -1,0 +1,120 @@
+{
+  "Verification_Date": "2026-11-27",
+  "Scope": "Synthetic demonstration and submission additions; no production ensemble rerun",
+  "Install": {
+    "Seconds": 6.8448857000039425,
+    "Exit_Code": 0,
+    "Scope": "Fresh target directory; cached/downloaded pip wheels; Python already installed; --no-compile",
+    "Command": "python -m pip install --only-binary=:all: --no-compile --target <new-directory> -r requirements-demo.txt --index-url https://pypi.org/simple"
+  },
+  "Repeated_Demo_Runs": [
+    {
+      "Run": 1,
+      "Wall_Seconds": 1.1995246000005864,
+      "Calculation_Seconds_Including_Imports": 1.0126486999943154,
+      "Passed": true,
+      "Expected_Summary_Checked": true
+    },
+    {
+      "Run": 2,
+      "Wall_Seconds": 1.203514200009522,
+      "Calculation_Seconds_Including_Imports": 1.0194412999990163,
+      "Passed": true,
+      "Expected_Summary_Checked": true
+    },
+    {
+      "Run": 3,
+      "Wall_Seconds": 1.1978719000035198,
+      "Calculation_Seconds_Including_Imports": 1.008599900000263,
+      "Passed": true,
+      "Expected_Summary_Checked": true
+    }
+  ],
+  "Fresh_Dependency_Demo": {
+    "Passed": true,
+    "Synthetic_Data": true,
+    "Years": [
+      2025,
+      2030
+    ],
+    "Rules": [
+      "C",
+      "F",
+      "T"
+    ],
+    "Stock_Rows": 36,
+    "Effort_Rows": 36,
+    "Maximum_Biomass_Balance_Error_Mt": 0.0,
+    "Expected_Summary_Checked": true,
+    "Python": "3.13.0",
+    "Platform": "Windows-11-10.0.26200-SP0",
+    "Packages": {
+      "numpy": "2.3.1",
+      "pandas": "2.2.3"
+    },
+    "Input_and_Model_SHA256": {
+      "scenario\\fishery_coupling.py": "7fe1a5d2c7badf3101da8a81599913bbf4faf4b34021e7ac744b3aae3d467c4b",
+      "scenario\\harvest_control_rules.py": "4f6a65c5ab1b61237f89dd693d83744517367ca2b17490eef96040555de8b062",
+      "demo\\input\\fleet.csv": "f3789ce2605a4c2ffacc312613748755b796009df5459cf407dff44cc7b3c54f",
+      "demo\\input\\stocks.csv": "b9686f6dbaa833a62c343efe598fe011ddfb4b25110d6917712c7d5276a1b359",
+      "demo\\input\\allocation.csv": "82cdcf22e83f037463eb33baa2238667c8ff6ff2b35fcaf8039e36dcac9fc9ef"
+    },
+    "Elapsed_Seconds": 13.101656700004241,
+    "Wall_Seconds": 13.34815959999105,
+    "Isolation": "Python -I -S; dependencies imported only from a fresh pip target directory"
+  },
+  "Scientific_Models_Unmodified": true,
+  "Source_Release": "v2026.11.18",
+  "Source_Commit": "002d0cba0139b31fa0c08ba43ecded5608bc7bec",
+  "Unfamiliar_Colleague_Test": "not performed",
+  "Full_Optional_Environment_Installation": "not timed",
+  "Fresh_GitHub_Access": "Verified through GitHub API on 2026-11-27",
+  "Final_Isolated_Run": {
+    "Passed": true,
+    "Synthetic_Data": true,
+    "Years": [
+      2025,
+      2030
+    ],
+    "Rules": [
+      "C",
+      "F",
+      "T"
+    ],
+    "Stock_Rows": 36,
+    "Effort_Rows": 36,
+    "Maximum_Biomass_Balance_Error_Mt": 0.0,
+    "Expected_Summary_Checked": true,
+    "Default_Input_Hand_Calculations_Checked": true,
+    "Python": "3.13.0",
+    "Platform": "Windows-11-10.0.26200-SP0",
+    "Packages": {
+      "numpy": "2.3.1",
+      "pandas": "2.2.3"
+    },
+    "Input_and_Model_SHA256": {
+      "scenario\\fishery_coupling.py": "7fe1a5d2c7badf3101da8a81599913bbf4faf4b34021e7ac744b3aae3d467c4b",
+      "scenario\\harvest_control_rules.py": "4f6a65c5ab1b61237f89dd693d83744517367ca2b17490eef96040555de8b062",
+      "demo\\input\\fleet.csv": "f3789ce2605a4c2ffacc312613748755b796009df5459cf407dff44cc7b3c54f",
+      "demo\\input\\stocks.csv": "b9686f6dbaa833a62c343efe598fe011ddfb4b25110d6917712c7d5276a1b359",
+      "demo\\input\\allocation.csv": "82cdcf22e83f037463eb33baa2238667c8ff6ff2b35fcaf8039e36dcac9fc9ef"
+    },
+    "Elapsed_Seconds": 14.428667600004701,
+    "Wall_Seconds": 14.66804659999616
+  },
+  "Remote_Source_Verified_Head": "96dc2b831092bca994755bd0d48926d985935869",
+  "Remote_Source_Hashes": {
+    "scenario/fishery_coupling.py": {
+      "Blob_SHA": "23d32b32f10100d6df1e7024baa7886a7ee11004",
+      "SHA256": "7fe1a5d2c7badf3101da8a81599913bbf4faf4b34021e7ac744b3aae3d467c4b"
+    },
+    "scenario/harvest_control_rules.py": {
+      "Blob_SHA": "14b054c40535731e2f6561ab1bef4b51620f3a91",
+      "SHA256": "4f6a65c5ab1b61237f89dd693d83744517367ca2b17490eef96040555de8b062"
+    },
+    "README.md": {
+      "Blob_SHA": "5e75a99337b1eadf61d124541af3a8cdf82d3eac",
+      "SHA256": "808170669cba613855a034dc6dd133d87f0cd7311a63d7b19ee389c9d3f1203e"
+    }
+  }
+}

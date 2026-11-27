@@ -1,0 +1,7 @@
+# Minimal, tested environment for the offline stock-effort demonstration.
+# These are verification-environment versions, not historical scraper versions.
+numpy==2.3.1
+pandas==2.2.3
+python-dateutil==4.0.0
+pytz==2026.6
+tzdata==2026.6

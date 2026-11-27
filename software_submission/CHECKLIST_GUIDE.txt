@@ -1,0 +1,95 @@
+Nature Code and Software Submission Checklist
+Prepared 2026-11-27 for the clean-1120 manuscript
+
+Important: These answers apply after the supplemental files have been included
+in the repository or ZIP actually supplied to editors and reviewers. Local files
+are not automatically uploaded to GitHub. No third-party installation test is
+claimed. The current installed environment is not evidence of the historical
+Selenium/browser versions.
+
+Corresponding author(s)
+Shaobin Li
+For double-blind review, follow the form's DBPR/manuscript-number instruction.
+
+Required content
+
+1. Compiled standalone software and/or source code
+Check when the scientific source repository/complete package is provided.
+The supplement includes the demo and unchanged source of its two model modules.
+A compiled executable is not required.
+
+2. A small (simulated or real) dataset to demo the software/code
+Check. demo/input/ contains synthetic fleet, stock and allocation CSV files.
+Instructions and expected outputs are in README_SOFTWARE.md. There are no real
+vessel identities in the demo.
+
+3. A README file that includes System requirements
+Check all three subitems after supplying README_SOFTWARE.md:
+- Software dependencies and OS versions: Python 3.13.0, Windows 11 build 26200,
+  pinned demo dependency set, full existing dependency files and version inventory.
+- Tested versions: the documented Windows/Python demo environments. Other OS
+  compatibility and a new full-ensemble rerun are not claimed.
+- Non-standard hardware: no GPU or specialized hardware required by the demo.
+  The approximately 32 GiB RAM is a test-machine specification, not a minimum.
+
+4. Installation guide
+Check Instructions and Typical install time after supplying README_SOFTWARE.md.
+Measured minimal dependency installation: 6.84 seconds into a fresh directory
+with cached wheels and Python already installed, using --no-compile. This is
+not the time to install Python/R/JAGS or download the full scientific release.
+The full optional environment was not freshly installed or timed in this task.
+
+5. Demo
+Check Instructions to run on data, Expected output, and Expected run time.
+Command from repository root: python demo/run_demo.py
+(Use the installed demo environment; README includes isolated installation.)
+Expected: PASS; stocks.csv and effort.csv each have 36 rows; summary.csv has
+three rows. Verification includes stock mass balance, quota/capacity ceilings,
+HCR boundary cases, and the expected default-input summary.
+Runtime: approximately 1-15 seconds on the tested machine; three repeated runs
+took about 1.20 seconds and a fresh isolated dependency run took 13.35 seconds.
+This demonstrates production HCR/stock-effort mechanisms, not all capabilities
+of the complete inventory/scenario pipeline or an empirical validation.
+
+6. Instructions for use
+Check after supplying README_SOFTWARE.md and the existing REPRODUCING.md.
+CSV schemas, units, input selection, output selection and full workflow entry
+points are described. Custom inputs skip default-input numerical reference
+checks, while generic biological and capacity checks remain active.
+
+7. Optional reproduction instructions
+Check if supplying the complete scientific release's REPRODUCING.md and inputs.
+The small demo supplement alone is not a substitute for the full scientific
+code/data package. Production Monte Carlo and scenario ensembles were not rerun
+as part of this submission addition.
+
+Additional information: software license
+Paste:
+Author-developed code and its software documentation are released under the
+MIT License. Third-party software, datasets and other materials retain their
+original licenses and applicable access and redistribution terms. The synthetic
+demo input tables are provided under the MIT terms with the demo. See LICENSE
+and THIRD_PARTY_NOTICES.md.
+
+Additional information: repository link
+https://github.com/jluxlz/global-tuna-ghg
+Scientific source release used to verify the demo modules:
+https://github.com/jluxlz/global-tuna-ghg/releases/tag/v2026.11.18
+Commit: 002d0cba0139b31fa0c08ba43ecded5608bc7bec
+This existing tag does not automatically include the new submission additions.
+Provide the new commit/release link after uploading, or provide the supplemental
+ZIP together with the complete scientific package to the journal.
+
+Location of detailed code functionality in the manuscript
+Select: Methods section.
+The clean-1120 manuscript Methods M1-M8 describe the algorithms. Supplementary
+Information S1-S7 provides additional equations, parameters and checks.
+If selecting Elsewhere (specify) instead, paste:
+Main manuscript Methods M1-M8 and Supplementary Information S1-S7 describe data
+processing, imputation, historical GHG accounting, stock-fleet dynamics,
+scenario comparisons and uncertainty analysis.
+
+Status of upload and optional checks
+Do not claim that GitHub has been updated until the uploaded files are verified.
+Do not claim that an unfamiliar colleague installed the software unless this
+has actually occurred. This is a strongly recommended, not mandatory, step.
